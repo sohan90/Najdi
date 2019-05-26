@@ -3,4 +3,122 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <color name="primary_text_black">#333333</color>
+    <color name="primary_text_white">#FFFFFF</color>
+    <color name="primary_text_orange">#ff5a00</color>
+    <color name="primary_text_grey_light">#818181</color>
+    <color name="primary_text_grey_medium">#9b9b9b</color>
+    <color name="primary_text_grey_dark">#3c3c3c</color>
+    <color name="primary_text_grey_light_medium">#b7b7b7</color>
+    <color name="black">#000000</color>
+    <color name="black_light">#181818</color>
+    <color name="b7b7b7">#b7b7b7</color>
+    <color name="scarlett">#d0021b</color>
+    <color name="color_4a4a4a">#4a4a4a</color>
+    <color name="color_transparent">#00000000</color>
+    <color name="translucent">#40000000</color>
+    <color name="translucent_very_light">#33000000</color>
+    <color name="translucent_light">#8C000000</color>
+    <color name="translucent_medium">#CC000000</color>
+    <color name="translucent_dark">#D9000000</color>
+    <color name="green_default">#008000</color>
+    <color name="green_press">#803eb765</color>
+    <color name="gray_press">#80b7b7b7</color>
+    <color name="password_hint">#E6d9d9d9</color>
+    <color name="password_highlight">#ffffff</color>
+    <color name="password_error_highlight">#c5001a</color>
+    <color name="password_error_color">#B3c5001a</color>
+    <color name="translucent_white">#66FFFFFF</color>
+    <color name="orange_press">#80ff5a00</color>
+    <color name="orange_light_press">#0Dff5a00</color>
+    <color name="white_press">#80ffffff</color>
+    <color name="gray_light">#e5e5e5</color>
+    <color name="black_222">#222222</color>
+    <color name="border_grey">#e6e6e6</color>
+    <color name="error_red">#c5001a</color>
+    <color name="translucent_gray">#33e6e6e6</color>
+    <color name="white_opacity_10">#1AFFFFFF</color>
+
+    <!-- Home screen BEGIN -->
+    <color name="home_tab_background">@color/primary_text_grey_dark</color>
+    <color name="home_tab_selected">@color/primary_text_white</color>
+    <color name="home_tab_default">@color/b7b7b7</color>
+    <color name="view_new_tag">#BF181818</color>
+    <color name="prompt_popup_text">#4a4a4a</color>
+    <!-- Home screen END -->
+
+    <!-- Video Playback screen BEGIN-->
+    <color name="video_play_duration_count">@color/primary_text_grey_medium</color>
+    <color name="video_play_details">@color/primary_text_grey_light_medium</color>
+    <color name="cardview_images_background">@color/primary_text_black</color>
+    <color name="quiz_blur_background">#7f000000</color>
+    <color name="reset_password_bg">#f2fff2</color>
+    <color name="video_list_odd">@color/black_light</color>
+    <color name="video_list_even">#242424</color>
+    <!-- Video Playback screen END-->
+
+    <color name="card_stack_default">#50a77c</color>
+    <color name="card_stack_fail">#ff704c</color>
+
+    <color name="item_new_transparent">#7f000000</color>
+    <color name="prodcut_grey">#f7f5f3</color>
+    <color name="circle_blue">#4fb5df</color>
+    <color name="sample_product_bg">#f7f5f3</color>
+    <color name="step_color">#acacac</color>
+
+    <color name="color1">#267DAE</color>
+    <color name="color2">#C8704F</color>
+    <color name="color3">#CAD55A</color>
+    <color name="color4">#88AECC</color>
+    <color name="color5">#E3C4DD</color>
+    <color name="color6">#079EB3</color>
+    <color name="color7">#776F69</color>
+    <color name="color8">#DBE8CB</color>
+    <color name="color9">#C2D3EE</color>
+    <color name="color10">#B3D7E5</color>
+    <color name="color11">#CA977B</color>
+    <color name="color12">#C8B7AE</color>
+
+    <integer-array name="colorArrays">
+        <item>@color/color1</item>
+        <item>@color/color2</item>
+        <item>@color/color3</item>
+        <item>@color/color4</item>
+        <item>@color/color5</item>
+        <item>@color/color6</item>
+        <item>@color/color7</item>
+        <item>@color/color8</item>
+        <item>@color/color9</item>
+        <item>@color/color10</item>
+        <item>@color/color11</item>
+        <item>@color/color12</item>
+    </integer-array>
+    <color name="txt_gry_color">#abaaa9</color>
+
+    <color name="color_4c000000">#4c000000</color>
+    <color name="color_66000000">#66000000</color>
+    <color name="color_acacac">#acacac</color>
+
+    <color name="join_code_color">#d9d9d9</color>
+
+    <color name="rate_app_bg">#e4e4e4</color>
+    <color name="rate_app_start_blue">#007aff</color>
+    <color name="grey_text">#333333</color>
+    <color name="black_alpha_60">#90000000</color>
+    <color name="black_alpha_35">#66000000</color>
+    <color name="black_alpha_25">#40000000</color>
+    <color name="black_alpha_80">#D9000000</color>
+    <color name="item_black">#4c000000</color>
+    <color name="bright_orange">#ff5a00</color>
+    <color name="correct_ans_color">#3dd069</color>
+    <color name="correct_grey">#9b9b9b</color>
+    <color name="assign_border">#3dd069</color>
+    <color name="search_grey">#262428</color>
+    <color name="completed_color">#CC3c3c3c</color>
+    <color name="quiz_option_bg">#151515</color>
+    <color name="course_border">#4D9b9b9b</color>
+    <color name="white_transparent">#4Dffffff</color>
+    <color name="white_eighty">#ccffffff</color>
+    <color name="white">#ffffff</color>
 </resources>
