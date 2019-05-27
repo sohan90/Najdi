@@ -30,7 +30,7 @@
                     android:indeterminate="false"
                     android:indeterminateOnly="false"
                     android:max="100"
-                    android:progress="100"
+                    android:progress="50"
                     android:progressBackgroundTint="@color/green_default" />
 
                 <RelativeLayout
@@ -107,8 +107,6 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/step_parent_lyt">
-
-        </FrameLayout>
+            android:layout_below="@id/step_parent_lyt"/>
     </RelativeLayout>
 </layout>

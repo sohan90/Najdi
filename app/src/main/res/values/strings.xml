@@ -22,4 +22,16 @@
     <string name="shipping_details">Shipping Details</string>
     <string name="checkout">Checkout</string>
     <string name="order_complete">Order Complete</string>
+    <string name="select_options">Select Options</string>
+    <string name="size">Size</string>
+    <string name="choose_an_option">Choose an option</string>
+    <string name="cutting_way">Cutting way</string>
+    <string name="head">Head</string>
+    <string name="legs">Legs</string>
+    <string name="proceed_to_checkout">Proceed to Checkout</string>
+    <string name="add_to_cart">Add to cart</string>
+    <string name="total">Total</string>
+    <string name="available">Available</string>
+    <string name="quantity">Quantity</string>
+    <string name="clear">clear</string>
 </resources>
