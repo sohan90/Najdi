@@ -19,7 +19,6 @@
     <string name="one">1</string>
     <string name="two">2</string>
     <string name="three">3</string>
-    <string name="shipping_details">Shipping Details</string>
     <string name="checkout">Checkout</string>
     <string name="order_complete">Order Complete</string>
     <string name="select_options">Select Options</string>
@@ -35,4 +34,16 @@
     <string name="quantity">Quantity</string>
     <string name="clear">clear</string>
     <string name="ok">Ok</string>
+    <string name="select_shipping_address_from_map">Select Shipping Address From Map</string>
+    <string name="shipping_details">Shipping Details</string>
+    <string name="continue_txt">Continue</string>
+    <string name="enter_location_name">Enter Location Name</string>
+    <string name="save_to_favourite_location">Save to favourite Location</string>
+    <string name="cancel">Cancel</string>
+    <string name="thank_you_order_has_been_received">Thank you order has been received.</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="order_number">Order Number</string>
+    <string name="date">Date</string>
+    <string name="subtotal">SubTotal</string>
+    <string name="our_bank_accounts">Our Bank Accounts</string>
 </resources>

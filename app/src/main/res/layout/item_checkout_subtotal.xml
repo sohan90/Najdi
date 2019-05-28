@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white_eighty"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey_text" />
+
+        <TextView
+            android:id="@+id/sub_total_Txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divider"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:text="Subtotal" />
+
+        <TextView
+            android:id="@+id/total_price_Txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divider"
+            android:layout_alignBaseline="@id/sub_total_Txt"
+            android:layout_alignParentEnd="true"
+            android:text="12345" />
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/sub_total_Txt"
+            android:background="@color/grey_text" />
+
+        <TextView
+            android:id="@+id/coupon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/sub_total_Txt"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:text="Coupon" />
+
+        <TextView
+            android:id="@+id/Coupon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/close"
+            android:layout_alignBottom="@id/close"
+            android:layout_toStartOf="@id/close"
+            android:text="-12345" />
+
+        <ImageView
+            android:id="@+id/close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divider2"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/ic_close_black_24dp" />
+
+        <View
+            android:id="@+id/divider_3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/coupon"
+            android:background="@color/grey_text" />
+
+        <TextView
+            android:id="@+id/total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/coupon"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:text="12345" />
+
+        <TextView
+            android:id="@+id/total_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/coupon"
+            android:layout_alignBaseline="@id/total"
+            android:layout_alignParentEnd="true"
+            android:text="12345" />
+
+        <View
+            android:id="@+id/divider_4"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/total"
+            android:background="@color/grey_text" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divider_4"
+            android:layout_marginTop="20dp"
+            android:buttonTint="@color/black"
+            android:checked="true"
+            android:padding="10dp"
+            android:text="Cash on Delivery"
+            android:textColor="@color/black" />
+
+    </RelativeLayout>
+</layout>
