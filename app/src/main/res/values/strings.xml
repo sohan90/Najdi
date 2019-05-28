@@ -34,4 +34,5 @@
     <string name="available">Available</string>
     <string name="quantity">Quantity</string>
     <string name="clear">clear</string>
+    <string name="ok">Ok</string>
 </resources>
