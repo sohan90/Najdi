@@ -15,7 +15,7 @@
     <string name="terms_and_conditions">Terms and conditions</string>
     <string name="and_privacy_policy">and Privacy policy</string>
     <string name="log_in">Log In</string>
-    <string name="dont_t_have_an_account_sign_up">Dont\'t have an account? Sign Up</string>
+    <string name="dont_t_have_an_account_sign_up">Dont\'t have an account?</string>
     <string name="one">1</string>
     <string name="two">2</string>
     <string name="three">3</string>
@@ -46,4 +46,6 @@
     <string name="date">Date</string>
     <string name="subtotal">SubTotal</string>
     <string name="our_bank_accounts">Our Bank Accounts</string>
+    <string name="invalid_phone_no">phone no is invalid!</string>
+    <string name="invalid_pass">invalid password</string>
 </resources>

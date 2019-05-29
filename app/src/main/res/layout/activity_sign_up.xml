@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="viewModel"
+            type="com.najdi.android.najdiapp.launch.viewmodel.SignUpViewModel"/>
+    </data>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -38,6 +44,7 @@
                 android:layout_margin="8dp"
                 android:layout_marginTop="15dp"
                 app:errorEnabled="true"
+                bind:errorText="@{viewModel.phoneNoError}"
                 app:hintTextAppearance="@style/HintText">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -45,6 +52,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionNext"
+                    android:text="@={viewModel.phoneNo}"
                     android:drawableEnd="@drawable/ic_phone_black_24dp"
                     android:hint="@string/mobile_number_5xxxxxx"
                     android:textColorHint="@color/grey_text" />
@@ -56,6 +64,7 @@
                 android:layout_margin="8dp"
                 android:layout_marginTop="5dp"
                 app:errorEnabled="true"
+                bind:errorText="@{viewModel.passwordError}"
                 app:hintTextAppearance="@style/HintText"
                 app:passwordToggleEnabled="true"
                 app:passwordToggleTint="@color/green_default">
@@ -65,6 +74,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/password"
+                    android:text="@={viewModel.password}"
                     android:imeOptions="actionNext"
                     android:inputType="textPassword"
                     android:textColorHint="@color/grey_text" />
@@ -76,6 +86,7 @@
                 android:layout_margin="8dp"
                 android:layout_marginTop="5dp"
                 app:errorEnabled="true"
+                bind:errorText="@{viewModel.confirmPassError}"
                 app:hintTextAppearance="@style/HintText"
                 app:passwordToggleEnabled="true"
                 app:passwordToggleTint="@color/green_default">
@@ -85,6 +96,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/confirm_password"
+                    android:text="@={viewModel.confirmPass}"
                     android:inputType="textPassword"
                     android:imeOptions="actionNext"
                     android:textColorHint="@color/grey_text" />
@@ -104,6 +116,7 @@
                     android:layout_height="wrap_content"
                     android:drawableEnd="@drawable/ic_person_black_24dp"
                     android:hint="@string/name_optional"
+                    android:text="@={viewModel.name}"
                     android:imeOptions="actionNext"
                     android:textColorHint="@color/grey_text" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -122,6 +135,7 @@
                     android:layout_height="wrap_content"
                     android:drawableEnd="@drawable/ic_email_black_24dp"
                     android:hint="@string/email_optional"
+                    android:text="@={viewModel.email}"
                     android:imeOptions="actionDone"
                     android:textColorHint="@color/grey_text" />
             </com.google.android.material.textfield.TextInputLayout>

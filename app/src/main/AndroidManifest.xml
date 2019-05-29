@@ -4,6 +4,7 @@
     package="com.najdi.android.najdiapp">
 
     <application
+        android:name=".NajdiApplication"
         android:allowBackup="true"
         android:icon="@drawable/najdi_logo"
         android:label="@string/app_name"
@@ -11,13 +12,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".MainActivity">
+        <activity android:name=".launch.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".launch.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".launch.SignUpActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
