@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NajdiApp</string>
+    <string name="app_name">Najdi</string>
     <string name="welcome_msg">WELCOME TO \n NAJDI</string>
     <string name="sign_up">Sign Up</string>
     <string name="mobile_number_5xxxxxx">Mobile Number(5xxxxxx)</string>

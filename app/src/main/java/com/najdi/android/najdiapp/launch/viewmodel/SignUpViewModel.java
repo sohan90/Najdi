@@ -1,11 +1,14 @@
 package com.najdi.android.najdiapp.launch.viewmodel;
 
 import android.app.Application;
-import android.text.TextUtils;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.najdi.android.najdiapp.NajdiApplication;
 import com.najdi.android.najdiapp.R;
+import com.najdi.android.najdiapp.launch.model.BillingAddress;
+import com.najdi.android.najdiapp.launch.model.SignupRequestModel;
+import com.najdi.android.najdiapp.launch.model.SignupResponseModel;
+import com.najdi.android.najdiapp.repository.ApiRequest;
 import com.najdi.android.najdiapp.utitility.ResourceProvider;
 
 import androidx.annotation.NonNull;
@@ -16,6 +19,7 @@ import androidx.lifecycle.MutableLiveData;
 
 public class SignUpViewModel extends AndroidViewModel {
     private final ResourceProvider resourceProvider;
+    private final ApiRequest repository;
     public MutableLiveData<String> phoneNo = new MutableLiveData<>();
     public MutableLiveData<String> password = new MutableLiveData<>();
     public MutableLiveData<String> confirmPass = new MutableLiveData<>();
@@ -28,6 +32,7 @@ public class SignUpViewModel extends AndroidViewModel {
 
     public SignUpViewModel(@NonNull Application application) {
         super(application);
+        repository = new ApiRequest();
         NajdiApplication najdiApplication = (NajdiApplication) application;
         resourceProvider = najdiApplication.getResourceProvider();
     }
@@ -43,29 +48,41 @@ public class SignUpViewModel extends AndroidViewModel {
     }
 
     public void validate() {
-        boolean valid = true;
-        if (TextUtils.isEmpty(phoneNo.getValue())) {
-            phoneNoError.setValue(resourceProvider.getString(R.string.invalid_phone_no));
-        } else {
+        boolean valid = false;
+        if (phoneNo.getValue() != null) {
             phoneNoError.setValue(null);
-        }
-        if (TextUtils.isEmpty(password.getValue())) {
-            passwordError.setValue(resourceProvider.getString(R.string.invalid_pass));
         } else {
+            phoneNoError.setValue(resourceProvider.getString(R.string.invalid_phone_no));
+        }
+
+        if (password.getValue() != null && password.getValue().length() <= 6) {
             passwordError.setValue(null);
-        }
-        if (TextUtils.isEmpty(confirmPass.getValue()) && password.getValue() != null &&
-                !password.getValue().equals(confirmPass.getValue())) {
-            confirmPassError.setValue(resourceProvider.getString(R.string.invalid_pass));
-            valid = false;
+
         } else {
+            passwordError.setValue(resourceProvider.getString(R.string.invalid_pass));
+        }
+
+        if (password.getValue() != null && confirmPass.getValue() != null && confirmPass.getValue()
+                .equals(password.getValue())) {
+
             confirmPassError.setValue(null);
+            valid = true;
+
+        } else {
+            confirmPassError.setValue(resourceProvider.getString(R.string.invalid_pass));
         }
         validateSuccess.setValue(valid);
     }
 
-    public void registerUser() {
-
+    public LiveData<SignupResponseModel> registerUser() {
+        SignupRequestModel signupRequestModel = new SignupRequestModel();
+        signupRequestModel.setEmail(email.getValue());
+        signupRequestModel.setPassword(password.getValue());
+        signupRequestModel.setUsername(name.getValue());
+        BillingAddress billingAddress = new BillingAddress();
+        billingAddress.setPhone(phoneNo.getValue());
+        signupRequestModel.setBilling(billingAddress);
+        return repository.registerUser(resourceProvider, signupRequestModel);
     }
 
 }

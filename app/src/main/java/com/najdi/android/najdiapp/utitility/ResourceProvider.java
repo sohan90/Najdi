@@ -12,6 +12,10 @@ public class ResourceProvider {
         this.mContext = mContext;
     }
 
+    public Context getAppContext(){
+        return mContext;
+    }
+
     public String getString(int resId) {
         return mContext.getString(resId);
     }
