@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/size"
+            android:textColor="@color/black" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/options"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_keyboard_arrow_down_black_24dp"
+            android:hint="@string/choose_an_option"
+            android:imeOptions="actionNext"
+            android:inputType="none"
+            android:focusableInTouchMode="false"
+            android:cursorVisible="false"
+            android:textColorHint="@color/grey_text" />
+
+    </LinearLayout>
+</layout>

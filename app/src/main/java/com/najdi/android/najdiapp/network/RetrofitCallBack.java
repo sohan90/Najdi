@@ -1,7 +1,7 @@
 package com.najdi.android.najdiapp.network;
 
 import com.google.gson.Gson;
-import com.najdi.android.najdiapp.ErrorResponse;
+import com.najdi.android.najdiapp.common.BaseResponse;
 
 import java.io.IOException;
 
@@ -26,8 +26,8 @@ public class RetrofitCallBack<T> implements Callback<T> {
                 if (response.errorBody() != null) {
                     String errorJson = response.errorBody().string();
                     Gson gson = new Gson();
-                    ErrorResponse errorResponse = gson.fromJson(errorJson, ErrorResponse.class);
-                    mCallback.onFailurResponse(call, errorResponse);
+                    BaseResponse baseResponse = gson.fromJson(errorJson, BaseResponse.class);
+                    mCallback.onFailurResponse(call, baseResponse);
                 }
 
             } catch (IOException e) {
@@ -38,12 +38,12 @@ public class RetrofitCallBack<T> implements Callback<T> {
 
     @Override
     public void onFailure(Call<T> call, Throwable t) {
-        mCallback.onFailurResponse(call, new ErrorResponse());
+        mCallback.onFailurResponse(call, new BaseResponse());
     }
 
     public interface CustomCallBack<T> {
         void onSuccesResponse(Call<T> call, T t);
 
-        void onFailurResponse(Call<T> call, ErrorResponse errorResponse);
+        void onFailurResponse(Call<T> call, BaseResponse baseResponse);
     }
 }

@@ -1,4 +1,4 @@
-package com.najdi.android.najdiapp;
+package com.najdi.android.najdiapp.common;
 
 public class Constants {
 
@@ -6,6 +6,7 @@ public class Constants {
 
     public interface FragmentTags {
         String SIGN_UP_FRAG = "sign_up";
+        String PRODUCT_LIST_FRAG = "product_list_frag";
 
     }
 }

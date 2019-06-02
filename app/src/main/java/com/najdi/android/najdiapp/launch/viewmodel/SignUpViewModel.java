@@ -3,23 +3,18 @@ package com.najdi.android.najdiapp.launch.viewmodel;
 import android.app.Application;
 
 import com.google.android.material.textfield.TextInputLayout;
-import com.najdi.android.najdiapp.NajdiApplication;
+import com.najdi.android.najdiapp.common.BaseViewModel;
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.launch.model.BillingAddress;
 import com.najdi.android.najdiapp.launch.model.SignupRequestModel;
 import com.najdi.android.najdiapp.launch.model.SignupResponseModel;
-import com.najdi.android.najdiapp.repository.ApiRequest;
-import com.najdi.android.najdiapp.utitility.ResourceProvider;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.BindingAdapter;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-public class SignUpViewModel extends AndroidViewModel {
-    private final ResourceProvider resourceProvider;
-    private final ApiRequest repository;
+public class SignUpViewModel extends BaseViewModel {
     public MutableLiveData<String> phoneNo = new MutableLiveData<>();
     public MutableLiveData<String> password = new MutableLiveData<>();
     public MutableLiveData<String> confirmPass = new MutableLiveData<>();
@@ -32,9 +27,6 @@ public class SignUpViewModel extends AndroidViewModel {
 
     public SignUpViewModel(@NonNull Application application) {
         super(application);
-        repository = new ApiRequest();
-        NajdiApplication najdiApplication = (NajdiApplication) application;
-        resourceProvider = najdiApplication.getResourceProvider();
     }
 
 
@@ -42,7 +34,7 @@ public class SignUpViewModel extends AndroidViewModel {
         return validateSuccess;
     }
 
-    @BindingAdapter("bind:errorText")
+    @BindingAdapter("errorText")
     public static void setErrorMessage(TextInputLayout view, String errorMessage) {
         view.setError(errorMessage);
     }
@@ -82,7 +74,7 @@ public class SignUpViewModel extends AndroidViewModel {
         BillingAddress billingAddress = new BillingAddress();
         billingAddress.setPhone(phoneNo.getValue());
         signupRequestModel.setBilling(billingAddress);
-        return repository.registerUser(resourceProvider, signupRequestModel);
+        return repository.registerUser(signupRequestModel);
     }
 
 }

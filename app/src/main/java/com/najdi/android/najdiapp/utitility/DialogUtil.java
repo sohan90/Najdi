@@ -4,11 +4,26 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.SimpleAdapter;
 
 import com.najdi.android.najdiapp.R;
+import com.najdi.android.najdiapp.common.GenericClickListener;
+
+import java.util.List;
+
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 
 /**
@@ -86,5 +101,26 @@ public class DialogUtil {
             AlertDialog dialog = builder.create();
             dialog.show();
         }
+    }
+
+    public static void showPopuwindow(Context context, View anchorView, List<String> list, GenericClickListener<String> clickListener) {
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+        View customView = inflater.inflate(R.layout.item_pop_window, null);
+        ArrayAdapter<String> itemsAdapter = new ArrayAdapter<>(context,
+                android.R.layout.simple_list_item_1, list);
+        ListView listView = customView.findViewById(R.id.list);
+        listView.setAdapter(itemsAdapter);
+        PopupWindow popupWindow = new PopupWindow(customView, anchorView.getWidth(),
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setElevation(20);
+        popupWindow.setFocusable(true);
+        popupWindow.showAsDropDown(anchorView,0, 0);
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            clickListener.onClicked(list.get(position));
+            popupWindow.dismiss();
+        });
+
     }
 }

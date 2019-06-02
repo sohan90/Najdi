@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
@@ -47,6 +48,7 @@
                     android:layout_margin="8dp"
                     android:layout_marginTop="15dp"
                     app:errorEnabled="true"
+                    bind:errorText="@{viewModel.phoneNoError}"
                     app:hintTextAppearance="@style/HintText">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -56,6 +58,7 @@
                         android:drawableEnd="@drawable/ic_phone_black_24dp"
                         android:hint="@string/mobile_number_5xxxxxx"
                         android:imeOptions="actionNext"
+                        android:text="@={viewModel.phoneNo}"
                         android:textColorHint="@color/grey_text" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -65,6 +68,9 @@
                     android:layout_margin="8dp"
                     android:layout_marginTop="5dp"
                     app:errorEnabled="true"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="6"
+                    bind:errorText="@{viewModel.passwordError}"
                     app:hintTextAppearance="@style/HintText"
                     app:passwordToggleEnabled="true"
                     app:passwordToggleTint="@color/green_default">
@@ -74,6 +80,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/password"
+                        android:text="@={viewModel.password}"
                         android:imeOptions="actionNext"
                         android:inputType="textPassword"
                         android:textColorHint="@color/grey_text" />
@@ -112,7 +119,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:background="@drawable/round_corner_stroke_green_selector"
-                    android:text="@string/log_in"
+                    android:text="@string/login_as_a_guest"
+                    android:textAllCaps="false"
                     android:textColor="@color/green_default"
                     android:textStyle="bold" />
 

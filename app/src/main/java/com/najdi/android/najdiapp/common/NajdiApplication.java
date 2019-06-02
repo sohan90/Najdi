@@ -1,4 +1,4 @@
-package com.najdi.android.najdiapp;
+package com.najdi.android.najdiapp.common;
 
 import android.app.Activity;
 import android.app.Application;

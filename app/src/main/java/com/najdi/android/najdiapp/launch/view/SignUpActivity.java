@@ -1,8 +1,8 @@
-package com.najdi.android.najdiapp.launch;
+package com.najdi.android.najdiapp.launch.view;
 
 import android.os.Bundle;
 
-import com.najdi.android.najdiapp.BaseActivity;
+import com.najdi.android.najdiapp.common.BaseActivity;
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.databinding.ActivitySignUpBinding;
 import com.najdi.android.najdiapp.launch.model.SignupResponseModel;
