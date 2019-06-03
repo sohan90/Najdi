@@ -191,7 +191,8 @@
                 android:paddingTop="20dp"
                 android:paddingBottom="20dp"
                 android:text="@string/add_to_cart"
-                android:textColor="@color/white"
+                android:enabled="@{viewModel.enableAddCartButton, default=false}"
+                android:textColor="@color/but_selector"
                 android:textStyle="bold" />
 
             <Button

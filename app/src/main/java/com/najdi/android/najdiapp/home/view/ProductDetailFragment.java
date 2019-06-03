@@ -7,12 +7,14 @@ import android.view.ViewGroup;
 
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseFragment;
+import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.databinding.FragmentProductDetailBinding;
 import com.najdi.android.najdiapp.databinding.ItemDetailBinding;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.home.viewmodel.HomeScreenViewModel;
 import com.najdi.android.najdiapp.home.viewmodel.ProductDetailViewModel;
 import com.najdi.android.najdiapp.home.viewmodel.ProductListItemModel;
+import com.najdi.android.najdiapp.shoppingcart.view.CartFragment;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 
 public class ProductDetailFragment extends BaseFragment {
@@ -52,12 +55,11 @@ public class ProductDetailFragment extends BaseFragment {
         inflateViewForProductVariation();
         initializeClickListener();
         bindViewModelWithLiveData();
-        showCartImageInActivityToolBar();
         return binding.getRoot();
     }
 
-    private void showCartImageInActivityToolBar() {
-        homeScreeViewModel.showCartImageLiveData().setValue(true);
+    private void updateNotificationCartCount() {
+        homeScreeViewModel.updateNotificationCartCount().setValue(0);
     }
 
     private void bindViewModelWithLiveData() {
@@ -71,8 +73,25 @@ public class ProductDetailFragment extends BaseFragment {
     }
 
     private void initializeClickListener() {
-        binding.dec.setOnClickListener(v -> viewModel.decreamentQuantity());
-        binding.inc.setOnClickListener(v -> viewModel.increamentQuantity());
+        binding.dec.setOnClickListener(v -> viewModel.decrementQuantity());
+        binding.inc.setOnClickListener(v -> viewModel.incrementQuantity());
+        binding.addToCart.setOnClickListener(v -> {
+            showProgressDialog();
+            LiveData<BaseResponse> liveData = viewModel.addToCart();
+            liveData.observe(this, baseResponse -> {
+                hideProgressDialog();
+                if (baseResponse != null && baseResponse.getCode().equalsIgnoreCase("200")) {
+                    updateNotificationCartCount();
+                    moveToAddCartScreen();
+                }
+            });
+        });
+    }
+
+
+    private void moveToAddCartScreen() {
+        CartFragment cartFragment = CartFragment.createInstance();
+        homeScreeViewModel.getReplaceFragmentLiveData().setValue(cartFragment);
     }
 
     private void setDetailsFromBundle() {
@@ -89,10 +108,12 @@ public class ProductDetailFragment extends BaseFragment {
                 binding.container.addView(view);
                 ItemDetailBinding detailBinding = ItemDetailBinding.bind(view);
                 detailBinding.name.setText(attributes.getName());
+                detailBinding.options.setTag(attributes.getId());
                 detailBinding.options.setOnClickListener((v -> {
                     if (getActivity() != null) {
+                        int selectedAttributeId = (int) v.getTag();
                         DialogUtil.showPopuwindow(getActivity(), v, stringList, s -> {
-                            viewModel.updatePrice(productListResponse, s);
+                            viewModel.updatePrice(productListResponse, s, selectedAttributeId);
                             detailBinding.options.setText(s);
                         });
                     }

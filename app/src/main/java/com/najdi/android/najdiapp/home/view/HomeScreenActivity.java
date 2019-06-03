@@ -13,6 +13,8 @@ import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.databinding.ActivityHomeScreenBinding;
 import com.najdi.android.najdiapp.databinding.NavHeaderHomeScreenBinding;
 import com.najdi.android.najdiapp.home.viewmodel.HomeScreenViewModel;
+import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
+import com.najdi.android.najdiapp.shoppingcart.view.CartFragment;
 import com.najdi.android.najdiapp.utitility.FragmentHelper;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
@@ -35,6 +37,8 @@ public class HomeScreenActivity extends BaseActivity
     private HomeScreenViewModel viewModel;
     private TextView toolBarTitle;
     private View cartImageLyt;
+    private TextView notificationText;
+    private int cartSize;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,16 +47,18 @@ public class HomeScreenActivity extends BaseActivity
         initializeViewModel();
         setNavigationBar();
         replaceFragment(ProductListFragment.createInstance());
-        subscribeForLuanchProductDetail();
+        subscribeForLaunchProductDetail();
         subscribeForShowCartImage();
+        subscribeReplaceFragment();
         fetchProduct();
+        fetchCart();
     }
 
     private void subscribeForShowCartImage() {
-        viewModel.showCartImageLiveData().observe(this, show -> {
-            if (show) {
-                setToolBarTitle(getString(R.string.product_details));
-                cartImageLyt.setVisibility(View.VISIBLE);
+        viewModel.updateNotificationCartCount().observe(this, count -> {
+            if (count != -1) {
+                cartSize++;
+                updateNotificationIconText();
             }
         });
     }
@@ -67,12 +73,18 @@ public class HomeScreenActivity extends BaseActivity
                 true, containerId);
     }
 
-    private void subscribeForLuanchProductDetail() {
+    private void subscribeForLaunchProductDetail() {
         viewModel.getLaunchProductDetailLiveData().observe(this, productListResponse -> {
             if (productListResponse != null) {
+                setToolBarTitle(getString(R.string.product_details));
+                updateNotificationIconText();
                 replaceFragment(ProductDetailFragment.createInstance(productListResponse));
             }
         });
+    }
+
+    private void subscribeReplaceFragment() {
+        viewModel.getReplaceFragmentLiveData().observe(this, this::replaceFragment);
     }
 
     private void fetchProduct() {
@@ -83,6 +95,20 @@ public class HomeScreenActivity extends BaseActivity
                 viewModel.getProductList().setValue(productListResponses);
             }
         });
+    }
+
+    private void fetchCart() {
+        viewModel.getCart().observe(this, cartResponse -> {
+            if (cartResponse != null) {
+                CartResponse.Data data = cartResponse.getData();
+                cartSize = data.getCartdata().size();
+            }
+        });
+    }
+
+    private void updateNotificationIconText() {
+        cartImageLyt.setVisibility(View.VISIBLE);
+        notificationText.setText(String.valueOf(cartSize));
     }
 
     private void setNavigationBar() {
@@ -97,6 +123,7 @@ public class HomeScreenActivity extends BaseActivity
 
         toolBarTitle = viewActionBar.findViewById(R.id.title);
         cartImageLyt = viewActionBar.findViewById(R.id.cartImageLyt);
+        notificationText = viewActionBar.findViewById(R.id.notification_text);
         toolBarTitle.setText(getString(R.string.category));
         toolBarTitle.setGravity(Gravity.CENTER);
         drawerLayout = binding.drawerLayout;
@@ -137,6 +164,10 @@ public class HomeScreenActivity extends BaseActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         switch (id) {
+            case R.id.shopping_cart:
+                CartFragment cartFragment = CartFragment.createInstance();
+                replaceFragment(cartFragment);
+                break;
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);

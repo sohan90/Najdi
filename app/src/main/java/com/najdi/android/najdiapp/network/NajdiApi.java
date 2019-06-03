@@ -3,16 +3,23 @@ package com.najdi.android.najdiapp.network;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.BuildConfig;
 import com.najdi.android.najdiapp.common.Constants;
+import com.najdi.android.najdiapp.home.model.CartRequest;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.launch.model.LoginRequestModel;
 import com.najdi.android.najdiapp.launch.model.SignupRequestModel;
 import com.najdi.android.najdiapp.launch.model.SignupResponseModel;
+import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
+import retrofit2.http.FieldMap;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
@@ -29,4 +36,16 @@ public interface NajdiApi {
     @GET(BuildConfig.NAJDI_END_POINTS + "products")
     @Headers({"Content-Type:application/json", "Authorization" + ": " + Constants.BASIC_64_AUTH})
     Call<List<ProductListResponse>> getProducts();
+
+    @POST(BuildConfig.NAJDI_END_POINTS + "cart/add")
+    @Headers({"Content-Type:application/json", "Authorization" + ": " + Constants.BASIC_64_AUTH})
+    Call<BaseResponse> addToCart(@Body CartRequest cartRequest);
+
+    @GET(BuildConfig.NAJDI_END_POINTS + "cart")
+    @Headers({"Content-Type:application/json", "Authorization" + ": " + Constants.BASIC_64_AUTH})
+    Call<CartResponse> getCart();
+
+    @HTTP(method = "DELETE", path = "cart/cart-item", hasBody = true)
+    @Headers({"Content-Type:application/json", "Authorization" + ": " + Constants.BASIC_64_AUTH})
+    Call<BaseResponse> removeCartItem(@Body HashMap<String, String> cartObj);
 }
