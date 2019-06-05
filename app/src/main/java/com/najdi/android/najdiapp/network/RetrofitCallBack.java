@@ -19,6 +19,7 @@ public class RetrofitCallBack<T> implements Callback<T> {
 
     @Override
     public void onResponse(Call<T> call, Response<T> response) {
+
         if (response.isSuccessful() && response.body() != null) {
             mCallback.onSuccesResponse(call, response.body());
         } else {

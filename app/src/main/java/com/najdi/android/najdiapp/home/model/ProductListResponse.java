@@ -3,6 +3,8 @@ package com.najdi.android.najdiapp.home.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,6 +23,9 @@ public class ProductListResponse implements Parcelable {
     List<Image> images;
     List<Attributes> attributes;
     List<VariationData> variations_data;
+
+    // local data
+    private CartResponse.CartData cartData;
 
 
     protected ProductListResponse(Parcel in) {
@@ -51,6 +56,14 @@ public class ProductListResponse implements Parcelable {
             return new ProductListResponse[size];
         }
     };
+
+    public CartResponse.CartData getCartData() {
+        return cartData;
+    }
+
+    public void setCartData(CartResponse.CartData cartData) {
+        this.cartData = cartData;
+    }
 
     public List<VariationData> getVariationsData() {
         return variations_data;

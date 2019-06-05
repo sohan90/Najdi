@@ -1,15 +1,12 @@
 package com.najdi.android.najdiapp.shoppingcart.view;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.databinding.ItemCartBinding;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
-import com.najdi.android.najdiapp.shoppingcart.viewmodel.CartViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -18,11 +15,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
-    private final CartViewModel cartViewModel;
+    private final AdapterClickLisntener clickListener;
     private List<CartResponse.CartData> cartDataList;
 
-    public CartAdapter(CartViewModel cartViewModel, List<CartResponse.CartData> cartDataList) {
-        this.cartViewModel = cartViewModel;
+    public CartAdapter(AdapterClickLisntener clickListener, List<CartResponse.CartData> cartDataList) {
+        this.clickListener = clickListener;
         this.cartDataList = cartDataList;
     }
 
@@ -75,9 +72,20 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             cartBinding.delete.setOnClickListener(v -> {
                 CartResponse.CartData cartData = cartDataList.get(getAdapterPosition());
                 String cartItemKey = cartData.getTm_cart_item_key();
-                cartViewModel.getCartItemKeyLiveData().setValue(cartItemKey);
+                clickListener.onRemoveItem(cartItemKey);
+                cartDataList.remove(getAdapterPosition());
                 notifyItemRemoved(getAdapterPosition());
             });
+
+            cartBinding.edit.setOnClickListener(v -> {
+                CartResponse.CartData cartData = cartDataList.get(getAdapterPosition());
+                clickListener.onEdit(cartData);
+            });
         }
+    }
+
+    public interface AdapterClickLisntener{
+        void onRemoveItem(String cartItemKey);
+        void onEdit(CartResponse.CartData cartData);
     }
 }

@@ -70,7 +70,7 @@
                     android:layout_toStartOf="@id/total_price"
                     android:layout_toEndOf="@id/img"
                     android:maxLines="1"
-                    android:text="@{cartModel.tm_epo_product_price_with_options.concat(`ر.س`)}"
+                    android:text="@{cartModel.seletedOptionPrice().concat(`ر.س`)}"
                     android:textColor="@color/black"
                     android:textDirection="locale" />
 

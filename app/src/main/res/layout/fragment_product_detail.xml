@@ -29,6 +29,7 @@
                 android:padding="15dp">
 
                 <ImageView
+                    android:id="@+id/reset"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_toStartOf="@id/clear"

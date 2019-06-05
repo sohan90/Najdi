@@ -31,7 +31,6 @@ public class CartFragment extends BaseFragment {
     FragmentCartBinding binding;
     private HomeScreenViewModel homeScreenViewModel;
     private CartAdapter adapter;
-    private CartResponse cartResponse;
     private CartViewModel viewModel;
 
     public static CartFragment createInstance() {
@@ -45,10 +44,9 @@ public class CartFragment extends BaseFragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_cart, container, false);
         initializeHomeScreenViewModel();
         initializeViewModel();
-        subscribeForCartResponse();
-        setRecyclAdapter();
-        subscribeForRemoveItem();
         bindLiveData();
+        setRecyclAdapter();
+        subscribeForCartResponse();
         return binding.getRoot();
     }
 
@@ -57,24 +55,24 @@ public class CartFragment extends BaseFragment {
         binding.setLifecycleOwner(this);
     }
 
-    private void subscribeForRemoveItem() {
-        viewModel.getCartItemKeyLiveData().observe(this, s -> {
-            if (!TextUtils.isEmpty(s)) {
-                removeItem(s);
-            }
-        });
-    }
-
     private void removeItem(String s) {
         showProgressDialog();
         LiveData<BaseResponse> baseResponseLiveData = viewModel.removeCart(s);
         baseResponseLiveData.observe(this, baseResponse -> {
             hideProgressDialog();
             if (baseResponse != null) {
+                updateCartSize();
                 String message = baseResponse.getData().getMessage();
                 ToastUtils.getInstance(getActivity()).showShortToast(message);
             }
         });
+    }
+
+    private void updateCartSize() {
+        int cartSize = homeScreenViewModel.getCartSize() - 1;
+        homeScreenViewModel.setCartSize(cartSize);
+        homeScreenViewModel.updateNotificationCartCount().
+                setValue(homeScreenViewModel.getCartSize());
     }
 
     private void initializeViewModel() {
@@ -85,11 +83,11 @@ public class CartFragment extends BaseFragment {
         showProgressDialog();
         homeScreenViewModel.getCart().observe(this, cartResponse -> {
             hideProgressDialog();
-            this.cartResponse = cartResponse;
             if (cartResponse != null && cartResponse.getData() != null) {
                 viewModel.setTotal(cartResponse.getData().getCartdata());
                 List<CartResponse.CartData> cartDataList = cartResponse.getData().getCartdata();
                 adapter.setData(cartDataList);
+                homeScreenViewModel.getCart().removeObservers(this);
             }
         });
     }
@@ -98,7 +96,27 @@ public class CartFragment extends BaseFragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL,
                 false);
         binding.recyl.setLayoutManager(linearLayoutManager);
-        adapter = new CartAdapter(viewModel, new ArrayList<>());
+        adapter = new CartAdapter(new CartAdapter.AdapterClickLisntener() {
+            @Override
+            public void onRemoveItem(String cartItemKey) {
+                if (!TextUtils.isEmpty(cartItemKey)) {
+                    removeItem(cartItemKey);
+                }
+            }
+
+            @Override
+            public void onEdit(CartResponse.CartData cartData) {
+                showProgressDialog();
+                viewModel.getIndividualProduct(cartData.getProductId()).observe(CartFragment.this,
+                        productListResponse -> {
+                            hideProgressDialog();
+                            if (productListResponse != null && getActivity() != null) {
+                                productListResponse.setCartData(cartData);
+                                homeScreenViewModel.getLaunchProductDetailLiveData().setValue(productListResponse);
+                            }
+                        });
+            }
+        }, new ArrayList<>());
         binding.recyl.setAdapter(adapter);
     }
 

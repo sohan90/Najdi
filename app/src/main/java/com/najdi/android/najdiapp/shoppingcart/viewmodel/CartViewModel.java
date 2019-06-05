@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.BaseViewModel;
+import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 
 import java.util.HashMap;
@@ -40,7 +41,7 @@ public class CartViewModel extends BaseViewModel {
     public void setTotal(List<CartResponse.CartData> cartDataList) {
         int subTotal = 0;
         for (CartResponse.CartData cartData : cartDataList) {
-            int total = Integer.parseInt(cartData.getTm_epo_product_price_with_options());
+            int total = Integer.parseInt(cartData.seletedOptionPrice());
             subTotal = total + subTotal;
         }
         subtotalLiveData.setValue(String.valueOf(subTotal));
@@ -52,4 +53,9 @@ public class CartViewModel extends BaseViewModel {
         hashMap.put("cart_item_key", itemKey);
         return repository.removeCartItem(hashMap);
     }
+
+    public LiveData<ProductListResponse> getIndividualProduct(int productId) {
+        return repository.getIndividualProduct(productId);
+    }
+
 }

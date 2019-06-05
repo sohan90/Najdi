@@ -16,6 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import static com.najdi.android.najdiapp.common.Constants.APPEND_ATTRIBUTE_STR;
+
 public class ProductDetailViewModel extends BaseViewModel {
     public MutableLiveData<String> totalPrice = new MutableLiveData<>();
     public MutableLiveData<Integer> quantityCount = new MutableLiveData<>();
@@ -34,6 +36,14 @@ public class ProductDetailViewModel extends BaseViewModel {
         selectOptionPrice = defaultPrice;
     }
 
+    public void setTotalPrice(String totalPrice) {
+        this.totalPrice.setValue(totalPrice);
+    }
+
+    public void setQuantityCount(int quantity) {
+        this.quantityCount.setValue(quantity);
+    }
+
     public void incrementQuantity() {
         if (quantityCount.getValue() != null) {
             quantityCount.setValue(quantityCount.getValue() + 1);
@@ -41,6 +51,7 @@ public class ProductDetailViewModel extends BaseViewModel {
         updateTotalPrice(selectOptionPrice);
         enableAddCartButton();
     }
+
 
     public void decrementQuantity() {
         if (quantityCount.getValue() != null && quantityCount.getValue() > 0) {
@@ -67,11 +78,12 @@ public class ProductDetailViewModel extends BaseViewModel {
         }
     }
 
+
     private void createAttributeForSelectedValue(String selectedValue, int selectedId) {
         createHashMap();
         for (ProductListResponse.Attributes attributes : productListResponse.getAttributesList()) {
             if (attributes.getId() == selectedId) {
-                attributHashMap.put("attribute_" + attributes.getSlug(), selectedValue);
+                attributHashMap.put(APPEND_ATTRIBUTE_STR + attributes.getSlug(), selectedValue);
                 break;
             }
         }
@@ -102,6 +114,13 @@ public class ProductDetailViewModel extends BaseViewModel {
         }
     }
 
+    public void reset() {
+        attributHashMap.clear();
+        quantityCount.setValue(0);
+        totalPrice.setValue("");
+        enableAddCartButton();
+    }
+
     public LiveData<BaseResponse> addToCart() {
         if (quantityCount.getValue() != null && productListResponse != null) {
             CartRequest cartRequest = new CartRequest();
@@ -109,12 +128,6 @@ public class ProductDetailViewModel extends BaseViewModel {
             cartRequest.setProductId(productListResponse.getId());
             cartRequest.setVariationId(variationId);
             cartRequest.setVariation(attributHashMap);
-
-          /*  HashMap<String, Object> top = new HashMap<>();
-            top.put("product_id", productListResponse.getId());
-            top.put("variation_id", variationId);
-            top.put("quantity", quantityCount.getValue());
-            top.put("variation", attributHashMap);*/
             return repository.addToCart(cartRequest);
         }
         return null;

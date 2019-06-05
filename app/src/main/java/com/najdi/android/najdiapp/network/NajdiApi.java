@@ -22,6 +22,8 @@ import retrofit2.http.GET;
 import retrofit2.http.HTTP;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface NajdiApi {
 
@@ -48,4 +50,8 @@ public interface NajdiApi {
     @HTTP(method = "DELETE", path = "cart/cart-item", hasBody = true)
     @Headers({"Content-Type:application/json", "Authorization" + ": " + Constants.BASIC_64_AUTH})
     Call<BaseResponse> removeCartItem(@Body HashMap<String, String> cartObj);
+
+    @GET(BuildConfig.NAJDI_END_POINTS + "products/{productId}")
+    @Headers({"Content-Type:application/json", "Authorization" + ": " + Constants.BASIC_64_AUTH})
+    Call<ProductListResponse> getIndividualProduct(@Path("productId") int productId);
 }

@@ -131,4 +131,22 @@ public class Repository {
         }));
         return liveData;
     }
+
+    public LiveData<ProductListResponse> getIndividualProduct(int productId) {
+        MutableLiveData<ProductListResponse> liveData = new MutableLiveData<>();
+        RetrofitClient.getInstance().getIndividualProduct(productId).enqueue(new RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<ProductListResponse>() {
+            @Override
+            public void onSuccesResponse(Call<ProductListResponse> call, ProductListResponse productListResponse) {
+                liveData.setValue(productListResponse);
+            }
+
+            @Override
+            public void onFailurResponse(Call<ProductListResponse> call, BaseResponse baseResponse) {
+                baseResponse.handleError(resourceProvider.getAppContext());
+                liveData.setValue(null);
+            }
+        }));
+        return liveData;
+
+    }
 }

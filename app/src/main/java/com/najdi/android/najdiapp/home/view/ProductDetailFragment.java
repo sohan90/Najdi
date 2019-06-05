@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseFragment;
 import com.najdi.android.najdiapp.common.BaseResponse;
@@ -14,6 +15,7 @@ import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.home.viewmodel.HomeScreenViewModel;
 import com.najdi.android.najdiapp.home.viewmodel.ProductDetailViewModel;
 import com.najdi.android.najdiapp.home.viewmodel.ProductListItemModel;
+import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 import com.najdi.android.najdiapp.shoppingcart.view.CartFragment;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 
@@ -27,16 +29,22 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 
+import static com.najdi.android.najdiapp.common.Constants.APPEND_ATTRIBUTE_STR;
+
 public class ProductDetailFragment extends BaseFragment {
     private static final String EXTRA_PRODUCT_DETAIL_KEY = "product_detail_key";
+    private static final String EXTR_PRODUCT_SELECTED_VARIATION = "selected_variation";
     private FragmentProductDetailBinding binding;
     private HomeScreenViewModel homeScreeViewModel;
     private ProductListResponse productListResponse;
     private ProductDetailViewModel viewModel;
+    private CartResponse.CartData cartData;
 
-    public static ProductDetailFragment createInstance(ProductListResponse productListResponse) {
+    public static ProductDetailFragment createInstance(ProductListResponse productListResponse,
+                                                       HashMap<String, String> selectedVartionHashMap) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(EXTRA_PRODUCT_DETAIL_KEY, productListResponse);
+        bundle.putSerializable(EXTR_PRODUCT_SELECTED_VARIATION, selectedVartionHashMap);
         ProductDetailFragment productDetailFragment = new ProductDetailFragment();
         productDetailFragment.setArguments(bundle);
         return productDetailFragment;
@@ -58,8 +66,9 @@ public class ProductDetailFragment extends BaseFragment {
         return binding.getRoot();
     }
 
-    private void updateNotificationCartCount() {
-        homeScreeViewModel.updateNotificationCartCount().setValue(0);
+
+    private void updateNotificationCartCount(int count) {
+        homeScreeViewModel.updateNotificationCartCount().setValue(count);
     }
 
     private void bindViewModelWithLiveData() {
@@ -75,13 +84,15 @@ public class ProductDetailFragment extends BaseFragment {
     private void initializeClickListener() {
         binding.dec.setOnClickListener(v -> viewModel.decrementQuantity());
         binding.inc.setOnClickListener(v -> viewModel.incrementQuantity());
+        binding.reset.setOnClickListener(v -> reset());
         binding.addToCart.setOnClickListener(v -> {
             showProgressDialog();
             LiveData<BaseResponse> liveData = viewModel.addToCart();
             liveData.observe(this, baseResponse -> {
                 hideProgressDialog();
                 if (baseResponse != null && baseResponse.getCode().equalsIgnoreCase("200")) {
-                    updateNotificationCartCount();
+                    homeScreeViewModel.setCartSize(homeScreeViewModel.getCartSize() + 1);
+                    updateNotificationCartCount(homeScreeViewModel.getCartSize());
                     moveToAddCartScreen();
                 }
             });
@@ -99,6 +110,7 @@ public class ProductDetailFragment extends BaseFragment {
     }
 
     private void inflateViewForProductVariation() {
+        binding.container.removeAllViews();
         if (productListResponse != null && productListResponse.getAttributesList() != null) {
             List<ProductListResponse.Attributes> attributesList = productListResponse.getAttributesList();
             for (ProductListResponse.Attributes attributes : attributesList) {
@@ -108,6 +120,8 @@ public class ProductDetailFragment extends BaseFragment {
                 binding.container.addView(view);
                 ItemDetailBinding detailBinding = ItemDetailBinding.bind(view);
                 detailBinding.name.setText(attributes.getName());
+                setDataForSelectedValue(detailBinding.options, attributes.getId(),
+                        attributes.getSlug());
                 detailBinding.options.setTag(attributes.getId());
                 detailBinding.options.setOnClickListener((v -> {
                     if (getActivity() != null) {
@@ -123,6 +137,26 @@ public class ProductDetailFragment extends BaseFragment {
         }
     }
 
+    private void reset(){
+        for (int i = 0; i < binding.container.getChildCount(); i++) {
+            View view = binding.container.getChildAt(i);
+            ItemDetailBinding detailBinding = DataBindingUtil.getBinding(view);
+            detailBinding.options.setText("");
+        }
+        viewModel.reset();
+    }
+
+    private void setDataForSelectedValue(TextInputEditText optionText, int id, String key) {
+        if (cartData != null && cartData.getVariation().size() > 0) {
+            String appendedKey = APPEND_ATTRIBUTE_STR.concat(key);
+            String selectedValue = cartData.getVariation().get(appendedKey);
+            optionText.setText(selectedValue);
+            viewModel.setTotalPrice(String.valueOf(cartData.getLineTotal()));
+            viewModel.setQuantityCount(cartData.getQuantity());
+            viewModel.updatePrice(productListResponse, selectedValue, id);
+        }
+    }
+
     private List<String> getListFromMap(List<HashMap<String, String>> hashMapList) {
         List<String> list = new ArrayList<>();
         for (HashMap<String, String> stringStringHashMap : hashMapList) {
@@ -134,6 +168,9 @@ public class ProductDetailFragment extends BaseFragment {
     private void getProductDetailFromBundle() {
         if (getArguments() != null && getArguments().containsKey(EXTRA_PRODUCT_DETAIL_KEY)) {
             productListResponse = getArguments().getParcelable(EXTRA_PRODUCT_DETAIL_KEY);
+            if (productListResponse != null) {
+                cartData = productListResponse.getCartData();
+            }
         }
     }
 

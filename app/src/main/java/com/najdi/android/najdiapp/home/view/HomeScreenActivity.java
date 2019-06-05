@@ -18,6 +18,8 @@ import com.najdi.android.najdiapp.shoppingcart.view.CartFragment;
 import com.najdi.android.najdiapp.utitility.FragmentHelper;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
+import java.util.HashMap;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.content.ContextCompat;
@@ -38,7 +40,7 @@ public class HomeScreenActivity extends BaseActivity
     private TextView toolBarTitle;
     private View cartImageLyt;
     private TextView notificationText;
-    private int cartSize;
+    private HashMap<String, String> selectedVariationMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,19 +50,25 @@ public class HomeScreenActivity extends BaseActivity
         setNavigationBar();
         replaceFragment(ProductListFragment.createInstance());
         subscribeForLaunchProductDetail();
+        subscribeForSelectedVariationOptions();
         subscribeForShowCartImage();
         subscribeReplaceFragment();
         fetchProduct();
         fetchCart();
     }
 
+
     private void subscribeForShowCartImage() {
         viewModel.updateNotificationCartCount().observe(this, count -> {
             if (count != -1) {
-                cartSize++;
-                updateNotificationIconText();
+                updateNotificationIconText(count);
             }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     private void initializeViewModel() {
@@ -73,12 +81,18 @@ public class HomeScreenActivity extends BaseActivity
                 true, containerId);
     }
 
+    private void subscribeForSelectedVariationOptions() {
+        viewModel.getSelecteVariationOptionLiveData().observe(this, selectedVariationMap -> {
+            this.selectedVariationMap = selectedVariationMap;
+        });
+    }
+
     private void subscribeForLaunchProductDetail() {
         viewModel.getLaunchProductDetailLiveData().observe(this, productListResponse -> {
             if (productListResponse != null) {
                 setToolBarTitle(getString(R.string.product_details));
-                updateNotificationIconText();
-                replaceFragment(ProductDetailFragment.createInstance(productListResponse));
+                updateNotificationIconText(viewModel.getCartSize());
+                replaceFragment(ProductDetailFragment.createInstance(productListResponse, null));
             }
         });
     }
@@ -101,14 +115,15 @@ public class HomeScreenActivity extends BaseActivity
         viewModel.getCart().observe(this, cartResponse -> {
             if (cartResponse != null) {
                 CartResponse.Data data = cartResponse.getData();
-                cartSize = data.getCartdata().size();
+                int cartSize = data.getCartdata().size();
+                viewModel.setCartSize(cartSize);
             }
         });
     }
 
-    private void updateNotificationIconText() {
+    private void updateNotificationIconText(int count) {
         cartImageLyt.setVisibility(View.VISIBLE);
-        notificationText.setText(String.valueOf(cartSize));
+        notificationText.setText(String.valueOf(count));
     }
 
     private void setNavigationBar() {

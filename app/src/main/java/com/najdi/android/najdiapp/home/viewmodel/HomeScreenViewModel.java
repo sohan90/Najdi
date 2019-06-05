@@ -6,6 +6,7 @@ import com.najdi.android.najdiapp.common.BaseViewModel;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 
+import java.util.HashMap;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,8 @@ public class HomeScreenViewModel extends BaseViewModel {
     private MutableLiveData<ProductListResponse> launchProductDetailLiveData;
     private MutableLiveData<Integer> showCartImageLiveData;
     private MutableLiveData<Fragment> replaceFragmentLiveData;
+    private MutableLiveData<HashMap<String, String>> selectedVariationLiveData;
+    int cartSize;
 
     public HomeScreenViewModel(@NonNull Application application) {
         super(application);
@@ -42,6 +45,13 @@ public class HomeScreenViewModel extends BaseViewModel {
         return launchProductDetailLiveData;
     }
 
+    public MutableLiveData<HashMap<String, String>> getSelecteVariationOptionLiveData() {
+        if (selectedVariationLiveData == null) {
+            selectedVariationLiveData = new MutableLiveData<>();
+        }
+        return selectedVariationLiveData;
+    }
+
     public MutableLiveData<Integer> updateNotificationCartCount() {
         if (showCartImageLiveData == null) {
             showCartImageLiveData = new MutableLiveData<>();
@@ -61,5 +71,11 @@ public class HomeScreenViewModel extends BaseViewModel {
         return repository.getCart();
     }
 
+    public void setCartSize(int cartSize) {
+        this.cartSize = cartSize;
+    }
 
+    public int getCartSize() {
+        return cartSize;
+    }
 }
