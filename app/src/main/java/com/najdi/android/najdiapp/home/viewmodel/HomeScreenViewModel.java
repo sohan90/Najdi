@@ -19,8 +19,10 @@ public class HomeScreenViewModel extends BaseViewModel {
     private MutableLiveData<List<ProductListResponse>> productListLivedata;
     private MutableLiveData<ProductListResponse> launchProductDetailLiveData;
     private MutableLiveData<Integer> showCartImageLiveData;
-    private MutableLiveData<Fragment> replaceFragmentLiveData;
+    private MutableLiveData<Integer> replaceFragmentLiveData;
     private MutableLiveData<HashMap<String, String>> selectedVariationLiveData;
+    private MutableLiveData<Boolean> setHomeScreenToolBarLiveData;
+    private MutableLiveData<String> setToolBarTitle;
     int cartSize;
 
     public HomeScreenViewModel(@NonNull Application application) {
@@ -59,13 +61,26 @@ public class HomeScreenViewModel extends BaseViewModel {
         return showCartImageLiveData;
     }
 
-    public MutableLiveData<Fragment> getReplaceFragmentLiveData() {
+    public MutableLiveData<Integer> getReplaceFragmentLiveData() {
         if (replaceFragmentLiveData == null) {
             replaceFragmentLiveData = new MutableLiveData<>();
         }
         return replaceFragmentLiveData;
     }
 
+    public MutableLiveData<String> getSetToolBarTitle(){
+        if (setToolBarTitle == null){
+            setToolBarTitle = new MutableLiveData<>();
+        }
+        return setToolBarTitle;
+    }
+
+    public MutableLiveData<Boolean> getSetHomeScreenToolBarLiveData(){
+        if (setHomeScreenToolBarLiveData == null){
+            setHomeScreenToolBarLiveData = new MutableLiveData<>();
+        }
+        return setHomeScreenToolBarLiveData;
+    }
 
     public LiveData<CartResponse> getCart() {
         return repository.getCart();

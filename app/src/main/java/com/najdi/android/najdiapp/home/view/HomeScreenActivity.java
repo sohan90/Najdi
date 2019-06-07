@@ -12,23 +12,24 @@ import com.najdi.android.najdiapp.common.BaseActivity;
 import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.databinding.ActivityHomeScreenBinding;
 import com.najdi.android.najdiapp.databinding.NavHeaderHomeScreenBinding;
+import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.home.viewmodel.HomeScreenViewModel;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 import com.najdi.android.najdiapp.shoppingcart.view.CartFragment;
 import com.najdi.android.najdiapp.utitility.FragmentHelper;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
-import java.util.HashMap;
-
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import static com.najdi.android.najdiapp.common.Constants.ScreeNames.PRODUCTS;
+import static com.najdi.android.najdiapp.common.Constants.ScreeNames.PRODUCT_DETAIL;
+import static com.najdi.android.najdiapp.common.Constants.ScreeNames.SHOPPING_CART;
 import static com.najdi.android.najdiapp.utitility.PreferenceUtils.USER_NAME_KEY;
 
 public class HomeScreenActivity extends BaseActivity
@@ -40,7 +41,8 @@ public class HomeScreenActivity extends BaseActivity
     private TextView toolBarTitle;
     private View cartImageLyt;
     private TextView notificationText;
-    private HashMap<String, String> selectedVariationMap;
+    private ActionBarDrawerToggle toggle;
+    private ProductListResponse productListResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +50,26 @@ public class HomeScreenActivity extends BaseActivity
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home_screen);
         initializeViewModel();
         setNavigationBar();
-        replaceFragment(ProductListFragment.createInstance());
+        replaceFragment(PRODUCTS);
         subscribeForLaunchProductDetail();
-        subscribeForSelectedVariationOptions();
         subscribeForShowCartImage();
         subscribeReplaceFragment();
+        subscribeToolBarTitle();
+        subscribeForHomeScreenToolBar();
         fetchProduct();
         fetchCart();
+    }
+
+    private void subscribeForHomeScreenToolBar() {
+        viewModel.getSetHomeScreenToolBarLiveData().observe(this, aBoolean -> {
+            if (aBoolean) {
+                setHomeScreeToolBar();
+            }
+        });
+    }
+
+    private void subscribeToolBarTitle() {
+        viewModel.getSetToolBarTitle().observe(this, this::setToolBarTitle);
     }
 
 
@@ -75,30 +90,45 @@ public class HomeScreenActivity extends BaseActivity
         viewModel = ViewModelProviders.of(this).get(HomeScreenViewModel.class);
     }
 
-    private void replaceFragment(Fragment fragment) {
+    private void replaceFragment(int screenName) {
         int containerId = binding.include.containerLyt.container.getId();
-        FragmentHelper.replaceFragment(this, fragment, Constants.FragmentTags.PRODUCT_LIST_FRAG,
-                true, containerId);
-    }
+        Fragment fragment;
+        switch (screenName) {
+            case PRODUCTS:
+                fragment = ProductListFragment.createInstance();
+                break;
 
-    private void subscribeForSelectedVariationOptions() {
-        viewModel.getSelecteVariationOptionLiveData().observe(this, selectedVariationMap -> {
-            this.selectedVariationMap = selectedVariationMap;
-        });
+            case PRODUCT_DETAIL:
+                fragment = ProductDetailFragment.createInstance(productListResponse);
+                break;
+
+            case SHOPPING_CART:
+                fragment = CartFragment.createInstance();
+                break;
+
+            default:
+                fragment = ProductListFragment.createInstance();
+                break;
+
+        }
+        FragmentHelper.replaceFragment(this, fragment,
+                Constants.FragmentTags.PRODUCT_LIST_FRAG, true, containerId);
     }
 
     private void subscribeForLaunchProductDetail() {
         viewModel.getLaunchProductDetailLiveData().observe(this, productListResponse -> {
             if (productListResponse != null) {
+                this.productListResponse = productListResponse;
                 setToolBarTitle(getString(R.string.product_details));
                 updateNotificationIconText(viewModel.getCartSize());
-                replaceFragment(ProductDetailFragment.createInstance(productListResponse, null));
+                replaceFragment(PRODUCT_DETAIL);
             }
         });
     }
 
     private void subscribeReplaceFragment() {
-        viewModel.getReplaceFragmentLiveData().observe(this, this::replaceFragment);
+        viewModel.getReplaceFragmentLiveData().observe(this, screenName ->
+                replaceFragment(screenName));
     }
 
     private void fetchProduct() {
@@ -143,10 +173,9 @@ public class HomeScreenActivity extends BaseActivity
         toolBarTitle.setGravity(Gravity.CENTER);
         drawerLayout = binding.drawerLayout;
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, binding.include.toolbar, R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);
-        toggle.getDrawerArrowDrawable().setColor(ContextCompat.getColor(this, R.color.white));
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -162,6 +191,21 @@ public class HomeScreenActivity extends BaseActivity
 
     private void setToolBarTitle(String title) {
         toolBarTitle.setText(title);
+        // Show back button
+        toggle.setDrawerIndicatorEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // Remove hamburger
+        //toggle.setDrawerIndicatorEnabled(false);
+        toggle.setToolbarNavigationClickListener(v -> onBackPressed());
+        toggle.syncState();
+    }
+
+
+    private void setHomeScreeToolBar() {
+        toolBarTitle.setText(getString(R.string.category));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        toggle.setDrawerIndicatorEnabled(true);
+        toggle.syncState();
     }
 
     @Override
@@ -170,7 +214,25 @@ public class HomeScreenActivity extends BaseActivity
             drawerLayout.closeDrawer(GravityCompat.START);
 
         } else {
-            super.onBackPressed();
+            int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
+            if (backStackCount == 1) {
+                finish();
+            } else {
+                getSupportFragmentManager().popBackStackImmediate();
+                Fragment fragment = FragmentHelper.
+                        getFragmentById(this, binding.include.containerLyt.container.getId());
+
+                if (fragment instanceof ProductListFragment) {
+                    cartImageLyt.setVisibility(View.INVISIBLE);
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                    toggle.setDrawerIndicatorEnabled(true);
+                    toggle.syncState();
+
+                } else if (fragment instanceof ProductDetailFragment) {
+                    setToolBarTitle(getString(R.string.product_details));
+                    cartImageLyt.setVisibility(View.VISIBLE);
+                }
+            }
         }
     }
 
@@ -180,9 +242,13 @@ public class HomeScreenActivity extends BaseActivity
         int id = item.getItemId();
         switch (id) {
             case R.id.shopping_cart:
-                CartFragment cartFragment = CartFragment.createInstance();
-                replaceFragment(cartFragment);
+                replaceFragment(SHOPPING_CART);
                 break;
+
+            case R.id.products:
+                replaceFragment(PRODUCTS);
+                break;
+
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);

@@ -9,6 +9,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseFragment;
 import com.najdi.android.najdiapp.common.BaseResponse;
+import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.databinding.FragmentProductDetailBinding;
 import com.najdi.android.najdiapp.databinding.ItemDetailBinding;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
@@ -33,18 +34,15 @@ import static com.najdi.android.najdiapp.common.Constants.APPEND_ATTRIBUTE_STR;
 
 public class ProductDetailFragment extends BaseFragment {
     private static final String EXTRA_PRODUCT_DETAIL_KEY = "product_detail_key";
-    private static final String EXTR_PRODUCT_SELECTED_VARIATION = "selected_variation";
     private FragmentProductDetailBinding binding;
     private HomeScreenViewModel homeScreeViewModel;
     private ProductListResponse productListResponse;
     private ProductDetailViewModel viewModel;
     private CartResponse.CartData cartData;
 
-    public static ProductDetailFragment createInstance(ProductListResponse productListResponse,
-                                                       HashMap<String, String> selectedVartionHashMap) {
+    public static ProductDetailFragment createInstance(ProductListResponse productListResponse) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(EXTRA_PRODUCT_DETAIL_KEY, productListResponse);
-        bundle.putSerializable(EXTR_PRODUCT_SELECTED_VARIATION, selectedVartionHashMap);
         ProductDetailFragment productDetailFragment = new ProductDetailFragment();
         productDetailFragment.setArguments(bundle);
         return productDetailFragment;
@@ -66,6 +64,12 @@ public class ProductDetailFragment extends BaseFragment {
         return binding.getRoot();
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        homeScreeViewModel.getSetToolBarTitle().setValue(getString(R.string.product_details));
+    }
 
     private void updateNotificationCartCount(int count) {
         homeScreeViewModel.updateNotificationCartCount().setValue(count);
@@ -101,8 +105,8 @@ public class ProductDetailFragment extends BaseFragment {
 
 
     private void moveToAddCartScreen() {
-        CartFragment cartFragment = CartFragment.createInstance();
-        homeScreeViewModel.getReplaceFragmentLiveData().setValue(cartFragment);
+        homeScreeViewModel.getReplaceFragmentLiveData().
+                setValue(Constants.ScreeNames.SHOPPING_CART);
     }
 
     private void setDetailsFromBundle() {
@@ -137,7 +141,7 @@ public class ProductDetailFragment extends BaseFragment {
         }
     }
 
-    private void reset(){
+    private void reset() {
         for (int i = 0; i < binding.container.getChildCount(); i++) {
             View view = binding.container.getChildAt(i);
             ItemDetailBinding detailBinding = DataBindingUtil.getBinding(view);

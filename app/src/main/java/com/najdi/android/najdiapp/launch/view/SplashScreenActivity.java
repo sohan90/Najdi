@@ -26,6 +26,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             } else {
                 launchLoginScreen();
             }
+            finish();
         }, DELAY);
     }
 

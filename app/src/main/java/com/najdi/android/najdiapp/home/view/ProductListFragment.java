@@ -42,6 +42,12 @@ public class ProductListFragment extends BaseFragment {
         return binding.getRoot();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        homeScreeViewModel.getSetHomeScreenToolBarLiveData().setValue(true);
+    }
+
     private void initialHomeScreenViewModel() {
         if (getActivity() != null) {
             homeScreeViewModel = ViewModelProviders.of(getActivity()).get(HomeScreenViewModel.class);

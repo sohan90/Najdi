@@ -55,6 +55,12 @@ public class CartFragment extends BaseFragment {
         binding.setLifecycleOwner(this);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        homeScreenViewModel.getSetToolBarTitle().setValue(getString(R.string.cart));
+    }
+
     private void removeItem(String s) {
         showProgressDialog();
         LiveData<BaseResponse> baseResponseLiveData = viewModel.removeCart(s);

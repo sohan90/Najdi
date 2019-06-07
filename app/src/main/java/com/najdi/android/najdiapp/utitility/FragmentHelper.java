@@ -90,8 +90,13 @@ public class FragmentHelper {
         manager.popBackStack(tag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
-    public static Fragment getFragment(AppCompatActivity context, String tag) {
+    public static Fragment getFragmentByTag(AppCompatActivity context, String tag) {
         FragmentManager fragmentManager = context.getSupportFragmentManager();
         return fragmentManager.findFragmentByTag(tag);
+    }
+
+    public static Fragment getFragmentById(AppCompatActivity context, int id) {
+        FragmentManager fragmentManager = context.getSupportFragmentManager();
+        return fragmentManager.findFragmentById(id);
     }
 }

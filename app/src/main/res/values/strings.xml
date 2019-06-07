@@ -59,4 +59,5 @@
     <string name="category">category</string>
     <string name="product_details">Product Details</string>
     <string name="currecy">1$s %ر.س</string>
+    <string name="cart">Cart</string>
 </resources>

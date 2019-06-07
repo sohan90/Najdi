@@ -7,8 +7,6 @@ import com.najdi.android.najdiapp.common.BaseViewModel;
 import com.najdi.android.najdiapp.home.model.CartRequest;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
 
-import org.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.Map;
 

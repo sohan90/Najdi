@@ -42,7 +42,7 @@
                         android:id="@+id/one"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
-                        android:background="@drawable/checkout_circle"
+                        android:background="@drawable/circle_selector"
                         android:gravity="center"
                         android:text="@string/one"
                         android:textColor="@color/white"
@@ -54,10 +54,11 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_centerInParent="true"
-                        android:background="@drawable/checkout_circle"
+                        android:background="@drawable/circle_selector"
                         android:gravity="center"
                         android:text="@string/two"
-                        android:textColor="@color/white"
+                        android:enabled="false"
+                        android:textColor="@color/circle_text_selector"
                         android:textStyle="bold" />
 
                     <TextView
@@ -65,10 +66,11 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_alignParentEnd="true"
-                        android:background="@drawable/checkout_circle"
+                        android:background="@drawable/circle_selector"
                         android:gravity="center"
                         android:text="@string/three"
-                        android:textColor="@color/white"
+                            android:enabled="false"
+                        android:textColor="@color/circle_text_selector"
                         android:textStyle="bold" />
                 </RelativeLayout>
             </FrameLayout>
