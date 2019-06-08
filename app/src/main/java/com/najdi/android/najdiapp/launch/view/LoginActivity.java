@@ -55,7 +55,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.log_in:
-                showProgressDialog();
                 viewModel.validate();
                 break;
 
@@ -71,8 +70,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     private void subscribeForInputValidation() {
         viewModel.getValidationStatus().observe(this, isValid -> {
-            hideProgressDialog();
             if (isValid) {
+                showProgressDialog();
                 login();
             }
         });
@@ -80,6 +79,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     private void login() {
         viewModel.login().observe(this, baseResponse -> {
+            hideProgressDialog();
             if (baseResponse != null && baseResponse.getData() != null) {
                 BaseResponse.Data data = baseResponse.getData();
                 saveCredential(data);

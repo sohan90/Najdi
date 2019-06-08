@@ -4,6 +4,9 @@
     package="com.najdi.android.najdiapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:name=".common.NajdiApplication"
@@ -36,6 +39,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.najdi.android.najdiapp.common.BaseActivity" />
         </activity>
+        <activity android:name=".checkout.view.CheckoutActivity"/>
+        <service
+            android:name=".checkout.FetchAddressIntentService"
+            android:exported="false"/>
     </application>
 
 </manifest>

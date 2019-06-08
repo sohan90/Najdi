@@ -1,5 +1,6 @@
 package com.najdi.android.najdiapp.home.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 import com.najdi.android.najdiapp.R;
+import com.najdi.android.najdiapp.checkout.view.CheckoutActivity;
 import com.najdi.android.najdiapp.common.BaseActivity;
 import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.databinding.ActivityHomeScreenBinding;
@@ -161,16 +163,12 @@ public class HomeScreenActivity extends BaseActivity
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         View viewActionBar = getLayoutInflater().inflate(R.layout.custom_actiob_bar, null);
-        getSupportActionBar().setCustomView(viewActionBar, new ActionBar.LayoutParams(
-                ActionBar.LayoutParams.MATCH_PARENT,
-                ActionBar.LayoutParams.MATCH_PARENT,
-                Gravity.CENTER));
+        getSupportActionBar().setCustomView(viewActionBar, getLayoutParams());
 
         toolBarTitle = viewActionBar.findViewById(R.id.title);
         cartImageLyt = viewActionBar.findViewById(R.id.cartImageLyt);
         notificationText = viewActionBar.findViewById(R.id.notification_text);
         toolBarTitle.setText(getString(R.string.category));
-        toolBarTitle.setGravity(Gravity.CENTER);
         drawerLayout = binding.drawerLayout;
 
         toggle = new ActionBarDrawerToggle(
@@ -181,6 +179,12 @@ public class HomeScreenActivity extends BaseActivity
 
         binding.navView.setNavigationItemSelectedListener(this);
         setNavHeader();
+    }
+
+    private ActionBar.LayoutParams getLayoutParams() {
+        return new ActionBar.LayoutParams(
+                ActionBar.LayoutParams.MATCH_PARENT,
+                ActionBar.LayoutParams.MATCH_PARENT, Gravity.CENTER);
     }
 
     private void setNavHeader() {
@@ -247,6 +251,11 @@ public class HomeScreenActivity extends BaseActivity
 
             case R.id.products:
                 replaceFragment(PRODUCTS);
+                break;
+
+            case R.id.about_us:
+                Intent intent = new Intent(this, CheckoutActivity.class);
+                startActivity(intent);
                 break;
 
         }

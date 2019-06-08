@@ -6,6 +6,15 @@ public class Constants {
 
     public final static String BASIC_64_AUTH = "Basic Y2tfMzFmNTIxOTA3ZDJlZTY0ZmE4ZDMzMjAwNjE0ODY4ZTc3ZDlhOGY3Njpjc184NDU5ZjU4NWIwYzM3MjQ0Y2JjZWViZDYzZTE0MTQ4OWRjZDlkMWU4";
     public final static String APPEND_ATTRIBUTE_STR = "attribute_";
+    public static final int SUCCESS_RESULT = 0;
+    public static final int FAILURE_RESULT = 1;
+    public static final String PACKAGE_NAME =
+            "com.google.android.gms.location.sample.locationaddress";
+    public static final String RECEIVER = PACKAGE_NAME + ".RECEIVER";
+    public static final String RESULT_DATA_KEY = PACKAGE_NAME +
+            ".RESULT_DATA_KEY";
+    public static final String LOCATION_DATA_EXTRA = PACKAGE_NAME +
+            ".LOCATION_DATA_EXTRA";
 
     public interface FragmentTags {
         String SIGN_UP_FRAG = "sign_up";

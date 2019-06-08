@@ -1,58 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:background="@color/green_default"
-        android:orientation="vertical">
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/green_default">
 
-        <RelativeLayout
+        <ImageView
+            android:id="@+id/back_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:padding="8dp"
+            android:src="@drawable/ic_arrow_back_black_24dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/cartImageLyt"
+            android:layout_toEndOf="@id/back_arrow"
+            android:gravity="center"
+            android:text="-------"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <FrameLayout
+            android:id="@+id/cartImageLyt"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:visibility="invisible">
+
+            <ImageView
+                android:id="@+id/cart"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_gravity="bottom|center"
+                android:layout_marginBottom="5dp"
+                android:src="@drawable/ic_shopping_cart_white_24dp" />
 
             <TextView
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toStartOf="@id/cartImageLyt"
+                android:id="@+id/notification_text"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="top|end"
+                android:background="@drawable/checkout_white_circle"
                 android:gravity="center"
-                android:text="-------"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:text="0"
+                android:textColor="@color/green_default"
+                android:textStyle="bold" />
+        </FrameLayout>
 
-            <FrameLayout
-                android:id="@+id/cartImageLyt"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:visibility="invisible">
+    </RelativeLayout>
 
-                <ImageView
-                    android:id="@+id/cart"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_gravity="bottom|center"
-                    android:layout_marginBottom="5dp"
-                    android:src="@drawable/ic_shopping_cart_white_24dp" />
-
-                <TextView
-                    android:id="@+id/notification_text"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="top|end"
-                    android:background="@drawable/checkout_white_circle"
-                    android:gravity="center"
-                    android:text="0"
-                    android:textColor="@color/green_default"
-                    android:textStyle="bold" />
-            </FrameLayout>
-
-        </RelativeLayout>
-    </LinearLayout>
 </layout>

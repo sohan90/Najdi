@@ -3,116 +3,127 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white_eighty"
+        android:layout_height="wrap_content"
+        android:background="@color/color_transparent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/shipping_details"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/title"
-            android:inputType="none"
-            android:padding="10dp"
-            android:text="Name" />
-
-        <EditText
-            android:id="@+id/ph_txt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/name"
-            android:layout_marginTop="10dp"
-            android:inputType="none"
-            android:padding="10dp"
-            android:text="phone" />
-
-        <EditText
-            android:id="@+id/em_txt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/ph_txt"
-            android:layout_marginTop="10dp"
-            android:inputType="none"
-            android:padding="10dp"
-            android:text="Email" />
-
-        <TextView
-            android:id="@+id/select_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/em_txt"
-            android:layout_marginTop="10dp"
-            android:inputType="none"
-            android:padding="10dp"
-            android:text="@string/select_shipping_address_from_map" />
-
-        <FrameLayout
-            android:id="@+id/map"
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/select_title"
-            android:background="@color/black" />
+            android:fitsSystemWindows="true"
+            android:scrollbars="none"
+            android:layout_above="@id/location_btn">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+            <LinearLayout
+                android:id="@+id/detail_lyt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <EditText
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Name"
+                    android:inputType="textAutoComplete"
+                    android:padding="10dp" />
+
+                <EditText
+                    android:id="@+id/ph_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="phone"
+                    android:inputType="number"
+                    android:padding="10dp" />
+
+                <EditText
+                    android:id="@+id/em_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Email"
+                    android:inputType="textAutoComplete"
+                    android:padding="10dp" />
+
+                <TextView
+                    android:id="@+id/select_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:inputType="textAutoComplete"
+                    android:padding="10dp"
+                    android:text="@string/shipping_details"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:visibility="visible" />
+
+                <EditText
+                    android:id="@+id/street"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Street"
+                    android:inputType="textAutoComplete"
+                    android:padding="10dp" />
+
+                <EditText
+                    android:id="@+id/building_no"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Building Number"
+                    android:inputType="textAutoComplete"
+                    android:padding="10dp"
+                    android:textAllCaps="true" />
+
+                <EditText
+                    android:id="@+id/city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="City"
+                    android:inputType="textAutoComplete"
+                    android:padding="10dp"
+                    android:textAllCaps="true" />
+
+                <EditText
+                    android:id="@+id/province"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Province"
+                    android:inputType="textAutoComplete"
+                    android:padding="10dp"
+                    android:textAllCaps="true" />
+
+                <EditText
+                    android:id="@+id/postal_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Postal Code"
+                    android:inputType="textAutoComplete"
+                    android:padding="10dp"
+                    android:textAllCaps="true" />
+            </LinearLayout>
+
+        </ScrollView>
+
+        <Button
+            android:id="@+id/location_btn"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@id/continue_txt"
-            android:layout_margin="10dp"
-            android:background="@color/white"
-            android:padding="10dp">
-
-            <ImageView
-                android:id="@+id/close"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:src="@drawable/ic_close_black_24dp" />
-
-            <TextView
-                android:id="@+id/place"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/close"
-                android:layout_toStartOf="@id/close"
-                android:text="------"
-                android:textColor="@color/black" />
-
-            <EditText
-                android:id="@+id/locaiton_name_txt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/place"
-                android:hint="@string/enter_location_name" />
-
-            <Button
-                android:id="@+id/fav_location_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/locaiton_name_txt"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/round_corner_solid_green_selector"
-                android:text="@string/save_to_favourite_location"
-                android:textColor="@color/white" />
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/fav_location_btn"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/round_corner_stroke_green_selector"
-                android:text="@string/cancel"
-                android:textColor="@color/green_default" />
-
-        </RelativeLayout>
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/round_corner_solid_green_selector"
+            android:padding="15dp"
+            android:text="Use Current Location"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/continue_txt"
@@ -126,3 +137,68 @@
 
     </RelativeLayout>
 </layout>
+
+
+    <!-- <FrameLayout
+     android:id="@+id/map"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     android:background="@color/black"
+     android:visibility="gone" />-->
+
+    <!--
+        <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/continue_txt"
+        android:layout_margin="10dp"
+        android:background="@color/white"
+        android:padding="10dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_close_black_24dp" />
+
+        <TextView
+            android:id="@+id/place"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/close"
+            android:layout_toStartOf="@id/close"
+            android:text="&#45;&#45;&#45;&#45;&#45;&#45;"
+            android:textColor="@color/black" />
+
+        <EditText
+            android:id="@+id/locaiton_name_txt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/place"
+            android:hint="@string/enter_location_name" />
+
+        <Button
+            android:id="@+id/fav_location_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/locaiton_name_txt"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/round_corner_solid_green_selector"
+            android:text="@string/save_to_favourite_location"
+            android:textColor="@color/white" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fav_location_btn"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/round_corner_stroke_green_selector"
+            android:text="@string/cancel"
+            android:textColor="@color/green_default" />
+
+        </RelativeLayout>
+    -->
+
+

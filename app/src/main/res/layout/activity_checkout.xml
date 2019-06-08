@@ -4,14 +4,18 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white_eighty"
-        android:padding="10dp">
+        android:background="@color/white_eighty">
 
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/custom_actiob_bar" />
 
         <LinearLayout
             android:id="@+id/step_parent_lyt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/toolbar"
+            android:layout_margin="10dp"
             android:orientation="vertical">
 
             <FrameLayout
@@ -30,7 +34,6 @@
                     android:indeterminate="false"
                     android:indeterminateOnly="false"
                     android:max="100"
-                    android:progress="50"
                     android:progressBackgroundTint="@color/green_default" />
 
                 <RelativeLayout
@@ -55,9 +58,9 @@
                         android:layout_height="35dp"
                         android:layout_centerInParent="true"
                         android:background="@drawable/circle_selector"
+                        android:enabled="false"
                         android:gravity="center"
                         android:text="@string/two"
-                        android:enabled="false"
                         android:textColor="@color/circle_text_selector"
                         android:textStyle="bold" />
 
@@ -67,9 +70,9 @@
                         android:layout_height="35dp"
                         android:layout_alignParentEnd="true"
                         android:background="@drawable/circle_selector"
+                        android:enabled="false"
                         android:gravity="center"
                         android:text="@string/three"
-                            android:enabled="false"
                         android:textColor="@color/circle_text_selector"
                         android:textStyle="bold" />
                 </RelativeLayout>
@@ -107,8 +110,10 @@
         </LinearLayout>
 
         <FrameLayout
+            android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/step_parent_lyt"/>
+
     </RelativeLayout>
 </layout>

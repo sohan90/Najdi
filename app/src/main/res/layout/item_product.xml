@@ -32,9 +32,10 @@
 
         <ImageView
             android:id="@+id/img"
-            android:layout_width="200dp"
+            android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/detail_lyt"
+            android:scaleType="centerCrop"
             android:layout_alignBottom="@id/detail_lyt"
             bind:setImageUrl="@{viewModel.productImg}" />
 

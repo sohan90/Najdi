@@ -35,7 +35,6 @@
     <string name="clear">clear</string>
     <string name="ok">Ok</string>
     <string name="select_shipping_address_from_map">Select Shipping Address From Map</string>
-    <string name="shipping_details">Shipping Details</string>
     <string name="continue_txt">Continue</string>
     <string name="enter_location_name">Enter Location Name</string>
     <string name="save_to_favourite_location">Save to favourite Location</string>
@@ -60,4 +59,10 @@
     <string name="product_details">Product Details</string>
     <string name="currecy">1$s %ر.س</string>
     <string name="cart">Cart</string>
+    <string name="shipping_details">Shipping Details</string>
+    <string name="permission_denied">Permission denied</string>
+    <string name="service_not_available">service is not available</string>
+    <string name="invalid_lat_long">invalid lat long</string>
+    <string name="no_address_found">No address found</string>
+    <string name="address_found">Address found</string>
 </resources>

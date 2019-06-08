@@ -113,6 +113,7 @@ public class ProductDetailViewModel extends BaseViewModel {
     }
 
     public void reset() {
+        if (attributHashMap == null) return;
         attributHashMap.clear();
         quantityCount.setValue(0);
         totalPrice.setValue("");
