@@ -1,5 +1,7 @@
 package com.najdi.android.najdiapp.network;
 
+import com.najdi.android.najdiapp.checkout.model.OrderRequest;
+import com.najdi.android.najdiapp.checkout.model.OrderResponse;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.BuildConfig;
 import com.najdi.android.najdiapp.common.Constants;
@@ -54,4 +56,8 @@ public interface NajdiApi {
     @GET(BuildConfig.NAJDI_END_POINTS + "products/{productId}")
     @Headers({"Content-Type:application/json", "Authorization" + ": " + Constants.BASIC_64_AUTH})
     Call<ProductListResponse> getIndividualProduct(@Path("productId") int productId);
+
+    @POST(BuildConfig.NAJDI_END_POINTS + "orders")
+    @Headers({"Content-Type:application/json", "Authorization" + ": " + Constants.BASIC_64_AUTH})
+    Call<OrderResponse> createOrder(@Query("customer") int userId, @Body OrderRequest orderRequest);
 }

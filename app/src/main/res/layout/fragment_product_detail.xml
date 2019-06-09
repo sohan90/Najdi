@@ -197,13 +197,15 @@
                 android:textStyle="bold" />
 
             <Button
+                android:id="@+id/proceed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:paddingTop="20dp"
                 android:paddingBottom="20dp"
+                android:enabled="@{viewModel.enableProceed, default=false}"
                 android:text="@string/proceed_to_checkout"
-                android:textColor="@color/green_default"
+                android:textColor="@color/but_back_selector"
                 android:textStyle="bold" />
         </LinearLayout>
     </ScrollView>

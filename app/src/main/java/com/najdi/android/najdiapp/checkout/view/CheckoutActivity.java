@@ -1,6 +1,7 @@
 package com.najdi.android.najdiapp.checkout.view;
 
 import android.Manifest;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -9,9 +10,9 @@ import android.location.Address;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.ResultReceiver;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationAvailability;
@@ -21,22 +22,24 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.checkout.FetchAddressIntentService;
+import com.najdi.android.najdiapp.checkout.model.OrderResponse;
 import com.najdi.android.najdiapp.checkout.viewmodel.CheckoutViewModel;
 import com.najdi.android.najdiapp.common.BaseActivity;
 import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.databinding.ActivityCheckoutBinding;
+import com.najdi.android.najdiapp.launch.model.BillingAddress;
+import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 import com.najdi.android.najdiapp.utitility.FragmentHelper;
 import com.najdi.android.najdiapp.utitility.GpsUtils;
-import com.najdi.android.najdiapp.utitility.LogUtil;
 import com.najdi.android.najdiapp.utitility.PermissionUtils;
+import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 import com.najdi.android.najdiapp.utitility.ToastUtils;
-
-import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 
 import static com.najdi.android.najdiapp.utitility.GpsUtils.GPS_REQUEST;
@@ -52,6 +55,8 @@ public class CheckoutActivity extends BaseActivity {
     private LocationRequest locationRequest;
     private boolean isGPS;
     private LocationCallback locationCallback;
+    private CartResponse cartResponse;
+    private BillingAddress billing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +68,93 @@ public class CheckoutActivity extends BaseActivity {
         initializeFusedLocation();
         initializeConnectionCallBack();
         subscribeGetCurrentLocation();
+        subscribeForProgress();
+        subscribeForBillingData();
+        subscribeForCheckout();
         replaceFragment(STEP_ONE);
+        fetchCart();
+    }
+
+    private void subscribeForCheckout() {
+        viewModel.getCheckoutLiveData().observe(this, aBoolean -> {
+            if (aBoolean) {
+                showProgressDialog();
+                int userId = PreferenceUtils.getValueInt(this, PreferenceUtils.USER_ID_KEY);
+                createOrder(userId);
+            }
+        });
+    }
+
+    private void createOrder(int userId) {
+        LiveData<OrderResponse> orderResponseLiveData =
+                viewModel.createOrder(userId, cartResponse.getData().getCartdata(), billing);
+
+        orderResponseLiveData.observe(this, orderResponse -> {
+            hideProgressDialog();
+            viewModel.orderResponseMutableLiveData().setValue(orderResponse);
+            handleProgress(100);
+        });
+    }
+
+    private void subscribeForBillingData() {
+        viewModel.getBillingMutableLiveData().observe(this, billing -> {
+            if (billing != null) {
+                this.billing = billing;
+            }
+        });
+    }
+
+    private void fetchCart() {
+        viewModel.fetchCart().observe(this, cartResponse -> {
+            if (cartResponse != null) {
+                this.cartResponse = cartResponse;
+                updateCartValueTxt();
+                viewModel.getCartResponseMutableLiveData().setValue(cartResponse);
+            }
+        });
+    }
+
+    private void updateCartValueTxt() {
+        if (cartResponse != null && cartResponse.getData() != null &&
+                cartResponse.getData().getCartdata() != null) {
+
+            int size = cartResponse.getData().getCartdata().size();
+            binding.toolbar.notificationText.setText(String.valueOf(size));
+        }
+    }
+
+    private void subscribeForProgress() {
+        viewModel.getProgressPercentage().observe(this, this::handleProgress);
+    }
+
+    private void handleProgress(Integer progress) {
+        animateProgress(progress);
+        switch (progress) {
+            case 0:
+                binding.one.setEnabled(true);
+                binding.two.setEnabled(false);
+                binding.three.setEnabled(false);
+                break;
+
+            case 50:
+                binding.two.setEnabled(true);
+                binding.three.setEnabled(false);
+                replaceFragment(STEP_TWO);
+                break;
+
+            case 100:
+                binding.three.setEnabled(true);
+                replaceFragment(STEP_THREE);
+                break;
+        }
+    }
+
+    private void animateProgress(Integer progress) {
+        ObjectAnimator animation = ObjectAnimator.ofInt(binding.progressId,
+                "progress", progress);
+        animation.setDuration(600);
+        animation.setInterpolator(new LinearInterpolator());
+        animation.start();
     }
 
     private void initializeConnectionCallBack() {
@@ -167,10 +258,20 @@ public class CheckoutActivity extends BaseActivity {
         switch (step) {
             case STEP_ONE:
                 fragment = ShippingDetailFragment.createInstance();
-                fragmentTag = "Step_one_frag";
+                fragmentTag = Constants.FragmentTags.SHIPPING_DETAIL;
+                break;
+
+            case STEP_TWO:
+                fragment = CheckoutFragment.createInstance();
+                fragmentTag = Constants.FragmentTags.CHECKOUT;
+                break;
+
+            case STEP_THREE:
+                fragment = OrderCompleteFragment.createInstance();
+                fragmentTag = Constants.FragmentTags.ORDER_COMPLETE;
                 break;
         }
-        FragmentHelper.replaceFragment(this, fragment, fragmentTag, true,
+        FragmentHelper.replaceFragmentWithAnim(this, fragment, fragmentTag, true,
                 binding.fragmentContainer.getId());
     }
 
@@ -179,8 +280,14 @@ public class CheckoutActivity extends BaseActivity {
         int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
         if (backStackCount == 1) {
             finish();
+        } else if (backStackCount == 2) {
+            getSupportFragmentManager().popBackStackImmediate();
+            animateProgress(0);
+            binding.two.setEnabled(false);
         } else {
-            super.onBackPressed();
+            getSupportFragmentManager().popBackStackImmediate();
+            animateProgress(50);
+            binding.three.setEnabled(false);
         }
     }
 

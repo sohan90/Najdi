@@ -19,6 +19,9 @@ public class Constants {
     public interface FragmentTags {
         String SIGN_UP_FRAG = "sign_up";
         String PRODUCT_LIST_FRAG = "product_list_frag";
+        String SHIPPING_DETAIL = "Step_one_frag";
+        String CHECKOUT = "Step_two_frag";
+        String ORDER_COMPLETE = "Step_three_frag";
 
     }
 

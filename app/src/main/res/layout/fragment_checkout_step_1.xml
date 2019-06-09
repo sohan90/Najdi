@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <data>
+        <variable
+            name="viewModel"
+            type="com.najdi.android.najdiapp.checkout.viewmodel.ShippingDetailViewModel"/>
+    </data>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,7 +30,8 @@
                     android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Name"
+                    android:hint="@string/name"
+                    android:text="@={viewModel.name}"
                     android:inputType="textAutoComplete"
                     android:padding="10dp" />
 
@@ -34,7 +40,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:hint="phone"
+                    android:hint="@string/phone"
+                    android:text="@={viewModel.phoneNo}"
                     android:inputType="number"
                     android:padding="10dp" />
 
@@ -43,7 +50,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:hint="Email"
+                    android:hint="@string/email"
+                    android:text="@={viewModel.email}"
                     android:inputType="textAutoComplete"
                     android:padding="10dp" />
 
@@ -64,7 +72,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:hint="Street"
+                    android:hint="@string/street"
+                    android:text="@={viewModel.street}"
                     android:inputType="textAutoComplete"
                     android:padding="10dp" />
 
@@ -74,6 +83,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:hint="Building Number"
+                    android:text="@={viewModel.buildingNO}"
                     android:inputType="textAutoComplete"
                     android:padding="10dp"
                     android:textAllCaps="true" />
@@ -83,7 +93,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:hint="City"
+                    android:hint="@string/city"
+                    android:text="@={viewModel.city}"
                     android:inputType="textAutoComplete"
                     android:padding="10dp"
                     android:textAllCaps="true" />
@@ -93,7 +104,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:hint="Province"
+                    android:hint="@string/province"
+                    android:text="@={viewModel.province}"
                     android:inputType="textAutoComplete"
                     android:padding="10dp"
                     android:textAllCaps="true" />
@@ -103,7 +115,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:hint="Postal Code"
+                    android:hint="@string/postal_code"
+                    android:text="@={viewModel.postalCode}"
                     android:inputType="textAutoComplete"
                     android:padding="10dp"
                     android:textAllCaps="true" />
@@ -120,7 +133,7 @@
             android:layout_marginBottom="15dp"
             android:background="@drawable/round_corner_solid_green_selector"
             android:padding="15dp"
-            android:text="Use Current Location"
+            android:text="@string/use_current_location"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textStyle="bold" />

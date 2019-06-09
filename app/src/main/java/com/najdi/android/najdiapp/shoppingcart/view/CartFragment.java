@@ -47,7 +47,14 @@ public class CartFragment extends BaseFragment {
         bindLiveData();
         setRecyclAdapter();
         subscribeForCartResponse();
+        initializeClickListener();
         return binding.getRoot();
+    }
+
+    private void initializeClickListener() {
+        binding.proceedTxt.setOnClickListener(v -> {
+            homeScreenViewModel.getLaunchCheckoutActivity().setValue(true);
+        });
     }
 
     private void bindLiveData() {

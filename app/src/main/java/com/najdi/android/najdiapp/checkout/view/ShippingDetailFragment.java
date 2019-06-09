@@ -7,9 +7,12 @@ import android.view.ViewGroup;
 
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.checkout.viewmodel.CheckoutViewModel;
+import com.najdi.android.najdiapp.checkout.viewmodel.ShippingDetailViewModel;
 import com.najdi.android.najdiapp.common.BaseFragment;
 import com.najdi.android.najdiapp.databinding.FragmentCheckoutStep1Binding;
+import com.najdi.android.najdiapp.launch.model.BillingAddress;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
+import com.najdi.android.najdiapp.utitility.ToastUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +23,7 @@ public class ShippingDetailFragment extends BaseFragment {
 
     FragmentCheckoutStep1Binding binding;
     private CheckoutViewModel activityViewModel;
+    private ShippingDetailViewModel viewModel;
 
     public static ShippingDetailFragment createInstance() {
         return new ShippingDetailFragment();
@@ -33,25 +37,27 @@ public class ShippingDetailFragment extends BaseFragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_checkout_step_1, container,
                 false);
         initalizeActivityViewModel();
+        initializeViewModel();
+        bindViewModel();
         initClickListeners();
         updateDetails();
         subscribeForAddress();
         return binding.getRoot();
     }
 
+    private void bindViewModel() {
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(this);
+    }
+
+    private void initializeViewModel() {
+        viewModel = ViewModelProviders.of(this).get(ShippingDetailViewModel.class);
+    }
+
     private void subscribeForAddress() {
         activityViewModel.getAddressMutableLiveData().observe(this, address -> {
             if (address != null) {
-                String building = address.getFeatureName();
-                String street = address.getSubLocality();
-                String city = address.getLocality();
-                String state = address.getAdminArea();
-                String postalCode = address.getPostalCode();
-                binding.street.setText(street);
-                binding.buildingNo.setText(building);
-                binding.city.setText(city);
-                binding.province.setText(state);
-                binding.postalCode.setText(postalCode);
+                viewModel.updateAddress(address);
             }
         });
     }
@@ -66,7 +72,15 @@ public class ShippingDetailFragment extends BaseFragment {
             activityViewModel.getGetCurrentLocationUpdateLiveData().setValue(true);
         });
         binding.continueTxt.setOnClickListener(v -> {
-
+            viewModel.validate().observe(getViewLifecycleOwner(), proceed -> {
+                if (proceed) {
+                    BillingAddress billingAddress = viewModel.getBillingObject();
+                    activityViewModel.getBillingMutableLiveData().setValue(billingAddress);
+                    activityViewModel.getProgressPercentage().setValue(50);
+                } else {
+                    ToastUtils.getInstance(getActivity()).showShortToast(getString(R.string.please_fill));
+                }
+            });
         });
     }
 
@@ -74,8 +88,6 @@ public class ShippingDetailFragment extends BaseFragment {
         if (getActivity() == null) return;
         String name = PreferenceUtils.getValueString(getActivity(), PreferenceUtils.USER_EMAIL_KEY);
         String phoneNo = PreferenceUtils.getValueString(getActivity(), PreferenceUtils.USER_NAME_KEY);
-        binding.name.setText(name);
-        binding.phTxt.setText(phoneNo);
-        binding.emTxt.setText(name);
+        viewModel.updatePersonalInfo(name, name, phoneNo);
     }
 }

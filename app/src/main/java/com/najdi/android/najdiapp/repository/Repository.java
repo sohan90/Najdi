@@ -1,5 +1,7 @@
 package com.najdi.android.najdiapp.repository;
 
+import com.najdi.android.najdiapp.checkout.model.OrderRequest;
+import com.najdi.android.najdiapp.checkout.model.OrderResponse;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.home.model.CartRequest;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
@@ -150,5 +152,24 @@ public class Repository {
         }));
         return liveData;
 
+    }
+
+    public LiveData<OrderResponse> createOrder(int userId, OrderRequest orderRequest) {
+        MutableLiveData<OrderResponse> liveData = new MutableLiveData<>();
+        RetrofitClient.getInstance().createOrder(userId, orderRequest).enqueue(new RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<OrderResponse>() {
+            @Override
+            public void onSuccesResponse(Call<OrderResponse> call, OrderResponse orderResponse) {
+                if (orderResponse != null) {
+                    liveData.setValue(orderResponse);
+                }
+            }
+
+            @Override
+            public void onFailurResponse(Call<OrderResponse> call, BaseResponse baseResponse) {
+                baseResponse.handleError(resourceProvider.getAppContext());
+                liveData.setValue(null);
+            }
+        }));
+        return liveData;
     }
 }

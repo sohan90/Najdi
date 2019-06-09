@@ -58,8 +58,22 @@ public class HomeScreenActivity extends BaseActivity
         subscribeReplaceFragment();
         subscribeToolBarTitle();
         subscribeForHomeScreenToolBar();
+        subscribeForLaunchCheckoutScreen();
         fetchProduct();
         fetchCart();
+    }
+
+    private void subscribeForLaunchCheckoutScreen() {
+        viewModel.getLaunchCheckoutActivity().observe(this, aBoolean -> {
+            if (aBoolean) {
+                launchCheckOutActivity();
+            }
+        });
+    }
+
+    private void launchCheckOutActivity() {
+        Intent intent = new Intent(this, CheckoutActivity.class);
+        startActivity(intent);
     }
 
     private void subscribeForHomeScreenToolBar() {
@@ -254,8 +268,6 @@ public class HomeScreenActivity extends BaseActivity
                 break;
 
             case R.id.about_us:
-                Intent intent = new Intent(this, CheckoutActivity.class);
-                startActivity(intent);
                 break;
 
         }

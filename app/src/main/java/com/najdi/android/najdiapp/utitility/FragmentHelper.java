@@ -1,6 +1,8 @@
 package com.najdi.android.najdiapp.utitility;
 
 
+import com.najdi.android.najdiapp.R;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -47,6 +49,19 @@ public class FragmentHelper {
         FragmentTransaction ft = context.getSupportFragmentManager()
                 .beginTransaction();
         //ft.setCustomAnimations(android.R.anim.slide_in_left, 0);
+        ft.replace(container, fragment, tag);
+        /*ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);*/
+        if (canAddBackStrace) {
+            ft.addToBackStack(tag);
+        }
+        ft.commit();
+    }
+
+    public static void replaceFragmentWithAnim(AppCompatActivity context, Fragment fragment, String tag,
+                                       boolean canAddBackStrace, int container) {
+        FragmentTransaction ft = context.getSupportFragmentManager()
+                .beginTransaction();
+        ft.setCustomAnimations(R.anim.slide_right, 0);
         ft.replace(container, fragment, tag);
         /*ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);*/
         if (canAddBackStrace) {

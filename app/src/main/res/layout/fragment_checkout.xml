@@ -1,205 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white_eighty"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignBaseline="@id/close"
-            android:layout_marginEnd="5dp"
-            android:layout_toStartOf="@id/close"
-            android:src="@drawable/ic_edit_black_24dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_transparent"
+            android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/close"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="10dp"
-            android:src="@drawable/ic_close_black_24dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/your_order"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
 
-        <ImageView
-            android:id="@+id/img"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_below="@id/close"
-            android:src="@color/black" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:padding="15dp">
 
-        <TextView
-            android:id="@+id/quantity_no_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/img"
-            android:layout_alignBottom="@id/img"
-            android:layout_marginStart="10dp"
-            android:layout_toEndOf="@id/img"
-            android:gravity="center"
-            android:text="x 1"
-            android:textColor="@color/black" />
+                <EditText
+                    android:id="@+id/coupon_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/apply_coupon"
+                    android:background="@drawable/round_chekout_grey_selector"
+                    android:hint="@string/coupon_code"
+                    android:padding="10dp"
+                    android:textColorHint="@color/grey_text" />
 
-        <TextView
-            android:id="@+id/product_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/quantity_no_txt"
-            android:layout_alignBottom="@id/quantity_no_txt"
-            android:layout_marginStart="20dp"
-            android:layout_toEndOf="@id/quantity_no_txt"
-            android:gravity="center"
-            android:text="Harry Sheep"
-            android:textColor="@color/black" />
+                <TextView
+                    android:id="@+id/apply_coupon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/coupon_code"
+                    android:layout_alignBottom="@id/coupon_code"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/round_apply_coupon_grey_selector"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/apply_coupon"
+                    android:textColor="@color/white" />
+            </RelativeLayout>
 
-        <TextView
-            android:id="@+id/price_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/product_name"
-            android:layout_alignBottom="@id/product_name"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="20dp"
-            android:layout_toEndOf="@id/product_name"
-            android:gravity="center"
-            android:text="600"
-            android:textColor="@color/black" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycl_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:nestedScrollingEnabled="false"
+                android:padding="15dp" />
 
-        <TextView
-            android:id="@+id/quantity_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/product_name"
-            android:layout_alignStart="@id/product_name"
-            android:layout_alignTop="@id/decrease"
-            android:layout_alignBottom="@id/decrease"
-            android:layout_toStartOf="@id/decrease"
-            android:gravity="start|center"
-            android:text="@string/quantity"
-            android:textColor="@color/black" />
+            <include
+                android:id="@+id/include_lyt"
+                layout="@layout/item_checkout_subtotal" />
 
-        <TextView
-            android:id="@+id/increase"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_below="@id/product_name"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="5dp"
-            android:background="@drawable/checkout_circle"
-            android:gravity="center"
-            android:text="+"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/count_txt"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_below="@id/product_name"
-            android:layout_toStartOf="@id/increase"
-            android:gravity="center"
-            android:text="1"
-            android:textColor="@color/black"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/decrease"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_below="@id/product_name"
-            android:layout_toStartOf="@id/count_txt"
-            android:background="@drawable/checkout_circle"
-            android:gravity="center"
-            android:text="-"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/size"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/quantity_txt"
-            android:layout_marginTop="30dp"
-            android:text="Size"
-            android:textColor="@color/black"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/size_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/quantity_txt"
-            android:layout_alignBaseline="@id/size"
-            android:layout_marginTop="10dp"
-            android:layout_toEndOf="@id/quantity_no_txt"
-            android:text="Small"
-            android:textColor="@color/black" />
-
-
-        <TextView
-            android:id="@+id/cutting_way"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/size"
-            android:layout_marginTop="10dp"
-            android:text="Cutting way"
-            android:textColor="@color/black"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/size_value"
-            android:layout_alignBaseline="@id/cutting_way"
-            android:layout_marginTop="10dp"
-            android:layout_toEndOf="@id/quantity_no_txt"
-            android:text="Small"
-            android:textColor="@color/black" />
-
-        <TextView
-            android:id="@+id/head"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/cutting_way"
-            android:layout_marginTop="10dp"
-            android:text="Head"
-            android:textColor="@color/black"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/size_value"
-            android:layout_alignBaseline="@id/head"
-            android:layout_marginTop="10dp"
-            android:layout_toEndOf="@id/quantity_no_txt"
-            android:text="Small"
-            android:textColor="@color/black" />
-
-
-        <TextView
-            android:id="@+id/legs"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/head"
-            android:layout_marginTop="10dp"
-            android:text="Head"
-            android:textColor="@color/black"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/size_value"
-            android:layout_alignBaseline="@id/legs"
-            android:layout_marginTop="10dp"
-            android:layout_toEndOf="@id/quantity_no_txt"
-            android:text="Small"
-            android:textColor="@color/black" />
-
-
-    </RelativeLayout>
-
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </layout>

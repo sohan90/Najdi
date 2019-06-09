@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="cartModel"
+            type="com.najdi.android.najdiapp.shoppingcart.model.CartResponse.CartData" />
+    </data>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_transparent"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignBaseline="@id/close"
+            android:layout_marginEnd="5dp"
+            android:layout_toStartOf="@id/close"
+            android:src="@drawable/ic_edit_black_24dp" />
+
+        <ImageView
+            android:id="@+id/close"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/ic_close_black_24dp" />
+
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_below="@id/close"
+            android:src="@color/black"
+            bind:setImageUrl="@{cartModel.postImageUrl}" />
+
+        <TextView
+            android:id="@+id/quantity_no_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/img"
+            android:layout_alignBottom="@id/img"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/img"
+            android:gravity="center"
+            android:text="@{`X `+cartModel.quantity}"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/product_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/quantity_no_txt"
+            android:layout_alignBottom="@id/quantity_no_txt"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@id/quantity_no_txt"
+            android:gravity="center"
+            android:text="@{cartModel.postName}"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/price_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/product_name"
+            android:layout_alignBottom="@id/product_name"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@id/product_name"
+            android:gravity="center"
+            android:text="@{String.valueOf(cartModel.lineTotal).concat(`ر.س`)}"
+            android:textColor="@color/black"
+            android:textDirection="locale" />
+
+        <TextView
+            android:id="@+id/quantity_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/product_name"
+            android:layout_alignStart="@id/product_name"
+            android:layout_alignTop="@id/decrease"
+            android:layout_alignBottom="@id/decrease"
+            android:layout_toStartOf="@id/decrease"
+            android:gravity="start|center"
+            android:text="@string/quantity"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/increase"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_below="@id/product_name"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/checkout_circle"
+            android:gravity="center"
+            android:text="+"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/count_txt"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_below="@id/product_name"
+            android:layout_toStartOf="@id/increase"
+            android:gravity="center"
+            android:text="@{String.valueOf(cartModel.quantity)}"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/decrease"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_below="@id/product_name"
+            android:layout_toStartOf="@id/count_txt"
+            android:background="@drawable/checkout_circle"
+            android:gravity="center"
+            android:text="-"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+
+        <LinearLayout
+            android:id="@+id/variation_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/quantity_txt"
+            android:layout_marginTop="30dp"
+            android:orientation="vertical">
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/variation_container"
+            android:layout_marginTop="20dp"
+            android:background="@color/grey_text" />
+    </RelativeLayout>
+
+</layout>

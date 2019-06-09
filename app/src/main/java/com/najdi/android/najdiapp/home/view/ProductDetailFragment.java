@@ -1,5 +1,6 @@
 package com.najdi.android.najdiapp.home.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.najdi.android.najdiapp.R;
+import com.najdi.android.najdiapp.checkout.view.CheckoutActivity;
 import com.najdi.android.najdiapp.common.BaseFragment;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.Constants;
@@ -89,6 +91,7 @@ public class ProductDetailFragment extends BaseFragment {
         binding.dec.setOnClickListener(v -> viewModel.decrementQuantity());
         binding.inc.setOnClickListener(v -> viewModel.incrementQuantity());
         binding.reset.setOnClickListener(v -> reset());
+        binding.proceed.setOnClickListener(v -> this.launchCheckOutActivity());
         binding.addToCart.setOnClickListener(v -> {
             showProgressDialog();
             LiveData<BaseResponse> liveData = viewModel.addToCart();
@@ -101,6 +104,10 @@ public class ProductDetailFragment extends BaseFragment {
                 }
             });
         });
+    }
+
+    private void launchCheckOutActivity() {
+      homeScreeViewModel.getLaunchCheckoutActivity().setValue(true);
     }
 
 

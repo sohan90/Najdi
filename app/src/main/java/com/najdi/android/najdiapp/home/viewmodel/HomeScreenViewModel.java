@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -23,6 +22,7 @@ public class HomeScreenViewModel extends BaseViewModel {
     private MutableLiveData<HashMap<String, String>> selectedVariationLiveData;
     private MutableLiveData<Boolean> setHomeScreenToolBarLiveData;
     private MutableLiveData<String> setToolBarTitle;
+    private MutableLiveData<Boolean> launchCheckoutActivity;
     int cartSize;
 
     public HomeScreenViewModel(@NonNull Application application) {
@@ -68,18 +68,25 @@ public class HomeScreenViewModel extends BaseViewModel {
         return replaceFragmentLiveData;
     }
 
-    public MutableLiveData<String> getSetToolBarTitle(){
-        if (setToolBarTitle == null){
+    public MutableLiveData<String> getSetToolBarTitle() {
+        if (setToolBarTitle == null) {
             setToolBarTitle = new MutableLiveData<>();
         }
         return setToolBarTitle;
     }
 
-    public MutableLiveData<Boolean> getSetHomeScreenToolBarLiveData(){
-        if (setHomeScreenToolBarLiveData == null){
+    public MutableLiveData<Boolean> getSetHomeScreenToolBarLiveData() {
+        if (setHomeScreenToolBarLiveData == null) {
             setHomeScreenToolBarLiveData = new MutableLiveData<>();
         }
         return setHomeScreenToolBarLiveData;
+    }
+
+    public MutableLiveData<Boolean> getLaunchCheckoutActivity() {
+        if (launchCheckoutActivity == null) {
+            launchCheckoutActivity = new MutableLiveData<>();
+        }
+        return launchCheckoutActivity;
     }
 
     public LiveData<CartResponse> getCart() {

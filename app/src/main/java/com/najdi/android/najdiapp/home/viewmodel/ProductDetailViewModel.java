@@ -20,6 +20,7 @@ public class ProductDetailViewModel extends BaseViewModel {
     public MutableLiveData<String> totalPrice = new MutableLiveData<>();
     public MutableLiveData<Integer> quantityCount = new MutableLiveData<>();
     public MutableLiveData<Boolean> enableAddCartButton = new MutableLiveData<>();
+    public MutableLiveData<Boolean> enableProceed = new MutableLiveData<>();
     private String selectOptionPrice;
     private HashMap<String, String> attributHashMap;
     private ProductListResponse productListResponse;
@@ -93,8 +94,10 @@ public class ProductDetailViewModel extends BaseViewModel {
                 attributHashMap != null && attributHashMap.size() == productListResponse
                 .getAttributesList().size()) {
             enableAddCartButton.setValue(true);
+            enableProceed.setValue(true);
         } else {
             enableAddCartButton.setValue(false);
+            enableProceed.setValue(false);
         }
     }
 
