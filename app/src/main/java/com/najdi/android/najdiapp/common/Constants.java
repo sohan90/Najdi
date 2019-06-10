@@ -26,11 +26,12 @@ public class Constants {
     }
 
     @IntDef(value = {ScreeNames.PRODUCTS, ScreeNames.SHOPPING_CART,
-            ScreeNames.PRODUCT_DETAIL})
+            ScreeNames.PRODUCT_DETAIL, ScreeNames.ORDER_STATUS})
     public @interface ScreeNames {
         int PRODUCTS = 0;
         int SHOPPING_CART = 1;
         int PRODUCT_DETAIL = 2;
+        int ORDER_STATUS = 3;
     }
 
 }

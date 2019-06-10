@@ -1,5 +1,7 @@
 package com.najdi.android.najdiapp.checkout.model;
 
+import com.najdi.android.najdiapp.utitility.MathUtils;
+
 public class OrderResponse {
     int id;
     int parent_id;
@@ -51,5 +53,9 @@ public class OrderResponse {
 
     public String getPayment_method_title() {
         return payment_method_title;
+    }
+
+    public String getFormatedData(){
+        return MathUtils.formateStringDate(date_created);
     }
 }

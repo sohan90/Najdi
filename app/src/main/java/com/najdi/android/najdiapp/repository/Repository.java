@@ -172,4 +172,24 @@ public class Repository {
         }));
         return liveData;
     }
+
+    public LiveData<List<OrderResponse>> getOrderStatus(int userId) {
+        MutableLiveData<List<OrderResponse>> liveData = new MutableLiveData<>();
+        RetrofitClient.getInstance().getOrderStatus(userId).enqueue(new
+                RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<List<OrderResponse>>() {
+            @Override
+            public void onSuccesResponse(Call<List<OrderResponse>> call, List<OrderResponse> orderResponses) {
+                if (orderResponses != null) {
+                    liveData.setValue(orderResponses);
+                }
+            }
+
+            @Override
+            public void onFailurResponse(Call<List<OrderResponse>> call, BaseResponse baseResponse) {
+                baseResponse.handleError(resourceProvider.getAppContext());
+                liveData.setValue(null);
+            }
+        }));
+        return liveData;
+    }
 }

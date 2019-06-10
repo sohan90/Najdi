@@ -60,4 +60,8 @@ public interface NajdiApi {
     @POST(BuildConfig.NAJDI_END_POINTS + "orders")
     @Headers({"Content-Type:application/json", "Authorization" + ": " + Constants.BASIC_64_AUTH})
     Call<OrderResponse> createOrder(@Query("customer") int userId, @Body OrderRequest orderRequest);
+
+    @GET(BuildConfig.NAJDI_END_POINTS + "orders")
+    @Headers({"Content-Type:application/json", "Authorization" + ": " + Constants.BASIC_64_AUTH})
+    Call<List<OrderResponse>> getOrderStatus(@Query("customer") int userId);
 }

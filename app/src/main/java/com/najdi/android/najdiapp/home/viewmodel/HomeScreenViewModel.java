@@ -2,6 +2,7 @@ package com.najdi.android.najdiapp.home.viewmodel;
 
 import android.app.Application;
 
+import com.najdi.android.najdiapp.checkout.model.OrderResponse;
 import com.najdi.android.najdiapp.common.BaseViewModel;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
@@ -100,4 +101,9 @@ public class HomeScreenViewModel extends BaseViewModel {
     public int getCartSize() {
         return cartSize;
     }
+
+    public LiveData<List<OrderResponse>> getOrderStatus(int userId) {
+        return repository.getOrderStatus(userId);
+    }
+
 }

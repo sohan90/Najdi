@@ -9,7 +9,9 @@ import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 import com.najdi.android.najdiapp.R;
+import com.najdi.android.najdiapp.checkout.model.OrderResponse;
 import com.najdi.android.najdiapp.checkout.view.CheckoutActivity;
+import com.najdi.android.najdiapp.checkout.view.OrderStatusFragment;
 import com.najdi.android.najdiapp.common.BaseActivity;
 import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.databinding.ActivityHomeScreenBinding;
@@ -21,17 +23,23 @@ import com.najdi.android.najdiapp.shoppingcart.view.CartFragment;
 import com.najdi.android.najdiapp.utitility.FragmentHelper;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
+import java.util.List;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import static com.najdi.android.najdiapp.common.Constants.ScreeNames.ORDER_STATUS;
 import static com.najdi.android.najdiapp.common.Constants.ScreeNames.PRODUCTS;
 import static com.najdi.android.najdiapp.common.Constants.ScreeNames.PRODUCT_DETAIL;
 import static com.najdi.android.najdiapp.common.Constants.ScreeNames.SHOPPING_CART;
+import static com.najdi.android.najdiapp.utitility.PreferenceUtils.USER_ID_KEY;
 import static com.najdi.android.najdiapp.utitility.PreferenceUtils.USER_NAME_KEY;
 
 public class HomeScreenActivity extends BaseActivity
@@ -120,6 +128,10 @@ public class HomeScreenActivity extends BaseActivity
 
             case SHOPPING_CART:
                 fragment = CartFragment.createInstance();
+                break;
+
+            case ORDER_STATUS:
+                fragment = OrderStatusFragment.createInstance();
                 break;
 
             default:
@@ -268,6 +280,10 @@ public class HomeScreenActivity extends BaseActivity
                 break;
 
             case R.id.about_us:
+                break;
+
+            case R.id.history:
+                replaceFragment(ORDER_STATUS);
                 break;
 
         }
