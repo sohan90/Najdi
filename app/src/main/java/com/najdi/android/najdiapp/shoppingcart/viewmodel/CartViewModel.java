@@ -2,6 +2,7 @@ package com.najdi.android.najdiapp.shoppingcart.viewmodel;
 
 import android.app.Application;
 
+import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.BaseViewModel;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
@@ -44,8 +45,9 @@ public class CartViewModel extends BaseViewModel {
             int total = Integer.parseInt(cartData.seletedOptionPrice());
             subTotal = total + subTotal;
         }
-        subtotalLiveData.setValue(String.valueOf(subTotal));
-        totalLiveData.setValue(String.valueOf(subTotal));
+        String total = String.valueOf(subTotal).concat(resourceProvider.getString(R.string.currecy));
+        subtotalLiveData.setValue(total);
+        totalLiveData.setValue(total);
     }
 
     public LiveData<BaseResponse> removeCart(String itemKey) {

@@ -1,6 +1,5 @@
 package com.najdi.android.najdiapp.home.view;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,18 +7,17 @@ import android.view.ViewGroup;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.najdi.android.najdiapp.R;
-import com.najdi.android.najdiapp.checkout.view.CheckoutActivity;
 import com.najdi.android.najdiapp.common.BaseFragment;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.databinding.FragmentProductDetailBinding;
 import com.najdi.android.najdiapp.databinding.ItemDetailBinding;
+import com.najdi.android.najdiapp.home.model.ProductDetailBundleModel;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.home.viewmodel.HomeScreenViewModel;
 import com.najdi.android.najdiapp.home.viewmodel.ProductDetailViewModel;
 import com.najdi.android.najdiapp.home.viewmodel.ProductListItemModel;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
-import com.najdi.android.najdiapp.shoppingcart.view.CartFragment;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 
 import java.util.ArrayList;
@@ -38,13 +36,14 @@ public class ProductDetailFragment extends BaseFragment {
     private static final String EXTRA_PRODUCT_DETAIL_KEY = "product_detail_key";
     private FragmentProductDetailBinding binding;
     private HomeScreenViewModel homeScreeViewModel;
-    private ProductListResponse productListResponse;
+    private int productId;
     private ProductDetailViewModel viewModel;
     private CartResponse.CartData cartData;
+    private ProductListResponse productListResponse;
 
-    public static ProductDetailFragment createInstance(ProductListResponse productListResponse) {
+    public static ProductDetailFragment createInstance(ProductDetailBundleModel model) {
         Bundle bundle = new Bundle();
-        bundle.putParcelable(EXTRA_PRODUCT_DETAIL_KEY, productListResponse);
+        bundle.putParcelable(EXTRA_PRODUCT_DETAIL_KEY, model);
         ProductDetailFragment productDetailFragment = new ProductDetailFragment();
         productDetailFragment.setArguments(bundle);
         return productDetailFragment;
@@ -57,13 +56,25 @@ public class ProductDetailFragment extends BaseFragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_product_detail, container,
                 false);
         getProductDetailFromBundle();
-        setDetailsFromBundle();
         initializeViewModel();
-        initializeHomeScreenViewModel();
-        inflateViewForProductVariation();
-        initializeClickListener();
         bindViewModelWithLiveData();
+        initializeHomeScreenViewModel();
+        initializeClickListener();
+        fetchProductDetail();
         return binding.getRoot();
+    }
+
+    private void fetchProductDetail() {
+        showProgressDialog();
+        homeScreeViewModel.getIndividualProduct(productId).observe(this, productListResponse1 -> {
+            hideProgressDialog();
+            if (productListResponse1 != null) {
+                this.productListResponse = productListResponse1;
+                setViewDataForIncludeLyt();
+                viewModel.setDefaultPrice(productListResponse.getPrice());
+                inflateViewForProductVariation();
+            }
+        });
     }
 
 
@@ -84,7 +95,6 @@ public class ProductDetailFragment extends BaseFragment {
 
     private void initializeViewModel() {
         viewModel = ViewModelProviders.of(this).get(ProductDetailViewModel.class);
-        viewModel.setDefaultPrice(productListResponse.getPrice());
     }
 
     private void initializeClickListener() {
@@ -107,7 +117,7 @@ public class ProductDetailFragment extends BaseFragment {
     }
 
     private void launchCheckOutActivity() {
-      homeScreeViewModel.getLaunchCheckoutActivity().setValue(true);
+        homeScreeViewModel.getLaunchCheckoutActivity().setValue(true);
     }
 
 
@@ -116,7 +126,7 @@ public class ProductDetailFragment extends BaseFragment {
                 setValue(Constants.ScreeNames.SHOPPING_CART);
     }
 
-    private void setDetailsFromBundle() {
+    private void setViewDataForIncludeLyt() {
         binding.topLyt.setViewModel(new ProductListItemModel(productListResponse, View.GONE));
     }
 
@@ -178,10 +188,10 @@ public class ProductDetailFragment extends BaseFragment {
 
     private void getProductDetailFromBundle() {
         if (getArguments() != null && getArguments().containsKey(EXTRA_PRODUCT_DETAIL_KEY)) {
-            productListResponse = getArguments().getParcelable(EXTRA_PRODUCT_DETAIL_KEY);
-            if (productListResponse != null) {
-                cartData = productListResponse.getCartData();
-            }
+            ProductDetailBundleModel model = getArguments().getParcelable(EXTRA_PRODUCT_DETAIL_KEY);
+            if (model == null) return;
+            productId = model.getProductId();
+            cartData = (CartResponse.CartData) model.getT();
         }
     }
 

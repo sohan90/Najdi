@@ -84,6 +84,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 BaseResponse.Data data = baseResponse.getData();
                 saveCredential(data);
                 launchHomeScreen();
+                finish();
             }
         });
     }

@@ -10,6 +10,7 @@ import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseFragment;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.databinding.FragmentCartBinding;
+import com.najdi.android.najdiapp.home.model.ProductDetailBundleModel;
 import com.najdi.android.najdiapp.home.viewmodel.HomeScreenViewModel;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 import com.najdi.android.najdiapp.shoppingcart.viewmodel.CartViewModel;
@@ -119,15 +120,10 @@ public class CartFragment extends BaseFragment {
 
             @Override
             public void onEdit(CartResponse.CartData cartData) {
-                showProgressDialog();
-                viewModel.getIndividualProduct(cartData.getProductId()).observe(CartFragment.this,
-                        productListResponse -> {
-                            hideProgressDialog();
-                            if (productListResponse != null && getActivity() != null) {
-                                productListResponse.setCartData(cartData);
-                                homeScreenViewModel.getLaunchProductDetailLiveData().setValue(productListResponse);
-                            }
-                        });
+                ProductDetailBundleModel model = new ProductDetailBundleModel();
+                model.setProductId(cartData.getProductId());
+                model.setT(cartData);
+                homeScreenViewModel.getLaunchProductDetailLiveData().setValue(model);
             }
         }, new ArrayList<>());
         binding.recyl.setAdapter(adapter);

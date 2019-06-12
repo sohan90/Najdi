@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.najdi.android.najdiapp.checkout.model.OrderResponse;
 import com.najdi.android.najdiapp.common.BaseViewModel;
+import com.najdi.android.najdiapp.home.model.ProductDetailBundleModel;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 
@@ -17,13 +18,14 @@ import androidx.lifecycle.MutableLiveData;
 public class HomeScreenViewModel extends BaseViewModel {
 
     private MutableLiveData<List<ProductListResponse>> productListLivedata;
-    private MutableLiveData<ProductListResponse> launchProductDetailLiveData;
+    private MutableLiveData<ProductDetailBundleModel> launchProductDetailLiveData;
     private MutableLiveData<Integer> showCartImageLiveData;
     private MutableLiveData<Integer> replaceFragmentLiveData;
     private MutableLiveData<HashMap<String, String>> selectedVariationLiveData;
     private MutableLiveData<Boolean> setHomeScreenToolBarLiveData;
     private MutableLiveData<String> setToolBarTitle;
     private MutableLiveData<Boolean> launchCheckoutActivity;
+    private MutableLiveData<CartResponse.CartData> selectedProductCartLiveData;
     int cartSize;
 
     public HomeScreenViewModel(@NonNull Application application) {
@@ -41,7 +43,7 @@ public class HomeScreenViewModel extends BaseViewModel {
         return productListLivedata;
     }
 
-    public MutableLiveData<ProductListResponse> getLaunchProductDetailLiveData() {
+    public MutableLiveData<ProductDetailBundleModel> getLaunchProductDetailLiveData() {
         if (launchProductDetailLiveData == null) {
             launchProductDetailLiveData = new MutableLiveData<>();
         }
@@ -90,6 +92,12 @@ public class HomeScreenViewModel extends BaseViewModel {
         return launchCheckoutActivity;
     }
 
+    public LiveData<CartResponse.CartData> getSelectedCartDataLiveData(){
+        if (selectedProductCartLiveData == null){
+            selectedProductCartLiveData = new MutableLiveData<>();
+        } return selectedProductCartLiveData;
+    }
+
     public LiveData<CartResponse> getCart() {
         return repository.getCart();
     }
@@ -104,6 +112,11 @@ public class HomeScreenViewModel extends BaseViewModel {
 
     public LiveData<List<OrderResponse>> getOrderStatus(int userId) {
         return repository.getOrderStatus(userId);
+    }
+
+
+    public LiveData<ProductListResponse> getIndividualProduct(int productId) {
+        return repository.getIndividualProduct(productId);
     }
 
 }

@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.najdi.android.najdiapp.R;
+import com.najdi.android.najdiapp.common.GenericClickListener;
 import com.najdi.android.najdiapp.databinding.InflateFragCheckoutBinding;
 import com.najdi.android.najdiapp.databinding.InflateVariationItemBinding;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
@@ -18,9 +19,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHolder> {
 
+    private final OnItemClickListener clickListener;
     private List<CartResponse.CartData> dataList;
 
-    public CheckoutAdapter(List<CartResponse.CartData> cartDataList) {
+    public CheckoutAdapter(OnItemClickListener clickListener,
+                           List<CartResponse.CartData> cartDataList) {
+
+        this.clickListener = clickListener;
         this.dataList = cartDataList;
 
     }
@@ -44,6 +49,9 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CartResponse.CartData cartData = dataList.get(position);
         holder.binding.setCartModel(cartData);
+        holder.binding.edit.setOnClickListener(v -> clickListener.onEdit(cartData));
+        holder.binding.close.setOnClickListener(v -> clickListener.onClose(cartData));
+
         LayoutInflater inflater = LayoutInflater.from(holder.binding.getRoot().getContext());
         for (Map.Entry<String, String> entry : cartData.getVariation().entrySet()) {
             View view = inflater.inflate(R.layout.inflate_variation_item,
@@ -70,4 +78,10 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHo
             binding = itemView;
         }
     }
+
+    public interface OnItemClickListener{
+        void onEdit(CartResponse.CartData cartData);
+        void onClose(CartResponse.CartData cartData);
+    }
+
 }

@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.databinding.ItemProductBinding;
+import com.najdi.android.najdiapp.home.model.ProductDetailBundleModel;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.home.viewmodel.HomeScreenViewModel;
 import com.najdi.android.najdiapp.home.viewmodel.ProductListItemModel;
@@ -59,7 +60,9 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             this.binding = itemView;
             binding.getRoot().setOnClickListener((v -> {
                 ProductListResponse productListResponse = list.get(getAdapterPosition());
-                homeScreenViewModel.getLaunchProductDetailLiveData().setValue(productListResponse);
+                ProductDetailBundleModel model = new ProductDetailBundleModel();
+                model.setProductId(productListResponse.getId());
+                homeScreenViewModel.getLaunchProductDetailLiveData().setValue(model);
             }));
 
         }

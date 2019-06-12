@@ -2,6 +2,7 @@ package com.najdi.android.najdiapp.home.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -9,21 +10,24 @@ import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 import com.najdi.android.najdiapp.R;
-import com.najdi.android.najdiapp.checkout.model.OrderResponse;
 import com.najdi.android.najdiapp.checkout.view.CheckoutActivity;
 import com.najdi.android.najdiapp.checkout.view.OrderStatusFragment;
 import com.najdi.android.najdiapp.common.BaseActivity;
 import com.najdi.android.najdiapp.common.Constants;
+import com.najdi.android.najdiapp.common.ObservableManager;
 import com.najdi.android.najdiapp.databinding.ActivityHomeScreenBinding;
 import com.najdi.android.najdiapp.databinding.NavHeaderHomeScreenBinding;
-import com.najdi.android.najdiapp.home.model.ProductListResponse;
+import com.najdi.android.najdiapp.home.model.ProductDetailBundleModel;
 import com.najdi.android.najdiapp.home.viewmodel.HomeScreenViewModel;
+import com.najdi.android.najdiapp.home.viewmodel.ProductDetailViewModel;
+import com.najdi.android.najdiapp.launch.view.LoginActivity;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 import com.najdi.android.najdiapp.shoppingcart.view.CartFragment;
 import com.najdi.android.najdiapp.utitility.FragmentHelper;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
-import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -31,10 +35,11 @@ import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import static androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE;
+import static com.najdi.android.najdiapp.common.Constants.FragmentTags.PRODUCT_LIST_FRAG;
+import static com.najdi.android.najdiapp.common.Constants.OBSERVER_INTENT_CART_RESPONSE;
 import static com.najdi.android.najdiapp.common.Constants.ScreeNames.ORDER_STATUS;
 import static com.najdi.android.najdiapp.common.Constants.ScreeNames.PRODUCTS;
 import static com.najdi.android.najdiapp.common.Constants.ScreeNames.PRODUCT_DETAIL;
@@ -43,7 +48,7 @@ import static com.najdi.android.najdiapp.utitility.PreferenceUtils.USER_ID_KEY;
 import static com.najdi.android.najdiapp.utitility.PreferenceUtils.USER_NAME_KEY;
 
 public class HomeScreenActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, Observer {
 
     private ActivityHomeScreenBinding binding;
     private DrawerLayout drawerLayout;
@@ -52,7 +57,7 @@ public class HomeScreenActivity extends BaseActivity
     private View cartImageLyt;
     private TextView notificationText;
     private ActionBarDrawerToggle toggle;
-    private ProductListResponse productListResponse;
+    private ProductDetailBundleModel productDetailBundleModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +72,13 @@ public class HomeScreenActivity extends BaseActivity
         subscribeToolBarTitle();
         subscribeForHomeScreenToolBar();
         subscribeForLaunchCheckoutScreen();
+        observeForProductDetailScreenFromCheckout();
         fetchProduct();
         fetchCart();
+    }
+
+    private void observeForProductDetailScreenFromCheckout() {
+        ObservableManager.getInstance().addObserver(this);
     }
 
     private void subscribeForLaunchCheckoutScreen() {
@@ -117,21 +127,26 @@ public class HomeScreenActivity extends BaseActivity
     private void replaceFragment(int screenName) {
         int containerId = binding.include.containerLyt.container.getId();
         Fragment fragment;
+        String fragmentTag = null;
         switch (screenName) {
             case PRODUCTS:
                 fragment = ProductListFragment.createInstance();
+                fragmentTag = Constants.FragmentTags.PRODUCT_LIST_FRAG;
                 break;
 
             case PRODUCT_DETAIL:
-                fragment = ProductDetailFragment.createInstance(productListResponse);
+                fragment = ProductDetailFragment.createInstance(productDetailBundleModel);
+                fragmentTag = Constants.FragmentTags.PRODUCT_DETAIL;
                 break;
 
             case SHOPPING_CART:
                 fragment = CartFragment.createInstance();
+                fragmentTag = Constants.FragmentTags.SHOPPING_CART;
                 break;
 
             case ORDER_STATUS:
                 fragment = OrderStatusFragment.createInstance();
+                fragmentTag = Constants.FragmentTags.ORDER_STATUS;
                 break;
 
             default:
@@ -139,14 +154,14 @@ public class HomeScreenActivity extends BaseActivity
                 break;
 
         }
-        FragmentHelper.replaceFragment(this, fragment,
-                Constants.FragmentTags.PRODUCT_LIST_FRAG, true, containerId);
+        FragmentHelper.replaceFragment(this, fragment, fragmentTag,
+                true, containerId);
     }
 
     private void subscribeForLaunchProductDetail() {
-        viewModel.getLaunchProductDetailLiveData().observe(this, productListResponse -> {
-            if (productListResponse != null) {
-                this.productListResponse = productListResponse;
+        viewModel.getLaunchProductDetailLiveData().observe(this, model -> {
+            if (model != null) {
+                this.productDetailBundleModel = model;
                 setToolBarTitle(getString(R.string.product_details));
                 updateNotificationIconText(viewModel.getCartSize());
                 replaceFragment(PRODUCT_DETAIL);
@@ -155,8 +170,7 @@ public class HomeScreenActivity extends BaseActivity
     }
 
     private void subscribeReplaceFragment() {
-        viewModel.getReplaceFragmentLiveData().observe(this, screenName ->
-                replaceFragment(screenName));
+        viewModel.getReplaceFragmentLiveData().observe(this, this::replaceFragment);
     }
 
     private void fetchProduct() {
@@ -276,6 +290,8 @@ public class HomeScreenActivity extends BaseActivity
                 break;
 
             case R.id.products:
+                getSupportFragmentManager().popBackStackImmediate(PRODUCT_LIST_FRAG,
+                        POP_BACK_STACK_INCLUSIVE);
                 replaceFragment(PRODUCTS);
                 break;
 
@@ -286,10 +302,35 @@ public class HomeScreenActivity extends BaseActivity
                 replaceFragment(ORDER_STATUS);
                 break;
 
+            case R.id.log_out:
+                clearCredentialandFinish();
+                break;
+
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
+    private void clearCredentialandFinish() {
+        showProgressDialog();
+        new Handler().postDelayed(() -> {
+            hideProgressDialog();
+            PreferenceUtils.setValueInt(this, USER_ID_KEY, 0);
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }, 1000);
+
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if (arg instanceof Intent) {
+            Intent intent = (Intent) arg;
+            ProductDetailBundleModel productDetailBundleModel = intent.
+                    getParcelableExtra(OBSERVER_INTENT_CART_RESPONSE);
+            viewModel.getLaunchProductDetailLiveData().setValue(productDetailBundleModel);
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package com.najdi.android.najdiapp.checkout.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +10,10 @@ import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.checkout.viewmodel.CheckoutFragmentViewModel;
 import com.najdi.android.najdiapp.checkout.viewmodel.CheckoutViewModel;
 import com.najdi.android.najdiapp.common.BaseFragment;
+import com.najdi.android.najdiapp.common.Constants;
+import com.najdi.android.najdiapp.common.ObservableManager;
 import com.najdi.android.najdiapp.databinding.FragmentCheckoutBinding;
+import com.najdi.android.najdiapp.home.model.ProductDetailBundleModel;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 
 import java.util.ArrayList;
@@ -66,8 +70,32 @@ public class CheckoutFragment extends BaseFragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL,
                 false);
         binding.recyclView.setLayoutManager(linearLayoutManager);
-        checkoutAdapter = new CheckoutAdapter(new ArrayList<>());
+        checkoutAdapter = new CheckoutAdapter(new CheckoutAdapter.OnItemClickListener() {
+            @Override
+            public void onEdit(CartResponse.CartData cartData) {
+                if (cartData != null) {
+                    ProductDetailBundleModel model = new ProductDetailBundleModel();
+                    model.setProductId(cartData.getProductId());
+                    model.setT(cartData);
+                    notifyObserver(model);
+                }
+            }
+
+            @Override
+            public void onClose(CartResponse.CartData cartData) {
+
+            }
+        }, new ArrayList<>());
         binding.recyclView.setAdapter(checkoutAdapter);
+    }
+
+    private void notifyObserver(ProductDetailBundleModel model) {
+        if (getActivity() != null) {
+            getActivity().finish();
+            Intent intent = new Intent();
+            intent.putExtra(Constants.OBSERVER_INTENT_CART_RESPONSE, model);
+            ObservableManager.getInstance().notifyData(intent);
+        }
     }
 
     private void initializeActivityViewModel() {

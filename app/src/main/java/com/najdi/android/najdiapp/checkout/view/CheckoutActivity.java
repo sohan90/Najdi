@@ -250,6 +250,7 @@ public class CheckoutActivity extends BaseActivity {
         binding.toolbar.backArrow.setVisibility(View.VISIBLE);
         binding.toolbar.title.setText(getString(R.string.shipping_details));
         binding.toolbar.cartImageLyt.setVisibility(View.VISIBLE);
+        binding.toolbar.backArrow.setOnClickListener(v -> onBackPressed());
     }
 
     private void replaceFragment(int step) {
@@ -278,16 +279,12 @@ public class CheckoutActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
-        if (backStackCount == 1) {
+        if (backStackCount == 1 || backStackCount == 3) {
             finish();
         } else if (backStackCount == 2) {
             getSupportFragmentManager().popBackStackImmediate();
             animateProgress(0);
             binding.two.setEnabled(false);
-        } else {
-            getSupportFragmentManager().popBackStackImmediate();
-            animateProgress(50);
-            binding.three.setEnabled(false);
         }
     }
 

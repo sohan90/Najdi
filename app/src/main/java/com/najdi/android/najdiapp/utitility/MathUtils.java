@@ -7,6 +7,8 @@ import java.util.Locale;
 
 public class MathUtils {
 
+    private static String currencySymbol;
+
     public static String formateStringDate(String date) {
         String newDate = null;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss",
@@ -19,5 +21,14 @@ public class MathUtils {
             e.printStackTrace();
         }
         return newDate;
+    }
+
+    public static void setCurrencySymbol(Locale locale) {
+        java.text.NumberFormat format = java.text.NumberFormat.getInstance(locale);
+        currencySymbol = format.getCurrency().getSymbol();
+    }
+
+    public String getCurrencySymbol() {
+        return currencySymbol;
     }
 }
