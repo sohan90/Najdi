@@ -181,7 +181,11 @@ public class ProductDetailFragment extends BaseFragment {
     private List<String> getListFromMap(List<HashMap<String, String>> hashMapList) {
         List<String> list = new ArrayList<>();
         for (HashMap<String, String> stringStringHashMap : hashMapList) {
-            list.add(stringStringHashMap.get("slug"));// for english
+            if (getCurrentLocale().equals(Constants.ARABIC_LAN)) {
+                list.add(stringStringHashMap.get("name"));
+            } else {
+                list.add(stringStringHashMap.get("slug"));// for english
+            }
         }
         return list;
     }

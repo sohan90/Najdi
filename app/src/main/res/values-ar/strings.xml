@@ -49,4 +49,19 @@
     <string name="cash_on_delivery">الدفع عند الاستلام</string>
     <string name="place_order">تأكيد الطلب</string>
     <string name="order_status">الطلبات السابقة</string>
+    <string name="use_current_location">"استخدم موقعك الحالي "</string>
+    <string name="province">"المنطقة "</string>
+    <string name="home">"الرئيسية  "</string>
+    <string name="about_us">"عن نجدي "</string>
+    <string name="log_out">"تسجيل الخروج "</string>
+    <string name="order_history">"الطلبات السابقة "</string>
+    <string name="language">"اللغة "</string>
+    <string name="products">"المنتجات "</string>
+    <string name="shopping_cart">"سلة التسوق "</string>
+    <string name="profile">"حسابي "</string>
+    <string name="contact_us">"اتصل بنا  "</string>
+    <string name="no_order_history_msg">لا توجد لديك طلبات سابقة</string>
+    <string name="enter_valid_code">الرجاء إدخال الرمز السري الصحيح</string>
+    <string name="pending">"تحت التنفيذ "</string>
+    <string name="completed">"مكتمل "</string>
 </resources>

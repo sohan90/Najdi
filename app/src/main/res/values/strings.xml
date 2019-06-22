@@ -80,4 +80,23 @@
     <string name="cash_on_delivery">Cash on Delivery</string>
     <string name="place_order">Place Order</string>
     <string name="order_status">Order Status</string>
+    <string name="home">Home</string>
+    <string name="products">Products</string>
+    <string name="shopping_cart">Shopping Cart</string>
+    <string name="about_us">About Us</string>
+    <string name="profile">Profile</string>
+    <string name="order_history">Order History</string>
+    <string name="language">Language</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="log_out">Log out</string>
+    <string name="enter_valid_code">Please enter correct code</string>
+    <string name="pending">pending</string>
+    <string name="completed">completed</string>
+    <string name="no_order_history_msg">At this moment you don\'t have an order history. Start ordering with one of your favourite product</string>
+    <string name="verify_mobile_no">Verifying Mobile Number</string>
+    <string name="one_time_psd">One Time Password sent to this mobile number</string>
+    <string name="please_enter_it_below">Please Enter it Below</string>
+    <string name="didn_t_get_the_sms">Didn\'t get the SMS?</string>
+    <string name="resend_code_in_30s">Resend Code in 30s</string>
+    <string name="verify">Verify</string>
 </resources>
