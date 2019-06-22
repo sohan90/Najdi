@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
@@ -16,10 +17,10 @@ import com.najdi.android.najdiapp.common.BaseActivity;
 import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.common.ObservableManager;
 import com.najdi.android.najdiapp.databinding.ActivityHomeScreenBinding;
+import com.najdi.android.najdiapp.databinding.MenuLanSelcBinding;
 import com.najdi.android.najdiapp.databinding.NavHeaderHomeScreenBinding;
 import com.najdi.android.najdiapp.home.model.ProductDetailBundleModel;
 import com.najdi.android.najdiapp.home.viewmodel.HomeScreenViewModel;
-import com.najdi.android.najdiapp.home.viewmodel.ProductDetailViewModel;
 import com.najdi.android.najdiapp.launch.view.LoginActivity;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 import com.najdi.android.najdiapp.shoppingcart.view.CartFragment;
@@ -31,6 +32,7 @@ import java.util.Observer;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -38,6 +40,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import static androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE;
+import static com.najdi.android.najdiapp.common.Constants.ARABIC_LAN;
+import static com.najdi.android.najdiapp.common.Constants.ENGLISH_LAN;
 import static com.najdi.android.najdiapp.common.Constants.FragmentTags.PRODUCT_LIST_FRAG;
 import static com.najdi.android.najdiapp.common.Constants.OBSERVER_INTENT_CART_RESPONSE;
 import static com.najdi.android.najdiapp.common.Constants.ScreeNames.ORDER_STATUS;
@@ -219,6 +223,30 @@ public class HomeScreenActivity extends BaseActivity
 
         binding.navView.setNavigationItemSelectedListener(this);
         setNavHeader();
+        setNavSubItemClicklistener();
+    }
+
+    private void setNavSubItemClicklistener() {
+        View view = binding.navView.getMenu().findItem(R.id.language).getActionView();
+        MenuLanSelcBinding menuLanSelcBinding = MenuLanSelcBinding.bind(view);
+        updateLanguageToggleBut(menuLanSelcBinding);
+        menuLanSelcBinding.checkbox.setOnClickListener(v -> {
+            SwitchCompat switchCompat = (SwitchCompat) v;
+            if (switchCompat.isChecked()) {
+                setLocaleLanguage(ARABIC_LAN);
+            } else {
+                setLocaleLanguage(ENGLISH_LAN);
+            }
+            recreate();
+        });
+    }
+
+    private void updateLanguageToggleBut(MenuLanSelcBinding menuLanSelcBinding) {
+        if (getCurrentLocale().equals(ARABIC_LAN)) {
+            menuLanSelcBinding.checkbox.setChecked(true);
+        } else {
+            menuLanSelcBinding.checkbox.setChecked(false);
+        }
     }
 
     private ActionBar.LayoutParams getLayoutParams() {
@@ -332,5 +360,11 @@ public class HomeScreenActivity extends BaseActivity
                     getParcelableExtra(OBSERVER_INTENT_CART_RESPONSE);
             viewModel.getLaunchProductDetailLiveData().setValue(productDetailBundleModel);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ObservableManager.getInstance().deleteObserver(this);
     }
 }

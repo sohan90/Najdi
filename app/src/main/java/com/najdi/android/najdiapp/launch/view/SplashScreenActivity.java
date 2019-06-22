@@ -19,6 +19,7 @@ public class SplashScreenActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setLocaleLanguage("en");
         setContentView(R.layout.activity_splash);
         new Handler().postDelayed(() -> {
             int userId = PreferenceUtils.getValueInt(SplashScreenActivity.this, USER_ID_KEY);

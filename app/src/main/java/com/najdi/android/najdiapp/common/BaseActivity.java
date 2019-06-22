@@ -18,6 +18,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
     }
 
     protected void showProgressDialog() {
@@ -32,9 +33,15 @@ public class BaseActivity extends AppCompatActivity {
         Locale locale = new Locale(localeLanguage);
         Locale.setDefault(locale);
         Configuration config = new Configuration();
-        config.locale = locale;
+        config.setLocale(locale);
+        config.setLayoutDirection(locale);
         getResources().updateConfiguration(config, getResources().getDisplayMetrics());
         MathUtils.setCurrencySymbol(locale);
+    }
+
+    protected String getCurrentLocale() {
+        Locale locale = getResources().getConfiguration().locale;
+        return locale.getLanguage();
     }
 
 }

@@ -1,5 +1,7 @@
 package com.najdi.android.najdiapp.home.viewmodel;
 
+import android.os.Build;
+import android.text.Html;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -35,7 +37,7 @@ public class ProductListItemModel extends BaseObservable {
         return product.getImages().get(0).getSrc();
     }
 
-    public void setShowDetailButton(int showDetailButton){
+    public void setShowDetailButton(int showDetailButton) {
         this.showDetailButton = showDetailButton;
     }
 
@@ -77,7 +79,13 @@ public class ProductListItemModel extends BaseObservable {
 
     @Bindable
     public String getDesc() {
-        return product.getShortDescription();
+        String desc;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            desc = Html.fromHtml(product.getDescription(), Html.FROM_HTML_MODE_COMPACT).toString();
+        } else {
+            desc = Html.fromHtml(product.getDescription()).toString();
+        }
+        return desc;
     }
 
     public void bind(ProductListResponse productListResponse) {

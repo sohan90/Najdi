@@ -58,4 +58,13 @@
         <item name="colorControlNormal">@color/white</item>
     </style>
 
+    <style name="switch_theme" parent="Theme.AppCompat.Light">
+        <item name="android:colorControlActivated">@color/green_default</item>
+    </style>
+
+    <style name="SwitchTextAppearance" parent="@android:style/TextAppearance.Holo.Small">
+        <item name="android:textColor">@color/lang_switch_color</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
 </resources>

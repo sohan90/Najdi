@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/home"
+            android:icon="@drawable/ic_home_black_24dp"
+            android:title="Home" />
+        <item
+            android:id="@+id/products"
+            android:icon="@drawable/ic_view_list_black_24dp"
+            android:title="Products" />
+        <item
+            android:id="@+id/shopping_cart"
+            android:icon="@drawable/ic_shopping_cart_black_24dp"
+            android:title="Shopping Cart" />
+        <item
+            android:id="@+id/about_us"
+            android:icon="@drawable/ic_info_black_24dp"
+            android:title="About Us" />
+
+        <item
+            android:id="@+id/profile"
+            android:icon="@drawable/ic_person_black_24dp"
+            android:title="Profile" />
+
+        <item
+            android:id="@+id/history"
+            android:icon="@drawable/ic_history_black_24dp"
+            android:title="Order History" />
+
+
+        <item
+            android:id="@+id/language"
+            android:icon="@drawable/ic_language_black_24dp"
+            android:title="Language"
+            app:actionLayout="@layout/menu_lan_selc" />
+
+        <item
+            android:id="@+id/contact_us"
+            android:icon="@drawable/ic_email_black_24dp"
+            android:title="Contact Us" />
+
+        <item
+            android:id="@+id/log_out"
+            android:icon="@drawable/ic_power_settings_new_black_24dp"
+            android:title="Log out" />
+
+    </group>
+
+
+</menu>
