@@ -8,6 +8,7 @@ import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.launch.model.BillingAddress;
 import com.najdi.android.najdiapp.launch.model.SignupRequestModel;
 import com.najdi.android.najdiapp.launch.model.SignupResponseModel;
+import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.BindingAdapter;
@@ -41,7 +42,7 @@ public class SignUpViewModel extends BaseViewModel {
 
     public void validate() {
         boolean valid = false;
-        if (phoneNo.getValue() != null) {
+        if (phoneNo.getValue() != null && phoneNo.getValue().startsWith("5")) {
             phoneNoError.setValue(null);
         } else {
             phoneNoError.setValue(resourceProvider.getString(R.string.invalid_phone_no));
@@ -74,6 +75,8 @@ public class SignUpViewModel extends BaseViewModel {
         BillingAddress billingAddress = new BillingAddress();
         billingAddress.setPhone(phoneNo.getValue());
         signupRequestModel.setBilling(billingAddress);
+        PreferenceUtils.setValueString(resourceProvider.getAppContext(),
+                PreferenceUtils.USER_PASSWORD, password.getValue());
         return repository.registerUser(signupRequestModel);
     }
 

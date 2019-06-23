@@ -1,5 +1,6 @@
 package com.najdi.android.najdiapp.launch.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.najdi.android.najdiapp.common.BaseActivity;
@@ -43,6 +44,12 @@ public class SignUpActivity extends BaseActivity {
             showProgressDialog();
             viewModel.validate();
         });
+        binding.signIn.setOnClickListener(v -> launchLoginScreen());
+    }
+
+    private void launchLoginScreen() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
     }
 
     private void subscribeValidationStatus() {
@@ -53,6 +60,8 @@ public class SignUpActivity extends BaseActivity {
                     hideProgressDialog();
                     if (signupResponseModel != null) {
                         saveUserCredential(signupResponseModel);
+                        launchOTPScreen();
+                        finish();
 
                     }
                 });
@@ -62,7 +71,14 @@ public class SignUpActivity extends BaseActivity {
         });
     }
 
+    private void launchOTPScreen() {
+        Intent intent = new Intent(this, OtpActivity.class);
+        startActivity(intent);
+    }
+
     private void saveUserCredential(SignupResponseModel signupResponseModel) {
+        PreferenceUtils.setValueString(this, PreferenceUtils.USER_PHONE_NO_KEY,
+                signupResponseModel.getBilling().getPhone());
         PreferenceUtils.setValueInt(this, PreferenceUtils.USER_ID_KEY, signupResponseModel.getId());
         PreferenceUtils.setValueString(this, PreferenceUtils.USER_EMAIL_KEY,
                 signupResponseModel.getEmail());

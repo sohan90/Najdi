@@ -64,4 +64,9 @@
     <string name="enter_valid_code">الرجاء إدخال الرمز السري الصحيح</string>
     <string name="pending">"تحت التنفيذ "</string>
     <string name="completed">"مكتمل "</string>
+    <string name="one_time_psd">الرمز السري المؤقت</string>
+    <string name="verify_mobile_no">تأكيد رقم الجوال</string>
+    <string name="please_enter_it_below">فضلا قم بتعبئة أدناه</string>
+    <string name="verify">تأكيد</string>
+    <string name="didn_t_get_the_sms">"لم تستلم الرسالة النصية؟ "</string>
 </resources>

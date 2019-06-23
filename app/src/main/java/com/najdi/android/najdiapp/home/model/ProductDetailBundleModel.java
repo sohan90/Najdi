@@ -6,14 +6,24 @@ import android.os.Parcelable;
 public class ProductDetailBundleModel implements Parcelable {
     Parcelable t;
     int productId;
+    boolean isFromCartScreen;
 
     public ProductDetailBundleModel() {
 
     }
 
+    public boolean isFromCartScreen() {
+        return isFromCartScreen;
+    }
+
+    public void setFromCartScreen(boolean fromCartScreen) {
+        isFromCartScreen = fromCartScreen;
+    }
+
     private ProductDetailBundleModel(Parcel in) {
         productId = in.readInt();
         t = in.readParcelable(t.getClass().getClassLoader());
+        isFromCartScreen = in.readByte() != 0;
     }
 
     public static final Creator<ProductDetailBundleModel> CREATOR = new Creator<ProductDetailBundleModel>() {
@@ -53,5 +63,6 @@ public class ProductDetailBundleModel implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(productId);
         dest.writeParcelable(t, flags);
+        dest.writeInt((byte) (isFromCartScreen ? 1 : 0));
     }
 }

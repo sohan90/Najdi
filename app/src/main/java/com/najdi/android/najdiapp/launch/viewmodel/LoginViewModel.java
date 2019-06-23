@@ -55,8 +55,8 @@ public class LoginViewModel extends BaseViewModel {
 
     public LiveData<BaseResponse> login() {
         LoginRequestModel requestModel = new LoginRequestModel();
-        requestModel.setUserName(phoneNo.getValue());
+        requestModel.setUserName("966" + phoneNo.getValue());
         requestModel.setPassword(password.getValue());
-        return repository.loginUser(requestModel);
+        return repository.loginToken(requestModel);
     }
 }

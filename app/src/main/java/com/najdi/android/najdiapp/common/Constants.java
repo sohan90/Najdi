@@ -4,7 +4,6 @@ import androidx.annotation.IntDef;
 
 public class Constants {
 
-    public final static String BASIC_64_AUTH = "Basic Y2tfMzFmNTIxOTA3ZDJlZTY0ZmE4ZDMzMjAwNjE0ODY4ZTc3ZDlhOGY3Njpjc184NDU5ZjU4NWIwYzM3MjQ0Y2JjZWViZDYzZTE0MTQ4OWRjZDlkMWU4";
     public final static String APPEND_ATTRIBUTE_STR = "attribute_";
     public static final int SUCCESS_RESULT = 0;
     public static final int FAILURE_RESULT = 1;

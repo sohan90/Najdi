@@ -13,6 +13,7 @@ import com.najdi.android.najdiapp.databinding.FragmentCartBinding;
 import com.najdi.android.najdiapp.home.model.ProductDetailBundleModel;
 import com.najdi.android.najdiapp.home.viewmodel.HomeScreenViewModel;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
+import com.najdi.android.najdiapp.shoppingcart.model.UpdateCartRequest;
 import com.najdi.android.najdiapp.shoppingcart.viewmodel.CartViewModel;
 import com.najdi.android.najdiapp.utitility.ToastUtils;
 
@@ -33,6 +34,7 @@ public class CartFragment extends BaseFragment {
     private HomeScreenViewModel homeScreenViewModel;
     private CartAdapter adapter;
     private CartViewModel viewModel;
+    private List<CartResponse.CartData> adapterList;
 
     public static CartFragment createInstance() {
         return new CartFragment();
@@ -53,9 +55,8 @@ public class CartFragment extends BaseFragment {
     }
 
     private void initializeClickListener() {
-        binding.proceedTxt.setOnClickListener(v -> {
-            homeScreenViewModel.getLaunchCheckoutActivity().setValue(true);
-        });
+        binding.proceedTxt.setOnClickListener(v ->
+                homeScreenViewModel.getLaunchCheckoutActivity().setValue(true));
     }
 
     private void bindLiveData() {
@@ -99,8 +100,8 @@ public class CartFragment extends BaseFragment {
             hideProgressDialog();
             if (cartResponse != null && cartResponse.getData() != null) {
                 viewModel.setTotal(cartResponse.getData().getCartdata());
-                List<CartResponse.CartData> cartDataList = cartResponse.getData().getCartdata();
-                adapter.setData(cartDataList);
+                adapterList = cartResponse.getData().getCartdata();
+                adapter.setData(adapterList);
                 homeScreenViewModel.getCart().removeObservers(this);
             }
         });
@@ -123,10 +124,39 @@ public class CartFragment extends BaseFragment {
                 ProductDetailBundleModel model = new ProductDetailBundleModel();
                 model.setProductId(cartData.getProductId());
                 model.setT(cartData);
+                model.setFromCartScreen(true);
                 homeScreenViewModel.getLaunchProductDetailLiveData().setValue(model);
             }
+
+            @Override
+            public void onUpdateQuantity(int adapterPosition, String cartItemKey, int quantity) {
+                updateItemQuantity(adapterPosition, cartItemKey, quantity);
+            }
         }, new ArrayList<>());
+
         binding.recyl.setAdapter(adapter);
+    }
+
+    private void updateItemQuantity(int adapterPosition, String cartItemKey, int quantity) {
+        showProgressDialog();
+
+        UpdateCartRequest updateCartRequest = new UpdateCartRequest();
+        updateCartRequest.setCartItemKey(cartItemKey);
+        updateCartRequest.setQuantity(quantity);
+
+        LiveData<BaseResponse> liveData = viewModel.updateQuantity(updateCartRequest);
+        liveData.observe(this, baseResponse -> {
+
+            hideProgressDialog();
+            if (baseResponse != null && baseResponse.getData() != null) {
+                ToastUtils.getInstance(getActivity()).
+                        showShortToast(baseResponse.getData().getMessage());
+            } else {
+                CartResponse.CartData cartData = adapterList.get(adapterPosition);
+                cartData.setQuantity(cartData.getPreviousQuantity());
+                adapter.setData(adapterList);
+            }
+        });
     }
 
     private void initializeHomeScreenViewModel() {

@@ -57,4 +57,48 @@ public class BillingAddress {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+    public String getFirst_name() {
+        return first_name;
+    }
+
+    public String getLast_name() {
+        return last_name;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public String getAddress_1() {
+        return address_1;
+    }
+
+    public String getAddress_2() {
+        return address_2;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public String getPostcode() {
+        return postcode;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
 }

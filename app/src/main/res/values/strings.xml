@@ -99,4 +99,5 @@
     <string name="didn_t_get_the_sms">Didn\'t get the SMS?</string>
     <string name="resend_code_in_30s">Resend Code in 30s</string>
     <string name="verify">Verify</string>
+    <string name="update_cart_label">Update Cart</string>
 </resources>

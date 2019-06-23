@@ -134,4 +134,11 @@ public class ProductDetailViewModel extends BaseViewModel {
         }
         return null;
     }
+
+    public LiveData<BaseResponse> removeCart(String itemKey) {
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("cart_item_key", itemKey);
+        return repository.removeCartItem(hashMap);
+    }
+
 }

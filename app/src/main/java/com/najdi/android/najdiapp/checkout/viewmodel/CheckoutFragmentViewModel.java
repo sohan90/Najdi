@@ -2,12 +2,16 @@ package com.najdi.android.najdiapp.checkout.viewmodel;
 
 import android.app.Application;
 
+import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.BaseViewModel;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
+import com.najdi.android.najdiapp.shoppingcart.model.UpdateCartRequest;
 
+import java.util.HashMap;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 public class CheckoutFragmentViewModel extends BaseViewModel {
@@ -33,5 +37,15 @@ public class CheckoutFragmentViewModel extends BaseViewModel {
         }
         subTotal.setValue(String.valueOf(total));
         totalLiveData.setValue(String.valueOf(total));
+    }
+
+    public LiveData<BaseResponse> removeCart(String cartItemKey){
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("cart_item_key", cartItemKey);
+        return repository.removeCartItem(hashMap);
+    }
+
+    public LiveData<BaseResponse> updateQuantity(UpdateCartRequest updateCartRequest) {
+        return repository.updateItemQuantity(updateCartRequest);
     }
 }

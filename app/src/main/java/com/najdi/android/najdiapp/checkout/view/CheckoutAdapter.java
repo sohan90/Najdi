@@ -5,10 +5,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.najdi.android.najdiapp.R;
-import com.najdi.android.najdiapp.common.GenericClickListener;
 import com.najdi.android.najdiapp.databinding.InflateFragCheckoutBinding;
 import com.najdi.android.najdiapp.databinding.InflateVariationItemBinding;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
+import com.najdi.android.najdiapp.shoppingcart.view.CartAdapter;
 
 import java.util.List;
 import java.util.Map;
@@ -19,10 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHolder> {
 
-    private final OnItemClickListener clickListener;
+    private final CartAdapter.AdapterClickLisntener clickListener;
     private List<CartResponse.CartData> dataList;
 
-    public CheckoutAdapter(OnItemClickListener clickListener,
+    public CheckoutAdapter(CartAdapter.AdapterClickLisntener clickListener,
                            List<CartResponse.CartData> cartDataList) {
 
         this.clickListener = clickListener;
@@ -49,8 +49,6 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CartResponse.CartData cartData = dataList.get(position);
         holder.binding.setCartModel(cartData);
-        holder.binding.edit.setOnClickListener(v -> clickListener.onEdit(cartData));
-        holder.binding.close.setOnClickListener(v -> clickListener.onClose(cartData));
 
         LayoutInflater inflater = LayoutInflater.from(holder.binding.getRoot().getContext());
         for (Map.Entry<String, String> entry : cartData.getVariation().entrySet()) {
@@ -76,12 +74,38 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHo
         public ViewHolder(@NonNull InflateFragCheckoutBinding itemView) {
             super(itemView.getRoot());
             binding = itemView;
+
+            binding.edit.setOnClickListener(v -> clickListener.onEdit(dataList.get(getAdapterPosition())));
+            binding.close.setOnClickListener(v -> {
+
+                CartResponse.CartData cartData = dataList.get(getAdapterPosition());
+                String cartItemKey = cartData.getTm_cart_item_key();
+                clickListener.onRemoveItem(cartItemKey);
+                dataList.remove(getAdapterPosition());
+                notifyItemRemoved(getAdapterPosition());
+
+            });
+
+            binding.increase.setOnClickListener(v -> {
+                CartResponse.CartData cartData = dataList.get(getAdapterPosition());
+                int updatedQuantity = cartData.getQuantity() + 1;
+                updateQuantity(updatedQuantity, cartData.getQuantity());
+            });
+
+            binding.decrease.setOnClickListener(v -> {
+                CartResponse.CartData cartData = dataList.get(getAdapterPosition());
+                int updatedQuantity = cartData.getQuantity() - 1;
+                updateQuantity(updatedQuantity, cartData.getQuantity());
+            });
+        }
+
+        private void updateQuantity(int updatedQuantity, int previousQuantity) {
+            CartResponse.CartData cartData = dataList.get(getAdapterPosition());
+            cartData.setPreviousQuantity(previousQuantity);
+            cartData.setQuantity(updatedQuantity);
+            notifyItemChanged(getAdapterPosition());
+            clickListener.onUpdateQuantity(getAdapterPosition(), cartData.getTm_cart_item_key(),
+                    updatedQuantity);
         }
     }
-
-    public interface OnItemClickListener{
-        void onEdit(CartResponse.CartData cartData);
-        void onClose(CartResponse.CartData cartData);
-    }
-
 }

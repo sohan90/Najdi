@@ -90,9 +90,18 @@ public class CheckoutActivity extends BaseActivity {
                 viewModel.createOrder(userId, cartResponse.getData().getCartdata(), billing);
 
         orderResponseLiveData.observe(this, orderResponse -> {
-            hideProgressDialog();
+            clearCart();
             viewModel.orderResponseMutableLiveData().setValue(orderResponse);
             handleProgress(100);
+        });
+    }
+
+    private void clearCart() {
+        viewModel.clearCart().observe(this, baseResponse -> {
+            hideProgressDialog();
+            if (baseResponse != null) {
+                //
+            }
         });
     }
 

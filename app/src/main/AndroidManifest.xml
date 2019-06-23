@@ -17,7 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".launch.view.SplashScreenActivity">
+        <activity android:name=".launch.view.SplashScreenActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,16 +31,25 @@
         <activity
             android:name=".launch.view.SignUpActivity"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".launch.view.OtpActivity"
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".home.view.HomeScreenActivity"
             android:label="@string/title_activity_home_screen"
             android:parentActivityName=".common.BaseActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
+
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.najdi.android.najdiapp.common.BaseActivity" />
         </activity>
-        <activity android:name=".checkout.view.CheckoutActivity"/>
+        <activity android:name=".checkout.view.CheckoutActivity"
+            android:screenOrientation="portrait"/>
         <service
             android:name=".checkout.FetchAddressIntentService"
             android:exported="false"/>

@@ -7,6 +7,7 @@ import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.BaseViewModel;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
+import com.najdi.android.najdiapp.shoppingcart.model.UpdateCartRequest;
 
 import java.util.HashMap;
 import java.util.List;
@@ -58,6 +59,10 @@ public class CartViewModel extends BaseViewModel {
 
     public LiveData<ProductListResponse> getIndividualProduct(int productId) {
         return repository.getIndividualProduct(productId);
+    }
+
+    public LiveData<BaseResponse> updateQuantity(UpdateCartRequest updateCartRequest){
+        return repository.updateItemQuantity(updateCartRequest);
     }
 
 }

@@ -32,20 +32,23 @@ public class CartResponse {
     }
 
     public static class CartData implements Parcelable {
-        int product_id;
-        int variation_id;
-        HashMap<String, String> variation;
-        int quantity;
-        String tm_epo_product_original_price;
-        String tm_epo_options_prices;
-        String tm_epo_product_price_with_options;
-        String tm_cart_item_key;
-        int line_total;
-        int line_subtotal;
-        int line_tax;
-        int line_subtotal_tax;
-        String post_name;
-        String post_image_url;
+        private int product_id;
+        private int variation_id;
+        private HashMap<String, String> variation;
+        private int quantity;
+        private String tm_epo_product_original_price;
+        private String tm_epo_options_prices;
+        private String tm_epo_product_price_with_options;
+        private String tm_cart_item_key;
+        private int line_total;
+        private int line_subtotal;
+        private int line_tax;
+        private int line_subtotal_tax;
+        private String post_name;
+        private String post_image_url;
+
+        //local data
+        private int previousQuantity;
 
 
         protected CartData(Parcel in) {
@@ -62,6 +65,7 @@ public class CartResponse {
             line_subtotal_tax = in.readInt();
             post_name = in.readString();
             post_image_url = in.readString();
+            previousQuantity = in.readInt();
         }
 
         public static final Creator<CartData> CREATOR = new Creator<CartData>() {
@@ -98,6 +102,14 @@ public class CartResponse {
 
         public int getQuantity() {
             return quantity;
+        }
+
+        public void setPreviousQuantity(int previousQuantity) {
+            this.previousQuantity = previousQuantity;
+        }
+
+        public int getPreviousQuantity() {
+            return previousQuantity;
         }
 
         public String getTm_epo_product_original_price() {
@@ -156,6 +168,7 @@ public class CartResponse {
             dest.writeInt(line_subtotal_tax);
             dest.writeString(post_name);
             dest.writeString(post_image_url);
+            dest.writeInt(previousQuantity);
         }
     }
 }

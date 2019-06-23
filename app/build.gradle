@@ -21,11 +21,15 @@ android {
     productFlavors {
         stagging {
             buildConfigField 'String', 'NAJDI_END_POINTS', '"https://najdisheep.com/temp/livetest/wp-json/wc/v2/"'
+            buildConfigField 'String', 'NAJDI_CART_BASE_URL', '"https://najdisheep.com/temp/livetest/wp-json/"'
+            buildConfigField 'String', 'BASIC_64_AUTH', '"Basic Y2tfMzFmNTIxOTA3ZDJlZTY0ZmE4ZDMzMjAwNjE0ODY4ZTc3ZDlhOGY3Njpjc184NDU5ZjU4NWIwYzM3MjQ0Y2JjZWViZDYzZTE0MTQ4OWRjZDlkMWU4"'
             dimension "environment"
         }
         production {
 
             buildConfigField 'String', 'NAJDI_END_POINTS', '"https://najdisheep.com/wp-json/wc/v2/"'
+            buildConfigField 'String', 'NAJDI_CART_BASE_URL', '"https://najdisheep.com/wp-json/"'
+            buildConfigField 'String', 'BASIC_64_AUTH', '"Basic Y2tfNjg2MzA3NTNjNDQ1YzVjYzczMTJmYzE0MGIyNmEwNTM4MTA5OGZlNDpjc19iOTQxZjU3ZmRkMjUwNGUyNTNjNmQ2Y2M2NjBjNGUyZmRhNWE5Zjgx"'
             dimension "environment"
         }
     }

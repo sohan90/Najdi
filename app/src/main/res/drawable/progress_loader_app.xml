@@ -15,10 +15,10 @@
             android:height="48dp" />
 
         <gradient
-            android:centerColor="@color/primary_text_orange"
+            android:centerColor="@color/green_default"
             android:centerY="0.50"
             android:endColor="@color/primary_text_white"
-            android:startColor="@color/primary_text_orange"
+            android:startColor="@color/green_default"
             android:useLevel="false" />
     </shape>
 </rotate>

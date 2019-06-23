@@ -11,6 +11,7 @@ public class SignupResponseModel {
     private String last_name;
     private String role;
     private String username;
+    private BillingAddress billing;
 
 
     public int getId() {
@@ -51,5 +52,9 @@ public class SignupResponseModel {
 
     public String getUsername() {
         return username;
+    }
+
+    public BillingAddress getBilling() {
+        return billing;
     }
 }

@@ -57,16 +57,22 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             cartBinding = binding;
             cartBinding.dec.setOnClickListener(v -> {
                 CartResponse.CartData cartData = cartDataList.get(getAdapterPosition());
+                cartData.setPreviousQuantity(cartData.getQuantity());
                 int updatedQuantity = cartData.getQuantity() - 1;
                 cartData.setQuantity(updatedQuantity);
                 notifyItemChanged(getAdapterPosition());
+                clickListener.onUpdateQuantity(getAdapterPosition(), cartData.getTm_cart_item_key(),
+                        updatedQuantity);
             });
 
             cartBinding.increase.setOnClickListener(v -> {
                 CartResponse.CartData cartData = cartDataList.get(getAdapterPosition());
+                cartData.setPreviousQuantity(cartData.getQuantity());
                 int updatedQuantity = cartData.getQuantity() + 1;
                 cartData.setQuantity(updatedQuantity);
                 notifyItemChanged(getAdapterPosition());
+                clickListener.onUpdateQuantity(getAdapterPosition(), cartData.getTm_cart_item_key(),
+                        updatedQuantity);
             });
 
             cartBinding.delete.setOnClickListener(v -> {
@@ -84,8 +90,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         }
     }
 
-    public interface AdapterClickLisntener{
+    public interface AdapterClickLisntener {
         void onRemoveItem(String cartItemKey);
+
         void onEdit(CartResponse.CartData cartData);
+
+        void onUpdateQuantity(int adapterPosition, String cartItemKey, int quantity);
     }
 }

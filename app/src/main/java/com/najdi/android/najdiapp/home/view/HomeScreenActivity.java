@@ -49,6 +49,7 @@ import static com.najdi.android.najdiapp.common.Constants.ScreeNames.PRODUCTS;
 import static com.najdi.android.najdiapp.common.Constants.ScreeNames.PRODUCT_DETAIL;
 import static com.najdi.android.najdiapp.common.Constants.ScreeNames.SHOPPING_CART;
 import static com.najdi.android.najdiapp.utitility.PreferenceUtils.USER_ID_KEY;
+import static com.najdi.android.najdiapp.utitility.PreferenceUtils.USER_LOGIIN_TOKEN;
 import static com.najdi.android.najdiapp.utitility.PreferenceUtils.USER_NAME_KEY;
 
 public class HomeScreenActivity extends BaseActivity
@@ -211,6 +212,7 @@ public class HomeScreenActivity extends BaseActivity
 
         toolBarTitle = viewActionBar.findViewById(R.id.title);
         cartImageLyt = viewActionBar.findViewById(R.id.cartImageLyt);
+        cartImageLyt.setOnClickListener(v -> launchCartScreen());
         notificationText = viewActionBar.findViewById(R.id.notification_text);
         toolBarTitle.setText(getString(R.string.category));
         drawerLayout = binding.drawerLayout;
@@ -226,6 +228,10 @@ public class HomeScreenActivity extends BaseActivity
         setNavSubItemClicklistener();
     }
 
+    private void launchCartScreen() {
+        replaceFragment(SHOPPING_CART);
+    }
+
     private void setNavSubItemClicklistener() {
         View view = binding.navView.getMenu().findItem(R.id.language).getActionView();
         MenuLanSelcBinding menuLanSelcBinding = MenuLanSelcBinding.bind(view);
@@ -237,7 +243,11 @@ public class HomeScreenActivity extends BaseActivity
             } else {
                 setLocaleLanguage(ENGLISH_LAN);
             }
-            recreate();
+            FragmentHelper.popBackStack(this, null);
+            Intent intent = new Intent(this, HomeScreenActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            //recreate();
         });
     }
 
@@ -318,8 +328,7 @@ public class HomeScreenActivity extends BaseActivity
                 break;
 
             case R.id.products:
-                getSupportFragmentManager().popBackStackImmediate(PRODUCT_LIST_FRAG,
-                        POP_BACK_STACK_INCLUSIVE);
+                FragmentHelper.popBackStack(this, PRODUCT_LIST_FRAG);
                 replaceFragment(PRODUCTS);
                 break;
 
@@ -345,6 +354,7 @@ public class HomeScreenActivity extends BaseActivity
         new Handler().postDelayed(() -> {
             hideProgressDialog();
             PreferenceUtils.setValueInt(this, USER_ID_KEY, 0);
+            PreferenceUtils.setValueString(this, USER_LOGIIN_TOKEN, null);
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();

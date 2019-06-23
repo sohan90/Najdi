@@ -3,6 +3,7 @@ package com.najdi.android.najdiapp.common;
 import android.content.res.Configuration;
 
 import com.najdi.android.najdiapp.utitility.DialogUtil;
+import com.najdi.android.najdiapp.utitility.LocaleUtitlity;
 import com.najdi.android.najdiapp.utitility.MathUtils;
 
 import java.util.Locale;
@@ -27,6 +28,7 @@ public class BaseFragment extends Fragment {
         config.setLayoutDirection(locale);
         getResources().updateConfiguration(config, getResources().getDisplayMetrics());
         MathUtils.setCurrencySymbol(locale);
+        LocaleUtitlity.setCountryLang(localeLanguage);
     }
 
     protected String getCurrentLocale() {

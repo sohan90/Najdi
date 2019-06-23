@@ -6,6 +6,7 @@ import android.location.Address;
 import com.najdi.android.najdiapp.checkout.model.LineItemModelRequest;
 import com.najdi.android.najdiapp.checkout.model.OrderRequest;
 import com.najdi.android.najdiapp.checkout.model.OrderResponse;
+import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.BaseViewModel;
 import com.najdi.android.najdiapp.launch.model.BillingAddress;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
@@ -103,5 +104,9 @@ public class CheckoutViewModel extends BaseViewModel {
             orderResponseMutableLiveData = new MutableLiveData<>();
         }
         return orderResponseMutableLiveData;
+    }
+
+    public LiveData<BaseResponse> clearCart(){
+        return repository.clearCart();
     }
 }

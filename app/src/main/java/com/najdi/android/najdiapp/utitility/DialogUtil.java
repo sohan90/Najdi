@@ -78,8 +78,10 @@ public class DialogUtil {
         return (sProgressAlertDialog != null && sProgressAlertDialog.isShowing());
     }
 
-    public static void showGuestAlertDialog(Context context, String tittle, String message, final DialogInterface.OnClickListener listener,
-                                            String posButtonName, String negButtonName, boolean isCancelable) {
+    public static void showGuestAlertDialog(Context context, String tittle, String message,
+                                            final DialogInterface.OnClickListener listener,
+                                            String posButtonName, String negButtonName,
+                                            boolean isCancelable) {
         if (context != null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AlertDialogTheme);
             if (!TextUtils.isEmpty(posButtonName)) {
@@ -94,7 +96,8 @@ public class DialogUtil {
         }
     }
 
-    public static void showAlertDialog(Context context, String message, final DialogInterface.OnClickListener listener) {
+    public static void showAlertDialog(Context context, String message,
+                                       final DialogInterface.OnClickListener listener) {
         if (context != null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AlertDialogTheme);
             builder.setTitle(null).setMessage(message).setPositiveButton(R.string.ok, listener);
@@ -103,7 +106,8 @@ public class DialogUtil {
         }
     }
 
-    public static void showPopuwindow(Context context, View anchorView, List<String> list, GenericClickListener<String> clickListener) {
+    public static void showPopuwindow(Context context, View anchorView, List<String> list,
+                                      GenericClickListener<String> clickListener) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
         View customView = inflater.inflate(R.layout.item_pop_window, null);
         ArrayAdapter<String> itemsAdapter = new ArrayAdapter<>(context,

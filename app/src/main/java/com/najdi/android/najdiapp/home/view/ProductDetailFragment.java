@@ -40,6 +40,7 @@ public class ProductDetailFragment extends BaseFragment {
     private ProductDetailViewModel viewModel;
     private CartResponse.CartData cartData;
     private ProductListResponse productListResponse;
+    private boolean isFromCartScreen;
 
     public static ProductDetailFragment createInstance(ProductDetailBundleModel model) {
         Bundle bundle = new Bundle();
@@ -56,12 +57,19 @@ public class ProductDetailFragment extends BaseFragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_product_detail, container,
                 false);
         getProductDetailFromBundle();
+        updateCartLableButton();
         initializeViewModel();
         bindViewModelWithLiveData();
         initializeHomeScreenViewModel();
         initializeClickListener();
         fetchProductDetail();
         return binding.getRoot();
+    }
+
+    private void updateCartLableButton() {
+        if (isFromCartScreen) {
+            binding.addToCart.setText(getString(R.string.update_cart_label));
+        }
     }
 
     private void fetchProductDetail() {
@@ -104,15 +112,30 @@ public class ProductDetailFragment extends BaseFragment {
         binding.proceed.setOnClickListener(v -> this.launchCheckOutActivity());
         binding.addToCart.setOnClickListener(v -> {
             showProgressDialog();
-            LiveData<BaseResponse> liveData = viewModel.addToCart();
-            liveData.observe(this, baseResponse -> {
-                hideProgressDialog();
-                if (baseResponse != null && baseResponse.getCode().equalsIgnoreCase("200")) {
-                    homeScreeViewModel.setCartSize(homeScreeViewModel.getCartSize() + 1);
-                    updateNotificationCartCount(homeScreeViewModel.getCartSize());
-                    moveToAddCartScreen();
-                }
-            });
+            if (!isFromCartScreen) {
+                addCart(homeScreeViewModel.getCartSize() + 1); // add cart
+            } else {
+                //update cart :Since api wont support update cart directly so
+                // to update cart  first delete product and add with updated product item
+                LiveData<BaseResponse> liveData = viewModel.removeCart(cartData.getTm_cart_item_key());
+                liveData.observe(this, baseResponse -> {
+                    if (baseResponse != null) {
+                        addCart(homeScreeViewModel.getCartSize());
+                    }
+                });
+            }
+        });
+    }
+
+    private void addCart(int existingCartSize) {
+        LiveData<BaseResponse> liveData = viewModel.addToCart();
+        liveData.observe(this, baseResponse -> {
+            hideProgressDialog();
+            if (baseResponse != null && baseResponse.getCode().equalsIgnoreCase("200")) {
+                homeScreeViewModel.setCartSize(existingCartSize);
+                updateNotificationCartCount(homeScreeViewModel.getCartSize());
+                moveToAddCartScreen();
+            }
         });
     }
 
@@ -196,6 +219,7 @@ public class ProductDetailFragment extends BaseFragment {
             if (model == null) return;
             productId = model.getProductId();
             cartData = (CartResponse.CartData) model.getT();
+            isFromCartScreen = model.isFromCartScreen();
         }
     }
 
