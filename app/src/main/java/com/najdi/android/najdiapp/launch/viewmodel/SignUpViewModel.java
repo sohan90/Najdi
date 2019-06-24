@@ -1,8 +1,10 @@
 package com.najdi.android.najdiapp.launch.viewmodel;
 
 import android.app.Application;
+import android.text.TextUtils;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.BaseViewModel;
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.launch.model.BillingAddress;
@@ -67,16 +69,26 @@ public class SignUpViewModel extends BaseViewModel {
         validateSuccess.setValue(valid);
     }
 
-    public LiveData<SignupResponseModel> registerUser() {
+    public LiveData<BaseResponse> registerUser() {
         SignupRequestModel signupRequestModel = new SignupRequestModel();
-        signupRequestModel.setEmail(email.getValue());
         signupRequestModel.setPassword(password.getValue());
-        signupRequestModel.setUsername(name.getValue());
-        BillingAddress billingAddress = new BillingAddress();
-        billingAddress.setPhone(phoneNo.getValue());
-        signupRequestModel.setBilling(billingAddress);
+        signupRequestModel.setMobile(phoneNo.getValue());
+        signupRequestModel.setLang(resourceProvider.getCountryLang());
+        if (!TextUtils.isEmpty(name.getValue())) {
+            signupRequestModel.setUsername(name.getValue());
+            PreferenceUtils.setValueString(resourceProvider.getAppContext(), PreferenceUtils.USER_NAME_KEY,
+                    name.getValue());
+        }
+        if (!TextUtils.isEmpty(email.getValue())) {
+            signupRequestModel.setEmail(email.getValue());
+            PreferenceUtils.setValueString(resourceProvider.getAppContext(), PreferenceUtils.USER_EMAIL_KEY,
+                    email.getValue());
+        }
+
         PreferenceUtils.setValueString(resourceProvider.getAppContext(),
                 PreferenceUtils.USER_PASSWORD, password.getValue());
+        PreferenceUtils.setValueString(resourceProvider.getAppContext(), PreferenceUtils.USER_PHONE_NO_KEY,
+                phoneNo.getValue());
         return repository.registerUser(signupRequestModel);
     }
 

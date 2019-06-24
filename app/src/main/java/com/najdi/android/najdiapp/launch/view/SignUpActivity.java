@@ -5,10 +5,12 @@ import android.os.Bundle;
 
 import com.najdi.android.najdiapp.common.BaseActivity;
 import com.najdi.android.najdiapp.R;
+import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.databinding.ActivitySignUpBinding;
 import com.najdi.android.najdiapp.launch.model.SignupResponseModel;
 import com.najdi.android.najdiapp.launch.viewmodel.SignUpViewModel;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
+import com.najdi.android.najdiapp.utitility.ToastUtils;
 
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
@@ -55,14 +57,19 @@ public class SignUpActivity extends BaseActivity {
     private void subscribeValidationStatus() {
         viewModel.getValidationStatus().observe(this, valid -> {
             if (valid) {
-                LiveData<SignupResponseModel> liveData = viewModel.registerUser();
+                LiveData<BaseResponse> liveData = viewModel.registerUser();
                 liveData.observe(this, signupResponseModel -> {
                     hideProgressDialog();
                     if (signupResponseModel != null) {
-                        saveUserCredential(signupResponseModel);
-                        launchOTPScreen();
-                        finish();
-
+                        if (signupResponseModel.getCode().equals("200") && signupResponseModel.getData() != null) {
+                            ToastUtils.getInstance(this).showShortToast(signupResponseModel.
+                                    getData().getMessage());
+                            launchOTPScreen();
+                            finish();
+                        } else {
+                            ToastUtils.getInstance(this).showShortToast(signupResponseModel.
+                                    getData().getMessage());
+                        }
                     }
                 });
             } else {

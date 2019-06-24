@@ -1,6 +1,8 @@
 package com.najdi.android.najdiapp.launch.model;
 
 public class SignupRequestModel {
+    String mobile;
+    String lang;
     String email;
     String password;
     String first_name;
@@ -8,6 +10,14 @@ public class SignupRequestModel {
     String username;
     BillingAddress billing;
 
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public void setLang(String lang) {
+        this.lang = lang;
+    }
 
     public void setBilling(BillingAddress billing) {
         this.billing = billing;

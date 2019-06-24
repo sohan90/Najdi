@@ -95,6 +95,7 @@ public class CheckoutFragment extends BaseFragment {
 
             @Override
             public void onUpdateQuantity(int adapterPosition, String cartItemKey, int quantity) {
+                updateTotal();
                 updateItemQuantity(adapterPosition, cartItemKey, quantity);
             }
 
@@ -102,6 +103,10 @@ public class CheckoutFragment extends BaseFragment {
         }, new ArrayList<>());
 
         binding.recyclView.setAdapter(checkoutAdapter);
+    }
+
+    private void updateTotal() {
+        viewModel.udpateTotal(adapterList);
     }
 
     private void removeItem(String s) {

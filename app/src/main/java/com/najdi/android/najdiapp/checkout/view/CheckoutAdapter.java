@@ -49,7 +49,7 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CartResponse.CartData cartData = dataList.get(position);
         holder.binding.setCartModel(cartData);
-
+        holder.binding.variationContainer.removeAllViews();
         LayoutInflater inflater = LayoutInflater.from(holder.binding.getRoot().getContext());
         for (Map.Entry<String, String> entry : cartData.getVariation().entrySet()) {
             View view = inflater.inflate(R.layout.inflate_variation_item,
@@ -95,14 +95,18 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHo
             binding.decrease.setOnClickListener(v -> {
                 CartResponse.CartData cartData = dataList.get(getAdapterPosition());
                 int updatedQuantity = cartData.getQuantity() - 1;
-                updateQuantity(updatedQuantity, cartData.getQuantity());
+                if (updatedQuantity > 1) {
+                    updateQuantity(updatedQuantity, cartData.getQuantity());
+                }
             });
         }
 
         private void updateQuantity(int updatedQuantity, int previousQuantity) {
             CartResponse.CartData cartData = dataList.get(getAdapterPosition());
+            int updatedTotal = updatedQuantity * Integer.parseInt(cartData.seletedOptionPrice());
             cartData.setPreviousQuantity(previousQuantity);
             cartData.setQuantity(updatedQuantity);
+            cartData.setLineTotal(updatedTotal);
             notifyItemChanged(getAdapterPosition());
             clickListener.onUpdateQuantity(getAdapterPosition(), cartData.getTm_cart_item_key(),
                     updatedQuantity);

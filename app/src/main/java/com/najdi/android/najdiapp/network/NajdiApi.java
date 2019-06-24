@@ -23,6 +23,7 @@ import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
+import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -30,29 +31,29 @@ import retrofit2.http.Query;
 
 public interface NajdiApi {
 
-    @POST(BuildConfig.NAJDI_END_POINTS + "customers")
+    @POST(BuildConfig.NAJDI_CART_BASE_URL + "customapi/signup")
     @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
-    Call<SignupResponseModel> registerUser(@Query("lang")String lang, @Body SignupRequestModel signupRequestModel);
+    Call<BaseResponse> registerUser(@Body SignupRequestModel signupRequestModel);
 
     @POST("https://najdisheep.com/temp/livetest/wp-json/jwt-auth/v1/token")
     @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
-    Call<BaseResponse> loginUser(@Query("lang")String lang, @Body LoginRequestModel loginRequestModel);
+    Call<BaseResponse> loginUser(@Query("lang") String lang, @Body LoginRequestModel loginRequestModel);
 
     @GET(BuildConfig.NAJDI_END_POINTS + "products")
     @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
     Call<List<ProductListResponse>> getProducts(@Query("lang") String lang);
 
     @POST(BuildConfig.NAJDI_END_POINTS + "cart/add")
-    @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
-    Call<BaseResponse> addToCart(@Body CartRequest cartRequest);
+    @Headers({"Content-Type:application/json"})
+    Call<BaseResponse> addToCart(@Header("Authorization") String token, @Body CartRequest cartRequest);
 
     @GET(BuildConfig.NAJDI_END_POINTS + "cart")
-    @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
-    Call<CartResponse> getCart(@Query("lang") String lang);
+    @Headers({"Content-Type:application/json"})
+    Call<CartResponse> getCart(@Header("Authorization") String token, @Query("lang") String lang);
 
     @HTTP(method = "DELETE", path = "cart/cart-item", hasBody = true)
-    @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
-    Call<BaseResponse> removeCartItem(@Body HashMap<String, String> cartObj);
+    @Headers({"Content-Type:application/json"})
+    Call<BaseResponse> removeCartItem(@Header("Authorization") String token, @Body HashMap<String, String> cartObj);
 
     @GET(BuildConfig.NAJDI_END_POINTS + "products/{productId}")
     @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
@@ -68,17 +69,21 @@ public interface NajdiApi {
 
     @POST(BuildConfig.NAJDI_CART_BASE_URL + "customapi/cart/update_item")
     @Headers({"Content-Type:application/json"})
-    Call<BaseResponse> updateItemQuantity(@Query("token") String token, @Body UpdateCartRequest cartRequest);
+    Call<BaseResponse> updateItemQuantity(@Header("Authorization") String token, @Body UpdateCartRequest cartRequest);
 
     @POST(BuildConfig.NAJDI_CART_BASE_URL + "customapi/verify")
-    @Headers({"Content-Type:application/json"})
+    @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
     Call<BaseResponse> verifyOtp(@Body OtpRequestModel requestModel);
+
+    @POST(BuildConfig.NAJDI_CART_BASE_URL + "customapi/resend")
+    @Headers({"Content-Type:application/json"})
+    Call<BaseResponse> resendOtp(@Body OtpRequestModel requestModel);
 
     @POST(BuildConfig.NAJDI_CART_BASE_URL + "jwt-auth/v1/token")
     @Headers({"Content-Type:application/json"})
     Call<BaseResponse> loginToken(@Body LoginRequestModel loginRequestModel);
 
-    @GET(BuildConfig.NAJDI_CART_BASE_URL + "customapi/clear_cart")
+    @GET(BuildConfig.NAJDI_END_POINTS + "cart/clear")
     @Headers({"Content-Type:application/json"})
-    Call<BaseResponse> clearCart(@Query("token") String token);
+    Call<BaseResponse> clearCart(@Header("Authorization") String token);
 }

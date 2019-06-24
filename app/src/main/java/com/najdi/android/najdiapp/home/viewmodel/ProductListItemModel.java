@@ -58,7 +58,13 @@ public class ProductListItemModel extends BaseObservable {
 
     @Bindable
     public String getPrice() {
-        return product.getPrice().concat("ر.س");
+        String price;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            price = Html.fromHtml(product.getPrice_html(), Html.FROM_HTML_MODE_COMPACT).toString();
+        } else {
+            price = Html.fromHtml(product.getPrice_html()).toString();
+        }
+        return price;
     }
 
     public void setTitle(String title) {

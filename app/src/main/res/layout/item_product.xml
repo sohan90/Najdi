@@ -49,8 +49,9 @@
 
             <TextView
                 android:id="@+id/price"
-                android:layout_width="150dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minWidth="150dp"
                 android:layout_gravity="end"
                 android:background="@color/card_stack_default"
                 android:gravity="center"
@@ -81,7 +82,7 @@
                 android:ellipsize="end"
                 android:gravity="start"
                 android:lineSpacingExtra="5dp"
-                android:maxLines="3"
+                android:maxLines="4"
                 android:text="@{viewModel.desc}"
                 android:textColor="@color/black" />
 

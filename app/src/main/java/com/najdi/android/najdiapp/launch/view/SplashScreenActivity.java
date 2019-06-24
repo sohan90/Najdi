@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import static com.najdi.android.najdiapp.utitility.PreferenceUtils.USER_ID_KEY;
 import static com.najdi.android.najdiapp.utitility.PreferenceUtils.USER_LOGIIN_TOKEN;
+import static com.najdi.android.najdiapp.utitility.PreferenceUtils.USER_PHONE_NO_KEY;
 
 public class SplashScreenActivity extends BaseActivity {
     private static final int DELAY = 2000;
@@ -41,7 +42,7 @@ public class SplashScreenActivity extends BaseActivity {
     }
 
     private void launchLoginScreen() {
-        Intent intent = new Intent(this, SignUpActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
     }

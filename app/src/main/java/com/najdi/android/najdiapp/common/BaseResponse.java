@@ -74,6 +74,7 @@ public class BaseResponse {
         if (data != null) {
             switch (data.getStatus()) {
                 case 400:
+                case 401:
                 case 403:
                 case 500:
                     ToastUtils.getInstance(context).showLongToast(message);

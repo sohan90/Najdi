@@ -16,6 +16,7 @@ public class ProductListResponse implements Parcelable {
     String status;
     String catalog_visibility;
     String price;
+    String price_html;
     String regular_price;
     String sale_price;
     String description;
@@ -43,6 +44,7 @@ public class ProductListResponse implements Parcelable {
         images = in.createTypedArrayList(Image.CREATOR);
         attributes = in.createTypedArrayList(Attributes.CREATOR);
         variations_data = in.createTypedArrayList(VariationData.CREATOR);
+        price_html = in.readString();
     }
 
     public static final Creator<ProductListResponse> CREATOR = new Creator<ProductListResponse>() {
@@ -97,6 +99,10 @@ public class ProductListResponse implements Parcelable {
         return status;
     }
 
+    public String getPrice_html() {
+        return price_html;
+    }
+
     public String getCatalog_visibility() {
         return catalog_visibility;
     }
@@ -142,6 +148,7 @@ public class ProductListResponse implements Parcelable {
         dest.writeTypedList(images);
         dest.writeTypedList(attributes);
         dest.writeTypedList(variations_data);
+        dest.writeString(price_html);
     }
 
     public static class Image implements Parcelable {

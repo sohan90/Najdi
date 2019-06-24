@@ -130,11 +130,16 @@ public class CartFragment extends BaseFragment {
 
             @Override
             public void onUpdateQuantity(int adapterPosition, String cartItemKey, int quantity) {
+                updateTotal();
                 updateItemQuantity(adapterPosition, cartItemKey, quantity);
             }
         }, new ArrayList<>());
 
         binding.recyl.setAdapter(adapter);
+    }
+
+    private void updateTotal() {
+        viewModel.setTotal(adapterList);
     }
 
     private void updateItemQuantity(int adapterPosition, String cartItemKey, int quantity) {

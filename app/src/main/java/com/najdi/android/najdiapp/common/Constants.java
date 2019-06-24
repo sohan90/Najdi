@@ -14,6 +14,7 @@ public class Constants {
     public static final String OBSERVER_INTENT_CART_RESPONSE = "observe_cart_response";
     public static final String ARABIC_LAN = "ar";
     public static final String ENGLISH_LAN = "en";
+    public static final String BEARER = "Bearer ";
 
     public interface FragmentTags {
         String PRODUCT_DETAIL = "prodcut_detail";

@@ -132,6 +132,10 @@ public class CartResponse {
             return line_total;
         }
 
+        public void setLineTotal(int line_total) {
+            this.line_total = line_total;
+        }
+
         public void setQuantity(int quantity) {
             this.quantity = quantity;
         }

@@ -90,6 +90,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void saveCredential(BaseResponse.Data data) {
+        PreferenceUtils.setValueString(this, PreferenceUtils.USER_LOGIIN_TOKEN, data.getToken());
         PreferenceUtils.setValueInt(this, PreferenceUtils.USER_ID_KEY, Integer.parseInt(data.getUserId()));
         PreferenceUtils.setValueString(this, PreferenceUtils.USER_EMAIL_KEY,
                 data.getUserEmail());

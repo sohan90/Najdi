@@ -1,5 +1,6 @@
 package com.najdi.android.najdiapp.home.view;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.najdi.android.najdiapp.utitility.DialogUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,6 +43,7 @@ public class ProductDetailFragment extends BaseFragment {
     private CartResponse.CartData cartData;
     private ProductListResponse productListResponse;
     private boolean isFromCartScreen;
+    private HashMap<String, String> variationMap = new HashMap<>();
 
     public static ProductDetailFragment createInstance(ProductDetailBundleModel model) {
         Bundle bundle = new Bundle();
@@ -65,6 +68,7 @@ public class ProductDetailFragment extends BaseFragment {
         fetchProductDetail();
         return binding.getRoot();
     }
+
 
     private void updateCartLableButton() {
         if (isFromCartScreen) {
@@ -158,27 +162,42 @@ public class ProductDetailFragment extends BaseFragment {
         if (productListResponse != null && productListResponse.getAttributesList() != null) {
             List<ProductListResponse.Attributes> attributesList = productListResponse.getAttributesList();
             for (ProductListResponse.Attributes attributes : attributesList) {
+
                 List<String> stringList = getListFromMap(attributes.getOptions());
                 View view = LayoutInflater.from(getActivity()).inflate(R.layout.item_detail,
                         binding.container, false);
                 binding.container.addView(view);
+
                 ItemDetailBinding detailBinding = ItemDetailBinding.bind(view);
                 detailBinding.name.setText(attributes.getName());
                 setDataForSelectedValue(detailBinding.options, attributes.getId(),
                         attributes.getSlug());
                 detailBinding.options.setTag(attributes.getId());
+
                 detailBinding.options.setOnClickListener((v -> {
                     if (getActivity() != null) {
                         int selectedAttributeId = (int) v.getTag();
+
                         DialogUtil.showPopuwindow(getActivity(), v, stringList, s -> {
-                            viewModel.updatePrice(productListResponse, s, selectedAttributeId);
+
+                            String selectedValue = getSelectedValueFromMap(s);
+                            viewModel.updatePrice(productListResponse, selectedValue, selectedAttributeId);
                             detailBinding.options.setText(s);
+
                         });
                     }
+
                 }));
             }
-
         }
+    }
+
+    private String getSelectedValueFromMap(String selectedNameKey) {
+        String slugValue = "";
+        if (variationMap.size() > 0) {
+            slugValue = variationMap.get(selectedNameKey);
+        }
+        return slugValue;
     }
 
     private void reset() {
@@ -204,11 +223,10 @@ public class ProductDetailFragment extends BaseFragment {
     private List<String> getListFromMap(List<HashMap<String, String>> hashMapList) {
         List<String> list = new ArrayList<>();
         for (HashMap<String, String> stringStringHashMap : hashMapList) {
-            if (getCurrentLocale().equals(Constants.ARABIC_LAN)) {
-                list.add(stringStringHashMap.get("name"));
-            } else {
-                list.add(stringStringHashMap.get("slug"));// for english
-            }
+            String name = stringStringHashMap.get("name");
+            String slug = stringStringHashMap.get("slug");
+            list.add(name);
+            variationMap.put(name, slug);
         }
         return list;
     }

@@ -43,10 +43,11 @@ public class CartViewModel extends BaseViewModel {
     public void setTotal(List<CartResponse.CartData> cartDataList) {
         int subTotal = 0;
         for (CartResponse.CartData cartData : cartDataList) {
-            int total = Integer.parseInt(cartData.seletedOptionPrice());
+            int total = cartData.getLineTotal();
             subTotal = total + subTotal;
         }
-        String total = String.valueOf(subTotal).concat(resourceProvider.getString(R.string.currecy));
+        String total = String.valueOf(subTotal).concat(" ").
+                concat(resourceProvider.getString(R.string.currency));
         subtotalLiveData.setValue(total);
         totalLiveData.setValue(total);
     }
@@ -61,7 +62,7 @@ public class CartViewModel extends BaseViewModel {
         return repository.getIndividualProduct(productId);
     }
 
-    public LiveData<BaseResponse> updateQuantity(UpdateCartRequest updateCartRequest){
+    public LiveData<BaseResponse> updateQuantity(UpdateCartRequest updateCartRequest) {
         return repository.updateItemQuantity(updateCartRequest);
     }
 

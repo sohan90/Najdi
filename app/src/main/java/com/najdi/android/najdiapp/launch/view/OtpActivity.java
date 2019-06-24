@@ -13,6 +13,7 @@ import com.najdi.android.najdiapp.databinding.ActivityOtpBinding;
 import com.najdi.android.najdiapp.home.view.HomeScreenActivity;
 import com.najdi.android.najdiapp.launch.model.OtpViewModel;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
+import com.najdi.android.najdiapp.utitility.ToastUtils;
 
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
@@ -39,6 +40,8 @@ public class OtpActivity extends BaseActivity {
 
     private void initializeViewModel() {
         viewModel = ViewModelProviders.of(this).get(OtpViewModel.class);
+        binding.one.requestFocus();
+        binding.one.setCursorVisible(true);
     }
 
     private void initClickListener() {
@@ -49,6 +52,19 @@ public class OtpActivity extends BaseActivity {
         binding.four.addTextChangedListener(new GenericTextWatcher(binding.four));
 
         binding.verify.setOnClickListener(v -> verifyOtp());
+        binding.resend.setOnClickListener(v -> resendOtp());
+    }
+
+    private void resendOtp() {
+        showProgressDialog();
+        viewModel.resendOtp().observe(this, baseResponse -> {
+            hideProgressDialog();
+            if (baseResponse != null) {
+                if (baseResponse.getData() != null) {
+                    ToastUtils.getInstance(this).showShortToast(baseResponse.getData().getMessage());
+                }
+            }
+        });
     }
 
     private void verifyOtp() {
@@ -66,7 +82,7 @@ public class OtpActivity extends BaseActivity {
     }
 
     private void login() {
-        String userName = PreferenceUtils.getValueString(this, PreferenceUtils.USER_NAME_KEY);
+        String userName = PreferenceUtils.getValueString(this, PreferenceUtils.USER_PHONE_NO_KEY);
         String password = PreferenceUtils.getValueString(this, PreferenceUtils.USER_PASSWORD);
         LiveData<BaseResponse> liveData = viewModel.login(userName, password);
         liveData.observe(this, baseResponse -> {

@@ -51,7 +51,8 @@ public class OtpViewModel extends BaseViewModel {
         String otp = one.getValue() + two.getValue() + three.getValue() + four.getValue();
         OtpRequestModel otpRequestModel = new OtpRequestModel();
         otpRequestModel.setMobile(mobile);
-        otpRequestModel.setOtp(Integer.parseInt(otp));
+        otpRequestModel.setOtp(otp);
+        otpRequestModel.setLang(resourceProvider.getCountryLang());
         return repository.verifyOtp(otpRequestModel);
     }
 
@@ -60,5 +61,14 @@ public class OtpViewModel extends BaseViewModel {
         loginRequestModel.setUserName(username);
         loginRequestModel.setPassword(password);
         return repository.loginToken(loginRequestModel);
+    }
+
+    public LiveData<BaseResponse> resendOtp() {
+        String phoneNo = PreferenceUtils.getValueString(resourceProvider.getAppContext(),
+                PreferenceUtils.USER_PHONE_NO_KEY);
+        OtpRequestModel otpRequestModel = new OtpRequestModel();
+        otpRequestModel.setMobile(phoneNo);
+        otpRequestModel.setLang(resourceProvider.getCountryLang());
+        return repository.resendOtp(otpRequestModel);
     }
 }

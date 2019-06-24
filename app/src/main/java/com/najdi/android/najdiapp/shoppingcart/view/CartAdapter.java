@@ -59,20 +59,29 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 CartResponse.CartData cartData = cartDataList.get(getAdapterPosition());
                 cartData.setPreviousQuantity(cartData.getQuantity());
                 int updatedQuantity = cartData.getQuantity() - 1;
-                cartData.setQuantity(updatedQuantity);
-                notifyItemChanged(getAdapterPosition());
-                clickListener.onUpdateQuantity(getAdapterPosition(), cartData.getTm_cart_item_key(),
-                        updatedQuantity);
+                if (updatedQuantity > 1) {
+                    int updatedTotal = updatedQuantity * Integer.parseInt(cartData.seletedOptionPrice());
+                    cartData.setQuantity(updatedQuantity);
+                    cartData.setLineTotal(updatedTotal);
+                    notifyItemChanged(getAdapterPosition());
+                    clickListener.onUpdateQuantity(getAdapterPosition(), cartData.getTm_cart_item_key(),
+                            updatedQuantity);
+                }
+
             });
 
             cartBinding.increase.setOnClickListener(v -> {
                 CartResponse.CartData cartData = cartDataList.get(getAdapterPosition());
                 cartData.setPreviousQuantity(cartData.getQuantity());
                 int updatedQuantity = cartData.getQuantity() + 1;
+                int updatedTotal = updatedQuantity * Integer.parseInt(cartData.seletedOptionPrice());
                 cartData.setQuantity(updatedQuantity);
+                cartData.setLineTotal(updatedTotal);
                 notifyItemChanged(getAdapterPosition());
                 clickListener.onUpdateQuantity(getAdapterPosition(), cartData.getTm_cart_item_key(),
                         updatedQuantity);
+
+
             });
 
             cartBinding.delete.setOnClickListener(v -> {

@@ -69,4 +69,5 @@
     <string name="please_enter_it_below">فضلا قم بتعبئة أدناه</string>
     <string name="verify">تأكيد</string>
     <string name="didn_t_get_the_sms">"لم تستلم الرسالة النصية؟ "</string>
+    <string name="currency">ر.س</string>
 </resources>
