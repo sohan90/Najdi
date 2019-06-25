@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.najdi.android.najdiapp.utitility.ToastUtils;
 
+import java.util.List;
+
 public class BaseResponse {
     String code;
     String message;
@@ -31,6 +33,12 @@ public class BaseResponse {
         String user_nicename;
         String user_status;
         String user_url;
+        List<BankResponse> data;
+
+
+        public List<BankResponse> getData() {
+            return data;
+        }
 
         public int getError() {
             return error;
@@ -69,6 +77,45 @@ public class BaseResponse {
         }
     }
 
+
+    public class BankResponse {
+        String account_name;
+        String account_number;
+        String bank_name;
+        String sort_code;
+        String bank_logo;
+        String iban;
+        String bic;
+
+
+        public String getAccount_name() {
+            return account_name;
+        }
+
+        public String getAccount_number() {
+            return account_number;
+        }
+
+        public String getBank_name() {
+            return bank_name;
+        }
+
+        public String getSort_code() {
+            return sort_code;
+        }
+
+        public String getBank_logo() {
+            return bank_logo;
+        }
+
+        public String getIban() {
+            return iban;
+        }
+
+        public String getBic() {
+            return bic;
+        }
+    }
 
     public void handleError(Context context) {
         if (data != null) {

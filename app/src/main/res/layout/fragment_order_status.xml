@@ -9,9 +9,20 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycl_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:visibility="visible">
 
         </androidx.recyclerview.widget.RecyclerView>
+
+        <TextView
+            android:id="@+id/plac_holder_txt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/no_order_history_msg"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:visibility="gone" />
 
     </LinearLayout>
 </layout>

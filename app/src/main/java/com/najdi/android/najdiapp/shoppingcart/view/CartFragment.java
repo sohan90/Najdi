@@ -51,6 +51,7 @@ public class CartFragment extends BaseFragment {
         setRecyclAdapter();
         subscribeForCartResponse();
         initializeClickListener();
+        showCart(homeScreenViewModel.getCartSize());
         return binding.getRoot();
     }
 
@@ -83,11 +84,25 @@ public class CartFragment extends BaseFragment {
         });
     }
 
+    private void showEmptyCartValueTxt() {
+        binding.recyl.setVisibility(View.GONE);
+        binding.proceedTxt.setVisibility(View.GONE);
+        binding.bottomLyt.setVisibility(View.GONE);
+        binding.placHolderTxt.setVisibility(View.VISIBLE);
+    }
+
     private void updateCartSize() {
         int cartSize = homeScreenViewModel.getCartSize() - 1;
         homeScreenViewModel.setCartSize(cartSize);
+        showCart(cartSize);
+        if (cartSize == 0) {
+            showEmptyCartValueTxt();
+        }
+    }
+
+    private void showCart(int cartSize) {
         homeScreenViewModel.updateNotificationCartCount().
-                setValue(homeScreenViewModel.getCartSize());
+                setValue(cartSize);
     }
 
     private void initializeViewModel() {
@@ -98,11 +113,16 @@ public class CartFragment extends BaseFragment {
         showProgressDialog();
         homeScreenViewModel.getCart().observe(this, cartResponse -> {
             hideProgressDialog();
-            if (cartResponse != null && cartResponse.getData() != null) {
-                viewModel.setTotal(cartResponse.getData().getCartdata());
-                adapterList = cartResponse.getData().getCartdata();
-                adapter.setData(adapterList);
-                homeScreenViewModel.getCart().removeObservers(this);
+            if (cartResponse != null) {
+                if (cartResponse.getData() != null && cartResponse.getData().getCartdata().size() > 0) {
+                    viewModel.setTotal(cartResponse.getData().getCartdata());
+                    adapterList = cartResponse.getData().getCartdata();
+                    adapter.setData(adapterList);
+                    homeScreenViewModel.getCart().removeObservers(this);
+                    showCart(cartResponse.getData().getCartdata().size());
+                } else {
+                    showEmptyCartValueTxt();
+                }
             }
         });
     }

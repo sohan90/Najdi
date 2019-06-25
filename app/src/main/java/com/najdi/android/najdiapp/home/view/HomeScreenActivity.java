@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 import com.najdi.android.najdiapp.R;
+import com.najdi.android.najdiapp.checkout.view.BankDetailFragment;
 import com.najdi.android.najdiapp.checkout.view.CheckoutActivity;
 import com.najdi.android.najdiapp.checkout.view.OrderStatusFragment;
 import com.najdi.android.najdiapp.common.BaseActivity;
@@ -44,6 +45,7 @@ import static com.najdi.android.najdiapp.common.Constants.ARABIC_LAN;
 import static com.najdi.android.najdiapp.common.Constants.ENGLISH_LAN;
 import static com.najdi.android.najdiapp.common.Constants.FragmentTags.PRODUCT_LIST_FRAG;
 import static com.najdi.android.najdiapp.common.Constants.OBSERVER_INTENT_CART_RESPONSE;
+import static com.najdi.android.najdiapp.common.Constants.ScreeNames.BANK_ACCOUNTS;
 import static com.najdi.android.najdiapp.common.Constants.ScreeNames.ORDER_STATUS;
 import static com.najdi.android.najdiapp.common.Constants.ScreeNames.PRODUCTS;
 import static com.najdi.android.najdiapp.common.Constants.ScreeNames.PRODUCT_DETAIL;
@@ -137,25 +139,37 @@ public class HomeScreenActivity extends BaseActivity
             case PRODUCTS:
                 fragment = ProductListFragment.createInstance();
                 fragmentTag = Constants.FragmentTags.PRODUCT_LIST_FRAG;
+                unlockDrawer();
                 break;
 
             case PRODUCT_DETAIL:
                 fragment = ProductDetailFragment.createInstance(productDetailBundleModel);
                 fragmentTag = Constants.FragmentTags.PRODUCT_DETAIL;
+                lockDrawer();
                 break;
 
             case SHOPPING_CART:
                 fragment = CartFragment.createInstance();
                 fragmentTag = Constants.FragmentTags.SHOPPING_CART;
+                lockDrawer();
                 break;
 
             case ORDER_STATUS:
                 fragment = OrderStatusFragment.createInstance();
                 fragmentTag = Constants.FragmentTags.ORDER_STATUS;
+                lockDrawer();
                 break;
+
+            case BANK_ACCOUNTS:
+                fragment = BankDetailFragment.createInstance();
+                fragmentTag = Constants.FragmentTags.BANK_ACCOUNT;
+                lockDrawer();
+                break;
+
 
             default:
                 fragment = ProductListFragment.createInstance();
+                unlockDrawer();
                 break;
 
         }
@@ -305,6 +319,8 @@ public class HomeScreenActivity extends BaseActivity
                         getFragmentById(this, binding.include.containerLyt.container.getId());
 
                 if (fragment instanceof ProductListFragment) {
+                    updateNavigationMenuHighlight(0);
+                    unlockDrawer();
                     cartImageLyt.setVisibility(View.INVISIBLE);
                     getSupportActionBar().setDisplayHomeAsUpEnabled(false);
                     toggle.setDrawerIndicatorEnabled(true);
@@ -316,6 +332,10 @@ public class HomeScreenActivity extends BaseActivity
                 }
             }
         }
+    }
+
+    public void updateNavigationMenuHighlight(int index) {
+        binding.navView.getMenu().getItem(index).setChecked(true);
     }
 
     @Override
@@ -335,8 +355,13 @@ public class HomeScreenActivity extends BaseActivity
             case R.id.about_us:
                 break;
 
+            case R.id.bank_account:
+                replaceFragment(BANK_ACCOUNTS);
+                break;
+
             case R.id.history:
                 replaceFragment(ORDER_STATUS);
+
                 break;
 
             case R.id.log_out:
@@ -376,5 +401,13 @@ public class HomeScreenActivity extends BaseActivity
     protected void onDestroy() {
         super.onDestroy();
         ObservableManager.getInstance().deleteObserver(this);
+    }
+
+    private void lockDrawer() {
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    }
+
+    private void unlockDrawer() {
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 }

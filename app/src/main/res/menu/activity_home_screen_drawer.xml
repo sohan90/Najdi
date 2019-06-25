@@ -27,6 +27,12 @@
             android:icon="@drawable/ic_person_black_24dp"
             android:title="@string/profile" />
 
+
+        <item
+            android:id="@+id/bank_account"
+            android:icon="@drawable/ic_account_balance_black_24dp"
+            android:title="@string/our_bank_accounts" />
+
         <item
             android:id="@+id/history"
             android:icon="@drawable/ic_history_black_24dp"

@@ -54,14 +54,16 @@
 
         <TextView
             android:id="@+id/product_name"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignTop="@id/quantity_no_txt"
             android:layout_alignBottom="@id/quantity_no_txt"
             android:layout_marginStart="20dp"
+            android:layout_toStartOf="@id/price_txt"
             android:layout_toEndOf="@id/quantity_no_txt"
-            android:gravity="center"
-            android:text="@{cartModel.postName}"
+            android:ellipsize="end"
+            android:gravity="center|start"
+            android:text="@{cartModel.postName, default=`----`}"
             android:textColor="@color/black" />
 
         <TextView
@@ -72,9 +74,9 @@
             android:layout_alignBottom="@id/product_name"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="20dp"
-            android:layout_toEndOf="@id/product_name"
+            android:layout_marginEnd="10dp"
             android:gravity="center"
-            android:text="@{String.valueOf(cartModel.lineTotal).concat(`ر.س`)}"
+            android:text="@{String.valueOf(cartModel.lineTotal).concat(` `).concat(@string/currency)}"
             android:textColor="@color/black"
             android:textDirection="locale" />
 

@@ -100,4 +100,5 @@
     <string name="resend_code_in_30s">Resend Code in 30s</string>
     <string name="verify">Verify</string>
     <string name="update_cart_label">Update Cart</string>
+    <string name="account_no">Account No</string>
 </resources>

@@ -54,7 +54,14 @@ public class OrderStatusFragment extends BaseFragment {
         int userId = PreferenceUtils.getValueInt(getActivity(), PreferenceUtils.USER_ID_KEY);
         activityViewModel.getOrderStatus(userId).observe(this, orderResponses -> {
             hideProgressDialog();
-            adapter.setData(orderResponses);
+            if (orderResponses != null) {
+                if (orderResponses.size() > 0) {
+                    adapter.setData(orderResponses);
+                } else {
+                    binding.recyclView.setVisibility(View.GONE);
+                    binding.placHolderTxt.setVisibility(View.VISIBLE);
+                }
+            }
         });
     }
 

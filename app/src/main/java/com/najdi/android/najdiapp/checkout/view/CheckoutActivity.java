@@ -75,6 +75,7 @@ public class CheckoutActivity extends BaseActivity {
         fetchCart();
     }
 
+
     private void subscribeForCheckout() {
         viewModel.getCheckoutLiveData().observe(this, aBoolean -> {
             if (aBoolean) {

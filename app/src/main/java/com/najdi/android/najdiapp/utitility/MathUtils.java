@@ -8,14 +8,16 @@ import java.util.Locale;
 public class MathUtils {
 
     private static String currencySymbol;
+    public static final String ORDER_STATUS_DATE_FORMAT = "MMM dd";
+    public static final String ORDER_COMPLETE_DATE_FORMAT = "MMM dd yy";
 
-    public static String formateStringDate(String date) {
+    public static String formateStringDate(String date, String dateFormatWanted) {
         String newDate = null;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss",
                 Locale.getDefault());
         try {
             Date dateParse = simpleDateFormat.parse(date);
-            SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("MMM yy", Locale.getDefault());
+            SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat(dateFormatWanted, Locale.getDefault());
             newDate = simpleDateFormat1.format(dateParse);
         } catch (ParseException e) {
             e.printStackTrace();

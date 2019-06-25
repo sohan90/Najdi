@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.najdi.android.najdiapp.common.BaseResponse.BankResponse"/>
+    </data>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            bind:cardCornerRadius="4dp"
+            bind:cardElevation="4dp"
+            android:background="@color/white">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/bank_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:text="@{viewModel.bank_name}"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/account_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/bank_name"
+                    android:layout_marginBottom="5dp"
+                    android:layout_toStartOf="@id/bank_logo"
+                    android:ellipsize="end"
+                    android:text="@{viewModel.account_name}"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/account_no"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/account_name"
+                    android:layout_marginBottom="5dp"
+                    android:text="@string/account_no"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/acc_no_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/account_name"
+                    android:layout_alignTop="@id/account_no"
+                    android:layout_alignBottom="@id/account_no"
+                    android:layout_marginStart="5dp"
+                    android:layout_toStartOf="@id/bank_logo"
+                    android:layout_toEndOf="@id/account_no"
+                    android:gravity="center_vertical"
+                    android:text="@{viewModel.account_number}" />
+
+                <TextView
+                    android:id="@+id/iban"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/account_no"
+                    android:layout_marginBottom="5dp"
+                    android:text="IBAN"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/iban_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/acc_no_value"
+                    android:layout_alignTop="@id/iban"
+                    android:layout_alignBottom="@id/iban"
+                    android:layout_marginStart="5dp"
+                    android:layout_toStartOf="@id/bank_logo"
+                    android:layout_toEndOf="@id/iban"
+                    android:gravity="center_vertical"
+                    android:text="@{viewModel.iban}" />
+
+                <ImageView
+                    android:id="@+id/bank_logo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    bind:setImageUrl="@{viewModel.bank_logo}"
+                    android:src="@color/black" />
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</layout>
