@@ -103,7 +103,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="@string/no_order_history_msg"
+            android:text="@string/empty_cart_msg"
             android:textColor="@color/black"
             android:visibility="gone"
             android:textSize="20sp" />

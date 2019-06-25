@@ -27,6 +27,7 @@ import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 import com.najdi.android.najdiapp.shoppingcart.view.CartFragment;
 import com.najdi.android.najdiapp.utitility.FragmentHelper;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
+import com.najdi.android.najdiapp.utitility.ToastUtils;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -195,9 +196,11 @@ public class HomeScreenActivity extends BaseActivity
     private void fetchProduct() {
         showProgressDialog();
         viewModel.getProducts().observe(this, productListResponses -> {
+            hideProgressDialog();
             if (productListResponses != null && productListResponses.size() > 0) {
-                hideProgressDialog();
                 viewModel.getProductList().setValue(productListResponses);
+            } else {
+                ToastUtils.getInstance(this).showShortToast("something went wrong");
             }
         });
     }

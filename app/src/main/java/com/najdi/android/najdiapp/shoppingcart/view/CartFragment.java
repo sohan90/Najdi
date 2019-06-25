@@ -51,7 +51,6 @@ public class CartFragment extends BaseFragment {
         setRecyclAdapter();
         subscribeForCartResponse();
         initializeClickListener();
-        showCart(homeScreenViewModel.getCartSize());
         return binding.getRoot();
     }
 
@@ -121,6 +120,7 @@ public class CartFragment extends BaseFragment {
                     homeScreenViewModel.getCart().removeObservers(this);
                     showCart(cartResponse.getData().getCartdata().size());
                 } else {
+                    showCart(0);
                     showEmptyCartValueTxt();
                 }
             }

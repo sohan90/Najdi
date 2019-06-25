@@ -12,7 +12,7 @@ import static com.najdi.android.najdiapp.utitility.MathUtils.ORDER_COMPLETE_DATE
 import static com.najdi.android.najdiapp.utitility.MathUtils.ORDER_STATUS_DATE_FORMAT;
 
 public class OrderResponse {
-    int id;
+    String id;
     int parent_id;
     String number;
     String order_key;
@@ -24,8 +24,8 @@ public class OrderResponse {
     String payment_method_title;
 
 
-    public int getId() {
-        return id;
+    public String getId() {
+        return "#" +String.valueOf(id);
     }
 
     public int getParent_id() {

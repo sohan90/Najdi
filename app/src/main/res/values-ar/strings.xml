@@ -70,4 +70,5 @@
     <string name="verify">تأكيد</string>
     <string name="didn_t_get_the_sms">"لم تستلم الرسالة النصية؟ "</string>
     <string name="currency">ر.س</string>
+    <string name="empty_cart_msg">.عربة التسوق فارغة حاليا.</string>
 </resources>

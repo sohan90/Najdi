@@ -48,7 +48,7 @@
                 android:layout_toEndOf="@id/img"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="@{viewModel.order_key}"
+                android:text="@{viewModel.id}"
                 android:textColor="@color/black" />
 
             <TextView

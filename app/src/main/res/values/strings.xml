@@ -101,4 +101,15 @@
     <string name="verify">Verify</string>
     <string name="update_cart_label">Update Cart</string>
     <string name="account_no">Account No</string>
+    <string name="empty_cart_msg">Your cart is currently empty</string>
+    <string name="about_us_page">Najdi is a new and easy way to buy meat online.\n\n
+        It provides different types of sheep and goats of different sizes, slaughtered, prepared, packed and delivered to your home.\n\n
+        Our products include: Nuami, Harri, Baladi Goat and Swakni.\n\n
+        We offer a wide range of succulent lamb which will accentuate and redefine the meat palate.\n\n
+        \u2022 We provide door-step service on the same day.\n\n
+\u2022 Cash On Delivery (COD) is used for payment. Online payment will be added in the future.\n\n
+\u2022 We are available 9:00 AM to 7:00 PM, seven days a week.\n\n
+\u2022 Last order will be taken till 4:00 PM to deliver on the same day.\n\n
+\u2022 Order placed After 4:00 PM will be considered for next day delivery.
+</string>
 </resources>
