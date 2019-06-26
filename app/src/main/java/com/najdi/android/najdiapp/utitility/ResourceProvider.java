@@ -2,6 +2,7 @@ package com.najdi.android.najdiapp.utitility;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 
 import java.util.Locale;
 
@@ -12,9 +13,10 @@ public class ResourceProvider {
 
     public ResourceProvider(Context mContext) {
         this.mContext = mContext;
+        LocaleUtitlity.setLocale(getLocale());
     }
 
-    public Context getAppContext(){
+    public Context getAppContext() {
         return mContext;
     }
 
@@ -22,11 +24,11 @@ public class ResourceProvider {
         return mContext.getString(resId);
     }
 
-    public int getColor(int color){
+    public int getColor(int color) {
         return ContextCompat.getColor(mContext, color);
     }
 
-    public Drawable getDrawable(int drawable){
+    public Drawable getDrawable(int drawable) {
         return ContextCompat.getDrawable(mContext, drawable);
     }
 
@@ -34,9 +36,18 @@ public class ResourceProvider {
         return mContext.getString(resId, value);
     }
 
-    public String getCountryLang(){
-        Locale locale = mContext.getResources().getConfiguration().locale;
-        return locale.getLanguage();
+    public String getCountryLang() {
+        return getLocale().getLanguage();
     }
 
+    public Locale getLocale() {
+        Locale locale;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            locale = mContext.getResources().getConfiguration().getLocales().get(0);
+        } else {
+            //noinspection deprecation
+            locale = mContext.getResources().getConfiguration().locale;
+        }
+        return locale;
+    }
 }

@@ -26,6 +26,7 @@ import com.najdi.android.najdiapp.checkout.model.OrderResponse;
 import com.najdi.android.najdiapp.checkout.viewmodel.CheckoutViewModel;
 import com.najdi.android.najdiapp.common.BaseActivity;
 import com.najdi.android.najdiapp.common.Constants;
+import com.najdi.android.najdiapp.common.ObservableManager;
 import com.najdi.android.najdiapp.databinding.ActivityCheckoutBinding;
 import com.najdi.android.najdiapp.launch.model.BillingAddress;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
@@ -42,6 +43,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 
+import static com.najdi.android.najdiapp.common.Constants.LAUNCH_CART;
 import static com.najdi.android.najdiapp.utitility.GpsUtils.GPS_REQUEST;
 import static com.najdi.android.najdiapp.utitility.PermissionUtils.LOCATION_PERMISSION_REQUEST_CODE;
 
@@ -261,6 +263,15 @@ public class CheckoutActivity extends BaseActivity {
         binding.toolbar.title.setText(getString(R.string.shipping_details));
         binding.toolbar.cartImageLyt.setVisibility(View.VISIBLE);
         binding.toolbar.backArrow.setOnClickListener(v -> onBackPressed());
+        binding.toolbar.cartImageLyt.setOnClickListener(v -> {
+            finish();
+            new Handler().postDelayed(() -> {
+                Intent intent = new Intent();
+                intent.putExtra(LAUNCH_CART, true);
+                ObservableManager.getInstance().notifyData(intent);
+            }, 100);
+
+        });
     }
 
     private void replaceFragment(int step) {

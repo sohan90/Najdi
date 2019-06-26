@@ -45,7 +45,7 @@ public interface NajdiApi {
 
     @POST(BuildConfig.NAJDI_END_POINTS + "cart/add")
     @Headers({"Content-Type:application/json"})
-    Call<BaseResponse> addToCart(@Header("Authorization") String token, @Body CartRequest cartRequest);
+    Call<BaseResponse> addToCart(@Query("lang") String lang, @Header("Authorization") String token, @Body CartRequest cartRequest);
 
     @GET(BuildConfig.NAJDI_END_POINTS + "cart")
     @Headers({"Content-Type:application/json"})

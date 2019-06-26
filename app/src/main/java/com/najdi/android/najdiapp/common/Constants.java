@@ -15,6 +15,7 @@ public class Constants {
     public static final String ARABIC_LAN = "ar";
     public static final String ENGLISH_LAN = "en";
     public static final String BEARER = "Bearer ";
+    public static final String LAUNCH_CART = "launch_cart ";
 
     public interface FragmentTags {
         String PRODUCT_DETAIL = "prodcut_detail";

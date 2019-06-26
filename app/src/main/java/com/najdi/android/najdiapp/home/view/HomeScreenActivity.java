@@ -45,6 +45,7 @@ import static androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE;
 import static com.najdi.android.najdiapp.common.Constants.ARABIC_LAN;
 import static com.najdi.android.najdiapp.common.Constants.ENGLISH_LAN;
 import static com.najdi.android.najdiapp.common.Constants.FragmentTags.PRODUCT_LIST_FRAG;
+import static com.najdi.android.najdiapp.common.Constants.LAUNCH_CART;
 import static com.najdi.android.najdiapp.common.Constants.OBSERVER_INTENT_CART_RESPONSE;
 import static com.najdi.android.najdiapp.common.Constants.ScreeNames.ABOUT_US;
 import static com.najdi.android.najdiapp.common.Constants.ScreeNames.BANK_ACCOUNTS;
@@ -82,6 +83,7 @@ public class HomeScreenActivity extends BaseActivity
         subscribeForHomeScreenToolBar();
         subscribeForLaunchCheckoutScreen();
         observeForProductDetailScreenFromCheckout();
+
         fetchProduct();
         fetchCart();
     }
@@ -402,9 +404,13 @@ public class HomeScreenActivity extends BaseActivity
     public void update(Observable o, Object arg) {
         if (arg instanceof Intent) {
             Intent intent = (Intent) arg;
-            ProductDetailBundleModel productDetailBundleModel = intent.
-                    getParcelableExtra(OBSERVER_INTENT_CART_RESPONSE);
-            viewModel.getLaunchProductDetailLiveData().setValue(productDetailBundleModel);
+            if (intent.hasExtra(LAUNCH_CART)) {
+                replaceFragment(SHOPPING_CART);
+            } else {
+                ProductDetailBundleModel productDetailBundleModel = intent.
+                        getParcelableExtra(OBSERVER_INTENT_CART_RESPONSE);
+                viewModel.getLaunchProductDetailLiveData().setValue(productDetailBundleModel);
+            }
         }
     }
 

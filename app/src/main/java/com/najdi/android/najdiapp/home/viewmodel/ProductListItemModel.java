@@ -5,6 +5,7 @@ import android.text.Html;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
 
 import androidx.databinding.BaseObservable;
@@ -48,7 +49,8 @@ public class ProductListItemModel extends BaseObservable {
 
     @BindingAdapter("setImageUrl")
     public static void setImageUrl(ImageView imageView, String url) {
-        Glide.with(imageView.getContext()).load(url).into(imageView);
+        Glide.with(imageView.getContext()).load(url).placeholder(R.drawable.najdi_logo).
+                into(imageView);
     }
 
     public void setPrice(String price) {

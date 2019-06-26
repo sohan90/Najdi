@@ -17,7 +17,8 @@ public class MathUtils {
                 Locale.getDefault());
         try {
             Date dateParse = simpleDateFormat.parse(date);
-            SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat(dateFormatWanted, Locale.getDefault());
+            SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat(dateFormatWanted,
+                    LocaleUtitlity.getLocale());
             newDate = simpleDateFormat1.format(dateParse);
         } catch (ParseException e) {
             e.printStackTrace();

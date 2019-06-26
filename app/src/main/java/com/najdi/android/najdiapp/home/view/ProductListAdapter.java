@@ -58,7 +58,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         public ViewHolder(@NonNull ItemProductBinding itemView) {
             super(itemView.getRoot());
             this.binding = itemView;
-            binding.getRoot().setOnClickListener((v -> {
+            binding.select.setOnClickListener((v -> {
                 ProductListResponse productListResponse = list.get(getAdapterPosition());
                 ProductDetailBundleModel model = new ProductDetailBundleModel();
                 model.setProductId(productListResponse.getId());

@@ -52,6 +52,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionNext"
+                    android:maxLines="1"
+                    android:maxLength="9"
+                    android:inputType="number"
                     android:text="@={viewModel.phoneNo}"
                     android:drawableEnd="@drawable/ic_phone_black_24dp"
                     android:hint="@string/mobile_number_5xxxxxx"
@@ -79,6 +82,7 @@
                     android:text="@={viewModel.password}"
                     android:imeOptions="actionNext"
                     android:inputType="textPassword"
+                    android:maxLines="1"
                     android:textColorHint="@color/grey_text" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -100,6 +104,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/confirm_password"
+                    android:maxLines="1"
                     android:text="@={viewModel.confirmPass}"
                     android:inputType="textPassword"
                     android:imeOptions="actionNext"
@@ -120,6 +125,7 @@
                     android:layout_height="wrap_content"
                     android:drawableEnd="@drawable/ic_person_black_24dp"
                     android:hint="@string/name_optional"
+                    android:maxLines="1"
                     android:text="@={viewModel.name}"
                     android:imeOptions="actionNext"
                     android:textColorHint="@color/grey_text" />
@@ -140,6 +146,7 @@
                     android:drawableEnd="@drawable/ic_email_black_24dp"
                     android:hint="@string/email_optional"
                     android:text="@={viewModel.email}"
+                    android:maxLines="1"
                     android:imeOptions="actionDone"
                     android:textColorHint="@color/grey_text" />
             </com.google.android.material.textfield.TextInputLayout>

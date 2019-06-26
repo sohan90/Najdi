@@ -67,7 +67,7 @@
             android:layout_below="@id/order_title"
             android:layout_toStartOf="@id/vertical_line"
             android:gravity="center"
-            android:text="@{viewModel.order_key}"
+            android:text="@{viewModel.id}"
             android:textColor="@color/grey_text"
             android:textSize="15sp" />
 
