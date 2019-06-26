@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Najdi</string>
+    <string name="app_name"> نجدي
+       للذبائح</string>
     <string name="welcome_msg">أهلاً بك في نجدي</string>
     <string name="sign_up">"إنشاء حساب "</string>
     <string name="mobile_number_5xxxxxx">رقم الجوال(5xxxxx)</string>

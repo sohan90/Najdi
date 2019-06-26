@@ -16,6 +16,7 @@ public class Constants {
     public static final String ENGLISH_LAN = "en";
     public static final String BEARER = "Bearer ";
     public static final String LAUNCH_CART = "launch_cart ";
+    public static final int PASSWORD_MAX_LENGTH = 20;
 
     public interface FragmentTags {
         String PRODUCT_DETAIL = "prodcut_detail";

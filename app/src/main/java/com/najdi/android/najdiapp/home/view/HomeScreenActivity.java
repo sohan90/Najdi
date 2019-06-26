@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
@@ -41,7 +40,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-import static androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE;
 import static com.najdi.android.najdiapp.common.Constants.ARABIC_LAN;
 import static com.najdi.android.najdiapp.common.Constants.ENGLISH_LAN;
 import static com.najdi.android.najdiapp.common.Constants.FragmentTags.PRODUCT_LIST_FRAG;
@@ -209,7 +207,7 @@ public class HomeScreenActivity extends BaseActivity
             if (productListResponses != null && productListResponses.size() > 0) {
                 viewModel.getProductList().setValue(productListResponses);
             } else {
-                ToastUtils.getInstance(this).showShortToast("something went wrong");
+                ToastUtils.getInstance(this).showShortToast(getString(R.string.something_went_wrong));
             }
         });
     }
@@ -240,7 +238,7 @@ public class HomeScreenActivity extends BaseActivity
         cartImageLyt = viewActionBar.findViewById(R.id.cartImageLyt);
         cartImageLyt.setOnClickListener(v -> launchCartScreen());
         notificationText = viewActionBar.findViewById(R.id.notification_text);
-        toolBarTitle.setText(getString(R.string.category));
+        toolBarTitle.setText(getString(R.string.products));
         drawerLayout = binding.drawerLayout;
 
         toggle = new ActionBarDrawerToggle(
@@ -278,7 +276,7 @@ public class HomeScreenActivity extends BaseActivity
     }
 
     private void updateLanguageToggleBut(MenuLanSelcBinding menuLanSelcBinding) {
-        if (getCurrentLocale().equals(ARABIC_LAN)) {
+        if (getCurrentLocaleLanguage().equals(ARABIC_LAN)) {
             menuLanSelcBinding.checkbox.setChecked(true);
         } else {
             menuLanSelcBinding.checkbox.setChecked(false);

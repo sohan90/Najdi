@@ -41,8 +41,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginBottom="5dp"
                 app:errorEnabled="true"
                 bind:errorText="@{viewModel.phoneNoError}"
                 app:hintTextAppearance="@style/HintText">
@@ -64,11 +63,10 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
                 app:errorEnabled="true"
                 app:counterEnabled="true"
-                app:counterMaxLength="8"
+                app:counterMaxLength="20"
                 bind:errorText="@{viewModel.passwordError}"
                 app:hintTextAppearance="@style/HintText"
                 app:passwordToggleEnabled="true"
@@ -82,6 +80,7 @@
                     android:text="@={viewModel.password}"
                     android:imeOptions="actionNext"
                     android:inputType="textPassword"
+                    android:maxLength="20"
                     android:maxLines="1"
                     android:textColorHint="@color/grey_text" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -89,8 +88,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
                 app:errorEnabled="true"
                 app:counterMaxLength="8"
                 app:counterEnabled="true"
@@ -114,8 +112,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_marginTop="5dp"
+               android:layout_marginBottom="5dp"
                 app:errorEnabled="true"
                 app:hintTextAppearance="@style/HintText">
 
@@ -134,8 +131,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
                 app:errorEnabled="true"
                 app:hintTextAppearance="@style/HintText">
 

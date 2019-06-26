@@ -114,4 +114,5 @@
 \u2022 Last order will be taken till 4:00 PM to deliver on the same day.\n\n
 \u2022 Order placed After 4:00 PM will be considered for next day delivery.
 </string>
+    <string name="something_went_wrong">something went wrong</string>
 </resources>

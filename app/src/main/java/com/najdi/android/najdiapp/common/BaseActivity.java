@@ -1,12 +1,13 @@
 package com.najdi.android.najdiapp.common;
 
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.MathUtils;
+import com.najdi.android.najdiapp.utitility.ResourceProvider;
 
-import java.text.NumberFormat;
 import java.util.Locale;
 
 import androidx.annotation.Nullable;
@@ -14,10 +15,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class BaseActivity extends AppCompatActivity {
 
+    private ResourceProvider resourProvider;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        resourProvider = NajdiApplication.get(this).getResourceProvider();
+        resourProvider.setCurrentLocale(getCurrentLocale());
 
     }
 
@@ -32,16 +36,29 @@ public class BaseActivity extends AppCompatActivity {
     protected void setLocaleLanguage(String localeLanguage) {
         Locale locale = new Locale(localeLanguage);
         Locale.setDefault(locale);
-        Configuration config = new Configuration();
+        Configuration config = getResources().getConfiguration();
         config.setLocale(locale);
         config.setLayoutDirection(locale);
         getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+        resourProvider.setCurrentLocale(locale);
         MathUtils.setCurrencySymbol(locale);
     }
 
-    protected String getCurrentLocale() {
-        Locale locale = getResources().getConfiguration().locale;
+    protected String getCurrentLocaleLanguage() {
+        Locale locale;
+        locale = getCurrentLocale();
         return locale.getLanguage();
+    }
+
+    private Locale getCurrentLocale() {
+        Locale locale;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            locale = getResources().getConfiguration().getLocales().get(0);
+        } else {
+            //noinspection deprecation
+            locale = getResources().getConfiguration().locale;
+        }
+        return locale;
     }
 
 }

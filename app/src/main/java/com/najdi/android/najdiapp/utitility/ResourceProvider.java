@@ -1,15 +1,18 @@
 package com.najdi.android.najdiapp.utitility;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 
 import java.util.Locale;
 
 import androidx.core.content.ContextCompat;
+import androidx.core.os.ConfigurationCompat;
 
 public class ResourceProvider {
     private Context mContext;
+    private Locale locale;
 
     public ResourceProvider(Context mContext) {
         this.mContext = mContext;
@@ -37,17 +40,14 @@ public class ResourceProvider {
     }
 
     public String getCountryLang() {
-        return getLocale().getLanguage();
+        return this.getLocale().getLanguage();
     }
 
     public Locale getLocale() {
-        Locale locale;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            locale = mContext.getResources().getConfiguration().getLocales().get(0);
-        } else {
-            //noinspection deprecation
-            locale = mContext.getResources().getConfiguration().locale;
-        }
         return locale;
+    }
+
+    public void setCurrentLocale(Locale locale){
+        this.locale = locale;
     }
 }
