@@ -2,6 +2,7 @@ package com.najdi.android.najdiapp.home.viewmodel;
 
 import android.app.Application;
 
+import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.BaseViewModel;
 import com.najdi.android.najdiapp.home.model.CartRequest;
@@ -36,7 +37,13 @@ public class ProductDetailViewModel extends BaseViewModel {
     }
 
     public void setTotalPrice(String totalPrice) {
-        this.totalPrice.setValue(totalPrice);
+        this.totalPrice.setValue(getCurrencyConcatintedString(totalPrice));
+    }
+
+    private String getCurrencyConcatintedString(String price){
+        String priceCurrency = price.concat(" ").
+                concat(resourceProvider.getString(R.string.currency));
+        return priceCurrency;
     }
 
     public void setQuantityCount(int quantity) {
@@ -77,7 +84,6 @@ public class ProductDetailViewModel extends BaseViewModel {
         }
     }
 
-
     private void createAttributeForSelectedValue(String selectedValue, int selectedId) {
         createHashMap();
         for (ProductListResponse.Attributes attributes : productListResponse.getAttributesList()) {
@@ -111,7 +117,7 @@ public class ProductDetailViewModel extends BaseViewModel {
         if (selectedOptionPrice != null && quantityCount.getValue() != null) {
             int price = Integer.parseInt(selectedOptionPrice);
             int totPrice = price * quantityCount.getValue();
-            totalPrice.setValue(String.valueOf(totPrice));
+            totalPrice.setValue(getCurrencyConcatintedString(String.valueOf(totPrice)));
         }
     }
 

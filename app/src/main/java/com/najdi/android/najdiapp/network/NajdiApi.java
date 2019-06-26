@@ -85,7 +85,7 @@ public interface NajdiApi {
 
     @GET(BuildConfig.NAJDI_END_POINTS + "cart/clear")
     @Headers({"Content-Type:application/json"})
-    Call<BaseResponse> clearCart(@Header("Authorization") String token);
+    Call<BaseResponse> clearCart(@Query("lang")String lang, @Header("Authorization") String token);
 
     @GET(BuildConfig.NAJDI_CART_BASE_URL + "customapi/banklist")
     @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})

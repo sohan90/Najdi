@@ -39,7 +39,12 @@ public class RetrofitCallBack<T> implements Callback<T> {
 
     @Override
     public void onFailure(Call<T> call, Throwable t) {
-        mCallback.onFailurResponse(call, new BaseResponse());
+        try {
+            mCallback.onFailurResponse(call, new BaseResponse());
+        } catch (IllegalStateException e) {
+            mCallback.onSuccesResponse(call, null);
+        }
+
     }
 
     public interface CustomCallBack<T> {

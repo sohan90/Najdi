@@ -101,6 +101,8 @@
     <string name="verify">Verify</string>
     <string name="update_cart_label">Update Cart</string>
     <string name="account_no">Account No</string>
+    <string name="arabic">ع</string>
+    <string name="english_lang">E</string>
     <string name="empty_cart_msg">Your cart is currently empty</string>
     <string name="about_us_page">Najdi is a new and easy way to buy meat online.\n\n
         It provides different types of sheep and goats of different sizes, slaughtered, prepared, packed and delivered to your home.\n\n

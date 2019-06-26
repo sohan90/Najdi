@@ -50,7 +50,7 @@ public class SignUpViewModel extends BaseViewModel {
             phoneNoError.setValue(resourceProvider.getString(R.string.invalid_phone_no));
         }
 
-        if (password.getValue() != null && password.getValue().length() <= 6) {
+        if (password.getValue() != null && password.getValue().length() <= 8) {
             passwordError.setValue(null);
 
         } else {

@@ -84,7 +84,9 @@ public class Repository {
 
             @Override
             public void onFailurResponse(Call<List<ProductListResponse>> call, BaseResponse baseResponse) {
-                baseResponse.handleError(resourceProvider.getAppContext());
+                if (baseResponse != null) {
+                    baseResponse.handleError(resourceProvider.getAppContext());
+                }
                 liveData.setValue(null);
             }
         }));
@@ -279,7 +281,8 @@ public class Repository {
         String loginToken = PreferenceUtils.getValueString(resourceProvider.getAppContext(),
                 PreferenceUtils.USER_LOGIIN_TOKEN);
         MutableLiveData<BaseResponse> liveData = new MutableLiveData<>();
-        RetrofitClient.getInstance().clearCart(Constants.BEARER + loginToken).enqueue(new RetrofitCallBack<>(new RetrofitCallBack.
+        RetrofitClient.getInstance().clearCart(resourceProvider.getCountryLang(),
+                Constants.BEARER + loginToken).enqueue(new RetrofitCallBack<>(new RetrofitCallBack.
                 CustomCallBack<BaseResponse>() {
             @Override
             public void onSuccesResponse(Call<BaseResponse> call, BaseResponse baseResponse) {

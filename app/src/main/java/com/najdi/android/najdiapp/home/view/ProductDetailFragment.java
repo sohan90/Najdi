@@ -135,11 +135,10 @@ public class ProductDetailFragment extends BaseFragment {
         LiveData<BaseResponse> liveData = viewModel.addToCart();
         liveData.observe(this, baseResponse -> {
             hideProgressDialog();
-            if (baseResponse != null && baseResponse.getCode().equalsIgnoreCase("200")) {
-                homeScreeViewModel.setCartSize(existingCartSize);
-                updateNotificationCartCount(homeScreeViewModel.getCartSize());
-                moveToAddCartScreen();
-            }
+            homeScreeViewModel.setCartSize(existingCartSize);
+            updateNotificationCartCount(homeScreeViewModel.getCartSize());
+            moveToAddCartScreen();
+
         });
     }
 

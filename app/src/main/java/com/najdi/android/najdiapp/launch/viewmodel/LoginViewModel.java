@@ -40,8 +40,13 @@ public class LoginViewModel extends BaseViewModel {
             phoneNoError.setValue(resourceProvider.getString(R.string.invalid_phone_no));
             isValid = false;
         } else {
-            phoneNoError.setValue(null);
-            isValid = true;
+            if (phoneNo.getValue().startsWith("5") && phoneNo.getValue().length() >= 8) {
+                phoneNoError.setValue(null);
+                isValid = true;
+            } else {
+                phoneNoError.setValue(resourceProvider.getString(R.string.invalid_phone_no));
+                isValid = false;
+            }
         }
 
         if (password.getValue() == null) {

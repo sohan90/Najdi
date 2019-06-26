@@ -26,6 +26,7 @@ public class Constants {
         String CHECKOUT = "Step_two_frag";
         String ORDER_COMPLETE = "Step_three_frag";
         String BANK_ACCOUNT = "bank_account";
+        String ABOUT_US = "about_us";
 
     }
 
@@ -36,7 +37,8 @@ public class Constants {
         int SHOPPING_CART = 1;
         int PRODUCT_DETAIL = 2;
         int ORDER_STATUS = 3;
-        int BANK_ACCOUNTS =4;
+        int BANK_ACCOUNTS = 4;
+        int ABOUT_US = 5;
     }
 
 }

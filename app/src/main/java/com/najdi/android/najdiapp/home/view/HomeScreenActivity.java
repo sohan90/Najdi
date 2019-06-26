@@ -46,6 +46,7 @@ import static com.najdi.android.najdiapp.common.Constants.ARABIC_LAN;
 import static com.najdi.android.najdiapp.common.Constants.ENGLISH_LAN;
 import static com.najdi.android.najdiapp.common.Constants.FragmentTags.PRODUCT_LIST_FRAG;
 import static com.najdi.android.najdiapp.common.Constants.OBSERVER_INTENT_CART_RESPONSE;
+import static com.najdi.android.najdiapp.common.Constants.ScreeNames.ABOUT_US;
 import static com.najdi.android.najdiapp.common.Constants.ScreeNames.BANK_ACCOUNTS;
 import static com.najdi.android.najdiapp.common.Constants.ScreeNames.ORDER_STATUS;
 import static com.najdi.android.najdiapp.common.Constants.ScreeNames.PRODUCTS;
@@ -164,6 +165,12 @@ public class HomeScreenActivity extends BaseActivity
             case BANK_ACCOUNTS:
                 fragment = BankDetailFragment.createInstance();
                 fragmentTag = Constants.FragmentTags.BANK_ACCOUNT;
+                lockDrawer();
+                break;
+
+            case ABOUT_US:
+                fragment = AboutUsFragment.createInstance();
+                fragmentTag = Constants.FragmentTags.ABOUT_US;
                 lockDrawer();
                 break;
 
@@ -356,6 +363,7 @@ public class HomeScreenActivity extends BaseActivity
                 break;
 
             case R.id.about_us:
+                replaceFragment(ABOUT_US);
                 break;
 
             case R.id.bank_account:
