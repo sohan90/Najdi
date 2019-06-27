@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import com.najdi.android.najdiapp.utitility.DialogUtil;
+import com.najdi.android.najdiapp.utitility.LocaleUtitlity;
 import com.najdi.android.najdiapp.utitility.MathUtils;
 import com.najdi.android.najdiapp.utitility.ResourceProvider;
 
@@ -22,7 +23,7 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         resourProvider = NajdiApplication.get(this).getResourceProvider();
         resourProvider.setCurrentLocale(getCurrentLocale());
-
+        LocaleUtitlity.setLocale(getCurrentLocale());
     }
 
     protected void showProgressDialog() {

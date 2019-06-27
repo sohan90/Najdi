@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.checkout.viewmodel.BankDetailViewModel;
 import com.najdi.android.najdiapp.common.BaseFragment;
@@ -17,6 +19,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -83,5 +86,10 @@ public class BankDetailFragment extends BaseFragment {
                 }
             }
         });
+    }
+
+    @BindingAdapter("setBankImageUrl")
+    public static void setBankImageUrl(ImageView imageView, String url){
+        Glide.with(imageView.getContext()).load(url).into(imageView);
     }
 }

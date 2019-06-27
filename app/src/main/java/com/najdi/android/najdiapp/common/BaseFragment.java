@@ -23,6 +23,7 @@ public class BaseFragment extends Fragment {
         super.onCreate(savedInstanceState);
         resourceProvider = NajdiApplication.get(getActivity()).getResourceProvider();
         resourceProvider.setCurrentLocale(getCurrentLocale());
+        LocaleUtitlity.setLocale(getCurrentLocale());
     }
 
     protected void showProgressDialog() {

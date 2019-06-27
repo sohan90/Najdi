@@ -103,7 +103,8 @@ public class CheckoutActivity extends BaseActivity {
         viewModel.clearCart().observe(this, baseResponse -> {
             hideProgressDialog();
             if (baseResponse != null) {
-                //
+               binding.toolbar.notificationText.setText("0");
+
             }
         });
     }
