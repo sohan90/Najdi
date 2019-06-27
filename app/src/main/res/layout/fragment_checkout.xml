@@ -34,6 +34,7 @@
                     android:layout_toStartOf="@id/apply_coupon"
                     android:background="@drawable/round_chekout_grey_selector"
                     android:hint="@string/coupon_code"
+                    android:maxLength="20"
                     android:maxLines="1"
                     android:padding="10dp"
                     android:textDirection="locale"
