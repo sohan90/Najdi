@@ -6,6 +6,7 @@ import com.najdi.android.najdiapp.checkout.model.OrderResponse;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.home.model.CartRequest;
+import com.najdi.android.najdiapp.home.model.ContactUsRequest;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.launch.model.LoginRequestModel;
 import com.najdi.android.najdiapp.launch.model.OtpRequestModel;
@@ -69,7 +70,8 @@ public interface NajdiApi {
 
     @POST(BuildConfig.NAJDI_CART_BASE_URL + "customapi/cart/update_item")
     @Headers({"Content-Type:application/json"})
-    Call<BaseResponse> updateItemQuantity(@Header("Authorization") String token, @Body UpdateCartRequest cartRequest);
+    Call<BaseResponse> updateItemQuantity(@Header("Authorization")String token, @Query("lang") String lang, @Query("customer") String userId,
+                                          @Body UpdateCartRequest cartRequest);
 
     @POST(BuildConfig.NAJDI_CART_BASE_URL + "customapi/verify")
     @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
@@ -85,10 +87,20 @@ public interface NajdiApi {
 
     @POST(BuildConfig.NAJDI_END_POINTS + "cart/clear")
     @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
-    Call<BaseResponse> clearCart(@Query("lang")String lang, @Query("customer") String userId);
+    Call<BaseResponse> clearCart(@Query("lang") String lang, @Query("customer") String userId);
 
     @GET(BuildConfig.NAJDI_CART_BASE_URL + "customapi/banklist")
     @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
     Call<BaseResponse> getBankDetails(@Query("lang") String lang);
+
+    @POST(BuildConfig.NAJDI_CART_BASE_URL + "customapi/contactus")
+    @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
+    Call<BaseResponse> contactUs(@Query("lang") String lang, @Body ContactUsRequest request);
+
+    @GET(BuildConfig.NAJDI_CART_BASE_URL + "customapi/count_items")
+    @Headers({"Content-Type:application/json"})
+    Call<BaseResponse> getCartCount(@Header("Authorization") String token,
+                                    @Query("lang") String lang, @Query("customer")String userId);
+
 
 }

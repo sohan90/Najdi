@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.checkout.viewmodel.CheckoutFragmentViewModel;
@@ -55,12 +57,16 @@ public class CheckoutFragment extends BaseFragment {
         initializeRecyclerViewAdapter();
         subscribeForCartResponse();
         initializeClickListener();
+        
         return binding.getRoot();
     }
 
     private void initializeClickListener() {
-        binding.includeLyt.placeOrder.setOnClickListener(v ->
-                activityViewModel.getCheckoutLiveData().setValue(true));
+        binding.includeLyt.placeOrder.setOnClickListener(v -> {
+            int checkedId = binding.includeLyt.radiGrp.getCheckedRadioButtonId();
+            RadioButton radioButton = binding.includeLyt.radiGrp.findViewById(checkedId);
+            activityViewModel.getCheckoutLiveData().setValue((String) radioButton.getTag());
+        });
     }
 
     private void bindViewModel() {
@@ -78,8 +84,8 @@ public class CheckoutFragment extends BaseFragment {
         binding.recyclView.setLayoutManager(linearLayoutManager);
         checkoutAdapter = new CheckoutAdapter(new CartAdapter.AdapterClickLisntener() {
             @Override
-            public void onRemoveItem(String cartItemKey) {
-                removeItem(cartItemKey);
+            public void onRemoveItem(int position, String cartItemKey) {
+                removeItem(position, cartItemKey);
             }
 
             @Override
@@ -109,16 +115,26 @@ public class CheckoutFragment extends BaseFragment {
         viewModel.udpateTotal(adapterList);
     }
 
-    private void removeItem(String s) {
+    private void removeItem(int position, String s) {
         showProgressDialog();
         LiveData<BaseResponse> baseResponseLiveData = viewModel.removeCart(s);
         baseResponseLiveData.observe(this, baseResponse -> {
             hideProgressDialog();
             if (baseResponse != null) {
+
+                updateAdapterForRemoveItem(position);
+                activityViewModel.getCartCountNotification().setValue(true);
                 String message = baseResponse.getData().getMessage();
                 ToastUtils.getInstance(getActivity()).showShortToast(message);
             }
         });
+    }
+
+
+    private void updateAdapterForRemoveItem(int position) {
+        adapterList.remove(position);
+        checkoutAdapter.notifyItemRemoved(position);
+        updateTotal();
     }
 
     private void updateItemQuantity(int adapterPosition, String cartItemKey, int quantity) {
@@ -126,7 +142,7 @@ public class CheckoutFragment extends BaseFragment {
 
         UpdateCartRequest updateCartRequest = new UpdateCartRequest();
         updateCartRequest.setCartItemKey(cartItemKey);
-        updateCartRequest.setQuantity(quantity);
+        updateCartRequest.setQuantity(String.valueOf(quantity));
 
         LiveData<BaseResponse> liveData = viewModel.updateQuantity(updateCartRequest);
         liveData.observe(this, baseResponse -> {
@@ -134,6 +150,7 @@ public class CheckoutFragment extends BaseFragment {
             hideProgressDialog();
             if (baseResponse != null && baseResponse.getData() != null) {
 
+                activityViewModel.updateCart().setValue(true);
                 ToastUtils.getInstance(getActivity()).
                         showShortToast(baseResponse.getData().getMessage());
             } else {

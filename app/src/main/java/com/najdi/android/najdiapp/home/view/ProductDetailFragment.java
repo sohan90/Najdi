@@ -1,6 +1,5 @@
 package com.najdi.android.najdiapp.home.view;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,11 +19,11 @@ import com.najdi.android.najdiapp.home.viewmodel.ProductDetailViewModel;
 import com.najdi.android.najdiapp.home.viewmodel.ProductListItemModel;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
+import com.najdi.android.najdiapp.utitility.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -65,10 +64,15 @@ public class ProductDetailFragment extends BaseFragment {
         bindViewModelWithLiveData();
         initializeHomeScreenViewModel();
         initializeClickListener();
+        updateNotificationCartCount();
         fetchProductDetail();
         return binding.getRoot();
     }
 
+
+    private void updateNotificationCartCount() {
+        homeScreeViewModel.getCartCountNotification().setValue(true);
+    }
 
     private void updateCartLableButton() {
         if (isFromCartScreen) {
@@ -96,10 +100,6 @@ public class ProductDetailFragment extends BaseFragment {
         homeScreeViewModel.getSetToolBarTitle().setValue(getString(R.string.product_details));
     }
 
-    private void updateNotificationCartCount(int count) {
-        homeScreeViewModel.updateNotificationCartCount().setValue(count);
-    }
-
     private void bindViewModelWithLiveData() {
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
@@ -113,39 +113,40 @@ public class ProductDetailFragment extends BaseFragment {
         binding.dec.setOnClickListener(v -> viewModel.decrementQuantity());
         binding.inc.setOnClickListener(v -> viewModel.incrementQuantity());
         binding.reset.setOnClickListener(v -> reset());
-        binding.proceed.setOnClickListener(v -> this.launchCheckOutActivity());
+        binding.proceed.setOnClickListener(v -> moveToAddCartScreen());
+
         binding.addToCart.setOnClickListener(v -> {
             showProgressDialog();
             if (!isFromCartScreen) {
-                addCart(homeScreeViewModel.getCartSize() + 1); // add cart
+                addCart(); // add cart
             } else {
-                //update cart :Since api wont support update cart directly so
-                // to update cart  first delete product and add with updated product item
-                LiveData<BaseResponse> liveData = viewModel.removeCart(cartData.getTm_cart_item_key());
-                liveData.observe(this, baseResponse -> {
-                    if (baseResponse != null) {
-                        addCart(homeScreeViewModel.getCartSize());
-                    }
-                });
+                updateCart();
             }
         });
     }
 
-    private void addCart(int existingCartSize) {
-        LiveData<BaseResponse> liveData = viewModel.addToCart();
+    private void updateCart() {
+        //update cart :Since api wont support update cart directly so
+        // to update cart  first delete product and add with updated product item
+        LiveData<BaseResponse> liveData = viewModel.removeCart(cartData.getTm_cart_item_key());
         liveData.observe(this, baseResponse -> {
-            hideProgressDialog();
-            homeScreeViewModel.setCartSize(existingCartSize);
-            updateNotificationCartCount(homeScreeViewModel.getCartSize());
-            moveToAddCartScreen();
-
+            if (baseResponse != null) {
+                addCart();
+            }
         });
     }
 
-    private void launchCheckOutActivity() {
-        homeScreeViewModel.getLaunchCheckoutActivity().setValue(true);
-    }
+    private void addCart() {
+        LiveData<BaseResponse> liveData = viewModel.addToCart();
+        liveData.observe(this, baseResponse -> {
+            hideProgressDialog();
+            ToastUtils.getInstance(getActivity()).
+                    showShortToast(getString(R.string.product_added_success));
+            binding.proceed.setEnabled(true);
+            updateNotificationCartCount();
 
+        });
+    }
 
     private void moveToAddCartScreen() {
         homeScreeViewModel.getReplaceFragmentLiveData().

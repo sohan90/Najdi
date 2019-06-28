@@ -20,13 +20,16 @@ import androidx.lifecycle.MutableLiveData;
 
 public class CheckoutViewModel extends BaseViewModel {
 
-    MutableLiveData<Boolean> getCurrentLocationUpdateLiveData;
-    MutableLiveData<Address> addressMutableLiveData;
-    MutableLiveData<Integer> progressPercentage;
-    MutableLiveData<CartResponse> cartResponseMutableLiveData;
-    MutableLiveData<BillingAddress> billingMutableLiveData;
-    MutableLiveData<Boolean> checkoutLiveData;
-    MutableLiveData<OrderResponse> orderResponseMutableLiveData;
+    private MutableLiveData<Boolean> getCurrentLocationUpdateLiveData;
+    private MutableLiveData<Address> addressMutableLiveData;
+    private MutableLiveData<Integer> progressPercentage;
+    private MutableLiveData<CartResponse> cartResponseMutableLiveData;
+    private MutableLiveData<BillingAddress> billingMutableLiveData;
+    private MutableLiveData<String> checkoutLiveData;
+    private MutableLiveData<OrderResponse> orderResponseMutableLiveData;
+    private MutableLiveData<Boolean> updateCartLiveData = new MutableLiveData<>();
+    private MutableLiveData<Boolean> cartCountNotification = new MutableLiveData<>();
+    private MutableLiveData<Boolean> hideCart = new MutableLiveData<>();
 
     public CheckoutViewModel(@NonNull Application application) {
         super(application);
@@ -57,6 +60,10 @@ public class CheckoutViewModel extends BaseViewModel {
         return repository.getCart();
     }
 
+    public MutableLiveData<Boolean> updateCart() {
+        return updateCartLiveData;
+    }
+
     public MutableLiveData<CartResponse> getCartResponseMutableLiveData() {
         if (cartResponseMutableLiveData == null) {
             cartResponseMutableLiveData = new MutableLiveData<>();
@@ -71,7 +78,7 @@ public class CheckoutViewModel extends BaseViewModel {
         return billingMutableLiveData;
     }
 
-    public MutableLiveData<Boolean> getCheckoutLiveData() {
+    public MutableLiveData<String> getCheckoutLiveData() {
         if (checkoutLiveData == null) {
             checkoutLiveData = new MutableLiveData<>();
         }
@@ -79,12 +86,16 @@ public class CheckoutViewModel extends BaseViewModel {
     }
 
     public LiveData<OrderResponse> createOrder(int userId, List<CartResponse.CartData> cartData,
-                                               BillingAddress billingAddress) {
+                                               String paymentMode, BillingAddress billingAddress) {
         OrderRequest orderRequest = new OrderRequest();
         orderRequest.setCustomer_id(userId);
         orderRequest.setBilling(billingAddress);
-        orderRequest.setPayment_method("bacs");
-        orderRequest.setPayment_method_title("Cash On Delivery");
+        orderRequest.setPayment_method(paymentMode);
+        if (paymentMode.equalsIgnoreCase("cod")) {
+            orderRequest.setPayment_method_title("Cash On Delivery");
+        } else {
+            orderRequest.setPayment_method_title("Direct Bank Transfer");
+        }
 
         List<LineItemModelRequest> list = new ArrayList<>();
         for (CartResponse.CartData cartData1 : cartData) {
@@ -106,7 +117,18 @@ public class CheckoutViewModel extends BaseViewModel {
         return orderResponseMutableLiveData;
     }
 
-    public LiveData<BaseResponse> clearCart(){
+    public LiveData<BaseResponse> getCartCount(){
+        return repository.getCartCount();
+    }
+    public LiveData<BaseResponse> clearCart() {
         return repository.clearCart();
+    }
+
+    public MutableLiveData<Boolean> getCartCountNotification() {
+        return cartCountNotification;
+    }
+
+    public MutableLiveData<Boolean> getHideCart() {
+        return hideCart;
     }
 }

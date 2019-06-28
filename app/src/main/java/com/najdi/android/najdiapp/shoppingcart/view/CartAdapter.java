@@ -59,7 +59,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 CartResponse.CartData cartData = cartDataList.get(getAdapterPosition());
                 cartData.setPreviousQuantity(cartData.getQuantity());
                 int updatedQuantity = cartData.getQuantity() - 1;
-                if (updatedQuantity > 1) {
+                if (updatedQuantity > 0) {
                     int updatedTotal = updatedQuantity * Integer.parseInt(cartData.seletedOptionPrice());
                     cartData.setQuantity(updatedQuantity);
                     cartData.setLineTotal(updatedTotal);
@@ -87,9 +87,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             cartBinding.delete.setOnClickListener(v -> {
                 CartResponse.CartData cartData = cartDataList.get(getAdapterPosition());
                 String cartItemKey = cartData.getTm_cart_item_key();
-                clickListener.onRemoveItem(cartItemKey);
-                cartDataList.remove(getAdapterPosition());
-                notifyItemRemoved(getAdapterPosition());
+                //cartDataList.remove(getAdapterPosition());
+                //notifyItemRemoved(getAdapterPosition());
+                clickListener.onRemoveItem(getAdapterPosition(), cartItemKey);
             });
 
             cartBinding.edit.setOnClickListener(v -> {
@@ -100,7 +100,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     }
 
     public interface AdapterClickLisntener {
-        void onRemoveItem(String cartItemKey);
+        void onRemoveItem(int position, String cartItemKey);
 
         void onEdit(CartResponse.CartData cartData);
 

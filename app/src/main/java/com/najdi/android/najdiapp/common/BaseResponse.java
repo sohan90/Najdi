@@ -34,7 +34,12 @@ public class BaseResponse {
         String user_status;
         String user_url;
         List<BankResponse> data;
+        int count;
 
+
+        public int getCount() {
+            return count;
+        }
 
         public List<BankResponse> getData() {
             return data;

@@ -7,6 +7,7 @@ import com.najdi.android.najdiapp.common.BaseViewModel;
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.launch.model.LoginRequestModel;
+import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.BindingAdapter;
@@ -60,8 +61,11 @@ public class LoginViewModel extends BaseViewModel {
 
     public LiveData<BaseResponse> login() {
         LoginRequestModel requestModel = new LoginRequestModel();
-        requestModel.setUserName("966" + phoneNo.getValue());
+        String phoneNo = "966" + this.phoneNo.getValue();
+        requestModel.setUserName(phoneNo);
         requestModel.setPassword(password.getValue());
+        PreferenceUtils.setValueString(resourceProvider.getAppContext(),
+                PreferenceUtils.USER_PHONE_NO_KEY, phoneNo);
         return repository.loginToken(requestModel);
     }
 }

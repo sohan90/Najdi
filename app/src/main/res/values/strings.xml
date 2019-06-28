@@ -9,7 +9,7 @@
     <string name="email_optional">Email (Optional)</string>
     <string name="already_have_an_account">Already have an account? </string>
     <string name="sign_in"> Sign In</string>
-    <string name="sign_to_continue">Sign to continue</string>
+    <string name="sign_to_continue">Sign In to continue</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="by_signing_up_you_agree_to_our">By signing up you agree to our</string>
     <string name="terms_and_conditions">Terms and conditions</string>
@@ -22,11 +22,8 @@
     <string name="checkout">Checkout</string>
     <string name="order_complete">Order Complete</string>
     <string name="select_options">Select Options</string>
-    <string name="size">Size</string>
     <string name="choose_an_option">Choose an option</string>
-    <string name="cutting_way">Cutting way</string>
     <string name="head">Head</string>
-    <string name="legs">Legs</string>
     <string name="proceed_to_checkout">Proceed to Checkout</string>
     <string name="add_to_cart">Add to cart</string>
     <string name="total">Total</string>
@@ -35,7 +32,7 @@
     <string name="clear">clear</string>
     <string name="ok">Ok</string>
     <string name="select_shipping_address_from_map">Select Shipping Address From Map</string>
-    <string name="continue_txt">Continue</string>
+    <string name="continue_txt">Continue shopping</string>
     <string name="enter_location_name">Enter Location Name</string>
     <string name="save_to_favourite_location">Save to favourite Location</string>
     <string name="cancel">Cancel</string>
@@ -97,7 +94,8 @@
     <string name="one_time_psd">One Time Password sent to this mobile number</string>
     <string name="please_enter_it_below">Please Enter it Below</string>
     <string name="didn_t_get_the_sms">Didn\'t get the SMS?</string>
-    <string name="resend_code_in_30s">Resend Code in 30s</string>
+    <string name="resend_code_in_30s">Resend Code in %s</string>
+    <string name="resend_code">Resend Code</string>
     <string name="verify">Verify</string>
     <string name="update_cart_label">Update Cart</string>
     <string name="account_no">Account No</string>
@@ -115,4 +113,17 @@
 \u2022 Order placed After 4:00 PM will be considered for next day delivery.
 </string>
     <string name="something_went_wrong">something went wrong</string>
+    <string name="direct_bank_transer_msg">“Make you payment direct into our bank account. Please use your order ID as the payment references, Your order will not be shipped until funds have credited to our account;
+</string>
+    <string name="please_feel">Please feel free to send us any questions</string>
+    <string name="message">Message</string>
+    <string name="phone_no">0533552201, 0558080240</string>
+    <string name="web_address">www.najdisheep.com</string>
+    <string name="send">Send</string>
+    <string name="cutting_way">Cutting Way</string>
+    <string name="legs">Legs</string>
+    <string name="size">Size</string>
+    <string name="minced_meat">minced meat</string>
+    <string name="order_received">Order Received</string>
+    <string name="product_added_success">product has been to added to your cart successfully</string>
 </resources>

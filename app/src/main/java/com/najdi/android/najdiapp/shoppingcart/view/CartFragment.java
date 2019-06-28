@@ -51,6 +51,7 @@ public class CartFragment extends BaseFragment {
         setRecyclAdapter();
         subscribeForCartResponse();
         initializeClickListener();
+        updateCart();
         return binding.getRoot();
     }
 
@@ -70,17 +71,24 @@ public class CartFragment extends BaseFragment {
         homeScreenViewModel.getSetToolBarTitle().setValue(getString(R.string.cart));
     }
 
-    private void removeItem(String s) {
+    private void removeItem(int position, String s) {
         showProgressDialog();
         LiveData<BaseResponse> baseResponseLiveData = viewModel.removeCart(s);
         baseResponseLiveData.observe(this, baseResponse -> {
             hideProgressDialog();
             if (baseResponse != null) {
-                updateCartSize();
+                updateCartSizeForRemoveItem(adapterList.get(position).getQuantity());
+                updateAdapterForRemoveItem(position);
                 String message = baseResponse.getData().getMessage();
                 ToastUtils.getInstance(getActivity()).showShortToast(message);
             }
         });
+    }
+
+    private void updateAdapterForRemoveItem(int position) {
+        adapterList.remove(position);
+        adapter.notifyItemRemoved(position);
+        updateTotal();
     }
 
     private void showEmptyCartValueTxt() {
@@ -90,18 +98,16 @@ public class CartFragment extends BaseFragment {
         binding.placHolderTxt.setVisibility(View.VISIBLE);
     }
 
-    private void updateCartSize() {
-        int cartSize = homeScreenViewModel.getCartSize() - 1;
-        homeScreenViewModel.setCartSize(cartSize);
-        showCart(cartSize);
+    private void updateCartSizeForRemoveItem(int quantity) {
+        int cartSize = homeScreenViewModel.getCartSize() - quantity;
+        updateCart();
         if (cartSize == 0) {
             showEmptyCartValueTxt();
         }
     }
 
-    private void showCart(int cartSize) {
-        homeScreenViewModel.updateNotificationCartCount().
-                setValue(cartSize);
+    private void updateCart() {
+        homeScreenViewModel.getCartCountNotification().setValue(true);
     }
 
     private void initializeViewModel() {
@@ -113,15 +119,15 @@ public class CartFragment extends BaseFragment {
         homeScreenViewModel.getCart().observe(this, cartResponse -> {
             hideProgressDialog();
             if (cartResponse != null) {
-                if (cartResponse.getData() != null && cartResponse.getData().getCartdata().size() > 0) {
-                    viewModel.setTotal(cartResponse.getData().getCartdata());
-                    adapterList = cartResponse.getData().getCartdata();
-                    adapter.setData(adapterList);
-                    homeScreenViewModel.getCart().removeObservers(this);
-                    showCart(cartResponse.getData().getCartdata().size());
-                } else {
-                    showCart(0);
-                    showEmptyCartValueTxt();
+                if (cartResponse.getData() != null) {
+                    if (cartResponse.getData().getCartdata().size() > 0) {
+                        viewModel.setTotal(cartResponse.getData().getCartdata());
+                        adapterList = cartResponse.getData().getCartdata();
+                        adapter.setData(adapterList);
+                        homeScreenViewModel.getCart().removeObservers(this);
+                    } else {
+                        showEmptyCartValueTxt();
+                    }
                 }
             }
         });
@@ -133,9 +139,10 @@ public class CartFragment extends BaseFragment {
         binding.recyl.setLayoutManager(linearLayoutManager);
         adapter = new CartAdapter(new CartAdapter.AdapterClickLisntener() {
             @Override
-            public void onRemoveItem(String cartItemKey) {
+            public void onRemoveItem(int position, String cartItemKey) {
                 if (!TextUtils.isEmpty(cartItemKey)) {
-                    removeItem(cartItemKey);
+                    //updateTotal();
+                    removeItem(position, cartItemKey);
                 }
             }
 
@@ -167,12 +174,13 @@ public class CartFragment extends BaseFragment {
 
         UpdateCartRequest updateCartRequest = new UpdateCartRequest();
         updateCartRequest.setCartItemKey(cartItemKey);
-        updateCartRequest.setQuantity(quantity);
+        updateCartRequest.setQuantity(String.valueOf(quantity));
 
         LiveData<BaseResponse> liveData = viewModel.updateQuantity(updateCartRequest);
         liveData.observe(this, baseResponse -> {
 
             hideProgressDialog();
+            updateCart();
             if (baseResponse != null && baseResponse.getData() != null) {
                 ToastUtils.getInstance(getActivity()).
                         showShortToast(baseResponse.getData().getMessage());

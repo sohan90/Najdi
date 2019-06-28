@@ -100,10 +100,10 @@ public class ProductDetailViewModel extends BaseViewModel {
                 attributHashMap != null && attributHashMap.size() == productListResponse
                 .getAttributesList().size()) {
             enableAddCartButton.setValue(true);
-            enableProceed.setValue(true);
+            //enableProceed.setValue(true);
         } else {
             enableAddCartButton.setValue(false);
-            enableProceed.setValue(false);
+            //enableProceed.setValue(false);
         }
     }
 

@@ -3,6 +3,7 @@ package com.najdi.android.najdiapp.home.viewmodel;
 import android.app.Application;
 
 import com.najdi.android.najdiapp.checkout.model.OrderResponse;
+import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.BaseViewModel;
 import com.najdi.android.najdiapp.home.model.ProductDetailBundleModel;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
@@ -26,6 +27,7 @@ public class HomeScreenViewModel extends BaseViewModel {
     private MutableLiveData<String> setToolBarTitle;
     private MutableLiveData<Boolean> launchCheckoutActivity;
     private MutableLiveData<CartResponse.CartData> selectedProductCartLiveData;
+    private MutableLiveData<Boolean> cartCountNotification = new MutableLiveData<>();
     int cartSize;
 
     public HomeScreenViewModel(@NonNull Application application) {
@@ -92,10 +94,11 @@ public class HomeScreenViewModel extends BaseViewModel {
         return launchCheckoutActivity;
     }
 
-    public LiveData<CartResponse.CartData> getSelectedCartDataLiveData(){
-        if (selectedProductCartLiveData == null){
+    public LiveData<CartResponse.CartData> getSelectedCartDataLiveData() {
+        if (selectedProductCartLiveData == null) {
             selectedProductCartLiveData = new MutableLiveData<>();
-        } return selectedProductCartLiveData;
+        }
+        return selectedProductCartLiveData;
     }
 
     public LiveData<CartResponse> getCart() {
@@ -119,4 +122,11 @@ public class HomeScreenViewModel extends BaseViewModel {
         return repository.getIndividualProduct(productId);
     }
 
+    public MutableLiveData<Boolean> getCartCountNotification() {
+        return cartCountNotification;
+    }
+
+    public LiveData<BaseResponse> getCartCount() {
+        return repository.getCartCount();
+    }
 }

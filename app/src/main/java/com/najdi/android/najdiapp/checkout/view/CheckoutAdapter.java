@@ -1,5 +1,6 @@
 package com.najdi.android.najdiapp.checkout.view;
 
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,16 +48,33 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
         CartResponse.CartData cartData = dataList.get(position);
         holder.binding.setCartModel(cartData);
         holder.binding.variationContainer.removeAllViews();
         LayoutInflater inflater = LayoutInflater.from(holder.binding.getRoot().getContext());
         for (Map.Entry<String, String> entry : cartData.getVariation().entrySet()) {
+            if (entry.getKey().equalsIgnoreCase("attribute_pa_cutting-way")) {
+                continue;
+
+            }
             View view = inflater.inflate(R.layout.inflate_variation_item,
                     holder.binding.variationContainer, false);
+
             InflateVariationItemBinding binding = InflateVariationItemBinding.bind(view);
+
             String replaceKey = entry.getKey().replace("attribute_pa_", "");
-            binding.label.setText(replaceKey);
+            String translatedKey;
+            try {
+                translatedKey = (String) view.getContext().getResources().
+                        getText(view.getContext().getResources().
+                                getIdentifier(replaceKey, "string", view.getContext().getPackageName()));
+            } catch (Resources.NotFoundException e) {
+
+                translatedKey = replaceKey;
+            }
+
+            binding.label.setText(translatedKey);
             binding.value.setText(entry.getValue());
             holder.binding.variationContainer.addView(view);
         }
@@ -80,9 +98,9 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHo
 
                 CartResponse.CartData cartData = dataList.get(getAdapterPosition());
                 String cartItemKey = cartData.getTm_cart_item_key();
-                clickListener.onRemoveItem(cartItemKey);
-                dataList.remove(getAdapterPosition());
-                notifyItemRemoved(getAdapterPosition());
+                clickListener.onRemoveItem(getAdapterPosition(), cartItemKey);
+                //dataList.remove(getAdapterPosition());
+                //notifyItemRemoved(getAdapterPosition());
 
             });
 
@@ -95,7 +113,7 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHo
             binding.decrease.setOnClickListener(v -> {
                 CartResponse.CartData cartData = dataList.get(getAdapterPosition());
                 int updatedQuantity = cartData.getQuantity() - 1;
-                if (updatedQuantity > 1) {
+                if (updatedQuantity > 0) {
                     updateQuantity(updatedQuantity, cartData.getQuantity());
                 }
             });

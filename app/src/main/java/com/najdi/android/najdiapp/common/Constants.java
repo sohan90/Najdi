@@ -16,6 +16,8 @@ public class Constants {
     public static final String ENGLISH_LAN = "en";
     public static final String BEARER = "Bearer ";
     public static final String LAUNCH_CART = "launch_cart ";
+    public static final String LAUNCH_PRODUCT = "launch_product ";
+    public static final String LAUNC_BANK_ACCOUNT = "launch_product ";
     public static final int PASSWORD_MAX_LENGTH = 20;
 
     public interface FragmentTags {
@@ -29,6 +31,7 @@ public class Constants {
         String ORDER_COMPLETE = "Step_three_frag";
         String BANK_ACCOUNT = "bank_account";
         String ABOUT_US = "about_us";
+        String CONTACT_US = "contact_us";
 
     }
 
@@ -41,6 +44,7 @@ public class Constants {
         int ORDER_STATUS = 3;
         int BANK_ACCOUNTS = 4;
         int ABOUT_US = 5;
+        int CONTACT_US = 6;
     }
 
 }

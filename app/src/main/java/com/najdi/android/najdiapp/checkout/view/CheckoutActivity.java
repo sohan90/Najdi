@@ -44,6 +44,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 
 import static com.najdi.android.najdiapp.common.Constants.LAUNCH_CART;
+import static com.najdi.android.najdiapp.common.Constants.LAUNCH_PRODUCT;
 import static com.najdi.android.najdiapp.utitility.GpsUtils.GPS_REQUEST;
 import static com.najdi.android.najdiapp.utitility.PermissionUtils.LOCATION_PERMISSION_REQUEST_CODE;
 
@@ -73,24 +74,62 @@ public class CheckoutActivity extends BaseActivity {
         subscribeForProgress();
         subscribeForBillingData();
         subscribeForCheckout();
+        subscribeupdateCartFromCheckoutScreen();
+        subscribeForCartCountNotification();
+        subscribeForHideCart();
         replaceFragment(STEP_ONE);
         fetchCart();
+        fetchCartCount();
     }
 
-
-    private void subscribeForCheckout() {
-        viewModel.getCheckoutLiveData().observe(this, aBoolean -> {
+    private void subscribeForHideCart() {
+        viewModel.getHideCart().observe(this, aBoolean -> {
             if (aBoolean) {
-                showProgressDialog();
-                int userId = PreferenceUtils.getValueInt(this, PreferenceUtils.USER_ID_KEY);
-                createOrder(userId);
+                binding.toolbar.backArrow.setVisibility(View.GONE);
+                binding.toolbar.cartImageLyt.setVisibility(View.GONE);
             }
         });
     }
 
-    private void createOrder(int userId) {
+    private void subscribeForCartCountNotification() {
+        viewModel.getCartCountNotification().observe(this, aBoolean -> {
+            if (aBoolean) {
+                fetchCart();
+            }
+        });
+    }
+
+    private void fetchCartCount() {
+        viewModel.getCartCount().observe(this, baseResponse -> {
+            if (baseResponse != null && baseResponse.getData() != null) {
+                updateCartValueTxt(baseResponse.getData().getCount());
+            }
+        });
+    }
+
+    private void subscribeupdateCartFromCheckoutScreen() {
+        viewModel.updateCart().observe(this, shouldUpdate -> {
+            if (shouldUpdate) {
+                fetchCartCount();
+                fetchCart();
+            }
+        });
+    }
+
+
+    private void subscribeForCheckout() {
+        viewModel.getCheckoutLiveData().observe(this, paymentMode -> {
+            if (paymentMode != null) {
+                showProgressDialog();
+                int userId = PreferenceUtils.getValueInt(this, PreferenceUtils.USER_ID_KEY);
+                createOrder(userId, paymentMode);
+            }
+        });
+    }
+
+    private void createOrder(int userId, String paymentMode) {
         LiveData<OrderResponse> orderResponseLiveData =
-                viewModel.createOrder(userId, cartResponse.getData().getCartdata(), billing);
+                viewModel.createOrder(userId, cartResponse.getData().getCartdata(), paymentMode, billing);
 
         orderResponseLiveData.observe(this, orderResponse -> {
             clearCart();
@@ -103,8 +142,7 @@ public class CheckoutActivity extends BaseActivity {
         viewModel.clearCart().observe(this, baseResponse -> {
             hideProgressDialog();
             if (baseResponse != null) {
-               binding.toolbar.notificationText.setText("0");
-
+                binding.toolbar.notificationText.setText("0");
             }
         });
     }
@@ -121,19 +159,15 @@ public class CheckoutActivity extends BaseActivity {
         viewModel.fetchCart().observe(this, cartResponse -> {
             if (cartResponse != null) {
                 this.cartResponse = cartResponse;
-                updateCartValueTxt();
                 viewModel.getCartResponseMutableLiveData().setValue(cartResponse);
             }
         });
     }
 
-    private void updateCartValueTxt() {
-        if (cartResponse != null && cartResponse.getData() != null &&
-                cartResponse.getData().getCartdata() != null) {
 
-            int size = cartResponse.getData().getCartdata().size();
-            binding.toolbar.notificationText.setText(String.valueOf(size));
-        }
+    private void updateCartValueTxt(int cartSize) {
+        binding.toolbar.notificationText.setText(String.valueOf(cartSize));
+
     }
 
     private void subscribeForProgress() {
@@ -303,11 +337,20 @@ public class CheckoutActivity extends BaseActivity {
         int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
         if (backStackCount == 1 || backStackCount == 3) {
             finish();
+            launchHomeScreen();
         } else if (backStackCount == 2) {
             getSupportFragmentManager().popBackStackImmediate();
             animateProgress(0);
             binding.two.setEnabled(false);
         }
+    }
+
+    private void launchHomeScreen() {
+        new Handler().postDelayed(() -> {
+            Intent intent = new Intent();
+            intent.putExtra(LAUNCH_PRODUCT, true);
+            ObservableManager.getInstance().notifyData(intent);
+        }, 100);
     }
 
     @Override
@@ -359,4 +402,6 @@ public class CheckoutActivity extends BaseActivity {
             ToastUtils.getInstance(this).showShortToast(getString(R.string.no_address_found));
         }
     }
+
+
 }

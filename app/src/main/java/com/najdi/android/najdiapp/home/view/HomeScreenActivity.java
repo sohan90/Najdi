@@ -44,9 +44,12 @@ import static com.najdi.android.najdiapp.common.Constants.ARABIC_LAN;
 import static com.najdi.android.najdiapp.common.Constants.ENGLISH_LAN;
 import static com.najdi.android.najdiapp.common.Constants.FragmentTags.PRODUCT_LIST_FRAG;
 import static com.najdi.android.najdiapp.common.Constants.LAUNCH_CART;
+import static com.najdi.android.najdiapp.common.Constants.LAUNCH_PRODUCT;
+import static com.najdi.android.najdiapp.common.Constants.LAUNC_BANK_ACCOUNT;
 import static com.najdi.android.najdiapp.common.Constants.OBSERVER_INTENT_CART_RESPONSE;
 import static com.najdi.android.najdiapp.common.Constants.ScreeNames.ABOUT_US;
 import static com.najdi.android.najdiapp.common.Constants.ScreeNames.BANK_ACCOUNTS;
+import static com.najdi.android.najdiapp.common.Constants.ScreeNames.CONTACT_US;
 import static com.najdi.android.najdiapp.common.Constants.ScreeNames.ORDER_STATUS;
 import static com.najdi.android.najdiapp.common.Constants.ScreeNames.PRODUCTS;
 import static com.najdi.android.najdiapp.common.Constants.ScreeNames.PRODUCT_DETAIL;
@@ -80,10 +83,31 @@ public class HomeScreenActivity extends BaseActivity
         subscribeToolBarTitle();
         subscribeForHomeScreenToolBar();
         subscribeForLaunchCheckoutScreen();
+        subscribeForCartCount();
         observeForProductDetailScreenFromCheckout();
-
         fetchProduct();
-        fetchCart();
+        //fetchCart();
+
+    }
+
+    private void subscribeForCartCount() {
+        viewModel.getCartCountNotification().observe(this, aBoolean -> {
+            if (aBoolean) {
+                getCartCount();
+            }
+        });
+    }
+
+    private void getCartCount() {
+        viewModel.getCartCount().observe(this, baseResponse -> {
+            if (baseResponse != null) {
+                if (baseResponse.getData() != null) {
+                    int count = baseResponse.getData().getCount();
+                    updateCartCountTxt(count);
+                    viewModel.setCartSize(count);
+                }
+            }
+        });
     }
 
     private void observeForProductDetailScreenFromCheckout() {
@@ -119,7 +143,7 @@ public class HomeScreenActivity extends BaseActivity
     private void subscribeForShowCartImage() {
         viewModel.updateNotificationCartCount().observe(this, count -> {
             if (count != -1) {
-                updateNotificationIconText(count);
+                updateCartCountTxt(count);
             }
         });
     }
@@ -139,6 +163,7 @@ public class HomeScreenActivity extends BaseActivity
         String fragmentTag = null;
         switch (screenName) {
             case PRODUCTS:
+                FragmentHelper.popBackStack(this, PRODUCT_LIST_FRAG);
                 fragment = ProductListFragment.createInstance();
                 fragmentTag = Constants.FragmentTags.PRODUCT_LIST_FRAG;
                 unlockDrawer();
@@ -174,6 +199,11 @@ public class HomeScreenActivity extends BaseActivity
                 lockDrawer();
                 break;
 
+            case CONTACT_US:
+                fragment = ContactUsFragment.createInstance();
+                fragmentTag = Constants.FragmentTags.CONTACT_US;
+                lockDrawer();
+                break;
 
             default:
                 fragment = ProductListFragment.createInstance();
@@ -190,7 +220,7 @@ public class HomeScreenActivity extends BaseActivity
             if (model != null) {
                 this.productDetailBundleModel = model;
                 setToolBarTitle(getString(R.string.product_details));
-                updateNotificationIconText(viewModel.getCartSize());
+                //updateCartCountTxt(viewModel.getCartSize());
                 replaceFragment(PRODUCT_DETAIL);
             }
         });
@@ -217,12 +247,11 @@ public class HomeScreenActivity extends BaseActivity
             if (cartResponse != null) {
                 CartResponse.Data data = cartResponse.getData();
                 int cartSize = data.getCartdata().size();
-                viewModel.setCartSize(cartSize);
             }
         });
     }
 
-    private void updateNotificationIconText(int count) {
+    private void updateCartCountTxt(int count) {
         cartImageLyt.setVisibility(View.VISIBLE);
         notificationText.setText(String.valueOf(count));
     }
@@ -308,7 +337,7 @@ public class HomeScreenActivity extends BaseActivity
 
 
     private void setHomeScreeToolBar() {
-        toolBarTitle.setText(getString(R.string.category));
+        toolBarTitle.setText(getString(R.string.products));
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         toggle.setDrawerIndicatorEnabled(true);
         toggle.syncState();
@@ -358,7 +387,6 @@ public class HomeScreenActivity extends BaseActivity
                 break;
 
             case R.id.products:
-                FragmentHelper.popBackStack(this, PRODUCT_LIST_FRAG);
                 replaceFragment(PRODUCTS);
                 break;
 
@@ -372,7 +400,10 @@ public class HomeScreenActivity extends BaseActivity
 
             case R.id.history:
                 replaceFragment(ORDER_STATUS);
+                break;
 
+            case R.id.contact_us:
+                replaceFragment(CONTACT_US);
                 break;
 
             case R.id.log_out:
@@ -404,6 +435,12 @@ public class HomeScreenActivity extends BaseActivity
             Intent intent = (Intent) arg;
             if (intent.hasExtra(LAUNCH_CART)) {
                 replaceFragment(SHOPPING_CART);
+            } else if (intent.hasExtra(LAUNCH_PRODUCT)) {
+                getCartCount();
+                replaceFragment(PRODUCTS);
+            } else if (intent.hasExtra(LAUNC_BANK_ACCOUNT)) {
+                getCartCount();
+                replaceFragment(BANK_ACCOUNTS);
             } else {
                 ProductDetailBundleModel productDetailBundleModel = intent.
                         getParcelableExtra(OBSERVER_INTENT_CART_RESPONSE);

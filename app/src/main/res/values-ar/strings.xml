@@ -26,7 +26,7 @@
     <string name="available">متاح!</string>
     <string name="quantity">الكمية</string>
     <string name="clear">مسح الخيارات</string>
-    <string name="continue_txt">استمرار</string>
+    <string name="continue_txt">مواصلة التسوق</string>
     <string name="thank_you_order_has_been_received">شكراً لك، تم استلام طلبك</string>
     <string name="payment_method">طريقة الدفع</string>
     <string name="order_number">رقم الطلب</string>
@@ -87,4 +87,11 @@
 أي طلب يصلنا بعد الساعة 4:00 م سيتم توصيله في اليوم التالي.</string>
     <string name="arabic">ع</string>
     <string name="dont_t_have_an_account_sign_up">.عربة التسوق فارغة حاليا.</string>
+    <string name="sign_to_continue">تسجيل الدخول للمتابعة</string>
+    <string name="legs">الساقين</string>
+    <string name="head">رئيس</string>
+    <string name="minced_meat">لحم مفروم</string>
+    <string name="order_received">"تم استلام الطلب "</string>
+    <string name="invalid_phone_no">رقم الهاتف غير صحيح</string>
+    <string name="product_added_success">تتم إضافة المنتج إلى سلة التسوق بنجاح</string>
 </resources>

@@ -2,6 +2,7 @@ package com.najdi.android.najdiapp.launch.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -23,6 +24,7 @@ import androidx.lifecycle.ViewModelProviders;
 public class OtpActivity extends BaseActivity {
     ActivityOtpBinding binding;
     private OtpViewModel viewModel;
+    int startSec = 30;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,6 +33,30 @@ public class OtpActivity extends BaseActivity {
         initializeViewModel();
         bindViewModel();
         initClickListener();
+        startHandlerFor30S();
+    }
+
+    private void startHandlerFor30S() {
+        binding.resend.setEnabled(false);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                int sec = --startSec;
+                String appendSec = sec + "s";
+                binding.resend.setText(getString(R.string.resend_code_in_30s, appendSec));
+                if (sec == 0) {
+                    handler.removeCallbacks(this);
+                    binding.resend.setText(getString(R.string.resend_code));
+                    binding.resend.setEnabled(true);
+                }
+                if (sec > 0) {
+                    handler.postDelayed(this, 1000);
+                }
+
+
+            }
+        }, 1000);
     }
 
     private void bindViewModel() {
@@ -61,6 +87,8 @@ public class OtpActivity extends BaseActivity {
             hideProgressDialog();
             if (baseResponse != null) {
                 if (baseResponse.getData() != null) {
+                    startSec = 30;
+                    startHandlerFor30S();
                     ToastUtils.getInstance(this).showShortToast(baseResponse.getData().getMessage());
                 }
             }
