@@ -89,8 +89,17 @@ public class ProductDetailFragment extends BaseFragment {
                 setViewDataForIncludeLyt();
                 viewModel.setDefaultPrice(productListResponse.getPrice());
                 inflateViewForProductVariation();
+                enableOrDisableAddCartButton();
             }
         });
+    }
+
+    private void enableOrDisableAddCartButton() {
+        if (!productListResponse.isIn_stock()){
+            binding.dec.setEnabled(false);
+            binding.inc.setEnabled(false);
+            binding.addToCart.setEnabled(true);
+        }
     }
 
 

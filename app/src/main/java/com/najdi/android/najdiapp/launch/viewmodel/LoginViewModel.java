@@ -21,6 +21,7 @@ public class LoginViewModel extends BaseViewModel {
     public MutableLiveData<String> password = new MutableLiveData<>();
     public MutableLiveData<String> passwordError = new MutableLiveData<>();
     private MutableLiveData<Boolean> validationStatus = new MutableLiveData<>();
+    private MutableLiveData<String> toolbarTitle = new MutableLiveData<>();
 
     public LoginViewModel(@NonNull Application application) {
         super(application);
@@ -67,5 +68,9 @@ public class LoginViewModel extends BaseViewModel {
         PreferenceUtils.setValueString(resourceProvider.getAppContext(),
                 PreferenceUtils.USER_PHONE_NO_KEY, phoneNo);
         return repository.loginToken(requestModel);
+    }
+
+    public MutableLiveData<String> getToolbarTitle() {
+        return toolbarTitle;
     }
 }

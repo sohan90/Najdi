@@ -1,5 +1,6 @@
 package com.najdi.android.najdiapp.common;
 
+import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,8 +23,10 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         resourProvider = NajdiApplication.get(this).getResourceProvider();
+        setLocaleLanguage(getCurrentLocale().getLanguage());
+        resourProvider.setActivityContext(this);
         resourProvider.setCurrentLocale(getCurrentLocale());
-        LocaleUtitlity.setLocale(getCurrentLocale());
+        LocaleUtitlity.setCurrentLocale(getCurrentLocale());
     }
 
     protected void showProgressDialog() {
@@ -37,11 +40,10 @@ public class BaseActivity extends AppCompatActivity {
     protected void setLocaleLanguage(String localeLanguage) {
         Locale locale = new Locale(localeLanguage);
         Locale.setDefault(locale);
-        Configuration config = getResources().getConfiguration();
+        Configuration config = getBaseContext().getResources().getConfiguration();
         config.setLocale(locale);
         config.setLayoutDirection(locale);
         getResources().updateConfiguration(config, getResources().getDisplayMetrics());
-        resourProvider.setCurrentLocale(locale);
         MathUtils.setCurrencySymbol(locale);
     }
 
@@ -62,4 +64,9 @@ public class BaseActivity extends AppCompatActivity {
         return locale;
     }
 
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(newBase);
+    }
 }

@@ -7,6 +7,8 @@ import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.home.model.CartRequest;
 import com.najdi.android.najdiapp.home.model.ContactUsRequest;
+import com.najdi.android.najdiapp.home.model.ForgotPaswwordRequest;
+import com.najdi.android.najdiapp.home.model.HtmlResponseForNajdi;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.launch.model.LoginRequestModel;
 import com.najdi.android.najdiapp.launch.model.OtpRequestModel;
@@ -50,7 +52,8 @@ public interface NajdiApi {
 
     @GET(BuildConfig.NAJDI_END_POINTS + "cart")
     @Headers({"Content-Type:application/json"})
-    Call<CartResponse> getCart(@Header("Authorization") String token, @Query("lang") String lang);
+    Call<CartResponse> getCart(@Header("Authorization") String token, @Query("customer") String userId,
+                               @Query("lang") String lang );
 
     @HTTP(method = "DELETE", path = "cart/cart-item", hasBody = true)
     @Headers({"Content-Type:application/json"})
@@ -101,6 +104,16 @@ public interface NajdiApi {
     @Headers({"Content-Type:application/json"})
     Call<BaseResponse> getCartCount(@Header("Authorization") String token,
                                     @Query("lang") String lang, @Query("customer")String userId);
+
+    @POST(BuildConfig.NAJDI_CART_BASE_URL + "customapi/forgot")
+    @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
+    Call<BaseResponse> forgotPassword(@Body ForgotPaswwordRequest request);
+
+
+    @GET(BuildConfig.NAJDI_CART_BASE_URL + "wp/v2/pages/{page_id}")
+    @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
+    Call<HtmlResponseForNajdi> getHtmlTermsAboutUsPrivacyPolicy(@Path("page_id") int pageId);
+
 
 
 }

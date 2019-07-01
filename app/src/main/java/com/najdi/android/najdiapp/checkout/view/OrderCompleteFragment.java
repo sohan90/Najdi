@@ -69,7 +69,7 @@ public class OrderCompleteFragment extends BaseFragment {
                     Intent intent = new Intent();
                     intent.putExtra(LAUNC_BANK_ACCOUNT, true);
                     ObservableManager.getInstance().notifyData(intent);
-                }, 100);
+                }, 200);
             }
         });
     }

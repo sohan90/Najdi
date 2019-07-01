@@ -6,6 +6,7 @@ import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.home.model.CartRequest;
 import com.najdi.android.najdiapp.home.model.ContactUsRequest;
+import com.najdi.android.najdiapp.home.model.HtmlResponseForNajdi;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.launch.model.LoginRequestModel;
 import com.najdi.android.najdiapp.launch.model.OtpRequestModel;
@@ -117,8 +118,12 @@ public class Repository {
 
     public LiveData<CartResponse> getCart() {
         MutableLiveData<CartResponse> liveData = new MutableLiveData<>();
-        String token = PreferenceUtils.getValueString(resourceProvider.getAppContext(), PreferenceUtils.USER_LOGIIN_TOKEN);
-        RetrofitClient.getInstance().getCart(Constants.BEARER + token, resourceProvider.getCountryLang()).enqueue(new RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<CartResponse>() {
+        String token = PreferenceUtils.getValueString(resourceProvider.getAppContext(),
+                PreferenceUtils.USER_LOGIIN_TOKEN);
+        String userId = String.valueOf(PreferenceUtils.getValueInt(resourceProvider.getAppContext(),
+                PreferenceUtils.USER_ID_KEY));
+        RetrofitClient.getInstance().getCart(Constants.BEARER + token, userId,
+                resourceProvider.getCountryLang()).enqueue(new RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<CartResponse>() {
             @Override
             public void onSuccesResponse(Call<CartResponse> call, CartResponse cartResponse) {
                 liveData.setValue(cartResponse);
@@ -404,4 +409,25 @@ public class Repository {
         return liveData;
     }
 
+    public LiveData<HtmlResponseForNajdi> getHtmlConent(int pageId) {
+        MutableLiveData<HtmlResponseForNajdi> liveData = new MutableLiveData<>();
+        RetrofitClient.getInstance().getHtmlTermsAboutUsPrivacyPolicy(pageId).enqueue(new
+                RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<HtmlResponseForNajdi>() {
+            @Override
+            public void onSuccesResponse(Call<HtmlResponseForNajdi> call, HtmlResponseForNajdi htmlResponseForNajdi) {
+                if (htmlResponseForNajdi != null) {
+                    liveData.setValue(htmlResponseForNajdi);
+                }
+            }
+
+            @Override
+            public void onFailurResponse(Call<HtmlResponseForNajdi> call, BaseResponse baseResponse) {
+                if (baseResponse != null) {
+                    baseResponse.handleError(resourceProvider.getAppContext());
+                }
+                liveData.setValue(null);
+            }
+        }));
+        return liveData;
+    }
 }

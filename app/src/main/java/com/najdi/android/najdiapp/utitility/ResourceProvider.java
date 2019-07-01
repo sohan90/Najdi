@@ -1,6 +1,7 @@
 package com.najdi.android.najdiapp.utitility;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -12,11 +13,11 @@ import androidx.core.os.ConfigurationCompat;
 
 public class ResourceProvider {
     private Context mContext;
+    private Context activityContext;
     private Locale locale;
 
     public ResourceProvider(Context mContext) {
         this.mContext = mContext;
-        LocaleUtitlity.setLocale(getLocale());
     }
 
     public Context getAppContext() {
@@ -24,7 +25,13 @@ public class ResourceProvider {
     }
 
     public String getString(int resId) {
-        return mContext.getString(resId);
+        Context context;
+        if (activityContext == null) {
+            context = mContext;
+        } else {
+            context = activityContext;
+        }
+        return context.getString(resId);
     }
 
     public int getColor(int color) {
@@ -47,7 +54,12 @@ public class ResourceProvider {
         return locale;
     }
 
-    public void setCurrentLocale(Locale locale){
+    public void setCurrentLocale(Locale locale) {
         this.locale = locale;
+
+    }
+
+    public void setActivityContext(Context activityContext) {
+        this.activityContext = activityContext;
     }
 }

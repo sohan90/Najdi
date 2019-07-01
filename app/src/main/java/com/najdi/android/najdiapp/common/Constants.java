@@ -47,4 +47,10 @@ public class Constants {
         int CONTACT_US = 6;
     }
 
+    @IntDef(value = {HtmlScreen.ABOUT_US, HtmlScreen.TERMS_CONDITION, HtmlScreen.PRIVACY_POLICY})
+    public @interface HtmlScreen {
+        int ABOUT_US = 0;
+        int TERMS_CONDITION = 1;
+        int PRIVACY_POLICY = 2;
+    }
 }

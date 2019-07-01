@@ -31,7 +31,7 @@ public class MathUtils {
         currencySymbol = format.getCurrency().getSymbol();
     }
 
-    public String getCurrencySymbol() {
+    public static String getCurrencySymbol() {
         return currencySymbol;
     }
 }

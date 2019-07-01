@@ -19,6 +19,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 
+import static com.najdi.android.najdiapp.common.Constants.ARABIC_LAN;
+import static com.najdi.android.najdiapp.common.Constants.ENGLISH_LAN;
 import static com.najdi.android.najdiapp.utitility.PreferenceUtils.USER_ID_KEY;
 import static com.najdi.android.najdiapp.utitility.PreferenceUtils.USER_LOGIIN_TOKEN;
 import static com.najdi.android.najdiapp.utitility.PreferenceUtils.USER_PHONE_NO_KEY;
@@ -57,8 +59,10 @@ public class SplashScreenActivity extends BaseActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position != 0) {
                     if (position == 1) {
+                        PreferenceUtils.setValueString(SplashScreenActivity.this, PreferenceUtils.LOCALE_LANG, ENGLISH_LAN);
                         setLocaleLanguage(Constants.ENGLISH_LAN);
                     } else {
+                        PreferenceUtils.setValueString(SplashScreenActivity.this, PreferenceUtils.LOCALE_LANG, ARABIC_LAN);
                         setLocaleLanguage(Constants.ARABIC_LAN);
                     }
                 }

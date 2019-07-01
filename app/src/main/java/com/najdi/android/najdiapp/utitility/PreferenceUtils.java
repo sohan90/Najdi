@@ -13,6 +13,7 @@ public class PreferenceUtils {
     public static final String USER_PHONE_NO_KEY = "phone_no";
     public static final String USER_PASSWORD = "password";
     public static final String USER_LOGIIN_TOKEN = "login_token";
+    public static final String LOCALE_LANG = "locale";
 
     public static String getValueString(Context context, String key) {
         SharedPreferences preferences = context.getSharedPreferences(SHARED_PREF, Activity.MODE_PRIVATE);

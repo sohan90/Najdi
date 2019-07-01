@@ -10,8 +10,10 @@ public class LocaleUtitlity {
         return locale;
     }
 
-    public static void setLocale(Locale locale) {
+    public static void setCurrentLocale(Locale locale) {
         LocaleUtitlity.locale = locale;
+        if (locale == null)return;
+        setCountryLang(locale.getLanguage());
     }
 
     public static void setCountryLang(String countryLang) {

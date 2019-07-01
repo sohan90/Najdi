@@ -23,7 +23,7 @@
             android:layout_toStartOf="@id/cartImageLyt"
             android:layout_toEndOf="@id/back_arrow"
             android:gravity="center"
-            android:text="-------"
+            android:text=""
             android:textColor="@color/white"
             android:textSize="18sp" />
 

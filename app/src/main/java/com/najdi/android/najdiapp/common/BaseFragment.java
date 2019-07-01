@@ -23,7 +23,8 @@ public class BaseFragment extends Fragment {
         super.onCreate(savedInstanceState);
         resourceProvider = NajdiApplication.get(getActivity()).getResourceProvider();
         resourceProvider.setCurrentLocale(getCurrentLocale());
-        LocaleUtitlity.setLocale(getCurrentLocale());
+        LocaleUtitlity.setCurrentLocale(getCurrentLocale());
+       // setLocaleLanguage(getCurrentLocale().getLanguage());
     }
 
     protected void showProgressDialog() {
@@ -40,7 +41,8 @@ public class BaseFragment extends Fragment {
         Configuration config = getResources().getConfiguration();
         config.setLocale(locale);
         config.setLayoutDirection(locale);
-        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+        if (getContext() == null) return;
+        getContext().createConfigurationContext(config);
         MathUtils.setCurrencySymbol(locale);
         resourceProvider.setCurrentLocale(locale);
         LocaleUtitlity.setCountryLang(localeLanguage);

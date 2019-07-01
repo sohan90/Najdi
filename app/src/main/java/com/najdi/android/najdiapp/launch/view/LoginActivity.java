@@ -7,12 +7,16 @@ import android.view.View;
 import com.najdi.android.najdiapp.common.BaseActivity;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.R;
+import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.databinding.ActivityLoginBinding;
+import com.najdi.android.najdiapp.home.view.AboutUsFragment;
 import com.najdi.android.najdiapp.home.view.HomeScreenActivity;
 import com.najdi.android.najdiapp.launch.viewmodel.LoginViewModel;
+import com.najdi.android.najdiapp.utitility.FragmentHelper;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
@@ -29,6 +33,25 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         setupBinding();
         initClickListener();
         subscribeForInputValidation();
+        subscribeForToolBarTitle();
+    }
+
+    private void subscribeForToolBarTitle() {
+        viewModel.getToolbarTitle().observe(this, s -> {
+            binding.frgLyt.setVisibility(View.VISIBLE);
+            binding.toolBarLyt.backArrow.setVisibility(View.VISIBLE);
+            binding.toolBarLyt.title.setVisibility(View.VISIBLE);
+            binding.toolBarLyt.title.setText(s);
+            binding.toolBarLyt.backArrow.setOnClickListener(v -> {
+                onBackPressed();
+            });
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        binding.frgLyt.setVisibility(View.GONE);
     }
 
     private void setupBinding() {
@@ -44,6 +67,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         binding.logIn.setOnClickListener(this);
         binding.guestLogin.setOnClickListener(this);
         binding.signUp.setOnClickListener(this);
+        binding.terms.setOnClickListener(this);
+        binding.privacy.setOnClickListener(this);
     }
 
     private void launchSignupActivity() {
@@ -65,7 +90,25 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             case R.id.sign_up:
                 launchSignupActivity();
                 break;
+
+            case R.id.terms:
+                Fragment fragment = AboutUsFragment.createInstance(Constants.HtmlScreen.TERMS_CONDITION);
+                launchTermConditionScreen(fragment, "terms_condition");
+                break;
+
+            case R.id.privacy:
+                Fragment privacyFragment = AboutUsFragment.createInstance(Constants.HtmlScreen.PRIVACY_POLICY);
+                launchTermConditionScreen(privacyFragment, "privacy_policy");
+                break;
         }
+    }
+
+    private void launchTermConditionScreen(Fragment fragment, String tag) {
+        binding.fragmentContainer.getId();
+        binding.frgLyt.setVisibility(View.VISIBLE);
+        FragmentHelper.replaceFragment(this, fragment, tag, true,
+                binding.fragmentContainer.getId());
+
     }
 
     private void subscribeForInputValidation() {
@@ -103,4 +146,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         startActivity(intent);
     }
 
+    @Override
+    public void onBackPressed() {
+        int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
+        if (backStackCount > 0) {
+            binding.frgLyt.setVisibility(View.GONE);
+        }
+        super.onBackPressed();
+    }
 }

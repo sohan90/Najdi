@@ -82,7 +82,7 @@ public class ProductListItemModel extends BaseObservable {
 
     @Bindable
     public String getTitle() {
-        return product.getSlug();
+        return product.getName();
     }
 
     @Bindable

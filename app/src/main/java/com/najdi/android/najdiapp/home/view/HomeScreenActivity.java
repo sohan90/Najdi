@@ -194,7 +194,7 @@ public class HomeScreenActivity extends BaseActivity
                 break;
 
             case ABOUT_US:
-                fragment = AboutUsFragment.createInstance();
+                fragment = AboutUsFragment.createInstance(Constants.HtmlScreen.ABOUT_US);
                 fragmentTag = Constants.FragmentTags.ABOUT_US;
                 lockDrawer();
                 break;
@@ -292,8 +292,10 @@ public class HomeScreenActivity extends BaseActivity
         menuLanSelcBinding.checkbox.setOnClickListener(v -> {
             SwitchCompat switchCompat = (SwitchCompat) v;
             if (switchCompat.isChecked()) {
+                PreferenceUtils.setValueString(this, PreferenceUtils.LOCALE_LANG, ARABIC_LAN);
                 setLocaleLanguage(ARABIC_LAN);
             } else {
+                PreferenceUtils.setValueString(this, PreferenceUtils.LOCALE_LANG, ENGLISH_LAN);
                 setLocaleLanguage(ENGLISH_LAN);
             }
             FragmentHelper.popBackStack(this, null);
