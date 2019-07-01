@@ -1,5 +1,6 @@
 package com.najdi.android.najdiapp.home.view;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -95,7 +96,7 @@ public class ProductDetailFragment extends BaseFragment {
     }
 
     private void enableOrDisableAddCartButton() {
-        if (!productListResponse.isIn_stock()){
+        if (!productListResponse.isIn_stock()) {
             binding.dec.setEnabled(false);
             binding.inc.setEnabled(false);
             binding.addToCart.setEnabled(true);
@@ -149,11 +150,10 @@ public class ProductDetailFragment extends BaseFragment {
         LiveData<BaseResponse> liveData = viewModel.addToCart();
         liveData.observe(this, baseResponse -> {
             hideProgressDialog();
-            ToastUtils.getInstance(getActivity()).
-                    showShortToast(getString(R.string.product_added_success));
             binding.proceed.setEnabled(true);
             updateNotificationCartCount();
-
+            DialogUtil.showAlertDialog(getActivity(), getString(R.string.product_added_success),
+                    (dialog, which) -> dialog.dismiss());
         });
     }
 
@@ -163,6 +163,7 @@ public class ProductDetailFragment extends BaseFragment {
     }
 
     private void setViewDataForIncludeLyt() {
+        binding.topLyt.desc.setMaxLines(Integer.MAX_VALUE);
         binding.topLyt.setViewModel(new ProductListItemModel(productListResponse, View.GONE));
     }
 

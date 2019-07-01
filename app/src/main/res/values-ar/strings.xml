@@ -101,4 +101,5 @@
     <string name="please_feel">لا تتردد في ارسال لنا أي أسئلة</string>
     <string name="message">رسالة</string>
     <string name="already_have_an_account">هل لديك حساب</string>
+    <string name="direct_bank_transer_msg">\"اجعلك تدفع مباشرة في حسابنا المصرفي. يرجى استخدام معرف الطلب الخاص بك كمراجع للدفع ، ولن يتم شحن طلبك حتى يتم إضافة الأموال إلى حسابنا ؛</string>
 </resources>

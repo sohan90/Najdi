@@ -113,8 +113,7 @@
 \u2022 Order placed After 4:00 PM will be considered for next day delivery.
 </string>
     <string name="something_went_wrong">something went wrong</string>
-    <string name="direct_bank_transer_msg">“Make you payment direct into our bank account. Please use your order ID as the payment references, Your order will not be shipped until funds have credited to our account;
-</string>
+    <string name="direct_bank_transer_msg">"“Make you payment direct into our bank account. Please use your order ID as the payment references, Your order will not be shipped until funds have credited to our account; "</string>
     <string name="please_feel">Please feel free to send us any questions</string>
     <string name="message">Message</string>
     <string name="phone_no">0533552201, 0558080240</string>

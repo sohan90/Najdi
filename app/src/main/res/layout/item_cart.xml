@@ -132,7 +132,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@id/img"
                     android:layout_alignParentEnd="true"
-                    android:text="@{String.valueOf(cartModel.lineTotal).concat(` `).concat(@string/currency)}"
+                    android:text="@{String.valueOf(cartModel.line_subtotal).concat(` `).concat(@string/currency)}"
                     android:textColor="@color/black"
                     android:textDirection="locale" />
 

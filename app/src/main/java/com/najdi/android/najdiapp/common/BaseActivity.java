@@ -23,6 +23,9 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         resourProvider = NajdiApplication.get(this).getResourceProvider();
+    }
+
+    private void updateLocale() {
         setLocaleLanguage(getCurrentLocale().getLanguage());
         resourProvider.setActivityContext(this);
         resourProvider.setCurrentLocale(getCurrentLocale());
@@ -64,6 +67,12 @@ public class BaseActivity extends AppCompatActivity {
         return locale;
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateLocale();
+    }
 
     @Override
     protected void attachBaseContext(Context newBase) {
