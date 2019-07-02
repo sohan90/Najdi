@@ -76,7 +76,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginEnd="10dp"
             android:gravity="center"
-            android:text="@{String.valueOf(cartModel.lineTotal).concat(` `).concat(@string/currency)}"
+            android:text="@{String.valueOf(cartModel.line_subtotal).concat(` `).concat(@string/currency)}"
             android:textColor="@color/black"
             android:textDirection="locale" />
 

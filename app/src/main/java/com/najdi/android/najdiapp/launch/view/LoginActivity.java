@@ -36,22 +36,22 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         subscribeForToolBarTitle();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        binding.frgLyt.setVisibility(View.GONE);
+        FragmentHelper.popBackStack(this);
+
+    }
+
     private void subscribeForToolBarTitle() {
         viewModel.getToolbarTitle().observe(this, s -> {
             binding.frgLyt.setVisibility(View.VISIBLE);
             binding.toolBarLyt.backArrow.setVisibility(View.VISIBLE);
             binding.toolBarLyt.title.setVisibility(View.VISIBLE);
             binding.toolBarLyt.title.setText(s);
-            binding.toolBarLyt.backArrow.setOnClickListener(v -> {
-                onBackPressed();
-            });
+            binding.toolBarLyt.backArrow.setOnClickListener(v -> onBackPressed());
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        binding.frgLyt.setVisibility(View.GONE);
     }
 
     private void setupBinding() {
@@ -67,8 +67,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         binding.logIn.setOnClickListener(this);
         binding.guestLogin.setOnClickListener(this);
         binding.signUp.setOnClickListener(this);
-        binding.terms.setOnClickListener(this);
-        binding.privacy.setOnClickListener(this);
+        binding.forgotPassword.setOnClickListener(this);
     }
 
     private void launchSignupActivity() {
@@ -91,24 +90,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 launchSignupActivity();
                 break;
 
-            case R.id.terms:
-                Fragment fragment = AboutUsFragment.createInstance(Constants.HtmlScreen.TERMS_CONDITION);
-                launchTermConditionScreen(fragment, "terms_condition");
-                break;
-
-            case R.id.privacy:
-                Fragment privacyFragment = AboutUsFragment.createInstance(Constants.HtmlScreen.PRIVACY_POLICY);
-                launchTermConditionScreen(privacyFragment, "privacy_policy");
+            case R.id.forgot_password:
+                launchForgotPasswordScreen();
                 break;
         }
     }
 
-    private void launchTermConditionScreen(Fragment fragment, String tag) {
-        binding.fragmentContainer.getId();
-        binding.frgLyt.setVisibility(View.VISIBLE);
-        FragmentHelper.replaceFragment(this, fragment, tag, true,
-                binding.fragmentContainer.getId());
-
+    private void launchForgotPasswordScreen() {
+        Fragment fragment = ForgotPasswordFragment.createInstance();
+        FragmentHelper.replaceFragment(this, fragment, Constants.FragmentTags.FORGOT_PASSWORD,
+                true, binding.fragmentContainer.getId());
     }
 
     private void subscribeForInputValidation() {

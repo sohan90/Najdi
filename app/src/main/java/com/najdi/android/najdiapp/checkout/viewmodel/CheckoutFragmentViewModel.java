@@ -34,7 +34,7 @@ public class CheckoutFragmentViewModel extends BaseViewModel {
     public void udpateTotal(List<CartResponse.CartData> cartDataList) {
         int total = 0;
         for (CartResponse.CartData cartData : cartDataList) {
-            total += cartData.getLineTotal();
+            total += cartData.getLine_subtotal();
         }
         String totalStr = String.valueOf(total).concat(" ").
                 concat(resourceProvider.getString(R.string.currency));

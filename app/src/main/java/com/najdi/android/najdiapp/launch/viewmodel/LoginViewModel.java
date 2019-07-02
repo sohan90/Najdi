@@ -66,7 +66,7 @@ public class LoginViewModel extends BaseViewModel {
         requestModel.setUserName(phoneNo);
         requestModel.setPassword(password.getValue());
         PreferenceUtils.setValueString(resourceProvider.getAppContext(),
-                PreferenceUtils.USER_PHONE_NO_KEY, phoneNo);
+                PreferenceUtils.USER_PHONE_NO_KEY, this.phoneNo.getValue());
         return repository.loginToken(requestModel);
     }
 

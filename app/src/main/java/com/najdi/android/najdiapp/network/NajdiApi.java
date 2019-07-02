@@ -109,6 +109,22 @@ public interface NajdiApi {
     @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
     Call<BaseResponse> forgotPassword(@Body ForgotPaswwordRequest request);
 
+    @POST(BuildConfig.NAJDI_CART_BASE_URL + "customapi/forgot_verify")
+    @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
+    Call<BaseResponse> forgotVerify(@Body OtpRequestModel request);
+
+    @POST(BuildConfig.NAJDI_CART_BASE_URL + "customapi/forgot_update")
+    @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
+    Call<BaseResponse> forgotUpdate(@Body ForgotPaswwordRequest request);
+
+    @POST(BuildConfig.NAJDI_CART_BASE_URL + "customapi/mobile_change")
+    @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
+    Call<BaseResponse> mobileChange(@Body ForgotPaswwordRequest request);
+
+    @POST(BuildConfig.NAJDI_CART_BASE_URL + "customapi/password_change")
+    @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
+    Call<BaseResponse> changePasswormd(@Body ForgotPaswwordRequest request);
+
 
     @GET(BuildConfig.NAJDI_CART_BASE_URL + "wp/v2/pages/{page_id}")
     @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})

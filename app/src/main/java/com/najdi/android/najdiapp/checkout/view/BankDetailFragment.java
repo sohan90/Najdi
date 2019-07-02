@@ -54,7 +54,7 @@ public class BankDetailFragment extends BaseFragment {
     }
 
     private void initToolBar() {
-        acitivityViewModel.getSetToolBarTitle().setValue(getString(R.string.our_bank_accounts));
+        acitivityViewModel.getSetToolBarTitle().setValue(getString(R.string.our_bank_accounts_drawer));
     }
 
     private void intializeActivityViewModel() {

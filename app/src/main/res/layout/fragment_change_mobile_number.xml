@@ -101,7 +101,7 @@
                 android:layout_marginStart="5dp"
                 android:background="@null"
                 android:gravity="center|start"
-                android:text="@string/mobile_number_5xxxxxx"
+                android:text="@string/mobile_number_5x"
                 android:textColor="@color/grey_text"
                 android:textSize="12sp" />
         </LinearLayout>

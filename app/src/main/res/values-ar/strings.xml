@@ -4,13 +4,14 @@
        للذبائح</string>
     <string name="welcome_msg">أهلاً بك في نجدي</string>
     <string name="sign_up">"إنشاء حساب "</string>
-    <string name="mobile_number_5xxxxxx">رقم الجوال(5xxxxx)</string>
+    <string name="mobile_number_5x">رقم الجوال(5xxxxxxxx)</string>
     <string name="password">كلمة المرور</string>
     <string name="confirm_password">الدخول كزائر</string>
     <string name="name_optional">الاسم (اختياري)</string>
     <string name="email_optional">البريد الإلكتروني (اختياري)</string>
     <string name="sign_in">تسجيل الدخول</string>
     <string name="forgot_password">هل نسيت كلمة المرور؟</string>
+    <string name="forgot_password_title">هل نسيت كلمة المرور</string>
     <string name="by_signing_up_you_agree_to_our">بإنشائك هذا الحساب، فإنك توافق على</string>
     <string name="terms_and_conditions">الشروط والأحكام</string>
     <string name="and_privacy_policy">سياسة الخصوصية</string>
@@ -32,7 +33,8 @@
     <string name="order_number">رقم الطلب</string>
     <string name="date">التاريخ</string>
     <string name="subtotal">المجموع الفرعي</string>
-    <string name="our_bank_accounts">حساباتنا البنكية</string>
+    <string name="our_bank_accounts"><u>حساباتنا البنكية</u></string>
+    <string name="our_bank_accounts_drawer">حساباتنا البنكية</string>
     <string name="invalid_pass">الرجاء إدخال كلمة المرور الصحيحة</string>
     <string name="category">الفئة</string>
     <string name="product_details">تفاصيل المنتج</string>
@@ -101,5 +103,7 @@
     <string name="please_feel">لا تتردد في ارسال لنا أي أسئلة</string>
     <string name="message">رسالة</string>
     <string name="already_have_an_account">هل لديك حساب</string>
-    <string name="direct_bank_transer_msg">\"اجعلك تدفع مباشرة في حسابنا المصرفي. يرجى استخدام معرف الطلب الخاص بك كمراجع للدفع ، ولن يتم شحن طلبك حتى يتم إضافة الأموال إلى حسابنا ؛</string>
+    <string name="direct_bank_transer_msg">\"اجعلك تدفع مباشرة في حسابنا المصرفي. يرجى استخدام معرف الطلب الخاص بك كمراجع للدفع ، ولن يتم شحن طلبك حتى يتم إضافة الأموال إلى حسابنا</string>
+    <string name="update_cart_label">تحديث العربة</string>
+    <string name="product_updated_success">تم تحديث المنتج إلى عربة التسوق بنجاح</string>
 </resources>

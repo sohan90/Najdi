@@ -20,6 +20,10 @@ public class ResourceProvider {
         this.mContext = mContext;
     }
 
+    public Context getActivityContext() {
+        return activityContext;
+    }
+
     public Context getAppContext() {
         return mContext;
     }

@@ -5,6 +5,7 @@ import com.najdi.android.najdiapp.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -89,7 +90,7 @@ public class FragmentHelper {
      *
      * @param context context
      */
-    public static void popBackStack(AppCompatActivity context) {
+    public static void popBackStack(FragmentActivity context) {
         FragmentManager manager = context.getSupportFragmentManager();
         manager.popBackStack();
     }

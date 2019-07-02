@@ -1,16 +1,18 @@
 <resources>
-    <string name="app_name">Najdi</string>
+    <string name="app_name"> نجدي
+       للذبائح</string>
     <string name="welcome_msg">WELCOME TO \n NAJDI</string>
     <string name="sign_up">Sign Up</string>
-    <string name="mobile_number_5xxxxxx">Mobile Number(5xxxxxx)</string>
+    <string name="mobile_number_5x">Mobile Number(5xxxxxxxx)</string>
     <string name="password">password</string>
     <string name="confirm_password">Confirm Password</string>
-    <string name="name_optional">Name Optional)</string>
+    <string name="name_optional">Name (Optional)</string>
     <string name="email_optional">Email (Optional)</string>
     <string name="already_have_an_account">Already have an account? </string>
     <string name="sign_in"> Sign In</string>
     <string name="sign_to_continue">Sign In to continue</string>
     <string name="forgot_password">Forgot Password?</string>
+    <string name="forgot_password_title">Forgot Password</string>
     <string name="by_signing_up_you_agree_to_our">By signing up you agree to our</string>
     <string name="terms_and_conditions">Terms and conditions</string>
     <string name="and_privacy_policy">Privacy policy</string>
@@ -41,7 +43,8 @@
     <string name="order_number">Order Number</string>
     <string name="date">Date</string>
     <string name="subtotal">SubTotal</string>
-    <string name="our_bank_accounts">Our Bank Accounts</string>
+    <string name="our_bank_accounts"><u>Our Bank Accounts</u></string>
+    <string name="our_bank_accounts_drawer">Our Bank Accounts</string>
     <string name="invalid_phone_no">phone no is invalid!</string>
     <string name="invalid_pass">invalid password</string>
     <string name="login_as_a_guest">Login as a Guest</string>
@@ -113,7 +116,7 @@
 \u2022 Order placed After 4:00 PM will be considered for next day delivery.
 </string>
     <string name="something_went_wrong">something went wrong</string>
-    <string name="direct_bank_transer_msg">"“Make you payment direct into our bank account. Please use your order ID as the payment references, Your order will not be shipped until funds have credited to our account; "</string>
+    <string name="direct_bank_transer_msg">Make you payment direct into our bank account. Please use your order ID as the payment references, Your order will not be shipped until funds have credited to our account; "</string>
     <string name="please_feel">Please feel free to send us any questions</string>
     <string name="message">Message</string>
     <string name="phone_no">0533552201, 0558080240</string>
@@ -125,6 +128,7 @@
     <string name="minced_meat">minced meat</string>
     <string name="order_received">Order Received</string>
     <string name="product_added_success">product has been to added to your cart successfully</string>
+    <string name="product_updated_success">product has been to updated to your cart successfully</string>
     <string name="change_password">Change Password</string>
     <string name="change_mobile_number">Change Mobile Number</string>
     <string name="save">Save</string>
@@ -137,4 +141,8 @@
     <string name="confirm_new_password">Confirm New Password</string>
     <string name="new_mobile_number">New Mobile Number</string>
     <string name="andStr">and</string>
+    <string name="forgot_your_password">Forgot Your Password</string>
+    <string name="please_otp_msg">Please enter your mobile number, You will receive  a One-Time-Password via SMS</string>
+    <string name="submit">Submit</string>
+    <string name="password_mismatched">Password mismatched!</string>
 </resources>

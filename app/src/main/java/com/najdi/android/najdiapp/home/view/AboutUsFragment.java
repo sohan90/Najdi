@@ -11,6 +11,7 @@ import com.najdi.android.najdiapp.databinding.FragAboutUsBinding;
 import com.najdi.android.najdiapp.home.viewmodel.AboutViewModel;
 import com.najdi.android.najdiapp.home.viewmodel.HomeScreenViewModel;
 import com.najdi.android.najdiapp.launch.viewmodel.LoginViewModel;
+import com.najdi.android.najdiapp.launch.viewmodel.SignUpViewModel;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,7 +28,7 @@ public class AboutUsFragment extends BaseFragment {
     private HomeScreenViewModel activityViewModel;
     private static final String EXTRA_SCREEN_TYPE = "screen_type";
     private int screenType;
-    private LoginViewModel logiActivityViewModel;
+    private SignUpViewModel signUpViewModel;
 
     public static AboutUsFragment createInstance(int screenType) {
         Bundle bundle = new Bundle();
@@ -120,7 +121,7 @@ public class AboutUsFragment extends BaseFragment {
         if (screenType == ABOUT_US) {
             activityViewModel = ViewModelProviders.of(getActivity()).get(HomeScreenViewModel.class);
         } else {
-            logiActivityViewModel = ViewModelProviders.of(getActivity()).get(LoginViewModel.class);
+            signUpViewModel = ViewModelProviders.of(getActivity()).get(SignUpViewModel.class);
         }
     }
 
@@ -129,9 +130,9 @@ public class AboutUsFragment extends BaseFragment {
             activityViewModel.getSetToolBarTitle().setValue(getString(R.string.about_us));
         } else {
             if (screenType == TERMS_CONDITION) {
-                logiActivityViewModel.getToolbarTitle().setValue(getString(R.string.terms_and_conditions));
+                signUpViewModel.getToolbarTitle().setValue(getString(R.string.terms_and_conditions));
             } else {
-                logiActivityViewModel.getToolbarTitle().setValue(getString(R.string.and_privacy_policy));
+                signUpViewModel.getToolbarTitle().setValue(getString(R.string.and_privacy_policy));
             }
         }
     }

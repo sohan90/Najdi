@@ -27,6 +27,7 @@ public class SignUpViewModel extends BaseViewModel {
     public MutableLiveData<String> passwordError = new MutableLiveData<>();
     public MutableLiveData<String> confirmPassError = new MutableLiveData<>();
     private MutableLiveData<Boolean> validateSuccess = new MutableLiveData<>();
+    private MutableLiveData<String> toolbarTitle = new MutableLiveData<>();
 
     public SignUpViewModel(@NonNull Application application) {
         super(application);
@@ -92,4 +93,7 @@ public class SignUpViewModel extends BaseViewModel {
         return repository.registerUser(signupRequestModel);
     }
 
+    public MutableLiveData<String> getToolbarTitle() {
+        return toolbarTitle;
+    }
 }

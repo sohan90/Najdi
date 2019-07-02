@@ -43,7 +43,7 @@ public class CartViewModel extends BaseViewModel {
     public void setTotal(List<CartResponse.CartData> cartDataList) {
         int subTotal = 0;
         for (CartResponse.CartData cartData : cartDataList) {
-            int total = cartData.getLineTotal();
+            int total = cartData.getLine_subtotal();
             subTotal = total + subTotal;
         }
         String total = String.valueOf(subTotal).concat(" ").

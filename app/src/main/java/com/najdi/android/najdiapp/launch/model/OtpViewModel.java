@@ -56,6 +56,15 @@ public class OtpViewModel extends BaseViewModel {
         return repository.verifyOtp(otpRequestModel);
     }
 
+    public LiveData<BaseResponse> verifyOtpForForgotPassword(String mobile) {
+        String otp = one.getValue() + two.getValue() + three.getValue() + four.getValue();
+        OtpRequestModel otpRequestModel = new OtpRequestModel();
+        otpRequestModel.setMobile(mobile);
+        otpRequestModel.setOtp(otp);
+        otpRequestModel.setLang(resourceProvider.getCountryLang());
+        return repository.verifyForgotOtp(otpRequestModel);
+    }
+
     public LiveData<BaseResponse> login(String username, String password) {
         LoginRequestModel loginRequestModel = new LoginRequestModel();
         loginRequestModel.setUserName(username);

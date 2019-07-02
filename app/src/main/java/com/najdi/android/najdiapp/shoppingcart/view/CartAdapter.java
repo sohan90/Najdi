@@ -62,7 +62,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 if (updatedQuantity > 0) {
                     int updatedTotal = updatedQuantity * Integer.parseInt(cartData.seletedOptionPrice());
                     cartData.setQuantity(updatedQuantity);
-                    cartData.setLineTotal(updatedTotal);
+                    cartData.setLine_subtotal(updatedTotal);
                     notifyItemChanged(getAdapterPosition());
                     clickListener.onUpdateQuantity(getAdapterPosition(), cartData.getTm_cart_item_key(),
                             updatedQuantity);
@@ -76,7 +76,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 int updatedQuantity = cartData.getQuantity() + 1;
                 int updatedTotal = updatedQuantity * Integer.parseInt(cartData.seletedOptionPrice());
                 cartData.setQuantity(updatedQuantity);
-                cartData.setLineTotal(updatedTotal);
+                cartData.setLine_subtotal(updatedTotal);
                 notifyItemChanged(getAdapterPosition());
                 clickListener.onUpdateQuantity(getAdapterPosition(), cartData.getTm_cart_item_key(),
                         updatedQuantity);

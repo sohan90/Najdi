@@ -32,6 +32,7 @@ public class Constants {
         String BANK_ACCOUNT = "bank_account";
         String ABOUT_US = "about_us";
         String CONTACT_US = "contact_us";
+        String FORGOT_PASSWORD = "forgot_password";
 
     }
 
@@ -52,5 +53,14 @@ public class Constants {
         int ABOUT_US = 0;
         int TERMS_CONDITION = 1;
         int PRIVACY_POLICY = 2;
+    }
+
+    @IntDef(value = {OtpScreen.SIGN_UP_SCREEN, OtpScreen.FORGOT_PASSWORD_SCREEN,
+            OtpScreen.CHANGE_PASSWORD_OTP_SCREEN, OtpScreen.CHANGE_PASSWORD_PROFILE})
+    public @interface OtpScreen {
+        int SIGN_UP_SCREEN = 0;
+        int FORGOT_PASSWORD_SCREEN = 1;
+        int CHANGE_PASSWORD_OTP_SCREEN = 2;
+        int CHANGE_PASSWORD_PROFILE = 3;
     }
 }

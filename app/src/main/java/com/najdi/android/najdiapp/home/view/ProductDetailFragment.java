@@ -1,6 +1,5 @@
 package com.najdi.android.najdiapp.home.view;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +19,6 @@ import com.najdi.android.najdiapp.home.viewmodel.ProductDetailViewModel;
 import com.najdi.android.najdiapp.home.viewmodel.ProductListItemModel;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
-import com.najdi.android.najdiapp.utitility.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -152,7 +150,11 @@ public class ProductDetailFragment extends BaseFragment {
             hideProgressDialog();
             binding.proceed.setEnabled(true);
             updateNotificationCartCount();
-            DialogUtil.showAlertDialog(getActivity(), getString(R.string.product_added_success),
+            String message = getString(R.string.product_added_success);
+            if (isFromCartScreen) {
+                message = getString(R.string.product_updated_success);
+            }
+            DialogUtil.showAlertDialog(getActivity(), message,
                     (dialog, which) -> dialog.dismiss());
         });
     }

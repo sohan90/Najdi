@@ -6,6 +6,7 @@ import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.home.model.CartRequest;
 import com.najdi.android.najdiapp.home.model.ContactUsRequest;
+import com.najdi.android.najdiapp.home.model.ForgotPaswwordRequest;
 import com.najdi.android.najdiapp.home.model.HtmlResponseForNajdi;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.launch.model.LoginRequestModel;
@@ -422,6 +423,72 @@ public class Repository {
 
             @Override
             public void onFailurResponse(Call<HtmlResponseForNajdi> call, BaseResponse baseResponse) {
+                if (baseResponse != null) {
+                    baseResponse.handleError(resourceProvider.getAppContext());
+                }
+                liveData.setValue(null);
+            }
+        }));
+        return liveData;
+    }
+
+    public LiveData<BaseResponse> forgotPasswordRequest(ForgotPaswwordRequest forgotPaswwordRequest) {
+        MutableLiveData<BaseResponse> liveData = new MutableLiveData<>();
+        RetrofitClient.getInstance().forgotPassword(forgotPaswwordRequest).enqueue(new
+                RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<BaseResponse>() {
+            @Override
+            public void onSuccesResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
+                if (baseResponse != null) {
+                    liveData.setValue(baseResponse);
+                }
+            }
+
+            @Override
+            public void onFailurResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
+                if (baseResponse != null) {
+                    baseResponse.handleError(resourceProvider.getAppContext());
+                }
+                liveData.setValue(null);
+            }
+        }));
+        return liveData;
+    }
+
+    public LiveData<BaseResponse> forgotUpdate(ForgotPaswwordRequest forgotPaswwordRequest) {
+        MutableLiveData<BaseResponse> liveData = new MutableLiveData<>();
+        RetrofitClient.getInstance().forgotUpdate(forgotPaswwordRequest).enqueue(new
+                RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<BaseResponse>() {
+            @Override
+            public void onSuccesResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
+                if (baseResponse != null) {
+                    liveData.setValue(baseResponse);
+                }
+            }
+
+            @Override
+            public void onFailurResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
+                if (baseResponse != null) {
+                    baseResponse.handleError(resourceProvider.getAppContext());
+                }
+                liveData.setValue(null);
+            }
+        }));
+        return liveData;
+    }
+
+    public LiveData<BaseResponse> verifyForgotOtp(OtpRequestModel otpRequestModel) {
+        MutableLiveData<BaseResponse> liveData = new MutableLiveData<>();
+        RetrofitClient.getInstance().forgotVerify(otpRequestModel).enqueue(new
+                RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<BaseResponse>() {
+            @Override
+            public void onSuccesResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
+                if (baseResponse != null) {
+                    liveData.setValue(baseResponse);
+                }
+            }
+
+            @Override
+            public void onFailurResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
                 if (baseResponse != null) {
                     baseResponse.handleError(resourceProvider.getAppContext());
                 }

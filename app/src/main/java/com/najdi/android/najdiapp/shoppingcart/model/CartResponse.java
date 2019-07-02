@@ -140,6 +140,10 @@ public class CartResponse {
             this.quantity = quantity;
         }
 
+        public void setLine_subtotal(int line_subtotal) {
+            this.line_subtotal = line_subtotal;
+        }
+
         public int getLine_subtotal() {
             return line_subtotal;
         }

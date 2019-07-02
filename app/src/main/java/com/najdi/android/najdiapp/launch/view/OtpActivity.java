@@ -10,9 +10,11 @@ import android.view.View;
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseActivity;
 import com.najdi.android.najdiapp.common.BaseResponse;
+import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.databinding.ActivityOtpBinding;
 import com.najdi.android.najdiapp.home.view.HomeScreenActivity;
 import com.najdi.android.najdiapp.launch.model.OtpViewModel;
+import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 import com.najdi.android.najdiapp.utitility.ToastUtils;
 
@@ -21,19 +23,31 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 
+import static com.najdi.android.najdiapp.common.Constants.OtpScreen.SIGN_UP_SCREEN;
+import static com.najdi.android.najdiapp.launch.view.ChangePasswordActivity.EXTRA_CHANGE_PASSWORD_LAUNCH_TYPE;
+
 public class OtpActivity extends BaseActivity {
     ActivityOtpBinding binding;
     private OtpViewModel viewModel;
     int startSec = 30;
+    public static final String EXTRA_SCREEN_TYPE = "extra_screen_type_otp";
+    private int screenType;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_otp);
+        getLaunchTypeFromBundle();
         initializeViewModel();
         bindViewModel();
         initClickListener();
         startHandlerFor30S();
+    }
+
+    private void getLaunchTypeFromBundle() {
+        if (getIntent() != null) {
+            screenType = getIntent().getIntExtra(EXTRA_SCREEN_TYPE, -1);
+        }
     }
 
     private void startHandlerFor30S() {
@@ -97,16 +111,39 @@ public class OtpActivity extends BaseActivity {
 
     private void verifyOtp() {
         showProgressDialog();
-        LiveData<BaseResponse> liveData = viewModel.verifyOtp(PreferenceUtils.getValueString(this,
-                PreferenceUtils.USER_PHONE_NO_KEY));
+        LiveData<BaseResponse> liveData;
+        if (screenType == SIGN_UP_SCREEN) {
+            liveData = viewModel.verifyOtp(PreferenceUtils.getValueString(this,
+                    PreferenceUtils.USER_PHONE_NO_KEY));
+        } else {
+            liveData = viewModel.verifyOtpForForgotPassword(PreferenceUtils.getValueString(this,
+                    PreferenceUtils.USER_PHONE_NO_KEY));// forgot password flow
+        }
 
         liveData.observe(this, baseResponse -> {
             if (baseResponse != null) {
-                login();
+                if (screenType == SIGN_UP_SCREEN) {
+                    login();// sign up flow
+                } else {
+                    hideProgressDialog();
+                    DialogUtil.showAlertDialog(this, baseResponse.getData().getMessage(),
+                            (dialog, which) -> {
+                                dialog.dismiss();
+                                launchChangePasswordScreen();
+                                finish();// forgot password flow
+
+                            });
+                }
             } else {
                 hideProgressDialog();
             }
         });
+    }
+
+    private void launchChangePasswordScreen() {
+        Intent intent = new Intent(this, ChangePasswordActivity.class);
+        intent.putExtra(EXTRA_CHANGE_PASSWORD_LAUNCH_TYPE, Constants.OtpScreen.CHANGE_PASSWORD_OTP_SCREEN);
+        startActivity(intent);
     }
 
     private void login() {
@@ -128,6 +165,7 @@ public class OtpActivity extends BaseActivity {
 
     private void launchHomeScreen() {
         Intent intent = new Intent(this, HomeScreenActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 

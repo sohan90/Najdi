@@ -38,7 +38,6 @@ public class OrderCompleteFragment extends BaseFragment {
         binding = DataBindingUtil.
                 inflate(inflater, R.layout.fragment_checkout_step_3, container, false);
 
-
         initializeActivityViewModel();
         initUi();
         initClickListener();
@@ -65,11 +64,12 @@ public class OrderCompleteFragment extends BaseFragment {
 
         binding.bottomTxt.setOnClickListener(v -> {
             if (getActivity() != null) {
+                getActivity().finish();
                 new Handler().postDelayed(() -> {
                     Intent intent = new Intent();
                     intent.putExtra(LAUNC_BANK_ACCOUNT, true);
                     ObservableManager.getInstance().notifyData(intent);
-                }, 200);
+                }, 100);
             }
         });
     }

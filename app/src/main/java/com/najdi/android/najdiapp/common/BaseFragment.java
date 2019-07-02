@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment;
 
 public class BaseFragment extends Fragment {
 
-    private ResourceProvider resourceProvider;
+    protected ResourceProvider resourceProvider;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

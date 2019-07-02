@@ -129,6 +129,8 @@ public class CartFragment extends BaseFragment {
                         showEmptyCartValueTxt();
                     }
                 }
+            } else {
+                showEmptyCartValueTxt();
             }
         });
     }
