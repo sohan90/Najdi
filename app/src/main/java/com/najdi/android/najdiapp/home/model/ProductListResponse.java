@@ -22,6 +22,7 @@ public class ProductListResponse implements Parcelable {
     String description;
     String short_description;
     boolean in_stock;
+    boolean on_sale;
     List<Image> images;
     List<Attributes> attributes;
     List<VariationData> variations_data;
@@ -29,6 +30,11 @@ public class ProductListResponse implements Parcelable {
     public boolean isIn_stock() {
         return in_stock;
     }
+
+    public boolean isOn_sale() {
+        return on_sale;
+    }
+
 
     // local data
     private CartResponse.CartData cartData;
@@ -51,6 +57,7 @@ public class ProductListResponse implements Parcelable {
         variations_data = in.createTypedArrayList(VariationData.CREATOR);
         price_html = in.readString();
         in_stock = in.readByte() != 0;
+        on_sale = in.readByte() != 0;
     }
 
     public static final Creator<ProductListResponse> CREATOR = new Creator<ProductListResponse>() {
@@ -157,6 +164,7 @@ public class ProductListResponse implements Parcelable {
         dest.writeTypedList(variations_data);
         dest.writeString(price_html);
         dest.writeByte((byte) (in_stock ? 1 : 0));
+        dest.writeByte((byte) (on_sale ? 1 : 0));
     }
 
     public static class Image implements Parcelable {

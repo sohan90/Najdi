@@ -47,11 +47,16 @@ public class AboutUsFragment extends BaseFragment {
         getScreenType();
         initActivityViewModel();
         initViewModel();
-        initToolBar();
         bindViewModel();
         fetchHtmlContentForScreenType();
 
         return binding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initToolBar();
     }
 
     private void fetchHtmlContentForScreenType() {

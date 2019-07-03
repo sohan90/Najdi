@@ -2,11 +2,11 @@
 <resources>
     <string name="app_name"> نجدي
        للذبائح</string>
-    <string name="welcome_msg">أهلاً بك في نجدي</string>
+    <string name="welcome_msg">أهلاً بك في نجدي للذبائح</string>
     <string name="sign_up">"إنشاء حساب "</string>
     <string name="mobile_number_5x">رقم الجوال(5xxxxxxxx)</string>
-    <string name="password">تأكيد رقم الجوال</string>
-    <string name="confirm_password">الدخول كزائر</string>
+    <string name="password">كلمة المرور</string>
+    <string name="confirm_password">تأكيد كلمة المرور</string>
     <string name="name_optional">الاسم (اختياري)</string>
     <string name="email_optional">البريد الإلكتروني (اختياري)</string>
     <string name="sign_in">تسجيل الدخول</string>
@@ -109,4 +109,24 @@
     <string name="building_number">رقم المبنى</string>
     <string name="direct_transfer_title">تحويل بنكي</string>
     <string name="send">إرسال</string>
+    <string name="not_available">غير متوفر</string>
+    <string name="sale">تخفيض السعر</string>
+    <string name="change_password">غير كلمة السر</string>
+    <string name="change_mobile_number">تغيير رقم الجوال</string>
+    <string name="save">حفظ</string>
+    <string name="my_account">حسابي</string>
+    <string name="change_no_msg">لتغيير رقم هاتفك المحمول ، يرجى إدخال الرقم الجديد أدناه.</string>
+    <string name="mobile_number">رقم الهاتف المحمول</string>
+    <string name="update">تحديث</string>
+    <string name="old_password">كلمة المرور القديمة</string>
+    <string name="new_password">كلمة السر الجديدة</string>
+    <string name="confirm_new_password">تأكيد كلمة المرور الجديدة</string>
+    <string name="new_mobile_number">رقم الجوال الجديد</string>
+    <string name="forgot_your_password">نسيت رقمك السري</string>
+    <string name="please_otp_msg">الرجاء إدخال رقم هاتفك المحمول ، ستتلقى كلمة مرور لمرة واحدة عبر الرسائل القصيرة</string>
+    <string name="submit">خضع</string>
+    <string name="password_mismatched">كلمة المرور غير متطابقة!</string>
+    <string name="cancel">إلغاء</string>
+    <string name="action_settings">الإعدادات</string>
+    <string name="ok">حسنا</string>
 </resources>

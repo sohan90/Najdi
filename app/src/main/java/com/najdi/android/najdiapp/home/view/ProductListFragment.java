@@ -8,9 +8,11 @@ import android.view.ViewGroup;
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseFragment;
 import com.najdi.android.najdiapp.databinding.FragmentProductBinding;
+import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.home.viewmodel.HomeScreenViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -56,8 +58,18 @@ public class ProductListFragment extends BaseFragment {
 
     private void subscribeForProductList() {
         homeScreeViewModel.getProductList().observe(this, productListResponses -> {
-            adapter.setData(productListResponses);
+            List<ProductListResponse> listResponseList = getVisibilityProducts(productListResponses);
+            adapter.setData(listResponseList);
         });
+    }
+
+    private List<ProductListResponse> getVisibilityProducts(List<ProductListResponse> productListResponses) {
+        for (int i = 0; i < productListResponses.size(); i++) {
+            if (productListResponses.get(i).getStatus().equalsIgnoreCase("private")) {
+                productListResponses.remove(i);
+            }
+        }
+        return productListResponses;
     }
 
     private void initializeRecyclerViewAdapter() {

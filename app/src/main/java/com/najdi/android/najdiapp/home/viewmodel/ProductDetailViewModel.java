@@ -35,6 +35,9 @@ public class ProductDetailViewModel extends BaseViewModel {
 
     public void setDefaultPrice(String defaultPrice) {
         selectOptionPrice = defaultPrice;
+    }
+
+    public void setDefaultQuantity(){
         incrementQuantity();
     }
 

@@ -26,6 +26,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
@@ -89,6 +90,9 @@ public class ProductDetailFragment extends BaseFragment {
                 viewModel.setDefaultPrice(productListResponse.getPrice());
                 inflateViewForProductVariation();
                 enableOrDisableAddCartButton();
+                if (cartData == null) {
+                    viewModel.setDefaultQuantity();
+                }
             }
         });
     }
@@ -97,8 +101,15 @@ public class ProductDetailFragment extends BaseFragment {
         if (!productListResponse.isIn_stock()) {
             binding.dec.setEnabled(false);
             binding.inc.setEnabled(false);
+            changeSmileIcon();
             binding.addToCart.setEnabled(true);
         }
+    }
+
+    private void changeSmileIcon() {
+        if (getActivity() == null) return;
+        binding.smileImg.setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.ic_sad));
+        binding.availableTxt.setText(getString(R.string.not_available));
     }
 
 
@@ -226,7 +237,7 @@ public class ProductDetailFragment extends BaseFragment {
             String appendedKey = APPEND_ATTRIBUTE_STR.concat(key);
             String selectedValue = cartData.getVariation().get(appendedKey);
             optionText.setText(selectedValue);
-            viewModel.setTotalPrice(String.valueOf(cartData.getLineTotal()));
+            viewModel.setTotalPrice(String.valueOf(cartData.getLine_subtotal()));
             viewModel.setQuantityCount(cartData.getQuantity());
             viewModel.updatePrice(productListResponse, selectedValue, id);
         }

@@ -27,6 +27,12 @@ public class BaseFragment extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        setLocaleLanguage(getCurrentLocale().getLanguage());
+    }
+
     protected void showProgressDialog() {
         DialogUtil.showProgressDialog(getActivity(), false);
     }

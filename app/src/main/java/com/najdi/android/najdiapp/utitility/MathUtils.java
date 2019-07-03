@@ -8,7 +8,7 @@ import java.util.Locale;
 public class MathUtils {
 
     private static String currencySymbol;
-    public static final String ORDER_STATUS_DATE_FORMAT = "MMM dd yy";
+    public static final String ORDER_STATUS_DATE_FORMAT = "MMM/dd/yy";
     public static final String ORDER_COMPLETE_DATE_FORMAT = "MMM dd yy";
 
     public static String formateStringDate(String date, String dateFormatWanted) {

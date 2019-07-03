@@ -123,7 +123,7 @@ public class Repository {
                 PreferenceUtils.USER_LOGIIN_TOKEN);
         String userId = String.valueOf(PreferenceUtils.getValueInt(resourceProvider.getAppContext(),
                 PreferenceUtils.USER_ID_KEY));
-        RetrofitClient.getInstance().getCart(Constants.BEARER + token, userId,
+        RetrofitClient.getInstance().getCart(userId,
                 resourceProvider.getCountryLang()).enqueue(new RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<CartResponse>() {
             @Override
             public void onSuccesResponse(Call<CartResponse> call, CartResponse cartResponse) {
@@ -389,8 +389,8 @@ public class Repository {
                 PreferenceUtils.USER_ID_KEY));
         String token = PreferenceUtils.getValueString(resourceProvider.getAppContext(),
                 PreferenceUtils.USER_LOGIIN_TOKEN);
-        RetrofitClient.getInstance().getCartCount(Constants.BEARER + token,
-                resourceProvider.getCountryLang(), userId).enqueue(new
+
+        RetrofitClient.getInstance().getCartCount(resourceProvider.getCountryLang(), userId).enqueue(new
                 RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<BaseResponse>() {
             @Override
             public void onSuccesResponse(Call<BaseResponse> call, BaseResponse baseResponse) {

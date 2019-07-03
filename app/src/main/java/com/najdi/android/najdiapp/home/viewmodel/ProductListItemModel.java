@@ -30,8 +30,13 @@ public class ProductListItemModel extends BaseObservable {
     public void setProductImg(String productImg) {
         this.productImg = productImg;
         notifyPropertyChanged(BR.productImg);
-
     }
+
+    @Bindable
+    public boolean isOnSale(){
+        return product.isOn_sale();
+    }
+
 
     @Bindable
     public String getProductImg() {

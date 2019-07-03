@@ -86,6 +86,7 @@
                         android:inputType="textPassword"
                         android:maxLength="20"
                         android:maxLines="1"
+                        android:textAlignment="viewStart"
                         android:text="@={viewModel.password}"
                         android:textColorHint="@color/grey_text"
                         android:textDirection="locale" />

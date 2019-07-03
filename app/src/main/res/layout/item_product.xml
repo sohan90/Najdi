@@ -2,7 +2,7 @@
 <layout xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <import type="android.view.View"/>
         <variable
             name="viewModel"
             type="com.najdi.android.najdiapp.home.viewmodel.ProductListItemModel" />
@@ -37,6 +37,18 @@
             android:layout_height="170dp"
             android:scaleType="centerCrop"
             bind:setImageUrl="@{viewModel.productImg}" />
+
+        <TextView
+            android:id="@+id/sale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sale"
+            android:minWidth="70dp"
+            android:padding="5dp"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:visibility="@{viewModel.onSale ? View.VISIBLE : View.GONE}"
+            android:background="@color/green_default"/>
 
         <LinearLayout
             android:id="@+id/detail_lyt"
