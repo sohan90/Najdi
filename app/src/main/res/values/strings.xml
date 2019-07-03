@@ -145,4 +145,6 @@
     <string name="please_otp_msg">Please enter your mobile number, You will receive  a One-Time-Password via SMS</string>
     <string name="submit">Submit</string>
     <string name="password_mismatched">Password mismatched!</string>
+    <string name="building_number">Building number</string>
+    <string name="direct_transfer_title">Direct Bank Transfer</string>
 </resources>

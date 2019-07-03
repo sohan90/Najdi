@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.najdi.android.najdiapp.home.viewmodel.ChangeMobileNoViewModel" />
+    </data>
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -8,12 +15,18 @@
         android:orientation="vertical"
         android:padding="20dp">
 
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_keyboard_arrow_left_black_24dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="30dp"
+            android:layout_marginTop="20dp"
             android:text="@string/change_mobile_number"
             android:textColor="@color/black"
             android:textSize="20sp"
@@ -51,9 +64,9 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="5dp"
                 android:gravity="center|start"
-                android:text="----------"
+                android:text="@={viewModel.oldMobileNo}"
                 android:textColor="@color/grey_text"
-                android:textSize="12sp" />
+                android:textSize="18sp" />
         </LinearLayout>
 
         <View
@@ -101,9 +114,11 @@
                 android:layout_marginStart="5dp"
                 android:background="@null"
                 android:gravity="center|start"
-                android:text="@string/mobile_number_5x"
+                android:inputType="number"
+                android:hint="@string/mobile_number_5x"
+                android:text="@={viewModel.newMobileNo}"
                 android:textColor="@color/grey_text"
-                android:textSize="12sp" />
+                android:textSize="18sp" />
         </LinearLayout>
 
         <View
@@ -113,6 +128,7 @@
             android:background="@color/grey_text" />
 
         <Button
+            android:id="@+id/update"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"

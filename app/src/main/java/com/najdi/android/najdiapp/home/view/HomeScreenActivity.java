@@ -53,6 +53,7 @@ import static com.najdi.android.najdiapp.common.Constants.ScreeNames.CONTACT_US;
 import static com.najdi.android.najdiapp.common.Constants.ScreeNames.ORDER_STATUS;
 import static com.najdi.android.najdiapp.common.Constants.ScreeNames.PRODUCTS;
 import static com.najdi.android.najdiapp.common.Constants.ScreeNames.PRODUCT_DETAIL;
+import static com.najdi.android.najdiapp.common.Constants.ScreeNames.PROFILE;
 import static com.najdi.android.najdiapp.common.Constants.ScreeNames.SHOPPING_CART;
 import static com.najdi.android.najdiapp.utitility.PreferenceUtils.USER_ID_KEY;
 import static com.najdi.android.najdiapp.utitility.PreferenceUtils.USER_LOGIIN_TOKEN;
@@ -131,6 +132,7 @@ public class HomeScreenActivity extends BaseActivity
         viewModel.getSetHomeScreenToolBarLiveData().observe(this, aBoolean -> {
             if (aBoolean) {
                 setHomeScreeToolBar();
+                getCartCount();
             }
         });
     }
@@ -202,6 +204,12 @@ public class HomeScreenActivity extends BaseActivity
             case CONTACT_US:
                 fragment = ContactUsFragment.createInstance();
                 fragmentTag = Constants.FragmentTags.CONTACT_US;
+                lockDrawer();
+                break;
+
+            case PROFILE:
+                fragment = ProfileFragment.createInstance();
+                fragmentTag = Constants.FragmentTags.PROFILE;
                 lockDrawer();
                 break;
 
@@ -362,7 +370,7 @@ public class HomeScreenActivity extends BaseActivity
                 if (fragment instanceof ProductListFragment) {
                     updateNavigationMenuHighlight(0);
                     unlockDrawer();
-                    cartImageLyt.setVisibility(View.INVISIBLE);
+                    cartImageLyt.setVisibility(View.VISIBLE);
                     getSupportActionBar().setDisplayHomeAsUpEnabled(false);
                     toggle.setDrawerIndicatorEnabled(true);
                     toggle.syncState();
@@ -410,6 +418,10 @@ public class HomeScreenActivity extends BaseActivity
 
             case R.id.log_out:
                 clearCredentialandFinish();
+                break;
+
+            case R.id.profile:
+                replaceFragment(PROFILE);
                 break;
 
         }

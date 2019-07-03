@@ -5,20 +5,21 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".common.NajdiApplication"
         android:allowBackup="true"
+        android:debuggable="true"
         android:icon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:debuggable="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".launch.view.SplashScreenActivity"
+        <activity
+            android:name=".launch.view.SplashScreenActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,7 +37,7 @@
         <activity
             android:name=".launch.view.OtpActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
+            android:windowSoftInputMode="stateHidden" />
 
         <activity
             android:name=".home.view.HomeScreenActivity"
@@ -50,14 +51,21 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.najdi.android.najdiapp.common.BaseActivity" />
         </activity>
-        <activity android:name=".checkout.view.CheckoutActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".checkout.view.CheckoutActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".launch.view.ChangePasswordActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".launch.view.ChangePasswordActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".home.view.ChangeMobileNoActivity"
+            android:screenOrientation="portrait" />
+
         <service
             android:name=".checkout.FetchAddressIntentService"
-            android:exported="false"/>
+            android:exported="false" />
     </application>
 
 </manifest>

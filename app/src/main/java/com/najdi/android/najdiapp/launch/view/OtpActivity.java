@@ -25,6 +25,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import static com.najdi.android.najdiapp.common.Constants.OtpScreen.SIGN_UP_SCREEN;
 import static com.najdi.android.najdiapp.launch.view.ChangePasswordActivity.EXTRA_CHANGE_PASSWORD_LAUNCH_TYPE;
+import static com.najdi.android.najdiapp.launch.view.ChangePasswordActivity.EXTRA_OTP_CODE;
 
 public class OtpActivity extends BaseActivity {
     ActivityOtpBinding binding;
@@ -121,32 +122,34 @@ public class OtpActivity extends BaseActivity {
         }
 
         liveData.observe(this, baseResponse -> {
+            hideProgressDialog();
             if (baseResponse != null) {
-                if (screenType == SIGN_UP_SCREEN) {
-                    login();// sign up flow
-                } else {
-                    hideProgressDialog();
-                    DialogUtil.showAlertDialog(this, baseResponse.getData().getMessage(),
-                            (dialog, which) -> {
-                                dialog.dismiss();
+                DialogUtil.showAlertDialog(this, baseResponse.getData().getMessage(),
+                        (dialog, which) -> {
+                            dialog.dismiss();
+                            if (screenType == SIGN_UP_SCREEN) {
+                                login();// sign up flow
+                            } else {
                                 launchChangePasswordScreen();
                                 finish();// forgot password flow
+                            }
 
-                            });
-                }
-            } else {
-                hideProgressDialog();
+                        });
             }
         });
     }
 
     private void launchChangePasswordScreen() {
+        String otp = viewModel.getOne().getValue() + viewModel.getTwo().getValue() +
+                viewModel.getThree().getValue() + viewModel.getFour().getValue();
         Intent intent = new Intent(this, ChangePasswordActivity.class);
         intent.putExtra(EXTRA_CHANGE_PASSWORD_LAUNCH_TYPE, Constants.OtpScreen.CHANGE_PASSWORD_OTP_SCREEN);
+        intent.putExtra(EXTRA_OTP_CODE, otp);
         startActivity(intent);
     }
 
     private void login() {
+        showProgressDialog();
         String userName = PreferenceUtils.getValueString(this, PreferenceUtils.USER_PHONE_NO_KEY);
         String password = PreferenceUtils.getValueString(this, PreferenceUtils.USER_PASSWORD);
         LiveData<BaseResponse> liveData = viewModel.login(userName, password);

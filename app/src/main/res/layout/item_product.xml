@@ -9,6 +9,7 @@
     </data>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/color_transparent"
@@ -87,13 +88,15 @@
             <Button
                 android:id="@+id/select"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_gravity="end"
                 android:layout_marginStart="10dp"
                 android:background="@drawable/round_corner_solid_green_selector"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
                 android:text="@string/select_options"
+                android:textAllCaps="false"
+                android:clickable="false"
                 android:textColor="@color/white"
                 android:visibility="@{viewModel.showDetailButton, default=visible}" />
 

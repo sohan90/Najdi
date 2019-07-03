@@ -7,6 +7,7 @@ import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.BaseViewModel;
 import com.najdi.android.najdiapp.home.model.CartRequest;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
+import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +35,7 @@ public class ProductDetailViewModel extends BaseViewModel {
 
     public void setDefaultPrice(String defaultPrice) {
         selectOptionPrice = defaultPrice;
+        incrementQuantity();
     }
 
     public void setTotalPrice(String totalPrice) {
@@ -142,8 +144,11 @@ public class ProductDetailViewModel extends BaseViewModel {
     }
 
     public LiveData<BaseResponse> removeCart(String itemKey) {
+        String userId = String.valueOf(PreferenceUtils.getValueInt(resourceProvider.getAppContext(),
+                PreferenceUtils.USER_ID_KEY));
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("cart_item_key", itemKey);
+        hashMap.put("customer", userId);
         return repository.removeCartItem(hashMap);
     }
 

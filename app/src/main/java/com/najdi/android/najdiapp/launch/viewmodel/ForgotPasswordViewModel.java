@@ -64,6 +64,15 @@ public class ForgotPasswordViewModel extends BaseViewModel {
         return repository.forgotUpdate(forgotPaswwordRequest);
     }
 
+    public LiveData<BaseResponse> changePassword(String phoneNo, String lang) {
+        ForgotPaswwordRequest forgotPaswwordRequest = new ForgotPaswwordRequest();
+        forgotPaswwordRequest.setMobile(phoneNo);
+        forgotPaswwordRequest.setLang(lang);
+        forgotPaswwordRequest.setPassword(oldPassword.getValue());
+        forgotPaswwordRequest.setNew_password(confirmPassword.getValue());
+        return repository.changePassword(forgotPaswwordRequest);
+    }
+
     public LiveData<Boolean> validatePassword() {
         boolean isValid = false;
         if (password.getValue() != null && confirmPassword.getValue() != null) {

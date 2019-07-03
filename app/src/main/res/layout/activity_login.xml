@@ -72,7 +72,6 @@
                     android:layout_margin="8dp"
                     android:layout_marginTop="5dp"
                     app:errorEnabled="true"
-                    android:textDirection="locale"
                     app:hintTextAppearance="@style/HintText"
                     app:passwordToggleEnabled="true"
                     app:passwordToggleTint="@color/green_default"

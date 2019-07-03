@@ -17,7 +17,7 @@ public class Constants {
     public static final String BEARER = "Bearer ";
     public static final String LAUNCH_CART = "launch_cart ";
     public static final String LAUNCH_PRODUCT = "launch_product ";
-    public static final String LAUNC_BANK_ACCOUNT = "launch_product ";
+    public static final String LAUNC_BANK_ACCOUNT = "launch_bank_account";
     public static final int PASSWORD_MAX_LENGTH = 20;
 
     public interface FragmentTags {
@@ -33,6 +33,7 @@ public class Constants {
         String ABOUT_US = "about_us";
         String CONTACT_US = "contact_us";
         String FORGOT_PASSWORD = "forgot_password";
+        String PROFILE = "profile_tag";
 
     }
 
@@ -46,6 +47,7 @@ public class Constants {
         int BANK_ACCOUNTS = 4;
         int ABOUT_US = 5;
         int CONTACT_US = 6;
+        int PROFILE = 7;
     }
 
     @IntDef(value = {HtmlScreen.ABOUT_US, HtmlScreen.TERMS_CONDITION, HtmlScreen.PRIVACY_POLICY})

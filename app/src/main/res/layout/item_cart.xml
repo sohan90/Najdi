@@ -42,10 +42,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_toStartOf="@id/edit"
+                    android:layout_marginEnd="10dp"
                     android:layout_toEndOf="@id/img"
                     android:ellipsize="end"
+                    android:gravity="start"
+                    android:textDirection="locale"
                     android:maxLines="1"
-                    android:text="@{cartModel.postName}"
+                    android:text="@{cartModel.postName, default=`---------`}"
                     android:textColor="@color/black" />
 
                 <TextView
@@ -90,6 +93,7 @@
                         android:background="@drawable/checkout_circle"
                         android:gravity="center"
                         android:text="-"
+                        android:layout_marginStart="5dp"
                         android:textColor="@color/white" />
 
                     <TextView
@@ -108,21 +112,26 @@
                         android:background="@drawable/checkout_circle"
                         android:gravity="center"
                         android:text="+"
+                        android:layout_marginEnd="5dp"
                         android:textColor="@color/white" />
                 </LinearLayout>
 
                 <ImageView
                     android:id="@+id/edit"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="5dp"
+                    android:layout_marginBottom="5dp"
                     android:layout_alignParentEnd="true"
                     android:src="@drawable/ic_edit_black_24dp" />
 
                 <ImageView
                     android:id="@+id/delete"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="5dp"
                     android:layout_alignParentEnd="true"
+                    android:layout_marginTop="5dp"
                     android:layout_centerVertical="true"
                     android:src="@drawable/ic_delete_forever_black_24dp" />
 

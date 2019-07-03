@@ -81,6 +81,7 @@ public class OrderCompleteFragment extends BaseFragment {
     }
 
     private void initializeActivityViewModel() {
+        if(getActivity() == null) return;
         activityViewModel = ViewModelProviders.of(getActivity()).get(CheckoutViewModel.class);
     }
 }

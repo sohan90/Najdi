@@ -5,7 +5,7 @@
     <string name="welcome_msg">أهلاً بك في نجدي</string>
     <string name="sign_up">"إنشاء حساب "</string>
     <string name="mobile_number_5x">رقم الجوال(5xxxxxxxx)</string>
-    <string name="password">كلمة المرور</string>
+    <string name="password">تأكيد رقم الجوال</string>
     <string name="confirm_password">الدخول كزائر</string>
     <string name="name_optional">الاسم (اختياري)</string>
     <string name="email_optional">البريد الإلكتروني (اختياري)</string>
@@ -35,7 +35,7 @@
     <string name="subtotal">المجموع الفرعي</string>
     <string name="our_bank_accounts"><u>حساباتنا البنكية</u></string>
     <string name="our_bank_accounts_drawer">حساباتنا البنكية</string>
-    <string name="invalid_pass">الرجاء إدخال كلمة المرور الصحيحة</string>
+    <string name="invalid_pass">تأكيد كلمة المرور غير صحيح</string>
     <string name="category">الفئة</string>
     <string name="product_details">تفاصيل المنتج</string>
     <string name="cart">سلة التسوق</string>
@@ -88,13 +88,13 @@
 يتم تجميع الطلبات إلى ما قبل الساعة 4:00 م، ويتم توصيلها في نفس اليوم.
 أي طلب يصلنا بعد الساعة 4:00 م سيتم توصيله في اليوم التالي.</string>
     <string name="arabic">ع</string>
-    <string name="dont_t_have_an_account_sign_up">.عربة التسوق فارغة حاليا.</string>
+    <string name="dont_t_have_an_account_sign_up">ليس لديك حساب؟!</string>
     <string name="sign_to_continue">تسجيل الدخول للمتابعة</string>
     <string name="legs">الساقين</string>
-    <string name="head">رئيس</string>
+    <string name="head">الرأس</string>
     <string name="minced_meat">لحم مفروم</string>
     <string name="order_received">"تم استلام الطلب "</string>
-    <string name="invalid_phone_no">رقم الهاتف غير صحيح</string>
+    <string name="invalid_phone_no">الرجاء إدخال 9 ارقام لرقم الجوال</string>
     <string name="product_added_success">تتم إضافة المنتج إلى سلة التسوق بنجاح</string>
     <string name="add_to_cart">أضف إلى السلة</string>
     <string name="andStr">و</string>
@@ -106,4 +106,7 @@
     <string name="direct_bank_transer_msg">\"اجعلك تدفع مباشرة في حسابنا المصرفي. يرجى استخدام معرف الطلب الخاص بك كمراجع للدفع ، ولن يتم شحن طلبك حتى يتم إضافة الأموال إلى حسابنا</string>
     <string name="update_cart_label">تحديث العربة</string>
     <string name="product_updated_success">تم تحديث المنتج إلى عربة التسوق بنجاح</string>
+    <string name="building_number">رقم المبنى</string>
+    <string name="direct_transfer_title">تحويل بنكي</string>
+    <string name="send">إرسال</string>
 </resources>

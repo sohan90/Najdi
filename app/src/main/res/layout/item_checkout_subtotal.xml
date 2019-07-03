@@ -11,7 +11,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/color_transparent"
+        android:background="@color/white_eighty"
         android:orientation="vertical">
 
         <TextView
@@ -146,8 +146,17 @@
                 android:checked="false"
                 android:padding="10dp"
                 android:tag="bacs"
-                android:text="@string/direct_bank_transer_msg"
+                android:text="@string/direct_transfer_title"
                 android:textColor="@color/black" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="@string/direct_bank_transer_msg"/>
 
             <RadioButton
                 android:id="@+id/cash_delivery"

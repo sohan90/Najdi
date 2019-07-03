@@ -33,6 +33,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_toStartOf="@id/clear"
+                    android:padding="5dp"
                     android:src="@drawable/ic_refresh_green_24dp" />
 
                 <TextView
@@ -43,8 +44,7 @@
                     android:layout_marginStart="10dp"
                     android:text="@string/clear"
                     android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:textSize="18sp" />
 
             </RelativeLayout>
 
@@ -180,6 +180,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
+                    android:enabled="false"
                     android:textColorHint="@color/grey_text" />
             </LinearLayout>
 

@@ -23,6 +23,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         resourProvider = NajdiApplication.get(this).getResourceProvider();
+        updateLocale();
     }
 
     private void updateLocale() {
