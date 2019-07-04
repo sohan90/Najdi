@@ -73,7 +73,7 @@ public class ContactUsFragment extends BaseFragment implements TextWatcher {
                     hideProgressDialog();
                     if (baseResponse != null && baseResponse.getData() != null) {
                         String message = baseResponse.getData().getMessage();
-                        ToastUtils.getInstance(getActivity()).showShortToast(message);
+                        ToastUtils.getInstance(getActivity()).showShortToast(getString(R.string.message_success));
                     }
                 });
             }

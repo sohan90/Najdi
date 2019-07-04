@@ -128,4 +128,9 @@ public interface NajdiApi {
     @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
     Call<HtmlResponseForNajdi> getHtmlTermsAboutUsPrivacyPolicy(@Path("page_id") int pageId);
 
+    @GET(BuildConfig.NAJDI_CART_BASE_URL + "wc/v2/products/{product_id}/variations/{variation_id}")
+    @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
+    Call<ProductListResponse> getVartionForSelectedProduct(@Path("product_id")int productId,
+                                                            @Path("variation_id") int variationId);
+
 }

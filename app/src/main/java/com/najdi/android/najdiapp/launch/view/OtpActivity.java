@@ -124,7 +124,7 @@ public class OtpActivity extends BaseActivity {
         liveData.observe(this, baseResponse -> {
             hideProgressDialog();
             if (baseResponse != null) {
-                DialogUtil.showAlertDialog(this, baseResponse.getData().getMessage(),
+                DialogUtil.showAlertDialog(this, getString(R.string.verification_matched),
                         (dialog, which) -> {
                             dialog.dismiss();
                             if (screenType == SIGN_UP_SCREEN) {

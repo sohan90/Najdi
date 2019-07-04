@@ -146,6 +146,7 @@
                     android:imeOptions="actionNext"
                     android:inputType="none"
                     android:paddingTop="5dp"
+                    android:enabled="false"
                     android:textColorHint="@color/grey_text"
                     android:translationY="5dp" />
 

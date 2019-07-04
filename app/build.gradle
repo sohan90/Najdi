@@ -29,7 +29,7 @@ android {
 
             buildConfigField 'String', 'NAJDI_END_POINTS', '"https://najdisheep.com/wp-json/wc/v2/"'
             buildConfigField 'String', 'NAJDI_CART_BASE_URL', '"https://najdisheep.com/wp-json/"'
-            buildConfigField 'String', 'BASIC_64_AUTH', '"Basic Y2tfNjg2MzA3NTNjNDQ1YzVjYzczMTJmYzE0MGIyNmEwNTM4MTA5OGZlNDpjc19iOTQxZjU3ZmRkMjUwNGUyNTNjNmQ2Y2M2NjBjNGUyZmRhNWE5Zjgx"'
+            buildConfigField 'String', 'BASIC_64_AUTH', '"Basic Y2tfMGJjMTljMWY0ZGUwNTU4YWQ0MmFjYTU2MDFiY2MyNzVlNTVmOTExZDpjc185MzA3MjVlZTBhOTE2ODkxNDEwZGI5MmQzZWI4MjcxYTcwYjVhMzBm"'
             dimension "environment"
         }
     }

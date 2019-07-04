@@ -541,4 +541,26 @@ public class Repository {
         }));
         return liveData;
     }
+
+    public LiveData<ProductListResponse> getVariationForProduct(int productId, int variaionId) {
+        MutableLiveData<ProductListResponse> liveData = new MutableLiveData<>();
+        RetrofitClient.getInstance().getVartionForSelectedProduct(productId, variaionId).enqueue(new
+                RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<ProductListResponse>() {
+            @Override
+            public void onSuccesResponse(Call<ProductListResponse> call, ProductListResponse baseResponse) {
+                if (baseResponse != null) {
+                    liveData.setValue(baseResponse);
+                }
+            }
+
+            @Override
+            public void onFailurResponse(Call<ProductListResponse> call, BaseResponse baseResponse) {
+                if (baseResponse != null) {
+                    baseResponse.handleError(resourceProvider.getAppContext());
+                }
+                liveData.setValue(null);
+            }
+        }));
+        return liveData;
+    }
 }

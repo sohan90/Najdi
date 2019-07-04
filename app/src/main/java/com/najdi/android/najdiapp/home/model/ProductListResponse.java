@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,6 +24,8 @@ public class ProductListResponse implements Parcelable {
     String short_description;
     boolean in_stock;
     boolean on_sale;
+    Integer stock_quantity;
+    String total_sales;
     List<Image> images;
     List<Attributes> attributes;
     List<VariationData> variations_data;
@@ -35,6 +38,13 @@ public class ProductListResponse implements Parcelable {
         return on_sale;
     }
 
+    public String getTotal_sales() {
+        return total_sales;
+    }
+
+    public Integer getStock_quantity() {
+        return stock_quantity;
+    }
 
     // local data
     private CartResponse.CartData cartData;
@@ -58,6 +68,8 @@ public class ProductListResponse implements Parcelable {
         price_html = in.readString();
         in_stock = in.readByte() != 0;
         on_sale = in.readByte() != 0;
+        total_sales = in.readString();
+        stock_quantity = in.readInt();
     }
 
     public static final Creator<ProductListResponse> CREATOR = new Creator<ProductListResponse>() {
@@ -165,6 +177,8 @@ public class ProductListResponse implements Parcelable {
         dest.writeString(price_html);
         dest.writeByte((byte) (in_stock ? 1 : 0));
         dest.writeByte((byte) (on_sale ? 1 : 0));
+        dest.writeString(total_sales);
+        dest.writeInt(stock_quantity);
     }
 
     public static class Image implements Parcelable {
@@ -335,4 +349,5 @@ public class ProductListResponse implements Parcelable {
             dest.writeString(variation_sales_price);
         }
     }
+
 }

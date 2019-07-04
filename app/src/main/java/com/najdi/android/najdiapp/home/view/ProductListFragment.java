@@ -59,6 +59,7 @@ public class ProductListFragment extends BaseFragment {
     private void subscribeForProductList() {
         homeScreeViewModel.getProductList().observe(this, productListResponses -> {
             List<ProductListResponse> listResponseList = getVisibilityProducts(productListResponses);
+            homeScreeViewModel.sortProduct(listResponseList);
             adapter.setData(listResponseList);
         });
     }

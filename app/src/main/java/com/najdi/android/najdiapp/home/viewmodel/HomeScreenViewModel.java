@@ -1,6 +1,7 @@
 package com.najdi.android.najdiapp.home.viewmodel;
 
 import android.app.Application;
+import android.content.Intent;
 
 import com.najdi.android.najdiapp.checkout.model.OrderResponse;
 import com.najdi.android.najdiapp.common.BaseResponse;
@@ -9,6 +10,8 @@ import com.najdi.android.najdiapp.home.model.ProductDetailBundleModel;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -128,5 +131,22 @@ public class HomeScreenViewModel extends BaseViewModel {
 
     public LiveData<BaseResponse> getCartCount() {
         return repository.getCartCount();
+    }
+
+    public void sortProduct(List<ProductListResponse> list) {
+
+        Comparator<ProductListResponse> COMPARATOR = (o1, o2) -> {
+            int totalSale1;
+            int totalSale2;
+            try {
+                totalSale1 = Integer.parseInt(o1.getTotal_sales());
+                totalSale2 = Integer.parseInt(o2.getTotal_sales());
+            } catch (NumberFormatException e) {
+                return 0;
+            }
+            return totalSale2 - totalSale1;
+        };
+
+        Collections.sort(list, COMPARATOR);
     }
 }

@@ -65,8 +65,30 @@ public class ProductDetailFragment extends BaseFragment {
         initializeHomeScreenViewModel();
         initializeClickListener();
         updateNotificationCartCount();
+        subscribeForVariationQuantity();
         fetchProductDetail();
         return binding.getRoot();
+    }
+
+    private void subscribeForVariationQuantity() {
+        viewModel.getVariaitionQuantity.observe(this, aBoolean -> {
+            showProgressDialog();
+            if (aBoolean) {
+                getVariationFromServer();
+            }
+        });
+    }
+
+    private void getVariationFromServer() {
+        LiveData<ProductListResponse> liveData = viewModel.getVariationQuantity(productListResponse.getId(),
+                viewModel.getVariationId());
+
+        liveData.observe(this, productListResponse1 -> {
+            hideProgressDialog();
+            if (productListResponse1 != null) {
+                viewModel.setMaxVariationQuantity(productListResponse1.getStock_quantity());
+            }
+        });
     }
 
 

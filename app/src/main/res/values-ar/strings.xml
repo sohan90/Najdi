@@ -95,7 +95,7 @@
     <string name="minced_meat">لحم مفروم</string>
     <string name="order_received">"تم استلام الطلب "</string>
     <string name="invalid_phone_no">الرجاء إدخال 9 ارقام لرقم الجوال</string>
-    <string name="product_added_success">تتم إضافة المنتج إلى سلة التسوق بنجاح</string>
+    <string name="product_added_success">تم إضافة المنتج إلى سلة التسوق</string>
     <string name="add_to_cart">أضف إلى السلة</string>
     <string name="andStr">و</string>
     <string name="please_fill">يرجى ملء جميع الحقول المطلوبة</string>
@@ -124,9 +124,14 @@
     <string name="new_mobile_number">رقم الجوال الجديد</string>
     <string name="forgot_your_password">نسيت رقمك السري</string>
     <string name="please_otp_msg">الرجاء إدخال رقم هاتفك المحمول ، ستتلقى كلمة مرور لمرة واحدة عبر الرسائل القصيرة</string>
-    <string name="submit">خضع</string>
+    <string name="submit">تأكيد</string>
     <string name="password_mismatched">كلمة المرور غير متطابقة!</string>
     <string name="cancel">إلغاء</string>
     <string name="action_settings">الإعدادات</string>
     <string name="ok">حسنا</string>
+    <string name="resend_code_in_30s">إعادة الإرسال %s</string>
+    <string name="resend_code">إعادة الإرسال</string>
+    <string name="profile_succes_msg">تم تحديث الملف الشخصي بنجاح</string>
+    <string name="verification_matched">كلمة مرور التحقق مطابقة!</string>
+    <string name="message_success">لقد تم استلام رسالتك، وسوف نتصل بك قريبًا</string>
 </resources>

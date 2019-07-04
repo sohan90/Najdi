@@ -23,10 +23,12 @@ public class ProductDetailViewModel extends BaseViewModel {
     public MutableLiveData<Integer> quantityCount = new MutableLiveData<>();
     public MutableLiveData<Boolean> enableAddCartButton = new MutableLiveData<>();
     public MutableLiveData<Boolean> enableProceed = new MutableLiveData<>();
+    public MutableLiveData<Boolean> getVariaitionQuantity = new MutableLiveData<>();
     private String selectOptionPrice;
     private HashMap<String, String> attributHashMap;
     private ProductListResponse productListResponse;
     private int variationId;
+    private int setMaxvariationQuantity;
 
     public ProductDetailViewModel(@NonNull Application application) {
         super(application);
@@ -37,7 +39,7 @@ public class ProductDetailViewModel extends BaseViewModel {
         selectOptionPrice = defaultPrice;
     }
 
-    public void setDefaultQuantity(){
+    public void setDefaultQuantity() {
         incrementQuantity();
     }
 
@@ -45,9 +47,8 @@ public class ProductDetailViewModel extends BaseViewModel {
         this.totalPrice.setValue(getCurrencyConcatintedString(totalPrice));
     }
 
-    private String getCurrencyConcatintedString(String price){
-        String priceCurrency = price.concat(" ").
-                concat(resourceProvider.getString(R.string.currency));
+    private String getCurrencyConcatintedString(String price) {
+        String priceCurrency = price.concat(" ").concat(resourceProvider.getString(R.string.currency));
         return priceCurrency;
     }
 
@@ -56,13 +57,18 @@ public class ProductDetailViewModel extends BaseViewModel {
     }
 
     public void incrementQuantity() {
-        if (quantityCount.getValue() != null) {
+        if (quantityCount.getValue() != null && quantityCount.getValue() <= setMaxvariationQuantity) {
+
             quantityCount.setValue(quantityCount.getValue() + 1);
+            updateTotalPrice(selectOptionPrice);
+            enableAddCartButton();
         }
-        updateTotalPrice(selectOptionPrice);
-        enableAddCartButton();
     }
 
+
+    public void setMaxVariationQuantity(int quantity) {
+        this.setMaxvariationQuantity = quantity;
+    }
 
     public void decrementQuantity() {
         if (quantityCount.getValue() != null && quantityCount.getValue() > 0) {
@@ -72,21 +78,30 @@ public class ProductDetailViewModel extends BaseViewModel {
         enableAddCartButton();
     }
 
-    public void updatePrice(ProductListResponse productListResponse, String selectedValue, int selectedId) {
+    public void updatePrice(ProductListResponse productListResponse, String selectedSlugValue, int selectedId) {
         this.productListResponse = productListResponse;
-        createAttributeForSelectedValue(selectedValue, selectedId);
+        createAttributeForSelectedValue(selectedSlugValue, selectedId);
         parent:
         for (ProductListResponse.VariationData variationData : productListResponse.getVariationsData()) {
             HashMap<String, String> variationType = variationData.getAttributes();
             for (Map.Entry<String, String> entry : variationType.entrySet()) {
-                if (entry.getValue().equalsIgnoreCase(selectedValue)) {
+                if (entry.getValue().equalsIgnoreCase(selectedSlugValue)) {
                     selectOptionPrice = variationData.getVariationRegularPrice();
                     variationId = variationData.getVariation_id();
+                    getQuantityLimitForSelectedVariation();
                     updateTotalPrice(selectOptionPrice);
                     break parent;
                 }
             }
         }
+    }
+
+    private void getQuantityLimitForSelectedVariation() {
+        getVariaitionQuantity.setValue(true);
+    }
+
+    public int getVariationId() {
+        return variationId;
     }
 
     private void createAttributeForSelectedValue(String selectedValue, int selectedId) {
@@ -155,4 +170,8 @@ public class ProductDetailViewModel extends BaseViewModel {
         return repository.removeCartItem(hashMap);
     }
 
+
+    public LiveData<ProductListResponse> getVariationQuantity(int productId, int variationId) {
+        return repository.getVariationForProduct(productId, variationId);
+    }
 }

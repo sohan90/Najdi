@@ -1,5 +1,6 @@
 package com.najdi.android.najdiapp.home.view;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import com.najdi.android.najdiapp.databinding.FragmentProfileBinding;
 import com.najdi.android.najdiapp.home.viewmodel.HomeScreenViewModel;
 import com.najdi.android.najdiapp.home.viewmodel.ProfileViewModel;
 import com.najdi.android.najdiapp.launch.view.ChangePasswordActivity;
+import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 import com.najdi.android.najdiapp.utitility.ToastUtils;
 
@@ -72,6 +74,8 @@ public class ProfileFragment extends BaseFragment {
                     binding.name.getText().toString());
             PreferenceUtils.setValueString(getActivity(), PreferenceUtils.USER_EMAIL_KEY,
                     binding.email.getText().toString());
+            DialogUtil.showAlertDialog(getActivity(), getString(R.string.profile_succes_msg),
+                    (dialog, which) -> dialog.dismiss());
         } else {
             ToastUtils.getInstance(getActivity()).showShortToast(getString(R.string.please_fill));
         }
