@@ -63,7 +63,10 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHo
 
             InflateVariationItemBinding binding = InflateVariationItemBinding.bind(view);
 
+            if (entry.getKey().endsWith("_slug")) continue;
+
             String replaceKey = entry.getKey().replace("attribute_pa_", "");
+
             String translatedKey;
             try {
                 translatedKey = (String) view.getContext().getResources().

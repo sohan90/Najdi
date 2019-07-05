@@ -71,7 +71,7 @@ public class ProductDetailViewModel extends BaseViewModel {
     }
 
     public void decrementQuantity() {
-        if (quantityCount.getValue() != null && quantityCount.getValue() > 0) {
+        if (quantityCount.getValue() != null && quantityCount.getValue() > 1) {
             quantityCount.setValue(quantityCount.getValue() - 1);
         }
         updateTotalPrice(selectOptionPrice);

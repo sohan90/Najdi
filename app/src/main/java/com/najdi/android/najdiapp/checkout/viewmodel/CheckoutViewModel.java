@@ -12,7 +12,9 @@ import com.najdi.android.najdiapp.launch.model.BillingAddress;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -102,12 +104,25 @@ public class CheckoutViewModel extends BaseViewModel {
             LineItemModelRequest lineItemModelRequest = new LineItemModelRequest();
             lineItemModelRequest.setProduct_id(cartData1.getProductId());
             lineItemModelRequest.setQuantity(cartData1.getQuantity());
-            lineItemModelRequest.setVariations(cartData1.getVariation());
+            HashMap<String, String> slugValueMap = getSlugValueFromMap(cartData1.getVariation());
+            lineItemModelRequest.setVariations(slugValueMap);
             list.add(lineItemModelRequest);
         }
 
         orderRequest.setLine_items(list);
         return repository.createOrder(userId, orderRequest);
+    }
+
+    private HashMap<String, String> getSlugValueFromMap(HashMap<String, String> variation) {
+        HashMap<String, String> slugValues = new HashMap<>();
+        for (Map.Entry<String, String> entry : variation.entrySet()) {
+            if (entry.getKey().endsWith("_slug")) {
+                String pa_key = entry.getKey().replace("attribute_", "");
+                String key = pa_key.replace("_slug", "");
+                slugValues.put(key, entry.getValue());
+            }
+        }
+        return slugValues;
     }
 
     public MutableLiveData<OrderResponse> orderResponseMutableLiveData() {
@@ -117,9 +132,10 @@ public class CheckoutViewModel extends BaseViewModel {
         return orderResponseMutableLiveData;
     }
 
-    public LiveData<BaseResponse> getCartCount(){
+    public LiveData<BaseResponse> getCartCount() {
         return repository.getCartCount();
     }
+
     public LiveData<BaseResponse> clearCart() {
         return repository.clearCart();
     }

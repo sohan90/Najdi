@@ -12,6 +12,10 @@ import static org.junit.Assert.*;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
+        String app = "attribute_pa_size_slug";
+        if(app.endsWith("_slug")){
+          String pa_key =  app.replace("attribute_","");
+          String finalResult = pa_key.replace("_slug","");
+        }
     }
 }

@@ -13,6 +13,7 @@ import android.util.Log;
 
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.Constants;
+import com.najdi.android.najdiapp.utitility.LocaleUtitlity;
 import com.najdi.android.najdiapp.utitility.LogUtil;
 
 import java.io.IOException;
@@ -37,7 +38,7 @@ public class FetchAddressIntentService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         if (intent == null) return;
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        Geocoder geocoder = new Geocoder(this, LocaleUtitlity.getLocale());
         // Get the location passed to this service through an extra.
         Location location = intent.getParcelableExtra(Constants.LOCATION_DATA_EXTRA);
         resultReceiver = intent.getParcelableExtra(Constants.RECEIVER);
