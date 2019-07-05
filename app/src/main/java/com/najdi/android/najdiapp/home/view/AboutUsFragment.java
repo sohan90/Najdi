@@ -1,6 +1,7 @@
 package com.najdi.android.najdiapp.home.view;
 
 import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,7 +85,8 @@ public class AboutUsFragment extends BaseFragment {
             hideProgressDialog();
             if (htmlResponseForNajdi != null) {
                 String htmlcontent = htmlResponseForNajdi.getContent().getContent();
-                binding.webview.loadDataWithBaseURL("", htmlcontent,
+                String imgageTrimmedHtml = htmlcontent.replaceAll("<img.+?>", "");
+                binding.webview.loadDataWithBaseURL("", imgageTrimmedHtml,
                         "text/html", "UTF-8", "");
             }
         });
