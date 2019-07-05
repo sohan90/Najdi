@@ -8,12 +8,15 @@ import android.os.Bundle;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.LocaleUtitlity;
 import com.najdi.android.najdiapp.utitility.MathUtils;
+import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 import com.najdi.android.najdiapp.utitility.ResourceProvider;
 
 import java.util.Locale;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import static com.najdi.android.najdiapp.common.Constants.ARABIC_LAN;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -23,11 +26,12 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         resourProvider = NajdiApplication.get(this).getResourceProvider();
-        updateLocale();
+        String lang = PreferenceUtils.getLangFromPref(this);
+        updateLocale(lang);
     }
 
-    private void updateLocale() {
-        setLocaleLanguage(getCurrentLocale().getLanguage());
+    private void updateLocale(String lang) {
+        setLocaleLanguage(lang);
         resourProvider.setActivityContext(this);
         resourProvider.setCurrentLocale(getCurrentLocale());
         LocaleUtitlity.setCurrentLocale(getCurrentLocale());
@@ -72,7 +76,6 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        updateLocale();
     }
 
     @Override

@@ -1,19 +1,26 @@
 package com.najdi.android.najdiapp.home.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseActivity;
 import com.najdi.android.najdiapp.common.BaseResponse;
+import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.databinding.ActivityChangeMobileNumberBinding;
 import com.najdi.android.najdiapp.home.viewmodel.ChangeMobileNoViewModel;
+import com.najdi.android.najdiapp.launch.view.OtpActivity;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProviders;
+
+import static com.najdi.android.najdiapp.launch.view.OtpActivity.EXTRA_NEW_MOBILE_NO;
+import static com.najdi.android.najdiapp.launch.view.OtpActivity.EXTRA_SCREEN_TYPE;
 
 public class ChangeMobileNoActivity extends BaseActivity {
 
@@ -42,10 +49,18 @@ public class ChangeMobileNoActivity extends BaseActivity {
                             (dialog, which) -> {
                                 dialog.dismiss();
                                 finish();
+                                launchOtpActivity(viewModel.getNewMobileNo());
                             });
                 }
             });
         });
+    }
+
+    private void launchOtpActivity(MutableLiveData<String> newMobileNo) {
+        Intent intent = new Intent(this, OtpActivity.class);
+        intent.putExtra(EXTRA_SCREEN_TYPE, Constants.OtpScreen.CHANGE_MOBILE_VERIFY);
+        intent.putExtra(EXTRA_NEW_MOBILE_NO, newMobileNo.getValue());
+        startActivity(intent);
     }
 
     private void setData() {

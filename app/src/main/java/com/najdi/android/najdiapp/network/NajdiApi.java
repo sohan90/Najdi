@@ -119,6 +119,10 @@ public interface NajdiApi {
     @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
     Call<BaseResponse> mobileChange(@Body ForgotPaswwordRequest request);
 
+    @POST(BuildConfig.NAJDI_CART_BASE_URL + "customapi/mobile_change_verify")
+    @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
+    Call<BaseResponse> mobileChangeVerify(@Body ForgotPaswwordRequest request);
+
     @POST(BuildConfig.NAJDI_CART_BASE_URL + "customapi/password_change")
     @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
     Call<BaseResponse> changePasswormd(@Body ForgotPaswwordRequest request);

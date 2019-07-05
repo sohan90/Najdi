@@ -48,7 +48,7 @@ public class ChangePasswordActivity extends BaseActivity {
         } else {
             binding.oldPasswordLyt.setVisibility(View.VISIBLE);
             String password = PreferenceUtils.getValueString(this, PreferenceUtils.USER_PASSWORD);
-            viewModel.getOldPassword().setValue(password);
+            //viewModel.getOldPassword().setValue(password);
             binding.newPassword.requestFocus();
         }
     }

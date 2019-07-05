@@ -23,6 +23,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 
+import static com.najdi.android.najdiapp.common.Constants.OtpScreen.CHANGE_MOBILE_VERIFY;
 import static com.najdi.android.najdiapp.common.Constants.OtpScreen.SIGN_UP_SCREEN;
 import static com.najdi.android.najdiapp.launch.view.ChangePasswordActivity.EXTRA_CHANGE_PASSWORD_LAUNCH_TYPE;
 import static com.najdi.android.najdiapp.launch.view.ChangePasswordActivity.EXTRA_OTP_CODE;
@@ -32,7 +33,9 @@ public class OtpActivity extends BaseActivity {
     private OtpViewModel viewModel;
     int startSec = 30;
     public static final String EXTRA_SCREEN_TYPE = "extra_screen_type_otp";
+    public static final String EXTRA_NEW_MOBILE_NO = "extra_mobile_no";
     private int screenType;
+    private String newMobileNo;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,11 +46,20 @@ public class OtpActivity extends BaseActivity {
         bindViewModel();
         initClickListener();
         startHandlerFor30S();
+        updateViewModel();
+    }
+
+    private void updateViewModel() {
+        viewModel.setScreenType(screenType);
+        viewModel.setNewMobile(newMobileNo);
     }
 
     private void getLaunchTypeFromBundle() {
         if (getIntent() != null) {
             screenType = getIntent().getIntExtra(EXTRA_SCREEN_TYPE, -1);
+            if (getIntent().hasExtra(EXTRA_NEW_MOBILE_NO)) {
+                newMobileNo = getIntent().getStringExtra(EXTRA_NEW_MOBILE_NO);
+            }
         }
     }
 
@@ -98,7 +110,13 @@ public class OtpActivity extends BaseActivity {
 
     private void resendOtp() {
         showProgressDialog();
-        viewModel.resendOtp().observe(this, baseResponse -> {
+        LiveData<BaseResponse> liveData;
+        if (screenType == CHANGE_MOBILE_VERIFY) {
+            liveData = viewModel.resendOtp(newMobileNo);
+        } else {
+            liveData = viewModel.resendOtp();
+        }
+        liveData.observe(this, baseResponse -> {
             hideProgressDialog();
             if (baseResponse != null) {
                 if (baseResponse.getData() != null) {
@@ -116,7 +134,13 @@ public class OtpActivity extends BaseActivity {
         if (screenType == SIGN_UP_SCREEN) {
             liveData = viewModel.verifyOtp(PreferenceUtils.getValueString(this,
                     PreferenceUtils.USER_PHONE_NO_KEY));
+
+        } else if (screenType == CHANGE_MOBILE_VERIFY) {
+
+            liveData = viewModel.mobileNoverify(PreferenceUtils.getValueString(this,
+                    PreferenceUtils.USER_PHONE_NO_KEY), newMobileNo);// change mobile no verification
         } else {
+
             liveData = viewModel.verifyOtpForForgotPassword(PreferenceUtils.getValueString(this,
                     PreferenceUtils.USER_PHONE_NO_KEY));// forgot password flow
         }
@@ -124,16 +148,25 @@ public class OtpActivity extends BaseActivity {
         liveData.observe(this, baseResponse -> {
             hideProgressDialog();
             if (baseResponse != null) {
-                DialogUtil.showAlertDialog(this, getString(R.string.verification_matched),
+                String messsage;
+                if (screenType == CHANGE_MOBILE_VERIFY) {
+                    messsage = getString(R.string.mobile_no_success_msg);
+                } else {
+                    messsage = getString(R.string.verification_matched);
+                }
+                DialogUtil.showAlertDialog(this, messsage,
                         (dialog, which) -> {
                             dialog.dismiss();
                             if (screenType == SIGN_UP_SCREEN) {
                                 login();// sign up flow
+                            } else if (screenType == CHANGE_MOBILE_VERIFY) {
+                                PreferenceUtils.setValueString(this,
+                                        PreferenceUtils.USER_PHONE_NO_KEY, newMobileNo);
+                                finish();
                             } else {
                                 launchChangePasswordScreen();
                                 finish();// forgot password flow
                             }
-
                         });
             }
         });

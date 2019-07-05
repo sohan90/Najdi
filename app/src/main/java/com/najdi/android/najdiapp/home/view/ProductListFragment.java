@@ -25,6 +25,8 @@ public class ProductListFragment extends BaseFragment {
     private FragmentProductBinding binding;
     private HomeScreenViewModel homeScreeViewModel;
     private ProductListAdapter adapter;
+    public static final String VISIBILITY = "publish";
+
 
     public static ProductListFragment createInstance() {
         return new ProductListFragment();
@@ -65,12 +67,13 @@ public class ProductListFragment extends BaseFragment {
     }
 
     private List<ProductListResponse> getVisibilityProducts(List<ProductListResponse> productListResponses) {
+        List<ProductListResponse> list = new ArrayList<>();
         for (int i = 0; i < productListResponses.size(); i++) {
-            if (productListResponses.get(i).getStatus().equalsIgnoreCase("private")) {
-                productListResponses.remove(i);
+            if (productListResponses.get(i).getStatus().equalsIgnoreCase(VISIBILITY)) {
+                list.add(productListResponses.get(i));
             }
         }
-        return productListResponses;
+        return list;
     }
 
     private void initializeRecyclerViewAdapter() {

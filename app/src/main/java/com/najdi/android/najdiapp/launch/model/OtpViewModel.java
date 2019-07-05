@@ -4,11 +4,15 @@ import android.app.Application;
 
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.BaseViewModel;
+import com.najdi.android.najdiapp.common.Constants;
+import com.najdi.android.najdiapp.home.model.ForgotPaswwordRequest;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+
+import static com.najdi.android.najdiapp.common.Constants.OtpScreen.CHANGE_MOBILE_VERIFY;
 
 public class OtpViewModel extends BaseViewModel {
 
@@ -17,6 +21,8 @@ public class OtpViewModel extends BaseViewModel {
     private MutableLiveData<String> three = new MutableLiveData<>();
     private MutableLiveData<String> four = new MutableLiveData<>();
     private MutableLiveData<String> phoneNoLiveData = new MutableLiveData<>();
+    private String newMobileNO;
+    private int screenType;
 
 
     public MutableLiveData<String> getOne() {
@@ -65,6 +71,17 @@ public class OtpViewModel extends BaseViewModel {
         return repository.verifyForgotOtp(otpRequestModel);
     }
 
+    public LiveData<BaseResponse> mobileNoverify(String mobile, String newMobileNo) {
+        String otp = one.getValue() + two.getValue() + three.getValue() + four.getValue();
+        ForgotPaswwordRequest forgotPaswwordRequest = new ForgotPaswwordRequest();
+        forgotPaswwordRequest.setMobile(mobile);
+        forgotPaswwordRequest.setNew_mobile(newMobileNo);
+        forgotPaswwordRequest.setOtp(otp);
+        forgotPaswwordRequest.setLang(resourceProvider.getCountryLang());
+        return repository.mobileChangeVerify(forgotPaswwordRequest);
+    }
+
+
     public LiveData<BaseResponse> login(String username, String password) {
         LoginRequestModel loginRequestModel = new LoginRequestModel();
         loginRequestModel.setUserName(username);
@@ -79,5 +96,25 @@ public class OtpViewModel extends BaseViewModel {
         otpRequestModel.setMobile(phoneNo);
         otpRequestModel.setLang(resourceProvider.getCountryLang());
         return repository.resendOtp(otpRequestModel);
+    }
+
+
+    public LiveData<BaseResponse> resendOtp(String newMobileNo) {
+        OtpRequestModel otpRequestModel = new OtpRequestModel();
+        otpRequestModel.setMobile(newMobileNo);
+        otpRequestModel.setLang(resourceProvider.getCountryLang());
+        return repository.resendOtp(otpRequestModel);
+    }
+
+    public void setNewMobile(String newMobileNo) {
+        this.newMobileNO = newMobileNo;
+        if (screenType == CHANGE_MOBILE_VERIFY) {
+            phoneNoLiveData.setValue(newMobileNo);
+        }
+    }
+
+    public void setScreenType(int screenType) {
+        this.screenType = screenType;
+
     }
 }

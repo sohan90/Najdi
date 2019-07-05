@@ -34,4 +34,5 @@ public class ChangeMobileNoViewModel extends BaseViewModel {
         forgotPaswwordRequest.setLang(lang);
         return repository.mobileChange(forgotPaswwordRequest);
     }
+
 }

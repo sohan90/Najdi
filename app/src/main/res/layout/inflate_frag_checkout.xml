@@ -63,7 +63,7 @@
             android:layout_toEndOf="@id/quantity_no_txt"
             android:ellipsize="end"
             android:gravity="center|start"
-            android:text="@{cartModel.postName, default=`----`}"
+            android:text="@{cartModel.post_title, default=`----`}"
             android:textColor="@color/black" />
 
         <TextView

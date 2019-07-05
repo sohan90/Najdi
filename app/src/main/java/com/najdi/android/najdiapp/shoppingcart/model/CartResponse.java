@@ -45,6 +45,7 @@ public class CartResponse {
         private int line_tax;
         private int line_subtotal_tax;
         private String post_name;
+        private String post_title;
         private String post_image_url;
 
         //local data
@@ -66,6 +67,7 @@ public class CartResponse {
             post_name = in.readString();
             post_image_url = in.readString();
             previousQuantity = in.readInt();
+            post_title = in.readString();
         }
 
         public static final Creator<CartData> CREATOR = new Creator<CartData>() {
@@ -79,6 +81,10 @@ public class CartResponse {
                 return new CartData[size];
             }
         };
+
+        public String getPost_title() {
+            return post_title;
+        }
 
         public HashMap<String, String> getVariation() {
             return variation;
@@ -177,6 +183,7 @@ public class CartResponse {
             dest.writeString(post_name);
             dest.writeString(post_image_url);
             dest.writeInt(previousQuantity);
+            dest.writeString(post_title);
         }
     }
 }

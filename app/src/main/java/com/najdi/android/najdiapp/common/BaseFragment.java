@@ -7,6 +7,7 @@ import android.os.Bundle;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.LocaleUtitlity;
 import com.najdi.android.najdiapp.utitility.MathUtils;
+import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 import com.najdi.android.najdiapp.utitility.ResourceProvider;
 
 import java.util.Locale;
@@ -21,16 +22,15 @@ public class BaseFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        resourceProvider = NajdiApplication.get(getActivity()).getResourceProvider();
+        /*resourceProvider = NajdiApplication.get(getActivity()).getResourceProvider();
         resourceProvider.setCurrentLocale(getCurrentLocale());
-        LocaleUtitlity.setCurrentLocale(getCurrentLocale());
+        LocaleUtitlity.setCurrentLocale(getCurrentLocale());*/
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        setLocaleLanguage(getCurrentLocale().getLanguage());
     }
 
     protected void showProgressDialog() {
@@ -52,12 +52,6 @@ public class BaseFragment extends Fragment {
         MathUtils.setCurrencySymbol(locale);
         resourceProvider.setCurrentLocale(locale);
         LocaleUtitlity.setCountryLang(localeLanguage);
-    }
-
-    protected String getCurrentLocaleLanguage() {
-        Locale locale;
-        locale = getCurrentLocale();
-        return locale.getLanguage();
     }
 
     private Locale getCurrentLocale() {

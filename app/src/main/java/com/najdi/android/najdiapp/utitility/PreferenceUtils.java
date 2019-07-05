@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import static com.najdi.android.najdiapp.common.Constants.ARABIC_LAN;
+
 public class PreferenceUtils {
 
     private static final String SHARED_PREF = "pref_auth_token";
@@ -18,6 +20,11 @@ public class PreferenceUtils {
     public static String getValueString(Context context, String key) {
         SharedPreferences preferences = context.getSharedPreferences(SHARED_PREF, Activity.MODE_PRIVATE);
         return preferences.getString(key, null);
+    }
+
+    public static String getLangFromPref(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences(SHARED_PREF, Activity.MODE_PRIVATE);
+        return preferences.getString(PreferenceUtils.LOCALE_LANG, ARABIC_LAN);
     }
 
     public static void setValueString(Context context, String key, String value) {

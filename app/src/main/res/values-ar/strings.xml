@@ -19,9 +19,9 @@
     <string name="checkout">أتمام الطلب</string>
     <string name="order_complete">طلب مكتمل</string>
     <string name="select_options">حدد الخيارات المناسبة</string>
-    <string name="size">الحجم</string>
+
     <string name="choose_an_option">حدد الخيار المناسب</string>
-    <string name="cutting_way">طريقة التقطيع</string>
+
     <string name="proceed_to_checkout">المتابعة لاتمام الشراء</string>
     <string name="total">المجموع</string>
     <string name="available">متاح!</string>
@@ -35,7 +35,7 @@
     <string name="subtotal">المجموع الفرعي</string>
     <string name="our_bank_accounts"><u>حساباتنا البنكية</u></string>
     <string name="our_bank_accounts_drawer">حساباتنا البنكية</string>
-    <string name="invalid_pass">تأكيد كلمة المرور غير صحيح</string>
+    <string name="invalid_pass">كلمة المرور غير صحيحة</string>
     <string name="category">الفئة</string>
     <string name="product_details">تفاصيل المنتج</string>
     <string name="cart">سلة التسوق</string>
@@ -90,8 +90,7 @@
     <string name="arabic">ع</string>
     <string name="dont_t_have_an_account_sign_up">ليس لديك حساب؟!</string>
     <string name="sign_to_continue">تسجيل الدخول للمتابعة</string>
-    <string name="legs">الساقين</string>
-    <string name="head">الرأس</string>
+
     <string name="minced_meat">لحم مفروم</string>
     <string name="order_received">"تم استلام الطلب "</string>
     <string name="invalid_phone_no">الرجاء إدخال 9 ارقام لرقم الجوال</string>
@@ -134,4 +133,15 @@
     <string name="profile_succes_msg">تم تحديث الملف الشخصي بنجاح</string>
     <string name="verification_matched">كلمة مرور التحقق مطابقة!</string>
     <string name="message_success">لقد تم استلام رسالتك، وسوف نتصل بك قريبًا</string>
+
+
+    <string name="size">الحجم</string>
+    <string name="legs">الكوارع</string>
+    <string name="head">الرأس والكوارع</string>
+    <string name="cutting_way">طريقة التقطيع</string>
+
+    <string name="head_legs">الرأس والكوارع</string>
+    <string name="packaging">التغليف</string>
+    <string name="mobile_no_success_msg">تم تغيير رقم الجوال بنجاح</string>
+
 </resources>

@@ -145,8 +145,9 @@ public class ProductDetailViewModel extends BaseViewModel {
         if (attributHashMap == null) return;
         attributHashMap.clear();
         quantityCount.setValue(0);
-        totalPrice.setValue("");
-        enableAddCartButton();
+        //totalPrice.setValue("");
+        //enableAddCartButton();
+        incrementQuantity();
     }
 
     public LiveData<BaseResponse> addToCart() {

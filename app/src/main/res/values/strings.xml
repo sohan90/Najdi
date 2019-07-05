@@ -152,4 +152,5 @@
     <string name="profile_succes_msg">profile has been updated successfully</string>
     <string name="verification_matched">Verification password matched!</string>
     <string name="message_success">Your message has been sent. We will contact you soon</string>
+    <string name="mobile_no_success_msg">Mobile number has been changed successfully</string>
 </resources>

@@ -64,5 +64,6 @@ public class Constants {
         int FORGOT_PASSWORD_SCREEN = 1;
         int CHANGE_PASSWORD_OTP_SCREEN = 2;
         int CHANGE_PASSWORD_PROFILE = 3;
+        int CHANGE_MOBILE_VERIFY = 4;
     }
 }
