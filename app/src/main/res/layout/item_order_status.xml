@@ -83,7 +83,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 bind:textColor="@{viewModel.status}"
-                android:text="@{viewModel.status}" />
+                android:text="---" />
 
         </RelativeLayout>
 

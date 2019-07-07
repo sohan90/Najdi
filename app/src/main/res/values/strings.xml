@@ -25,7 +25,7 @@
     <string name="order_complete">Order Complete</string>
     <string name="select_options">Select Options</string>
     <string name="choose_an_option">Choose an option</string>
-    <string name="head">Head</string>
+    <string name="head">Head &amp; Legs</string>
     <string name="proceed_to_checkout">Proceed to Checkout</string>
     <string name="add_to_cart">Add to cart</string>
     <string name="total">Total</string>
@@ -123,9 +123,8 @@
     <string name="web_address">www.najdisheep.com</string>
     <string name="send">Send</string>
     <string name="cutting_way">Cutting Way</string>
-    <string name="legs">Legs</string>
+    <string name="legs">Packaging</string>
     <string name="size">Size</string>
-    <string name="minced_meat">minced meat</string>
     <string name="order_received">Order Received</string>
     <string name="product_added_success">product has been to added to your cart successfully</string>
     <string name="product_updated_success">product has been to updated to your cart successfully</string>
@@ -150,7 +149,10 @@
     <string name="not_available">Not Available</string>
     <string name="sale">Sale</string>
     <string name="profile_succes_msg">profile has been updated successfully</string>
-    <string name="verification_matched">Verification password matched!</string>
+    <string name="verification_matched">The code is correct</string>
     <string name="message_success">Your message has been sent. We will contact you soon</string>
     <string name="mobile_no_success_msg">Mobile number has been changed successfully</string>
+    <string name="delete_msg">Are you sure want to delete?</string>
+    <string name="minced_meat">Minced Meat Type</string>
+    <string name="enter_correct_code">Please enter the correct code</string>
 </resources>

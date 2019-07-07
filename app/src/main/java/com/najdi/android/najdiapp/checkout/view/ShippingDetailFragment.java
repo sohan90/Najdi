@@ -86,8 +86,9 @@ public class ShippingDetailFragment extends BaseFragment {
 
     private void updateDetails() {
         if (getActivity() == null) return;
-        String name = PreferenceUtils.getValueString(getActivity(), PreferenceUtils.USER_EMAIL_KEY);
-        String phoneNo = PreferenceUtils.getValueString(getActivity(), PreferenceUtils.USER_NAME_KEY);
-        viewModel.updatePersonalInfo(name, name, phoneNo);
+        String name = PreferenceUtils.getValueString(getActivity(), PreferenceUtils.USER_NAME_KEY);
+        String phoneNo = PreferenceUtils.getValueString(getActivity(), PreferenceUtils.USER_PHONE_NO_KEY);
+        String email = PreferenceUtils.getValueString(getActivity(), PreferenceUtils.USER_EMAIL_KEY);
+        viewModel.updatePersonalInfo(name, email, phoneNo);
     }
 }

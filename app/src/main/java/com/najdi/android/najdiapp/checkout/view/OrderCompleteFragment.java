@@ -77,6 +77,8 @@ public class OrderCompleteFragment extends BaseFragment {
     private void subscribeForOrderResponse() {
         activityViewModel.orderResponseMutableLiveData().observe(this, orderResponse -> {
             binding.setViewModel(orderResponse);
+            String total = orderResponse.getTotal().concat(" "+getString(R.string.currency));
+            binding.totalValue.setText(total);
         });
     }
 

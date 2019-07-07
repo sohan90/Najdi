@@ -178,7 +178,8 @@ public class Repository {
 
     public LiveData<OrderResponse> createOrder(int userId, OrderRequest orderRequest) {
         MutableLiveData<OrderResponse> liveData = new MutableLiveData<>();
-        RetrofitClient.getInstance().createOrder(userId, orderRequest).enqueue(new RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<OrderResponse>() {
+        RetrofitClient.getInstance().createOrder(resourceProvider.getCountryLang(),
+                userId, orderRequest).enqueue(new RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<OrderResponse>() {
             @Override
             public void onSuccesResponse(Call<OrderResponse> call, OrderResponse orderResponse) {
                 if (orderResponse != null) {
@@ -280,7 +281,7 @@ public class Repository {
             @Override
             public void onFailurResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
                 if (baseResponse != null) {
-                    baseResponse.handleError(resourceProvider.getAppContext());
+                    baseResponse.handleErrorForDialog(resourceProvider.getActivityContext());
                 }
                 liveData.setValue(null);
             }
@@ -512,7 +513,7 @@ public class Repository {
             @Override
             public void onFailurResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
                 if (baseResponse != null) {
-                    baseResponse.handleError(resourceProvider.getAppContext());
+                    baseResponse.handleErrorForDialog(resourceProvider.getActivityContext());
                 }
                 liveData.setValue(null);
             }
@@ -556,7 +557,7 @@ public class Repository {
             @Override
             public void onFailurResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
                 if (baseResponse != null) {
-                    baseResponse.handleError(resourceProvider.getAppContext());
+                    baseResponse.handleErrorForDialog(resourceProvider.getActivityContext());
                 }
                 liveData.setValue(null);
             }

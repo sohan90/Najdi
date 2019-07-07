@@ -43,7 +43,7 @@ public class ProductListResponse implements Parcelable {
     }
 
     public Integer getStock_quantity() {
-        return stock_quantity;
+        return stock_quantity == null ? 0 : stock_quantity;
     }
 
     // local data

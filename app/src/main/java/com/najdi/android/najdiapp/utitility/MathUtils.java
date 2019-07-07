@@ -28,7 +28,7 @@ public class MathUtils {
 
     public static void setCurrencySymbol(Locale locale) {
         java.text.NumberFormat format = java.text.NumberFormat.getInstance(locale);
-        currencySymbol = format.getCurrency().getSymbol();
+        currencySymbol = format.getCurrency().getSymbol(locale);
     }
 
     public static String getCurrencySymbol() {

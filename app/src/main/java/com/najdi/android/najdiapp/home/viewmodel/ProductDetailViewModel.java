@@ -40,6 +40,7 @@ public class ProductDetailViewModel extends BaseViewModel {
     }
 
     public void setDefaultQuantity() {
+        quantityCount.setValue(0);
         incrementQuantity();
     }
 

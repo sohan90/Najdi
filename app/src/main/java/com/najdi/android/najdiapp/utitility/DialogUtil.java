@@ -106,6 +106,17 @@ public class DialogUtil {
         }
     }
 
+    public static void showAlertWithNegativeButton(Context context, String message,
+                                                   final DialogInterface.OnClickListener listener) {
+        if (context != null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AlertDialogTheme);
+            builder.setTitle(null).setMessage(message).setNegativeButton(R.string.cancel, listener).
+                    setPositiveButton(R.string.ok, listener);
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+    }
+
     public static void showPopuwindow(Context context, View anchorView, List<String> list,
                                       GenericClickListener<String> clickListener) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -120,7 +131,7 @@ public class DialogUtil {
         popupWindow.setOutsideTouchable(true);
         popupWindow.setElevation(20);
         popupWindow.setFocusable(true);
-        popupWindow.showAsDropDown(anchorView,0, 0);
+        popupWindow.showAsDropDown(anchorView, 0, 0);
         listView.setOnItemClickListener((parent, view, position, id) -> {
             clickListener.onClicked(list.get(position));
             popupWindow.dismiss();

@@ -56,7 +56,6 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHo
         for (Map.Entry<String, String> entry : cartData.getVariation().entrySet()) {
             if (entry.getKey().equalsIgnoreCase("attribute_pa_cutting-way")) {
                 continue;
-
             }
             View view = inflater.inflate(R.layout.inflate_variation_item,
                     holder.binding.variationContainer, false);

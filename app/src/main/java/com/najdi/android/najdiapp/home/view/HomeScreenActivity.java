@@ -230,6 +230,7 @@ public class HomeScreenActivity extends BaseActivity
                 setToolBarTitle(getString(R.string.product_details));
                 //updateCartCountTxt(viewModel.getCartSize());
                 replaceFragment(PRODUCT_DETAIL);
+
             }
         });
     }

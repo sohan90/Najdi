@@ -35,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/name_optional"
-                android:imeOptions="actionDone"
+                android:imeOptions="actionNext"
                 android:inputType="textPersonName"
                 android:maxLength="20"
                 android:maxLines="1"

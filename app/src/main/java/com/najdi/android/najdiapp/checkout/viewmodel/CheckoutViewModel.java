@@ -90,21 +90,26 @@ public class CheckoutViewModel extends BaseViewModel {
     public LiveData<OrderResponse> createOrder(int userId, List<CartResponse.CartData> cartData,
                                                String paymentMode, BillingAddress billingAddress) {
         OrderRequest orderRequest = new OrderRequest();
-        orderRequest.setCustomer_id(userId);
+        orderRequest.setCustomer_id(String.valueOf(userId));
         orderRequest.setBilling(billingAddress);
+        orderRequest.setShipping(billingAddress);
         orderRequest.setPayment_method(paymentMode);
         if (paymentMode.equalsIgnoreCase("cod")) {
             orderRequest.setPayment_method_title("Cash On Delivery");
+            orderRequest.setSet_paid(false);
         } else {
             orderRequest.setPayment_method_title("Direct Bank Transfer");
+            orderRequest.setSet_paid(false);
         }
 
         List<LineItemModelRequest> list = new ArrayList<>();
         for (CartResponse.CartData cartData1 : cartData) {
+
             LineItemModelRequest lineItemModelRequest = new LineItemModelRequest();
+            lineItemModelRequest.setVariation_id(cartData1.getVariationId());
             lineItemModelRequest.setProduct_id(cartData1.getProductId());
             lineItemModelRequest.setQuantity(cartData1.getQuantity());
-            HashMap<String, String> slugValueMap = getSlugValueFromMap(cartData1.getVariation());
+            List<HashMap<String, String>> slugValueMap = getSlugValueFromMap(cartData1.getVariation());
             lineItemModelRequest.setVariations(slugValueMap);
             list.add(lineItemModelRequest);
         }
@@ -113,16 +118,19 @@ public class CheckoutViewModel extends BaseViewModel {
         return repository.createOrder(userId, orderRequest);
     }
 
-    private HashMap<String, String> getSlugValueFromMap(HashMap<String, String> variation) {
-        HashMap<String, String> slugValues = new HashMap<>();
+    private List<HashMap<String, String>> getSlugValueFromMap(HashMap<String, String> variation) {
+        List<HashMap<String, String>> list = new ArrayList<>();
         for (Map.Entry<String, String> entry : variation.entrySet()) {
-            if (entry.getKey().endsWith("_slug")) {
+            if (entry.getKey().endsWith("_slug") || entry.getKey().endsWith("minced_meat")) {
+                HashMap<String, String> hashMap = new HashMap<>();
                 String pa_key = entry.getKey().replace("attribute_", "");
                 String key = pa_key.replace("_slug", "");
-                slugValues.put(key, entry.getValue());
+                hashMap.put("key", key);
+                hashMap.put("value", entry.getValue());
+                list.add(hashMap);
             }
         }
-        return slugValues;
+        return list;
     }
 
     public MutableLiveData<OrderResponse> orderResponseMutableLiveData() {

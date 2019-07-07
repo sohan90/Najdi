@@ -40,6 +40,13 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         OrderResponse orderResponse = list.get(position);
         holder.binding.setViewModel(orderResponse);
+        String status = orderResponse.getStatus();
+        if (orderResponse.getStatus().equals("pending")) {
+            status = holder.binding.getRoot().getContext().getString(R.string.pending);
+        } else if (orderResponse.getStatus().equals("completed")) {
+            status = holder.binding.getRoot().getContext().getString(R.string.completed);
+        }
+        holder.binding.status.setText(status);
     }
 
     @Override

@@ -65,8 +65,8 @@
     <string name="contact_us">"اتصل بنا  "</string>
     <string name="no_order_history_msg">لا توجد لديك طلبات سابقة</string>
     <string name="enter_valid_code">الرجاء إدخال الرمز السري الصحيح</string>
-    <string name="pending">"تحت التنفيذ "</string>
-    <string name="completed">"مكتمل "</string>
+    <string name="pending">تحت التنفيذ</string>
+    <string name="completed">مكتمل</string>
     <string name="one_time_psd">الرمز السري المؤقت</string>
     <string name="verify_mobile_no">تأكيد رقم الجوال</string>
     <string name="please_enter_it_below">فضلا قم بتعبئة أدناه</string>
@@ -91,7 +91,6 @@
     <string name="dont_t_have_an_account_sign_up">ليس لديك حساب؟!</string>
     <string name="sign_to_continue">تسجيل الدخول للمتابعة</string>
 
-    <string name="minced_meat">لحم مفروم</string>
     <string name="order_received">"تم استلام الطلب "</string>
     <string name="invalid_phone_no">الرجاء إدخال 9 ارقام لرقم الجوال</string>
     <string name="product_added_success">تم إضافة المنتج إلى سلة التسوق</string>
@@ -104,7 +103,7 @@
     <string name="already_have_an_account">هل لديك حساب</string>
     <string name="direct_bank_transer_msg">\"اجعلك تدفع مباشرة في حسابنا المصرفي. يرجى استخدام معرف الطلب الخاص بك كمراجع للدفع ، ولن يتم شحن طلبك حتى يتم إضافة الأموال إلى حسابنا</string>
     <string name="update_cart_label">تحديث العربة</string>
-    <string name="product_updated_success">تم تحديث المنتج إلى عربة التسوق بنجاح</string>
+    <string name="product_updated_success">تم تحديث السلة</string>
     <string name="building_number">رقم المبنى</string>
     <string name="direct_transfer_title">تحويل بنكي</string>
     <string name="send">إرسال</string>
@@ -131,17 +130,20 @@
     <string name="resend_code_in_30s">إعادة الإرسال %s</string>
     <string name="resend_code">إعادة الإرسال</string>
     <string name="profile_succes_msg">تم تحديث الملف الشخصي بنجاح</string>
-    <string name="verification_matched">كلمة مرور التحقق مطابقة!</string>
+    <string name="verification_matched">كلمة المرور صحيح </string>
     <string name="message_success">لقد تم استلام رسالتك، وسوف نتصل بك قريبًا</string>
 
 
     <string name="size">الحجم</string>
-    <string name="legs">الكوارع</string>
+    <string name="legs">التغليف</string>
     <string name="head">الرأس والكوارع</string>
     <string name="cutting_way">طريقة التقطيع</string>
 
     <string name="head_legs">الرأس والكوارع</string>
     <string name="packaging">التغليف</string>
     <string name="mobile_no_success_msg">تم تغيير رقم الجوال بنجاح</string>
+    <string name="delete_msg">هل تريد بالتأكيد الحذف؟</string>
+    <string name="minced_meat">نوع اللحم المفروم</string>
+    <string name="enter_correct_code">لرجاء إدخال الرمز السري الصحيح</string>
 
 </resources>

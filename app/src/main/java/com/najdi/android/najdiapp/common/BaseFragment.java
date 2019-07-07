@@ -22,8 +22,8 @@ public class BaseFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*resourceProvider = NajdiApplication.get(getActivity()).getResourceProvider();
-        resourceProvider.setCurrentLocale(getCurrentLocale());
+        resourceProvider = NajdiApplication.get(getActivity()).getResourceProvider();
+        /*resourceProvider.setCurrentLocale(getCurrentLocale());
         LocaleUtitlity.setCurrentLocale(getCurrentLocale());*/
 
     }

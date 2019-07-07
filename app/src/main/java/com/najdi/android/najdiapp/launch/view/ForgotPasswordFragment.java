@@ -15,6 +15,7 @@ import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.databinding.FragmentForgotPasswordBinding;
 import com.najdi.android.najdiapp.launch.viewmodel.ForgotPasswordViewModel;
 import com.najdi.android.najdiapp.launch.viewmodel.LoginViewModel;
+import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 import com.najdi.android.najdiapp.utitility.ToastUtils;
 
@@ -72,9 +73,12 @@ public class ForgotPasswordFragment extends BaseFragment {
             liveData.observe(this, baseResponse -> {
                 hideProgressDialog();
                 if (baseResponse != null) {
-                    ToastUtils.getInstance(getActivity()).
-                            showShortToast(baseResponse.getData().getMessage());
-                    launchOtpScreen();
+                    DialogUtil.showAlertDialog(getActivity(), baseResponse.getData().getMessage(),
+                            (dialog, which) -> {
+                                dialog.dismiss();
+                                launchOtpScreen();
+                            });
+
                 }
             });
         });

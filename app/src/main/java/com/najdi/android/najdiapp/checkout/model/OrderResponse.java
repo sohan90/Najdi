@@ -3,6 +3,7 @@ package com.najdi.android.najdiapp.checkout.model;
 import android.widget.TextView;
 
 import com.najdi.android.najdiapp.R;
+import com.najdi.android.najdiapp.utitility.LocaleUtitlity;
 import com.najdi.android.najdiapp.utitility.MathUtils;
 
 import androidx.core.content.ContextCompat;

@@ -1,10 +1,16 @@
 package com.najdi.android.najdiapp.common;
 
 import android.content.Context;
+import android.content.DialogInterface;
 
+import com.najdi.android.najdiapp.R;
+import com.najdi.android.najdiapp.utitility.DialogUtil;
+import com.najdi.android.najdiapp.utitility.LocaleUtitlity;
 import com.najdi.android.najdiapp.utitility.ToastUtils;
 
 import java.util.List;
+
+import static com.najdi.android.najdiapp.common.Constants.ARABIC_LAN;
 
 public class BaseResponse {
     String code;
@@ -126,10 +132,21 @@ public class BaseResponse {
         if (data != null) {
             switch (data.getStatus()) {
                 case 400:
-                case 401:
                 case 403:
                 case 500:
                     ToastUtils.getInstance(context).showLongToast(message);
+                    break;
+
+            }
+        }
+    }
+
+    public void handleErrorForDialog(Context context) {
+        if (data != null) {
+            switch (data.getStatus()) {
+                case 401:
+                    DialogUtil.showAlertDialog(context, context.getString(R.string.enter_correct_code),
+                            (dialog, which) -> dialog.dismiss());
                     break;
             }
         }

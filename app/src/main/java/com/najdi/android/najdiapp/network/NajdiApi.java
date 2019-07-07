@@ -64,13 +64,13 @@ public interface NajdiApi {
 
     @POST(BuildConfig.NAJDI_END_POINTS + "orders")
     @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
-    Call<OrderResponse> createOrder(@Query("customer") int userId, @Body OrderRequest orderRequest);
+    Call<OrderResponse> createOrder(@Query("lang") String lang, @Query("customer") int userId, @Body OrderRequest orderRequest);
 
     @GET(BuildConfig.NAJDI_END_POINTS + "orders")
     @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
     Call<List<OrderResponse>> getOrderStatus(@Query("lang") String lang, @Query("customer") int userId);
 
-    @POST(BuildConfig.NAJDI_CART_BASE_URL + "customapi/cart/update_item")
+    @POST(BuildConfig.NAJDI_END_POINTS + "cart/cart-item")
     @Headers({"Content-Type:application/json"})
     Call<BaseResponse> updateItemQuantity(@Header("Authorization")String token, @Query("lang") String lang, @Query("customer") String userId,
                                           @Body UpdateCartRequest cartRequest);

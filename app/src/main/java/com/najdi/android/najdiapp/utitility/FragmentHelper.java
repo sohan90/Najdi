@@ -101,9 +101,14 @@ public class FragmentHelper {
      * @param context context
      * @param tag     if tag name is null then all the fragment will be close or till the given tag name
      */
-    public static void popBackStack(AppCompatActivity context, String tag) {
+    public static void popBackStack(FragmentActivity context, String tag) {
         FragmentManager manager = context.getSupportFragmentManager();
         manager.popBackStack(tag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    }
+
+    public static void popBackStackExclusive(FragmentActivity context, String tag) {
+        FragmentManager manager = context.getSupportFragmentManager();
+        manager.popBackStack(tag, 0);
     }
 
     public static Fragment getFragmentByTag(AppCompatActivity context, String tag) {

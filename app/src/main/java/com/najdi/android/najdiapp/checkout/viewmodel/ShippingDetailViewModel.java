@@ -94,7 +94,7 @@ public class ShippingDetailViewModel extends BaseViewModel {
         billing.setFirst_name(name.getValue());
         billing.setLast_name(name.getValue());
         billing.setEmail(email.getValue());
-        billing.setPhone(phoneNo.getValue());
+        billing.setPhone(phoneNo.getValue().replace("966",""));
         billing.setAddress_1(buildingNO.getValue());
         billing.setAddress_2(street.getValue());
         billing.setCity(city.getValue());

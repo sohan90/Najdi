@@ -1,5 +1,6 @@
 package com.najdi.android.najdiapp.checkout.view;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import com.najdi.android.najdiapp.home.model.ProductDetailBundleModel;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 import com.najdi.android.najdiapp.shoppingcart.model.UpdateCartRequest;
 import com.najdi.android.najdiapp.shoppingcart.view.CartAdapter;
+import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.ToastUtils;
 
 import java.util.ArrayList;
@@ -85,7 +87,13 @@ public class CheckoutFragment extends BaseFragment {
         checkoutAdapter = new CheckoutAdapter(new CartAdapter.AdapterClickLisntener() {
             @Override
             public void onRemoveItem(int position, String cartItemKey) {
-                removeItem(position, cartItemKey);
+                DialogUtil.showAlertWithNegativeButton(getActivity(),
+                        getString(R.string.delete_msg), (dialog, which) -> {
+                            dialog.dismiss();
+                            if (which == DialogInterface.BUTTON_POSITIVE) {
+                                removeItem(position, cartItemKey);
+                            }
+                        });
             }
 
             @Override
@@ -177,8 +185,10 @@ public class CheckoutFragment extends BaseFragment {
     }
 
     private void subscribeForCartResponse() {
+        showProgressDialog();
         activityViewModel.getCartResponseMutableLiveData().observe(getViewLifecycleOwner(),
                 cartResponse -> {
+            hideProgressDialog();
                     if (cartResponse != null) {
                         updateAdapter(cartResponse);
                         viewModel.udpateTotal(cartResponse.getData().getCartdata());

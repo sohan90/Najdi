@@ -1,5 +1,6 @@
 package com.najdi.android.najdiapp.shoppingcart.view;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -15,6 +16,8 @@ import com.najdi.android.najdiapp.home.viewmodel.HomeScreenViewModel;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 import com.najdi.android.najdiapp.shoppingcart.model.UpdateCartRequest;
 import com.najdi.android.najdiapp.shoppingcart.viewmodel.CartViewModel;
+import com.najdi.android.najdiapp.utitility.DialogUtil;
+import com.najdi.android.najdiapp.utitility.FragmentHelper;
 import com.najdi.android.najdiapp.utitility.ToastUtils;
 
 import java.util.ArrayList;
@@ -27,6 +30,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import static com.najdi.android.najdiapp.common.Constants.FragmentTags.PRODUCT_LIST_FRAG;
 
 public class CartFragment extends BaseFragment {
 
@@ -56,8 +61,10 @@ public class CartFragment extends BaseFragment {
     }
 
     private void initializeClickListener() {
-        binding.proceedTxt.setOnClickListener(v ->
-                homeScreenViewModel.getLaunchCheckoutActivity().setValue(true));
+        binding.proceedTxt.setOnClickListener(v -> {
+            if (getActivity() == null) return;
+            homeScreenViewModel.getLaunchCheckoutActivity().setValue(true);
+        });
     }
 
     private void bindLiveData() {
@@ -80,7 +87,7 @@ public class CartFragment extends BaseFragment {
                 updateCartSizeForRemoveItem(adapterList.get(position).getQuantity());
                 updateAdapterForRemoveItem(position);
                 String message = baseResponse.getData().getMessage();
-                ToastUtils.getInstance(getActivity()).showShortToast(message);
+                ToastUtils.getInstance(getActivity()).showLongToast(message);
             }
         });
     }
@@ -89,6 +96,9 @@ public class CartFragment extends BaseFragment {
         adapterList.remove(position);
         adapter.notifyItemRemoved(position);
         updateTotal();
+        if (adapterList.size() == 0){
+            showEmptyCartValueTxt();
+        }
     }
 
     private void showEmptyCartValueTxt() {
@@ -144,7 +154,14 @@ public class CartFragment extends BaseFragment {
             public void onRemoveItem(int position, String cartItemKey) {
                 if (!TextUtils.isEmpty(cartItemKey)) {
                     //updateTotal();
-                    removeItem(position, cartItemKey);
+                    DialogUtil.showAlertWithNegativeButton(getActivity(),
+                            getString(R.string.delete_msg), (dialog, which) -> {
+                                dialog.dismiss();
+                                if (which == DialogInterface.BUTTON_POSITIVE) {
+                                    removeItem(position, cartItemKey);
+                                }
+                            });
+
                 }
             }
 
@@ -154,6 +171,8 @@ public class CartFragment extends BaseFragment {
                 model.setProductId(cartData.getProductId());
                 model.setT(cartData);
                 model.setFromCartScreen(true);
+                if (getActivity() == null) return;
+                FragmentHelper.popBackStack(getActivity());
                 homeScreenViewModel.getLaunchProductDetailLiveData().setValue(model);
             }
 
