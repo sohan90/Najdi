@@ -47,6 +47,8 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
             status = holder.binding.getRoot().getContext().getString(R.string.completed);
         }
         holder.binding.status.setText(status);
+        holder.binding.price.setText(orderResponse.getTotal().concat(" "+holder.binding.getRoot().
+                getContext().getString(R.string.currency)));
     }
 
     @Override

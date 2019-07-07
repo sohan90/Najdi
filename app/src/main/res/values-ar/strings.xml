@@ -130,7 +130,7 @@
     <string name="resend_code_in_30s">إعادة الإرسال %s</string>
     <string name="resend_code">إعادة الإرسال</string>
     <string name="profile_succes_msg">تم تحديث الملف الشخصي بنجاح</string>
-    <string name="verification_matched">كلمة المرور صحيح </string>
+    <string name="verification_matched">كلمة المرور صحيحة</string>
     <string name="message_success">لقد تم استلام رسالتك، وسوف نتصل بك قريبًا</string>
 
 
@@ -144,6 +144,9 @@
     <string name="mobile_no_success_msg">تم تغيير رقم الجوال بنجاح</string>
     <string name="delete_msg">هل تريد بالتأكيد الحذف؟</string>
     <string name="minced_meat">نوع اللحم المفروم</string>
-    <string name="enter_correct_code">لرجاء إدخال الرمز السري الصحيح</string>
+    <string name="enter_correct_code">الرجاء إدخال الرمز السري الصحيح</string>
+    <string name="quantity_updated">الكمية المحدثة</string>
+    <string name="incorrect_password">كلمة المرور خاطئة</string>
+    <string name="order_no">" رقم الطلب %s"</string>
 
 </resources>

@@ -223,7 +223,7 @@ public class Repository {
                 PreferenceUtils.USER_LOGIIN_TOKEN);
         String userId = String.valueOf(PreferenceUtils.getValueInt(resourceProvider.getAppContext(),
                 PreferenceUtils.USER_ID_KEY));
-        RetrofitClient.getInstance().updateItemQuantity(Constants.BEARER + token,
+        RetrofitClient.getInstance().updateItemQuantity(
                 resourceProvider.getCountryLang(),
                 userId, updateCartRequest).enqueue(new
                 RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<BaseResponse>() {

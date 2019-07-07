@@ -71,8 +71,8 @@ public interface NajdiApi {
     Call<List<OrderResponse>> getOrderStatus(@Query("lang") String lang, @Query("customer") int userId);
 
     @POST(BuildConfig.NAJDI_END_POINTS + "cart/cart-item")
-    @Headers({"Content-Type:application/json"})
-    Call<BaseResponse> updateItemQuantity(@Header("Authorization")String token, @Query("lang") String lang, @Query("customer") String userId,
+    @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
+    Call<BaseResponse> updateItemQuantity(@Query("lang") String lang, @Query("customer") String userId,
                                           @Body UpdateCartRequest cartRequest);
 
     @POST(BuildConfig.NAJDI_CART_BASE_URL + "customapi/verify")

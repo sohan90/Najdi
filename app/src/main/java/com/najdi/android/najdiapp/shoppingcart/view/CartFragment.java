@@ -204,7 +204,7 @@ public class CartFragment extends BaseFragment {
             updateCart();
             if (baseResponse != null && baseResponse.getData() != null) {
                 ToastUtils.getInstance(getActivity()).
-                        showShortToast(baseResponse.getData().getMessage());
+                        showShortToast(getString(R.string.quantity_updated));
             } else {
                 CartResponse.CartData cartData = adapterList.get(adapterPosition);
                 cartData.setQuantity(cartData.getPreviousQuantity());

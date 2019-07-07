@@ -132,10 +132,15 @@ public class BaseResponse {
         if (data != null) {
             switch (data.getStatus()) {
                 case 400:
-                case 403:
                 case 500:
                     ToastUtils.getInstance(context).showLongToast(message);
                     break;
+
+                case 403:
+                    if (data.getMessage() != null) {
+                        ToastUtils.getInstance(context).showLongToast(context.
+                                getString(R.string.incorrect_password));
+                    }
 
             }
         }

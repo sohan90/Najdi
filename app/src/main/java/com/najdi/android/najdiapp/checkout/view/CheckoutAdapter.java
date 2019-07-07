@@ -125,6 +125,7 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHo
             CartResponse.CartData cartData = dataList.get(getAdapterPosition());
             int updatedTotal = updatedQuantity * Integer.parseInt(cartData.seletedOptionPrice());
             cartData.setPreviousQuantity(previousQuantity);
+            cartData.setPreviousTotal(cartData.getLine_subtotal());
             cartData.setQuantity(updatedQuantity);
             cartData.setLine_subtotal(updatedTotal);
             notifyItemChanged(getAdapterPosition());

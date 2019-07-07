@@ -59,7 +59,7 @@ public class CheckoutFragment extends BaseFragment {
         initializeRecyclerViewAdapter();
         subscribeForCartResponse();
         initializeClickListener();
-        
+
         return binding.getRoot();
     }
 
@@ -109,7 +109,6 @@ public class CheckoutFragment extends BaseFragment {
 
             @Override
             public void onUpdateQuantity(int adapterPosition, String cartItemKey, int quantity) {
-                updateTotal();
                 updateItemQuantity(adapterPosition, cartItemKey, quantity);
             }
 
@@ -157,7 +156,6 @@ public class CheckoutFragment extends BaseFragment {
 
             hideProgressDialog();
             if (baseResponse != null && baseResponse.getData() != null) {
-
                 activityViewModel.updateCart().setValue(true);
                 ToastUtils.getInstance(getActivity()).
                         showShortToast(baseResponse.getData().getMessage());
@@ -165,8 +163,10 @@ public class CheckoutFragment extends BaseFragment {
                 // failure case
                 CartResponse.CartData cartData = adapterList.get(adapterPosition);
                 cartData.setQuantity(cartData.getPreviousQuantity());
+                cartData.setLine_subtotal(cartData.getPreviousTotal());
                 checkoutAdapter.setDataList(adapterList);
             }
+            updateTotal();
         });
     }
 
@@ -188,7 +188,7 @@ public class CheckoutFragment extends BaseFragment {
         showProgressDialog();
         activityViewModel.getCartResponseMutableLiveData().observe(getViewLifecycleOwner(),
                 cartResponse -> {
-            hideProgressDialog();
+                    hideProgressDialog();
                     if (cartResponse != null) {
                         updateAdapter(cartResponse);
                         viewModel.udpateTotal(cartResponse.getData().getCartdata());

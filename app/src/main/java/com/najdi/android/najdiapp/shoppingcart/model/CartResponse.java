@@ -50,6 +50,7 @@ public class CartResponse {
 
         //local data
         private int previousQuantity;
+        private int previousTotal;
 
 
         protected CartData(Parcel in) {
@@ -68,6 +69,7 @@ public class CartResponse {
             post_image_url = in.readString();
             previousQuantity = in.readInt();
             post_title = in.readString();
+            previousTotal = in.readInt();
         }
 
         public static final Creator<CartData> CREATOR = new Creator<CartData>() {
@@ -81,6 +83,14 @@ public class CartResponse {
                 return new CartData[size];
             }
         };
+
+        public void setPreviousTotal(int previousTotal) {
+            this.previousTotal = previousTotal;
+        }
+
+        public int getPreviousTotal() {
+            return previousTotal;
+        }
 
         public String getPost_title() {
             return post_title;
@@ -113,6 +123,8 @@ public class CartResponse {
         public void setPreviousQuantity(int previousQuantity) {
             this.previousQuantity = previousQuantity;
         }
+
+
 
         public int getPreviousQuantity() {
             return previousQuantity;
@@ -184,6 +196,7 @@ public class CartResponse {
             dest.writeString(post_image_url);
             dest.writeInt(previousQuantity);
             dest.writeString(post_title);
+            dest.writeInt(previousTotal);
         }
     }
 }

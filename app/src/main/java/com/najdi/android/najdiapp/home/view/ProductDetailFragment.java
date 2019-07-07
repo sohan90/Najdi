@@ -72,7 +72,6 @@ public class ProductDetailFragment extends BaseFragment {
 
     private void subscribeForVariationQuantity() {
         viewModel.getVariaitionQuantity.observe(this, aBoolean -> {
-            showProgressDialog();
             if (aBoolean) {
                 getVariationFromServer();
             }
@@ -80,6 +79,7 @@ public class ProductDetailFragment extends BaseFragment {
     }
 
     private void getVariationFromServer() {
+        showProgressDialog();
         LiveData<ProductListResponse> liveData = viewModel.getVariationQuantity(productListResponse.getId(),
                 viewModel.getVariationId());
 
@@ -262,6 +262,7 @@ public class ProductDetailFragment extends BaseFragment {
             viewModel.setTotalPrice(String.valueOf(cartData.getLine_subtotal()));
             viewModel.setQuantityCount(cartData.getQuantity());
             viewModel.updatePrice(productListResponse, selectedValue, id);
+            getVariationFromServer();
         }
     }
 
