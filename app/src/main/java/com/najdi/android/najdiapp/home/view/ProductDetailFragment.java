@@ -71,7 +71,7 @@ public class ProductDetailFragment extends BaseFragment {
     }
 
     private void subscribeForVariationQuantity() {
-        viewModel.getVariaitionQuantity.observe(this, aBoolean -> {
+        viewModel.getGetVariaitionQuantity().observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 getVariationFromServer();
             }
@@ -215,8 +215,10 @@ public class ProductDetailFragment extends BaseFragment {
 
                 ItemDetailBinding detailBinding = ItemDetailBinding.bind(view);
                 detailBinding.name.setText(attributes.getName());
+
                 setDataForSelectedValue(detailBinding.options, attributes.getId(),
                         attributes.getSlug());
+
                 detailBinding.options.setTag(attributes.getId());
 
                 detailBinding.options.setOnClickListener((v -> {
@@ -256,13 +258,13 @@ public class ProductDetailFragment extends BaseFragment {
 
     private void setDataForSelectedValue(TextInputEditText optionText, int id, String key) {
         if (cartData != null && cartData.getVariation().size() > 0) {
-            String appendedKey = APPEND_ATTRIBUTE_STR.concat(key);
-            String selectedValue = cartData.getVariation().get(appendedKey);
-            optionText.setText(selectedValue);
+            String attribute = APPEND_ATTRIBUTE_STR.concat(key);
+            String appendedSlugKey = attribute.concat("_slug");
+            String selectedSlugKeyValue = cartData.getVariation().get(appendedSlugKey);
             viewModel.setTotalPrice(String.valueOf(cartData.getLine_subtotal()));
             viewModel.setQuantityCount(cartData.getQuantity());
-            viewModel.updatePrice(productListResponse, selectedValue, id);
-            getVariationFromServer();
+            optionText.setText(cartData.getVariation().get(attribute));
+            viewModel.updatePrice(productListResponse, selectedSlugKeyValue, id);
         }
     }
 

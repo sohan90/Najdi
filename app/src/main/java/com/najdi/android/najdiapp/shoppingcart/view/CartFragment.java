@@ -96,7 +96,7 @@ public class CartFragment extends BaseFragment {
         adapterList.remove(position);
         adapter.notifyItemRemoved(position);
         updateTotal();
-        if (adapterList.size() == 0){
+        if (adapterList.size() == 0) {
             showEmptyCartValueTxt();
         }
     }
@@ -203,8 +203,8 @@ public class CartFragment extends BaseFragment {
             hideProgressDialog();
             updateCart();
             if (baseResponse != null && baseResponse.getData() != null) {
-                ToastUtils.getInstance(getActivity()).
-                        showShortToast(getString(R.string.quantity_updated));
+                DialogUtil.showAlertDialog(getActivity(), getString(R.string.quantity_updated),
+                        (dialog, which) -> dialog.dismiss());
             } else {
                 CartResponse.CartData cartData = adapterList.get(adapterPosition);
                 cartData.setQuantity(cartData.getPreviousQuantity());

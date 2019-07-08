@@ -136,11 +136,6 @@ public class BaseResponse {
                     ToastUtils.getInstance(context).showLongToast(message);
                     break;
 
-                case 403:
-                    if (data.getMessage() != null) {
-                        ToastUtils.getInstance(context).showLongToast(context.
-                                getString(R.string.incorrect_password));
-                    }
 
             }
         }
@@ -153,6 +148,16 @@ public class BaseResponse {
                     DialogUtil.showAlertDialog(context, context.getString(R.string.enter_correct_code),
                             (dialog, which) -> dialog.dismiss());
                     break;
+
+                case 403:
+                    if (data.getMessage() != null) {
+                        String message = context.getString(R.string.incorrect_password);
+                        if (LocaleUtitlity.getCountryLang() == ARABIC_LAN) {
+                            message = context.getString(R.string.incorrect_password_arabic);
+                        }
+                        DialogUtil.showAlertDialog(context, message,
+                                (dialog, which) -> dialog.dismiss());
+                    }
             }
         }
     }

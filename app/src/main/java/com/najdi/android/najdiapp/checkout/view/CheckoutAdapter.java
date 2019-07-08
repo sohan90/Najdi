@@ -23,15 +23,15 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHo
     private final CartAdapter.AdapterClickLisntener clickListener;
     private List<CartResponse.CartData> dataList;
 
-    public CheckoutAdapter(CartAdapter.AdapterClickLisntener clickListener,
-                           List<CartResponse.CartData> cartDataList) {
+    CheckoutAdapter(CartAdapter.AdapterClickLisntener clickListener,
+                    List<CartResponse.CartData> cartDataList) {
 
         this.clickListener = clickListener;
         this.dataList = cartDataList;
 
     }
 
-    public void setDataList(List<CartResponse.CartData> cartDataList) {
+    void setDataList(List<CartResponse.CartData> cartDataList) {
         this.dataList = cartDataList;
         notifyDataSetChanged();
     }
@@ -88,10 +88,10 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHo
         return dataList == null ? 0 : dataList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         InflateFragCheckoutBinding binding;
 
-        public ViewHolder(@NonNull InflateFragCheckoutBinding itemView) {
+        ViewHolder(@NonNull InflateFragCheckoutBinding itemView) {
             super(itemView.getRoot());
             binding = itemView;
 

@@ -155,7 +155,8 @@
     <string name="delete_msg">Are you sure want to delete?</string>
     <string name="minced_meat">Minced Meat Type</string>
     <string name="enter_correct_code">Please enter the correct code</string>
-    <string name="quantity_updated">Qunatity updated</string>
+    <string name="quantity_updated">Quantity updated</string>
     <string name="incorrect_password">incorrect password</string>
     <string name="order_no">Order No %s</string>
+    <string name="incorrect_password_arabic">كلمة المرور خاطئة</string>
 </resources>

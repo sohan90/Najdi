@@ -259,7 +259,7 @@ public class Repository {
             @Override
             public void onFailurResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
                 if (baseResponse != null) {
-                    baseResponse.handleError(resourceProvider.getAppContext());
+                    baseResponse.handleErrorForDialog(resourceProvider.getActivityContext());
                 }
                 liveData.setValue(null);
             }

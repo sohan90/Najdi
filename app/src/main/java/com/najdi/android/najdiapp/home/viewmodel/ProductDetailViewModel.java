@@ -23,7 +23,7 @@ public class ProductDetailViewModel extends BaseViewModel {
     public MutableLiveData<Integer> quantityCount = new MutableLiveData<>();
     public MutableLiveData<Boolean> enableAddCartButton = new MutableLiveData<>();
     public MutableLiveData<Boolean> enableProceed = new MutableLiveData<>();
-    public MutableLiveData<Boolean> getVariaitionQuantity = new MutableLiveData<>();
+    public MutableLiveData<Boolean> getVariaitionQuantity;
     private String selectOptionPrice;
     private HashMap<String, String> attributHashMap;
     private ProductListResponse productListResponse;
@@ -79,6 +79,10 @@ public class ProductDetailViewModel extends BaseViewModel {
         enableAddCartButton();
     }
 
+    public int getSetMaxvariationQuantity() {
+        return setMaxvariationQuantity;
+    }
+
     public void updatePrice(ProductListResponse productListResponse, String selectedSlugValue, int selectedId) {
         this.productListResponse = productListResponse;
         createAttributeForSelectedValue(selectedSlugValue, selectedId);
@@ -103,6 +107,10 @@ public class ProductDetailViewModel extends BaseViewModel {
 
     public int getVariationId() {
         return variationId;
+    }
+
+    public void setVariationId(int variationId) {
+        this.variationId = variationId;
     }
 
     private void createAttributeForSelectedValue(String selectedValue, int selectedId) {
@@ -172,6 +180,11 @@ public class ProductDetailViewModel extends BaseViewModel {
         return repository.removeCartItem(hashMap);
     }
 
+
+    public MutableLiveData<Boolean> getGetVariaitionQuantity() {
+        getVariaitionQuantity = new MutableLiveData<>();
+        return getVariaitionQuantity;
+    }
 
     public LiveData<ProductListResponse> getVariationQuantity(int productId, int variationId) {
         return repository.getVariationForProduct(productId, variationId);
