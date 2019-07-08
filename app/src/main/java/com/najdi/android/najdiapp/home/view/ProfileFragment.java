@@ -77,7 +77,8 @@ public class ProfileFragment extends BaseFragment {
             DialogUtil.showAlertDialog(getActivity(), getString(R.string.profile_succes_msg),
                     (dialog, which) -> dialog.dismiss());
         } else {
-            ToastUtils.getInstance(getActivity()).showShortToast(getString(R.string.please_fill));
+            DialogUtil.showAlertDialog(getActivity(), getString(R.string.please_fill),
+                    (dialog, which) -> dialog.dismiss());
         }
 
     }

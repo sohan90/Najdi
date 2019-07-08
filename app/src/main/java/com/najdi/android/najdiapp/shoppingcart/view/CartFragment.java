@@ -87,7 +87,9 @@ public class CartFragment extends BaseFragment {
                 updateCartSizeForRemoveItem(adapterList.get(position).getQuantity());
                 updateAdapterForRemoveItem(position);
                 String message = baseResponse.getData().getMessage();
-                ToastUtils.getInstance(getActivity()).showLongToast(message);
+                DialogUtil.showAlertDialog(getActivity(), getString(R.string.item_removed), (dialog, which) -> {
+                    dialog.dismiss();
+                });
             }
         });
     }

@@ -246,7 +246,7 @@ public class HomeScreenActivity extends BaseActivity
             if (productListResponses != null && productListResponses.size() > 0) {
                 viewModel.getProductList().setValue(productListResponses);
             } else {
-                ToastUtils.getInstance(this).showShortToast(getString(R.string.something_went_wrong));
+                ToastUtils.getInstance(this).showLongToast(getString(R.string.something_went_wrong));
             }
         });
     }

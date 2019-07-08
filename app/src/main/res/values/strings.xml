@@ -159,4 +159,5 @@
     <string name="incorrect_password">incorrect password</string>
     <string name="order_no">Order No %s</string>
     <string name="incorrect_password_arabic">كلمة المرور خاطئة</string>
+    <string name="item_removed">Item removed</string>
 </resources>

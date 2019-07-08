@@ -132,7 +132,9 @@ public class CheckoutFragment extends BaseFragment {
                 updateAdapterForRemoveItem(position);
                 activityViewModel.getCartCountNotification().setValue(true);
                 String message = baseResponse.getData().getMessage();
-                ToastUtils.getInstance(getActivity()).showShortToast(message);
+                DialogUtil.showAlertDialog(getActivity(), getString(R.string.item_removed), (dialog, which) -> {
+                    dialog.dismiss();
+                });
             }
         });
     }

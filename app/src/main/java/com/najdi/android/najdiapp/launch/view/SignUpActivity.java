@@ -12,6 +12,7 @@ import com.najdi.android.najdiapp.databinding.ActivitySignUpBinding;
 import com.najdi.android.najdiapp.home.view.AboutUsFragment;
 import com.najdi.android.najdiapp.launch.model.SignupResponseModel;
 import com.najdi.android.najdiapp.launch.viewmodel.SignUpViewModel;
+import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.FragmentHelper;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 import com.najdi.android.najdiapp.utitility.ToastUtils;
@@ -94,13 +95,17 @@ public class SignUpActivity extends BaseActivity {
                     hideProgressDialog();
                     if (signupResponseModel != null) {
                         if (signupResponseModel.getCode().equals("200") && signupResponseModel.getData() != null) {
-                            ToastUtils.getInstance(this).showShortToast(signupResponseModel.
-                                    getData().getMessage());
-                            launchOTPScreen();
-                            finish();
+                            DialogUtil.showAlertDialog(this, signupResponseModel.getData().getMessage(),
+                                    (dialog, which) -> {
+                                        launchOTPScreen();
+                                        finish();
+                                    });
+
                         } else {
-                            ToastUtils.getInstance(this).showShortToast(signupResponseModel.
-                                    getData().getMessage());
+                            if (signupResponseModel.getData() == null) return;
+                            DialogUtil.showAlertDialog(this, signupResponseModel.getData().
+                                            getMessage(),
+                                    (dialog, which) -> dialog.dismiss());
                         }
                     }
                 });

@@ -11,6 +11,7 @@ import com.najdi.android.najdiapp.checkout.viewmodel.ShippingDetailViewModel;
 import com.najdi.android.najdiapp.common.BaseFragment;
 import com.najdi.android.najdiapp.databinding.FragmentCheckoutStep1Binding;
 import com.najdi.android.najdiapp.launch.model.BillingAddress;
+import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 import com.najdi.android.najdiapp.utitility.ToastUtils;
 
@@ -78,7 +79,9 @@ public class ShippingDetailFragment extends BaseFragment {
                     activityViewModel.getBillingMutableLiveData().setValue(billingAddress);
                     activityViewModel.getProgressPercentage().setValue(50);
                 } else {
-                    ToastUtils.getInstance(getActivity()).showShortToast(getString(R.string.please_fill));
+                    DialogUtil.showAlertDialog(getActivity(), getString(R.string.please_fill), (dialog, which) -> {
+                        dialog.dismiss();
+                    });
                 }
             });
         });

@@ -6,6 +6,7 @@ import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.BaseViewModel;
 import com.najdi.android.najdiapp.home.model.ForgotPaswwordRequest;
+import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.ToastUtils;
 
 import androidx.annotation.NonNull;
@@ -82,8 +83,10 @@ public class ForgotPasswordViewModel extends BaseViewModel {
                 passwordErrorField.setValue(resourceProvider.getString(R.string.password_mismatched));
             }
         } else {
-            ToastUtils.getInstance(resourceProvider.getActivityContext()).showShortToast(
-                    resourceProvider.getString(R.string.please_fill));
+            DialogUtil.showAlertDialog(resourceProvider.getActivityContext(),
+                    resourceProvider.getString(R.string.please_fill), (dialog, which) -> {
+                        dialog.dismiss();
+                    });
         }
         validatePasswordStatus.setValue(isValid);
         return validatePasswordStatus;

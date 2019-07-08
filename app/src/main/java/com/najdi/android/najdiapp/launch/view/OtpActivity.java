@@ -122,7 +122,9 @@ public class OtpActivity extends BaseActivity {
                 if (baseResponse.getData() != null) {
                     startSec = 30;
                     startHandlerFor30S();
-                    ToastUtils.getInstance(this).showShortToast(baseResponse.getData().getMessage());
+                    DialogUtil.showAlertDialog(this, baseResponse.getData().getMessage(), (dialog, which) -> {
+                        dialog.dismiss();
+                    });
                 }
             }
         });

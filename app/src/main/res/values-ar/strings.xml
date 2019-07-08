@@ -149,5 +149,6 @@
     <string name="incorrect_password">كلمة المرور خاطئة</string>
     <string name="order_no">" رقم الطلب %s"</string>
     <string name="incorrect_password_arabic">كلمة المرور خاطئة</string>
+    <string name="item_removed">تمت إزالة العنصر</string>
 
 </resources>

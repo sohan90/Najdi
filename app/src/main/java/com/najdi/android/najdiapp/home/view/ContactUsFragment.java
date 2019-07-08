@@ -13,6 +13,7 @@ import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.databinding.ContactUsBinding;
 import com.najdi.android.najdiapp.home.viewmodel.ContactUsViewModel;
 import com.najdi.android.najdiapp.home.viewmodel.HomeScreenViewModel;
+import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 import com.najdi.android.najdiapp.utitility.ToastUtils;
 
@@ -73,7 +74,9 @@ public class ContactUsFragment extends BaseFragment implements TextWatcher {
                     hideProgressDialog();
                     if (baseResponse != null && baseResponse.getData() != null) {
                         String message = baseResponse.getData().getMessage();
-                        ToastUtils.getInstance(getActivity()).showShortToast(getString(R.string.message_success));
+                        DialogUtil.showAlertDialog(getActivity(), getString(R.string.message_success), (dialog, which) -> {
+                            dialog.dismiss();
+                        });
                     }
                 });
             }
