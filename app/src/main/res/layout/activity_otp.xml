@@ -68,6 +68,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="15dp"
                 android:text="@string/please_enter_it_below"
+                android:visibility="gone"
                 android:textColor="@color/black"
                 android:textSize="19sp" />
 

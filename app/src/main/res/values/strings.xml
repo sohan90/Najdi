@@ -160,4 +160,6 @@
     <string name="order_no">Order No %s</string>
     <string name="incorrect_password_arabic">كلمة المرور خاطئة</string>
     <string name="item_removed">Item removed</string>
+    <string name="verification_password_sent_to">Verification password sent to %s</string>
+    <string name="password_upd_msg">Password updated successfully</string>
 </resources>

@@ -7,6 +7,7 @@ import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.BaseViewModel;
 import com.najdi.android.najdiapp.home.model.ForgotPaswwordRequest;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
+import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 import com.najdi.android.najdiapp.utitility.ToastUtils;
 
 import androidx.annotation.NonNull;
@@ -51,7 +52,8 @@ public class ForgotPasswordViewModel extends BaseViewModel {
         ForgotPaswwordRequest forgotPaswwordRequest = new ForgotPaswwordRequest();
         forgotPaswwordRequest.setMobile(phoneno.getValue());
         forgotPaswwordRequest.setLang(lang);
-
+        PreferenceUtils.setValueString(resourceProvider.getActivityContext(),
+                PreferenceUtils.USER_PHONE_NO_KEY, phoneno.getValue());
         return repository.forgotPasswordRequest(forgotPaswwordRequest);
     }
 

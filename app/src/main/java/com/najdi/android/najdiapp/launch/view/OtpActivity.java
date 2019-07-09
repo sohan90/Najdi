@@ -122,9 +122,9 @@ public class OtpActivity extends BaseActivity {
                 if (baseResponse.getData() != null) {
                     startSec = 30;
                     startHandlerFor30S();
-                    DialogUtil.showAlertDialog(this, baseResponse.getData().getMessage(), (dialog, which) -> {
-                        dialog.dismiss();
-                    });
+                    String phone = PreferenceUtils.getValueString(this, PreferenceUtils.USER_PHONE_NO_KEY);
+                    String msg = getString(R.string.verification_password_sent_to, phone);
+                    DialogUtil.showAlertDialog(this, msg, (dialog, which) -> dialog.dismiss());
                 }
             }
         });
@@ -150,7 +150,17 @@ public class OtpActivity extends BaseActivity {
         liveData.observe(this, baseResponse -> {
             hideProgressDialog();
             if (baseResponse != null) {
-                String messsage;
+                if (screenType == SIGN_UP_SCREEN) {
+                    login();// sign up flow
+                } else if (screenType == CHANGE_MOBILE_VERIFY) {
+                    PreferenceUtils.setValueString(this,
+                            PreferenceUtils.USER_PHONE_NO_KEY, newMobileNo);
+                    finish();
+                } else {
+                    launchChangePasswordScreen();
+                    finish();// forgot password flow
+                }
+               /* String messsage;
                 if (screenType == CHANGE_MOBILE_VERIFY) {
                     messsage = getString(R.string.mobile_no_success_msg);
                 } else {
@@ -169,7 +179,7 @@ public class OtpActivity extends BaseActivity {
                                 launchChangePasswordScreen();
                                 finish();// forgot password flow
                             }
-                        });
+                        });*/
             }
         });
     }

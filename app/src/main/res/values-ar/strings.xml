@@ -67,8 +67,8 @@
     <string name="enter_valid_code">الرجاء إدخال الرمز السري الصحيح</string>
     <string name="pending">تحت التنفيذ</string>
     <string name="completed">مكتمل</string>
-    <string name="one_time_psd">الرمز السري المؤقت</string>
-    <string name="verify_mobile_no">تأكيد رقم الجوال</string>
+    <string name="one_time_psd">الرمز السري المؤقت المرسل للجوال رقم</string>
+    <string name="verify_mobile_no">التحقق من رقم الجوال</string>
     <string name="please_enter_it_below">فضلا قم بتعبئة أدناه</string>
     <string name="verify">تأكيد</string>
     <string name="didn_t_get_the_sms">"لم تستلم الرسالة النصية؟ "</string>
@@ -92,7 +92,7 @@
     <string name="sign_to_continue">تسجيل الدخول للمتابعة</string>
 
     <string name="order_received">"تم استلام الطلب "</string>
-    <string name="invalid_phone_no">الرجاء إدخال 9 ارقام لرقم الجوال</string>
+    <string name="invalid_phone_no">الرجاء إدخال رقم الجوال بالصيغة (5xxxxxxxx)</string>
     <string name="product_added_success">تم إضافة المنتج إلى سلة التسوق</string>
     <string name="add_to_cart">أضف إلى السلة</string>
     <string name="andStr">و</string>
@@ -109,7 +109,7 @@
     <string name="send">إرسال</string>
     <string name="not_available">غير متوفر</string>
     <string name="sale">تخفيض السعر</string>
-    <string name="change_password">غير كلمة السر</string>
+    <string name="change_password">تغيير كلمة المرور</string>
     <string name="change_mobile_number">تغيير رقم الجوال</string>
     <string name="save">حفظ</string>
     <string name="my_account">حسابي</string>
@@ -117,11 +117,11 @@
     <string name="mobile_number">رقم الهاتف المحمول</string>
     <string name="update">تحديث</string>
     <string name="old_password">كلمة المرور القديمة</string>
-    <string name="new_password">كلمة السر الجديدة</string>
+    <string name="new_password">كلمة المرور الجديدة</string>
     <string name="confirm_new_password">تأكيد كلمة المرور الجديدة</string>
     <string name="new_mobile_number">رقم الجوال الجديد</string>
     <string name="forgot_your_password">نسيت رقمك السري</string>
-    <string name="please_otp_msg">الرجاء إدخال رقم هاتفك المحمول ، ستتلقى كلمة مرور لمرة واحدة عبر الرسائل القصيرة</string>
+    <string name="please_otp_msg">الرجاء إدخال رقم الجوال</string>
     <string name="submit">تأكيد</string>
     <string name="password_mismatched">كلمة المرور غير متطابقة!</string>
     <string name="cancel">إلغاء</string>
@@ -145,10 +145,12 @@
     <string name="delete_msg">هل تريد بالتأكيد الحذف؟</string>
     <string name="minced_meat">نوع اللحم المفروم</string>
     <string name="enter_correct_code">الرجاء إدخال الرمز السري الصحيح</string>
-    <string name="quantity_updated">الكمية المحدثة</string>
+    <string name="quantity_updated">تم تحديث السلة</string>
     <string name="incorrect_password">كلمة المرور خاطئة</string>
     <string name="order_no">" رقم الطلب %s"</string>
     <string name="incorrect_password_arabic">كلمة المرور خاطئة</string>
     <string name="item_removed">تمت إزالة العنصر</string>
+    <string name="verification_password_sent_to">تم ارسال رمز التحقق إلى الجوال رقم %s</string>
+    <string name="password_upd_msg">"تم تحديث كلمة المرور بنجاح "</string>
 
 </resources>

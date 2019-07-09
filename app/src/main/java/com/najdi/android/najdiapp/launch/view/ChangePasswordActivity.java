@@ -88,7 +88,7 @@ public class ChangePasswordActivity extends BaseActivity {
         liveData.observe(this, baseResponse -> {
             hideProgressDialog();
             if (baseResponse != null) {
-                DialogUtil.showAlertDialog(this, baseResponse.getData().getMessage(), (dialog, which) -> {
+                DialogUtil.showAlertDialog(this, getString(R.string.password_upd_msg), (dialog, which) -> {
                     dialog.dismiss();
                     finish();
                 });
