@@ -42,35 +42,79 @@
                     android:textColor="@color/black" />
 
 
-                <com.google.android.material.textfield.TextInputLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_marginTop="15dp"
-                    app:errorEnabled="true"
-                    app:hintTextAppearance="@style/HintText"
-                    bind:errorText="@{viewModel.phoneNoError}">
+                    android:layoutDirection="ltr"
+                    android:gravity="bottom"
+                    android:orientation="horizontal">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/mobile_no"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layoutDirection="ltr"
+                        android:orientation="horizontal"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:text="966+"
+                            android:textColor="@color/black"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="1.2dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="bottom"
+                            android:layout_marginStart="5dp"
+                            android:background="@color/black" />
+                    </LinearLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:drawableEnd="@drawable/ic_phone_black_24dp"
-                        android:hint="@string/mobile_number_5x"
-                        android:imeOptions="actionNext"
-                        android:inputType="number"
-                        android:maxLength="9"
-                        android:maxLines="1"
-                        android:text="@={viewModel.phoneNo}"
-                        android:textColorHint="@color/grey_text"
-                        android:textDirection="locale" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_gravity="bottom"
+                        android:layout_marginStart="5dp"
+                        app:errorEnabled="true"
+                        app:hintTextAppearance="@style/HintText"
+                        bind:errorText="@{viewModel.phoneNoError}">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/mobile_no"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom|center"
+                            android:background="@null"
+                            android:drawableEnd="@drawable/ic_phone_black_24dp"
+                            android:gravity="bottom"
+                            android:hint="@string/mobile_number_5x"
+                            android:imeOptions="actionNext"
+                            android:inputType="number"
+                            android:maxLength="9"
+                            android:maxLines="1"
+                            android:text="@={viewModel.phoneNo}"
+                            android:textColorHint="@color/grey_text"
+                            android:textDirection="ltr" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1.2dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:padding="5dp"
+                    android:background="@color/grey_text" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="12dp"
+                    android:layoutDirection="ltr"
                     app:errorEnabled="true"
                     app:hintTextAppearance="@style/HintText"
                     app:passwordToggleEnabled="true"
@@ -86,8 +130,8 @@
                         android:inputType="textPassword"
                         android:maxLength="20"
                         android:maxLines="1"
-                        android:textAlignment="viewStart"
                         android:text="@={viewModel.password}"
+                        android:textAlignment="viewStart"
                         android:textColorHint="@color/grey_text"
                         android:textDirection="locale" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -147,8 +191,8 @@
                         android:layout_height="wrap_content"
                         android:layout_alignTop="@id/spannable_sign_up"
                         android:layout_alignBottom="@id/spannable_sign_up"
-                        android:gravity="center"
                         android:layout_toEndOf="@id/spannable_sign_up"
+                        android:gravity="center"
                         android:text="@string/sign_up"
                         android:textColor="@color/green_default" />
 

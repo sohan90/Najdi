@@ -312,6 +312,9 @@ public class CheckoutActivity extends BaseActivity {
         });
     }
 
+    private void setTitle(String title){
+        binding.toolbar.title.setText(title);
+    }
     private void replaceFragment(int step) {
         Fragment fragment = null;
         String fragmentTag = null;
@@ -322,11 +325,13 @@ public class CheckoutActivity extends BaseActivity {
                 break;
 
             case STEP_TWO:
+                setTitle(getString(R.string.checkout));
                 fragment = CheckoutFragment.createInstance();
                 fragmentTag = Constants.FragmentTags.CHECKOUT;
                 break;
 
             case STEP_THREE:
+                setTitle(getString(R.string.order_complete));
                 fragment = OrderCompleteFragment.createInstance();
                 fragmentTag = Constants.FragmentTags.ORDER_COMPLETE;
                 break;
@@ -342,6 +347,7 @@ public class CheckoutActivity extends BaseActivity {
             finish();
             launchHomeScreen();
         } else if (backStackCount == 2) {
+            setTitle(getString(R.string.shipping_details));
             getSupportFragmentManager().popBackStackImmediate();
             animateProgress(0);
             binding.two.setEnabled(false);

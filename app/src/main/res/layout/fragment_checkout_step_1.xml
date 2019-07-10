@@ -32,7 +32,6 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/name"
                     android:imeOptions="actionNext"
-                    android:text="@={viewModel.name}"
                     android:inputType="textAutoComplete"
                     android:textDirection="locale"
                     android:padding="10dp" />

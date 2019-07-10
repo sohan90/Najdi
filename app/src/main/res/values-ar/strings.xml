@@ -16,7 +16,7 @@
     <string name="terms_and_conditions">الشروط والأحكام</string>
     <string name="and_privacy_policy">سياسة الخصوصية</string>
     <string name="log_in">تسجيل الدخول</string>
-    <string name="checkout">أتمام الطلب</string>
+    <string name="checkout">تمام الطلب</string>
     <string name="order_complete">طلب مكتمل</string>
     <string name="select_options">حدد الخيارات المناسبة</string>
 
@@ -94,12 +94,12 @@
     <string name="order_received">"تم استلام الطلب "</string>
     <string name="invalid_phone_no">الرجاء إدخال رقم الجوال بالصيغة (5xxxxxxxx)</string>
     <string name="product_added_success">تم إضافة المنتج إلى سلة التسوق</string>
-    <string name="add_to_cart">أضف إلى السلة</string>
+    <string name="add_to_cart">تحديث السلة</string>
     <string name="andStr">و</string>
     <string name="please_fill">يرجى ملء جميع الحقول المطلوبة</string>
     <string name="something_went_wrong">هناك خطأ ما</string>
     <string name="please_feel">لا تتردد في ارسال لنا أي أسئلة</string>
-    <string name="message">رسالة</string>
+    <string name="message">أرسل لنا رسالة</string>
     <string name="already_have_an_account">هل لديك حساب</string>
     <string name="direct_bank_transer_msg">\"اجعلك تدفع مباشرة في حسابنا المصرفي. يرجى استخدام معرف الطلب الخاص بك كمراجع للدفع ، ولن يتم شحن طلبك حتى يتم إضافة الأموال إلى حسابنا</string>
     <string name="update_cart_label">تحديث العربة</string>
@@ -113,8 +113,8 @@
     <string name="change_mobile_number">تغيير رقم الجوال</string>
     <string name="save">حفظ</string>
     <string name="my_account">حسابي</string>
-    <string name="change_no_msg">لتغيير رقم هاتفك المحمول ، يرجى إدخال الرقم الجديد أدناه.</string>
-    <string name="mobile_number">رقم الهاتف المحمول</string>
+    <string name="change_no_msg">رجى إدخال رقم الجوال الجديد أدناه</string>
+    <string name="mobile_number">رقم الجوال الحالي</string>
     <string name="update">تحديث</string>
     <string name="old_password">كلمة المرور القديمة</string>
     <string name="new_password">كلمة المرور الجديدة</string>
@@ -149,7 +149,7 @@
     <string name="incorrect_password">كلمة المرور خاطئة</string>
     <string name="order_no">" رقم الطلب %s"</string>
     <string name="incorrect_password_arabic">كلمة المرور خاطئة</string>
-    <string name="item_removed">تمت إزالة العنصر</string>
+    <string name="item_removed">تم إزالة المنتج</string>
     <string name="verification_password_sent_to">تم ارسال رمز التحقق إلى الجوال رقم %s</string>
     <string name="password_upd_msg">"تم تحديث كلمة المرور بنجاح "</string>
 
