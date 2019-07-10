@@ -57,12 +57,12 @@
     <string name="home">"الرئيسية  "</string>
     <string name="about_us">"عن نجدي "</string>
     <string name="log_out">"تسجيل الخروج "</string>
-    <string name="order_history">"الطلبات السابقة "</string>
+    <string name="order_history">"الطلبات السابقة"</string>
     <string name="language">"اللغة "</string>
     <string name="products">"المنتجات "</string>
     <string name="shopping_cart">"سلة التسوق "</string>
     <string name="profile">"حسابي "</string>
-    <string name="contact_us">"اتصل بنا  "</string>
+    <string name="contact_us">"اتصل بنا"</string>
     <string name="no_order_history_msg">لا توجد لديك طلبات سابقة</string>
     <string name="enter_valid_code">الرجاء إدخال الرمز السري الصحيح</string>
     <string name="pending">تحت التنفيذ</string>
@@ -139,8 +139,6 @@
     <string name="head">الرأس والكوارع</string>
     <string name="cutting_way">طريقة التقطيع</string>
 
-    <string name="head_legs">الرأس والكوارع</string>
-    <string name="packaging">التغليف</string>
     <string name="mobile_no_success_msg">تم تغيير رقم الجوال بنجاح</string>
     <string name="delete_msg">هل تريد بالتأكيد الحذف؟</string>
     <string name="minced_meat">نوع اللحم المفروم</string>
@@ -154,5 +152,23 @@
     <string name="password_upd_msg">"تم تحديث كلمة المرور بنجاح "</string>
     <string name="account_no">رقم الحساب</string>
     <string name="iban">رقم الحساب الدولي</string>
+    <string name="phone_no">0533552201, 0558080240</string>
+    <string name="web_address">www.najdisheep.com</string>
+    <string name="one">1</string>
+    <string name="two">2</string>
+    <string name="three">3</string>
+    <string name="login_as_a_guest">Login as a Guest</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="title_activity_home_screen">HomeScreenActivity</string>
+    <string name="permission_denied">Permission denied</string>
+    <string name="service_not_available">service is not available</string>
+    <string name="invalid_lat_long">invalid lat long</string>
+    <string name="no_address_found">No address found</string>
+    <string name="address_found">Address found</string>
+    <string name="english_lang">E</string>
 
 </resources>

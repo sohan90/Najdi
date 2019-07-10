@@ -32,11 +32,8 @@
     <string name="available">Available</string>
     <string name="quantity">Quantity</string>
     <string name="clear">clear</string>
-    <string name="ok">Ok</string>
-    <string name="select_shipping_address_from_map">Select Shipping Address From Map</string>
+    <string name="ok">OK</string>
     <string name="continue_txt">Continue shopping</string>
-    <string name="enter_location_name">Enter Location Name</string>
-    <string name="save_to_favourite_location">Save to favourite Location</string>
     <string name="cancel">Cancel</string>
     <string name="thank_you_order_has_been_received">Thank you order has been received.</string>
     <string name="payment_method">Payment Method</string>
