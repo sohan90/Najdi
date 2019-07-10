@@ -16,7 +16,7 @@
     <string name="terms_and_conditions">الشروط والأحكام</string>
     <string name="and_privacy_policy">سياسة الخصوصية</string>
     <string name="log_in">تسجيل الدخول</string>
-    <string name="checkout">تمام الطلب</string>
+    <string name="checkout">اتمام الطلب</string>
     <string name="order_complete">طلب مكتمل</string>
     <string name="select_options">حدد الخيارات المناسبة</string>
 
@@ -113,7 +113,7 @@
     <string name="change_mobile_number">تغيير رقم الجوال</string>
     <string name="save">حفظ</string>
     <string name="my_account">حسابي</string>
-    <string name="change_no_msg">رجى إدخال رقم الجوال الجديد أدناه</string>
+    <string name="change_no_msg">يرجى إدخال رقم الجوال الجديد أدناه</string>
     <string name="mobile_number">رقم الجوال الحالي</string>
     <string name="update">تحديث</string>
     <string name="old_password">كلمة المرور القديمة</string>
@@ -145,12 +145,14 @@
     <string name="delete_msg">هل تريد بالتأكيد الحذف؟</string>
     <string name="minced_meat">نوع اللحم المفروم</string>
     <string name="enter_correct_code">الرجاء إدخال الرمز السري الصحيح</string>
-    <string name="quantity_updated">تم تحديث السلة</string>
+    <string name="quantity_updated">الكميةتم تحديث</string>
     <string name="incorrect_password">كلمة المرور خاطئة</string>
     <string name="order_no">" رقم الطلب %s"</string>
     <string name="incorrect_password_arabic">كلمة المرور خاطئة</string>
     <string name="item_removed">تم إزالة المنتج</string>
     <string name="verification_password_sent_to">تم ارسال رمز التحقق إلى الجوال رقم %s</string>
     <string name="password_upd_msg">"تم تحديث كلمة المرور بنجاح "</string>
+    <string name="account_no">رقم الحساب</string>
+    <string name="iban">رقم الحساب الدولي</string>
 
 </resources>

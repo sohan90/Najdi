@@ -76,7 +76,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/account_no"
                     android:layout_marginBottom="5dp"
-                    android:text="IBAN"
+                    android:text="@string/iban"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
