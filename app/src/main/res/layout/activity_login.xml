@@ -41,74 +41,61 @@
                     android:text="@string/sign_to_continue"
                     android:textColor="@color/black" />
 
-
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="10dp"
                     android:layoutDirection="ltr"
-                    android:gravity="bottom"
                     android:orientation="horizontal">
 
-                    <LinearLayout
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:layoutDirection="ltr"
-                        android:orientation="horizontal"
-                        android:padding="5dp">
+                        android:layout_gravity="center"
+                        android:text="+966"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="bottom"
-                            android:text="966+"
-                            android:textColor="@color/black"
-                            android:textStyle="bold" />
-
-                        <View
-                            android:layout_width="1.2dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="bottom"
-                            android:layout_marginStart="5dp"
-                            android:background="@color/black" />
-                    </LinearLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
+                    <View
+                        android:layout_width="1.2dp"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="5dp"
-                        app:errorEnabled="true"
-                        app:hintTextAppearance="@style/HintText"
-                        bind:errorText="@{viewModel.phoneNoError}">
+                        android:background="@color/black" />
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/mobile_no"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="bottom|center"
-                            android:background="@null"
-                            android:drawableEnd="@drawable/ic_phone_black_24dp"
-                            android:gravity="bottom"
-                            android:hint="@string/mobile_number_5x"
-                            android:imeOptions="actionNext"
-                            android:inputType="number"
-                            android:maxLength="9"
-                            android:maxLines="1"
-                            android:text="@={viewModel.phoneNo}"
-                            android:textColorHint="@color/grey_text"
-                            android:textDirection="ltr" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
+                    <EditText
+                        android:id="@+id/mobile_no"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="5dp"
+                        android:background="@null"
+                        android:gravity="center|start"
+                        android:hint="@string/mobile_number_5x"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="9"
+                        android:text="@={viewModel.phoneNo}"
+                        android:textColor="@color/grey_text"
+                        android:textDirection="ltr"
+                        android:textSize="18sp" />
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1.2dp"
                     android:layout_marginTop="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@color/grey_text"
+                    android:padding="5dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:text="@{viewModel.phoneNoError}"
+                    android:gravity="left"
                     android:layout_marginBottom="10dp"
-                    android:padding="5dp"
-                    android:background="@color/grey_text" />
+                    android:textColor="@color/error_red"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
@@ -116,6 +103,7 @@
                     android:layout_marginTop="12dp"
                     android:layoutDirection="ltr"
                     app:errorEnabled="true"
+                    app:errorTextAppearance="@style/error_appearance"
                     app:hintTextAppearance="@style/HintText"
                     app:passwordToggleEnabled="true"
                     app:passwordToggleTint="@color/green_default"
@@ -129,6 +117,7 @@
                         android:imeOptions="actionDone"
                         android:inputType="textPassword"
                         android:maxLength="20"
+                        android:layoutDirection="ltr"
                         android:maxLines="1"
                         android:text="@={viewModel.password}"
                         android:textAlignment="viewStart"

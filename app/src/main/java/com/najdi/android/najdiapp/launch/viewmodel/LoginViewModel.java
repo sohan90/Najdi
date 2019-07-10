@@ -1,6 +1,7 @@
 package com.najdi.android.najdiapp.launch.viewmodel;
 
 import android.app.Application;
+import android.text.TextUtils;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.najdi.android.najdiapp.common.BaseViewModel;
@@ -51,7 +52,7 @@ public class LoginViewModel extends BaseViewModel {
             }
         }
 
-        if (password.getValue() == null) {
+        if (TextUtils.isEmpty(password.getValue())) {
             passwordError.setValue(resourceProvider.getString(R.string.invalid_pass));
             isValid = false;
         } else {

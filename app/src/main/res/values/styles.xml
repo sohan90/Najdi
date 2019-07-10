@@ -16,6 +16,11 @@
         <item name="android:textColor">@color/green_default</item>
     </style>
 
+    <style name="error_appearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/error_red</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
     <!-- Service Call Progress Dialog  BEGIN -->
     <style name="ProgressDialogTheme" parent="android:Theme.Holo.Dialog">
         <item name="android:alertDialogStyle">@style/ProgressDialogStyle</item>
