@@ -103,6 +103,7 @@
                     android:layout_marginTop="12dp"
                     android:layoutDirection="ltr"
                     app:errorEnabled="true"
+                    android:textDirection="ltr"
                     app:errorTextAppearance="@style/error_appearance"
                     app:hintTextAppearance="@style/HintText"
                     app:passwordToggleEnabled="true"
@@ -117,12 +118,11 @@
                         android:imeOptions="actionDone"
                         android:inputType="textPassword"
                         android:maxLength="20"
-                        android:layoutDirection="ltr"
                         android:maxLines="1"
                         android:text="@={viewModel.password}"
                         android:textAlignment="viewStart"
                         android:textColorHint="@color/grey_text"
-                        android:textDirection="locale" />
+                        android:textDirection="ltr" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView

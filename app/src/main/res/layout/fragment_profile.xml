@@ -40,7 +40,7 @@
                 android:maxLength="20"
                 android:maxLines="1"
                 android:textColorHint="@color/grey_text"
-                android:textDirection="locale" />
+                android:textDirection="ltr" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout

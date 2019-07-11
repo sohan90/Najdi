@@ -12,6 +12,7 @@ android {
     }
     buildTypes {
         release {
+            debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -54,6 +55,7 @@ android {
             storePassword "test@123"
             keyAlias "najdi"
             keyPassword "test@123"
+            storeFile file('najdi.jks')
             v2SigningEnabled false
         }
     }

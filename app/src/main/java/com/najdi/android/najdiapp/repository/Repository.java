@@ -364,7 +364,7 @@ public class Repository {
 
     public LiveData<BaseResponse> contactUs(ContactUsRequest contactUsRequest) {
         MutableLiveData<BaseResponse> liveData = new MutableLiveData<>();
-        RetrofitClient.getInstance().contactUs(resourceProvider.getCountryLang(), contactUsRequest).enqueue(new
+        RetrofitClient.getInstance().contactUs(Constants.ENGLISH_LAN, contactUsRequest).enqueue(new
                 RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<BaseResponse>() {
             @Override
             public void onSuccesResponse(Call<BaseResponse> call, BaseResponse baseResponse) {

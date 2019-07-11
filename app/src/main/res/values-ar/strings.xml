@@ -102,7 +102,7 @@
     <string name="message">أرسل لنا رسالة</string>
     <string name="already_have_an_account">هل لديك حساب</string>
     <string name="direct_bank_transer_msg">\"اجعلك تدفع مباشرة في حسابنا المصرفي. يرجى استخدام معرف الطلب الخاص بك كمراجع للدفع ، ولن يتم شحن طلبك حتى يتم إضافة الأموال إلى حسابنا</string>
-    <string name="update_cart_label">تحديث العربة</string>
+    <string name="update_cart_label">تحديث السلة</string>
     <string name="product_updated_success">تم تحديث السلة</string>
     <string name="building_number">رقم المبنى</string>
     <string name="direct_transfer_title">تحويل بنكي</string>
@@ -142,8 +142,8 @@
     <string name="mobile_no_success_msg">تم تغيير رقم الجوال بنجاح</string>
     <string name="delete_msg">هل تريد بالتأكيد الحذف؟</string>
     <string name="minced_meat">نوع اللحم المفروم</string>
-    <string name="enter_correct_code">الرجاء إدخال الرمز السري الصحيح</string>
-    <string name="quantity_updated">الكميةتم تحديث</string>
+    <string name="enter_correct_code">الرجاء إدخال رمز التحقق الصحيح</string>
+    <string name="quantity_updated">تم تحديث الكمية</string>
     <string name="incorrect_password">كلمة المرور خاطئة</string>
     <string name="order_no">" رقم الطلب %s"</string>
     <string name="incorrect_password_arabic">كلمة المرور خاطئة</string>
@@ -170,5 +170,6 @@
     <string name="no_address_found">No address found</string>
     <string name="address_found">Address found</string>
     <string name="english_lang">E</string>
+    <string name="password_does_not_matched">كلمة المرور غير متطابقة</string>
 
 </resources>

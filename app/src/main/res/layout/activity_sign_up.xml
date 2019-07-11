@@ -44,27 +44,60 @@
                     android:layout_marginBottom="5dp"
                     android:src="@drawable/najdi_logo" />
 
-                <com.google.android.material.textfield.TextInputLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    app:errorEnabled="true"
-                    app:hintTextAppearance="@style/HintText"
-                    bind:errorText="@{viewModel.phoneNoError}">
+                    android:layout_height="25dp"
+                    android:layout_marginTop="10dp"
+                    android:layoutDirection="ltr"
+                    android:orientation="horizontal">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="+966"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="1.2dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="5dp"
+                        android:background="@color/black" />
+
+                    <EditText
                         android:id="@+id/mobile_no"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableEnd="@drawable/ic_phone_black_24dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="5dp"
+                        android:background="@null"
+                        android:gravity="center|start"
                         android:hint="@string/mobile_number_5x"
                         android:imeOptions="actionNext"
                         android:inputType="number"
                         android:maxLength="9"
-                        android:maxLines="1"
                         android:text="@={viewModel.phoneNo}"
-                        android:textColorHint="@color/grey_text" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:textColor="@color/grey_text"
+                        android:textDirection="ltr"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1.2dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@color/grey_text"
+                    android:padding="5dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:text="@{viewModel.phoneNoError}"
+                    android:gravity="left"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/error_red"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
@@ -75,6 +108,7 @@
                     app:errorEnabled="true"
                     app:hintTextAppearance="@style/HintText"
                     app:passwordToggleEnabled="true"
+                    app:errorTextAppearance="@style/error_appearance"
                     app:passwordToggleTint="@color/green_default"
                     bind:errorText="@{viewModel.passwordError}">
 
@@ -101,6 +135,7 @@
                     app:errorEnabled="true"
                     app:hintTextAppearance="@style/HintText"
                     app:passwordToggleEnabled="true"
+                    app:errorTextAppearance="@style/error_appearance"
                     app:passwordToggleTint="@color/green_default"
                     bind:errorText="@{viewModel.confirmPassError}">
 

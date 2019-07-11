@@ -133,6 +133,7 @@ public class BaseResponse {
             switch (data.getStatus()) {
                 case 400:
                 case 500:
+                case 404:
                     ToastUtils.getInstance(context).showLongToast(message);
                     break;
 

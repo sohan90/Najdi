@@ -160,4 +160,5 @@
     <string name="verification_password_sent_to">Verification password sent to %s</string>
     <string name="password_upd_msg">Password updated successfully</string>
     <string name="iban">IBAN</string>
+    <string name="password_does_not_matched">Password does not matched</string>
 </resources>

@@ -65,7 +65,7 @@ public class SignUpViewModel extends BaseViewModel {
             valid = true;
 
         } else {
-            confirmPassError.setValue(resourceProvider.getString(R.string.invalid_pass));
+            confirmPassError.setValue(resourceProvider.getString(R.string.password_does_not_matched));
         }
         validateSuccess.setValue(valid);
     }
