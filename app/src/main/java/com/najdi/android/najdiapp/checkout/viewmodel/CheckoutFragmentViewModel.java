@@ -10,6 +10,7 @@ import com.najdi.android.najdiapp.shoppingcart.model.UpdateCartRequest;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import androidx.lifecycle.MutableLiveData;
 public class CheckoutFragmentViewModel extends BaseViewModel {
     private MutableLiveData<String> subTotal = new MutableLiveData<>();
     private MutableLiveData<String> totalLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<CartResponse.CartData>> adapterList = new MutableLiveData<>();
 
     public CheckoutFragmentViewModel(@NonNull Application application) {
         super(application);
@@ -30,6 +32,30 @@ public class CheckoutFragmentViewModel extends BaseViewModel {
 
     public MutableLiveData<String> getTotal() {
         return totalLiveData;
+    }
+
+    public LiveData<List<CartResponse.CartData>> sortvariation(CartResponse cartResponse) {
+        List<CartResponse.CartData> cartdataList = cartResponse.getData().getCartdata();
+
+        for (CartResponse.CartData cartData : cartdataList) {
+            LinkedHashMap<String, String> hashMap = new LinkedHashMap<>();
+            if (cartData.getVariation().containsKey("attribute_pa_size")) {
+                hashMap.put("attribute_pa_size", cartData.getVariation().get("attribute_pa_size"));
+            }
+            if (cartData.getVariation().containsKey("attribute_pa_cutting_way")) {
+                hashMap.put("attribute_pa_cutting_way", cartData.getVariation().get("attribute_pa_cutting_way"));
+            }
+            if (cartData.getVariation().containsKey("attribute_pa_head")) {
+                hashMap.put("attribute_pa_head", cartData.getVariation().get("attribute_pa_head"));
+            }
+            if (cartData.getVariation().containsKey("attribute_pa_legs")) {
+                hashMap.put("attribute_pa_legs", cartData.getVariation().get("attribute_pa_legs"));
+            }
+            hashMap.putAll(cartData.getVariation());
+            cartData.setVariation(hashMap);
+        }
+        adapterList.setValue(cartdataList);
+        return adapterList;
     }
 
     public void udpateTotal(List<CartResponse.CartData> cartDataList) {

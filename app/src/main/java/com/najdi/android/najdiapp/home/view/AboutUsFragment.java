@@ -13,6 +13,7 @@ import com.najdi.android.najdiapp.home.viewmodel.AboutViewModel;
 import com.najdi.android.najdiapp.home.viewmodel.HomeScreenViewModel;
 import com.najdi.android.najdiapp.launch.viewmodel.LoginViewModel;
 import com.najdi.android.najdiapp.launch.viewmodel.SignUpViewModel;
+import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,19 +46,19 @@ public class AboutUsFragment extends BaseFragment {
                              @Nullable Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.frag_about_us, container, false);
+        setLocaleLanguage(PreferenceUtils.getLangFromPref(getActivity()));
         getScreenType();
         initActivityViewModel();
         initViewModel();
         bindViewModel();
         fetchHtmlContentForScreenType();
-
+        initToolBar();
         return binding.getRoot();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        initToolBar();
     }
 
     private void fetchHtmlContentForScreenType() {
@@ -136,7 +137,7 @@ public class AboutUsFragment extends BaseFragment {
         if (screenType == ABOUT_US) {
             activityViewModel.getSetToolBarTitle().setValue(getString(R.string.about_us));
         } else {
-            if (screenType == TERMS_CONDITION) {
+           if (screenType == TERMS_CONDITION) {
                 signUpViewModel.getToolbarTitle().setValue(getString(R.string.terms_and_conditions));
             } else {
                 signUpViewModel.getToolbarTitle().setValue(getString(R.string.and_privacy_policy));

@@ -45,7 +45,8 @@ public class SignUpViewModel extends BaseViewModel {
 
     public void validate() {
         boolean valid = false;
-        if (phoneNo.getValue() != null && phoneNo.getValue().startsWith("5")) {
+        if (phoneNo.getValue() != null &&
+                phoneNo.getValue().startsWith("5") && phoneNo.getValue().length() == 9) {
             phoneNoError.setValue(null);
         } else {
             phoneNoError.setValue(resourceProvider.getString(R.string.invalid_phone_no));

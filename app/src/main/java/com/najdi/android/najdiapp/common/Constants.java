@@ -19,6 +19,7 @@ public class Constants {
     public static final String LAUNCH_PRODUCT = "launch_product ";
     public static final String LAUNC_BANK_ACCOUNT = "launch_bank_account";
     public static final int PASSWORD_MAX_LENGTH = 20;
+    public static final int OTP_TIME = 60;
 
     public interface FragmentTags {
         String PRODUCT_DETAIL = "prodcut_detail";

@@ -1,5 +1,6 @@
 package com.najdi.android.najdiapp.common;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 
@@ -83,7 +84,7 @@ public class BaseResponse {
             return user_url;
         }
 
-        int getStatus() {
+        public int getStatus() {
             return status;
         }
     }
@@ -153,7 +154,7 @@ public class BaseResponse {
                 case 403:
                     if (data.getMessage() != null) {
                         String message = context.getString(R.string.incorrect_password);
-                        if (LocaleUtitlity.getCountryLang() == ARABIC_LAN) {
+                        if (LocaleUtitlity.getCountryLang().equals(ARABIC_LAN)) {
                             message = context.getString(R.string.incorrect_password_arabic);
                         }
                         DialogUtil.showAlertDialog(context, message,

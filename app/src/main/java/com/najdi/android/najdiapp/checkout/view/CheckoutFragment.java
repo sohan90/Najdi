@@ -25,6 +25,7 @@ import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.ToastUtils;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -81,8 +82,8 @@ public class CheckoutFragment extends BaseFragment {
     }
 
     private void initializeRecyclerViewAdapter() {
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL,
-                false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(),
+                RecyclerView.VERTICAL, false);
         binding.recyclView.setLayoutManager(linearLayoutManager);
         checkoutAdapter = new CheckoutAdapter(new CartAdapter.AdapterClickLisntener() {
             @Override
@@ -191,17 +192,17 @@ public class CheckoutFragment extends BaseFragment {
         activityViewModel.getCartResponseMutableLiveData().observe(getViewLifecycleOwner(),
                 cartResponse -> {
                     hideProgressDialog();
-                    if (cartResponse != null) {
-                        updateAdapter(cartResponse);
+                    if (cartResponse != null && cartResponse.getData().getCartdata() != null) {
                         viewModel.udpateTotal(cartResponse.getData().getCartdata());
+                        viewModel.sortvariation(cartResponse).observe(this, cartData -> {
+                            adapterList = cartData;
+                            updateAdapter(adapterList);
+                        });
                     }
                 });
     }
 
-    private void updateAdapter(CartResponse cartResponse) {
-        if (cartResponse.getData() != null && cartResponse.getData().getCartdata() != null) {
-            adapterList = cartResponse.getData().getCartdata();
-            checkoutAdapter.setDataList(adapterList);
-        }
+    private void updateAdapter(List<CartResponse.CartData> cartDataList) {
+        checkoutAdapter.setDataList(cartDataList);
     }
 }

@@ -23,9 +23,6 @@ public class BaseFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         resourceProvider = NajdiApplication.get(getActivity()).getResourceProvider();
-        /*resourceProvider.setCurrentLocale(getCurrentLocale());
-        LocaleUtitlity.setCurrentLocale(getCurrentLocale());*/
-
     }
 
     @Override
@@ -41,27 +38,15 @@ public class BaseFragment extends Fragment {
         DialogUtil.hideProgressDialog();
     }
 
+
     protected void setLocaleLanguage(String localeLanguage) {
+        if (getActivity() == null)return;
         Locale locale = new Locale(localeLanguage);
         Locale.setDefault(locale);
-        Configuration config = getResources().getConfiguration();
+        Configuration config = getActivity().getResources().getConfiguration();
         config.setLocale(locale);
         config.setLayoutDirection(locale);
-        if (getContext() == null) return;
-        getContext().createConfigurationContext(config);
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
         MathUtils.setCurrencySymbol(locale);
-        resourceProvider.setCurrentLocale(locale);
-        LocaleUtitlity.setCountryLang(localeLanguage);
-    }
-
-    private Locale getCurrentLocale() {
-        Locale locale;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            locale = getResources().getConfiguration().getLocales().get(0);
-        } else {
-            //noinspection deprecation
-            locale = getResources().getConfiguration().locale;
-        }
-        return locale;
     }
 }

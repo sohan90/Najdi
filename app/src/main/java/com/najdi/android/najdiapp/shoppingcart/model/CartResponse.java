@@ -100,6 +100,10 @@ public class CartResponse {
             return variation;
         }
 
+        public void setVariation(HashMap<String, String> variation) {
+            this.variation = variation;
+        }
+
         public int getProductId() {
             return product_id;
         }

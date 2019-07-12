@@ -87,9 +87,9 @@ public class ProfileFragment extends BaseFragment {
         if (getActivity() == null) return;
         String name = PreferenceUtils.getValueString(getActivity(), PreferenceUtils.USER_NAME_KEY);
         String email = PreferenceUtils.getValueString(getActivity(), PreferenceUtils.USER_EMAIL_KEY);
-        binding.name.setText(name);
+        binding.name.setText("");
         binding.email.setText(email);
-        binding.name.setSelection(name.length());
+        //binding.name.setSelection(name.length());
 
     }
 

@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
+import com.najdi.android.najdiapp.utitility.GlideApp;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;

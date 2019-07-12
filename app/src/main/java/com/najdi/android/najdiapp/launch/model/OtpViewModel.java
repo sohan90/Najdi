@@ -84,7 +84,8 @@ public class OtpViewModel extends BaseViewModel {
 
     public LiveData<BaseResponse> login(String username, String password) {
         LoginRequestModel loginRequestModel = new LoginRequestModel();
-        loginRequestModel.setUserName(username);
+        String phoneNo = "966" + username;
+        loginRequestModel.setUserName(phoneNo);
         loginRequestModel.setPassword(password);
         return repository.loginToken(loginRequestModel);
     }

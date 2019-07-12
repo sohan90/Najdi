@@ -78,7 +78,6 @@ public class ForgotPasswordFragment extends BaseFragment {
                                 dialog.dismiss();
                                 launchOtpScreen();
                             });
-
                 }
             });
         });

@@ -15,6 +15,7 @@ import com.najdi.android.najdiapp.databinding.ActivityOtpBinding;
 import com.najdi.android.najdiapp.home.view.HomeScreenActivity;
 import com.najdi.android.najdiapp.launch.model.OtpViewModel;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
+import com.najdi.android.najdiapp.utitility.LocaleUtitlity;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 import com.najdi.android.najdiapp.utitility.ToastUtils;
 
@@ -23,6 +24,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 
+import static com.najdi.android.najdiapp.common.Constants.ARABIC_LAN;
+import static com.najdi.android.najdiapp.common.Constants.OTP_TIME;
 import static com.najdi.android.najdiapp.common.Constants.OtpScreen.CHANGE_MOBILE_VERIFY;
 import static com.najdi.android.najdiapp.common.Constants.OtpScreen.SIGN_UP_SCREEN;
 import static com.najdi.android.najdiapp.launch.view.ChangePasswordActivity.EXTRA_CHANGE_PASSWORD_LAUNCH_TYPE;
@@ -31,7 +34,7 @@ import static com.najdi.android.najdiapp.launch.view.ChangePasswordActivity.EXTR
 public class OtpActivity extends BaseActivity {
     ActivityOtpBinding binding;
     private OtpViewModel viewModel;
-    int startSec = 30;
+    int startSec = OTP_TIME;
     public static final String EXTRA_SCREEN_TYPE = "extra_screen_type_otp";
     public static final String EXTRA_NEW_MOBILE_NO = "extra_mobile_no";
     private int screenType;
@@ -120,7 +123,7 @@ public class OtpActivity extends BaseActivity {
             hideProgressDialog();
             if (baseResponse != null) {
                 if (baseResponse.getData() != null) {
-                    startSec = 30;
+                    startSec = OTP_TIME;
                     startHandlerFor30S();
                     String phone = PreferenceUtils.getValueString(this, PreferenceUtils.USER_PHONE_NO_KEY);
                     String msg = getString(R.string.verification_password_sent_to, phone);
@@ -200,12 +203,21 @@ public class OtpActivity extends BaseActivity {
         LiveData<BaseResponse> liveData = viewModel.login(userName, password);
         liveData.observe(this, baseResponse -> {
             hideProgressDialog();
-            if (baseResponse != null) {
+            if (baseResponse != null && Integer.parseInt(baseResponse.getCode()) == 200) {
                 if (baseResponse.getData() != null) {
                     String loginToken = baseResponse.getData().getToken();
                     PreferenceUtils.setValueString(this, PreferenceUtils.USER_LOGIIN_TOKEN,
                             loginToken);
                     launchHomeScreen();
+                }
+            } else {
+                if (baseResponse != null && baseResponse.getData().getStatus() == 403) {
+                    String message = getString(R.string.incorrect_password);
+                    if (LocaleUtitlity.getCountryLang().equalsIgnoreCase(ARABIC_LAN)) {
+                        message = getString(R.string.incorrect_password_arabic);
+                    }
+                    DialogUtil.showAlertDialog(this, message,
+                            (dialog, which) -> dialog.dismiss());
                 }
             }
         });

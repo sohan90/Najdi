@@ -4,20 +4,23 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseActivity;
 import com.najdi.android.najdiapp.common.BaseResponse;
-import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.databinding.ActivityLoginBinding;
-import com.najdi.android.najdiapp.home.view.AboutUsFragment;
 import com.najdi.android.najdiapp.home.view.HomeScreenActivity;
 import com.najdi.android.najdiapp.launch.viewmodel.LoginViewModel;
+import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.FragmentHelper;
+import com.najdi.android.najdiapp.utitility.LocaleUtitlity;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+
+import static com.najdi.android.najdiapp.common.Constants.ARABIC_LAN;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
@@ -114,11 +117,24 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private void login() {
         viewModel.login().observe(this, baseResponse -> {
             hideProgressDialog();
-            if (baseResponse != null && baseResponse.getData() != null) {
+
+            if (baseResponse != null && baseResponse.getData() != null &&
+                    Integer.parseInt(baseResponse.getCode()) == 200) {
+
                 BaseResponse.Data data = baseResponse.getData();
                 saveCredential(data);
                 launchHomeScreen();
                 finish();
+
+            } else {
+                if (baseResponse != null && baseResponse.getData().getStatus() == 403) {
+                    String message = getString(R.string.incorrect_password);
+                    if (LocaleUtitlity.getCountryLang().equalsIgnoreCase(ARABIC_LAN)) {
+                        message = getString(R.string.incorrect_password_arabic);
+                    }
+                    DialogUtil.showAlertDialog(this, message,
+                            (dialog, which) -> dialog.dismiss());
+                }
             }
         });
     }

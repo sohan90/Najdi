@@ -80,7 +80,7 @@ public interface NajdiApi {
     Call<BaseResponse> verifyOtp(@Body OtpRequestModel requestModel);
 
     @POST(BuildConfig.NAJDI_CART_BASE_URL + "customapi/resend")
-    @Headers({"Content-Type:application/json"})
+    @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
     Call<BaseResponse> resendOtp(@Body OtpRequestModel requestModel);
 
     @POST(BuildConfig.NAJDI_CART_BASE_URL + "jwt-auth/v1/token")
