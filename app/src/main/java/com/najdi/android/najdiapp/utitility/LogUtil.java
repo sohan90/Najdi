@@ -7,7 +7,6 @@ import com.najdi.android.najdiapp.BuildConfig;
 
 
 /**
- * Created by Mindtree on 10/11/2017.
  */
 public class LogUtil {
 
