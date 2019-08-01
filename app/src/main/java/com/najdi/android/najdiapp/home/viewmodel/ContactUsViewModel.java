@@ -27,7 +27,7 @@ public class ContactUsViewModel extends BaseViewModel {
         LiveData<BaseResponse> liveData = null;
         if (message.getValue() != null) {
             ContactUsRequest contactUsRequest = new ContactUsRequest();
-            contactUsRequest.setMessage(message.getValue());
+            contactUsRequest.setMessage(message.getValue() + " " + "\n" + phoneNo);
             contactUsRequest.setUser_name(phoneNo);
             contactUsRequest.setSubject("Customer's Message");
 

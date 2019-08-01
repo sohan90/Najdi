@@ -6,8 +6,8 @@ android {
         applicationId "com.najdi.android.najdiapp"
         minSdkVersion 23
         targetSdkVersion 28
-        versionCode 3
-        versionName "1.2"
+        versionCode 4
+        versionName "1.2.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -18,21 +18,21 @@ android {
         }
     }
 
-    flavorDimensions "environment"
+    flavorDimensions "default"
     productFlavors {
         stagging {
             applicationId "com.najdi.android.najdiapp.stagging"
             buildConfigField 'String', 'NAJDI_END_POINTS', '"https://najdisheep.com/temp/livetest/wp-json/wc/v2/"'
             buildConfigField 'String', 'NAJDI_CART_BASE_URL', '"https://najdisheep.com/temp/livetest/wp-json/"'
             buildConfigField 'String', 'BASIC_64_AUTH', '"Basic Y2tfMzFmNTIxOTA3ZDJlZTY0ZmE4ZDMzMjAwNjE0ODY4ZTc3ZDlhOGY3Njpjc184NDU5ZjU4NWIwYzM3MjQ0Y2JjZWViZDYzZTE0MTQ4OWRjZDlkMWU4"'
-            dimension "environment"
+            dimension "default"
         }
         production {
             applicationId "com.najdi.android.najdiapp"
             buildConfigField 'String', 'NAJDI_END_POINTS', '"https://najdisheep.com/wp-json/wc/v2/"'
             buildConfigField 'String', 'NAJDI_CART_BASE_URL', '"https://najdisheep.com/wp-json/"'
             buildConfigField 'String', 'BASIC_64_AUTH', '"Basic Y2tfMGJjMTljMWY0ZGUwNTU4YWQ0MmFjYTU2MDFiY2MyNzVlNTVmOTExZDpjc185MzA3MjVlZTBhOTE2ODkxNDEwZGI5MmQzZWI4MjcxYTcwYjVhMzBm"'
-            dimension "environment"
+            dimension "default"
         }
     }
     sourceSets {

@@ -19,4 +19,10 @@ public class ExampleTest {
         SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("MMM YY");
         String newDate = simpleDateFormat1.format(dateParse);
     }
+
+    @Test
+    public void slashN(){
+        String message = "asdfdsfsdfs";
+        String newMessgage = message + "\n\n" + "96666";
+    }
 }
