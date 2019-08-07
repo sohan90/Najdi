@@ -83,6 +83,10 @@ public interface NajdiApi {
     @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
     Call<BaseResponse> resendOtp(@Body OtpRequestModel requestModel);
 
+    @POST(BuildConfig.NAJDI_CART_BASE_URL + "customapi/forgot/resend")
+    @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
+    Call<BaseResponse> forgotResendOtp(@Body OtpRequestModel requestModel);
+
     @POST(BuildConfig.NAJDI_CART_BASE_URL + "jwt-auth/v1/token")
     @Headers({"Content-Type:application/json"})
     Call<BaseResponse> loginToken(@Body LoginRequestModel loginRequestModel);

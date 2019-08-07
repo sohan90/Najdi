@@ -99,6 +99,15 @@ public class OtpViewModel extends BaseViewModel {
         return repository.resendOtp(otpRequestModel);
     }
 
+    public LiveData<BaseResponse> forgotresendOtp() {
+        String phoneNo = PreferenceUtils.getValueString(resourceProvider.getAppContext(),
+                PreferenceUtils.USER_PHONE_NO_KEY);
+        OtpRequestModel otpRequestModel = new OtpRequestModel();
+        otpRequestModel.setMobile(phoneNo);
+        otpRequestModel.setLang(resourceProvider.getCountryLang());
+        return repository.forgotresendOtp(otpRequestModel);
+    }
+
 
     public LiveData<BaseResponse> resendOtp(String newMobileNo) {
         OtpRequestModel otpRequestModel = new OtpRequestModel();

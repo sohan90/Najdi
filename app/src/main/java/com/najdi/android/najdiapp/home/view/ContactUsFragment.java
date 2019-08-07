@@ -73,6 +73,7 @@ public class ContactUsFragment extends BaseFragment implements TextWatcher {
                 liveData.observe(this, baseResponse -> {
                     hideProgressDialog();
                     if (baseResponse != null && baseResponse.getData() != null) {
+                        viewModel.getMessage().setValue("");
                         String message = baseResponse.getData().getMessage();
                         DialogUtil.showAlertDialog(getActivity(), getString(R.string.message_success), (dialog, which) -> {
                             dialog.dismiss();

@@ -27,6 +27,7 @@ import androidx.lifecycle.ViewModelProviders;
 import static com.najdi.android.najdiapp.common.Constants.ARABIC_LAN;
 import static com.najdi.android.najdiapp.common.Constants.OTP_TIME;
 import static com.najdi.android.najdiapp.common.Constants.OtpScreen.CHANGE_MOBILE_VERIFY;
+import static com.najdi.android.najdiapp.common.Constants.OtpScreen.FORGOT_PASSWORD_SCREEN;
 import static com.najdi.android.najdiapp.common.Constants.OtpScreen.SIGN_UP_SCREEN;
 import static com.najdi.android.najdiapp.launch.view.ChangePasswordActivity.EXTRA_CHANGE_PASSWORD_LAUNCH_TYPE;
 import static com.najdi.android.najdiapp.launch.view.ChangePasswordActivity.EXTRA_OTP_CODE;
@@ -116,6 +117,9 @@ public class OtpActivity extends BaseActivity {
         LiveData<BaseResponse> liveData;
         if (screenType == CHANGE_MOBILE_VERIFY) {
             liveData = viewModel.resendOtp(newMobileNo);
+
+        } else if (screenType == FORGOT_PASSWORD_SCREEN) {
+            liveData = viewModel.forgotresendOtp();
         } else {
             liveData = viewModel.resendOtp();
         }
@@ -163,26 +167,6 @@ public class OtpActivity extends BaseActivity {
                     launchChangePasswordScreen();
                     finish();// forgot password flow
                 }
-               /* String messsage;
-                if (screenType == CHANGE_MOBILE_VERIFY) {
-                    messsage = getString(R.string.mobile_no_success_msg);
-                } else {
-                    messsage = getString(R.string.verification_matched);
-                }
-                DialogUtil.showAlertDialog(this, messsage,
-                        (dialog, which) -> {
-                            dialog.dismiss();
-                            if (screenType == SIGN_UP_SCREEN) {
-                                login();// sign up flow
-                            } else if (screenType == CHANGE_MOBILE_VERIFY) {
-                                PreferenceUtils.setValueString(this,
-                                        PreferenceUtils.USER_PHONE_NO_KEY, newMobileNo);
-                                finish();
-                            } else {
-                                launchChangePasswordScreen();
-                                finish();// forgot password flow
-                            }
-                        });*/
             }
         });
     }
@@ -206,8 +190,13 @@ public class OtpActivity extends BaseActivity {
             if (baseResponse != null && Integer.parseInt(baseResponse.getCode()) == 200) {
                 if (baseResponse.getData() != null) {
                     String loginToken = baseResponse.getData().getToken();
+
+                    PreferenceUtils.setValueInt(this, PreferenceUtils.USER_ID_KEY,
+                            Integer.parseInt(baseResponse.getData().getUserId()));
+
                     PreferenceUtils.setValueString(this, PreferenceUtils.USER_LOGIIN_TOKEN,
                             loginToken);
+
                     launchHomeScreen();
                 }
             } else {
