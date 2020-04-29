@@ -5,6 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.google.android.material.textfield.TextInputEditText;
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseFragment;
@@ -23,13 +30,6 @@ import com.najdi.android.najdiapp.utitility.DialogUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProviders;
 
 import static com.najdi.android.najdiapp.common.Constants.APPEND_ATTRIBUTE_STR;
 
@@ -104,7 +104,8 @@ public class ProductDetailFragment extends BaseFragment {
 
     private void fetchProductDetail() {
         showProgressDialog();
-        homeScreeViewModel.getIndividualProduct(productId).observe(this, productListResponse1 -> {
+        homeScreeViewModel.getIndividualProduct(productId)
+                .observe(this, productListResponse1 -> {
             hideProgressDialog();
             if (productListResponse1 != null) {
                 this.productListResponse = productListResponse1;

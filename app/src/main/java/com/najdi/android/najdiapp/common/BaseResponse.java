@@ -1,8 +1,6 @@
 package com.najdi.android.najdiapp.common;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
@@ -132,8 +130,13 @@ public class BaseResponse {
     public void handleError(Context context) {
         if (data != null) {
             switch (data.getStatus()) {
-                case 400:
                 case 500:
+                    if (message == null) return;
+                    DialogUtil.showAlertDialog(context, message,
+                            (dialog, which) -> dialog.dismiss());
+                    break;
+
+                case 400:
                 case 404:
                     ToastUtils.getInstance(context).showLongToast(message);
                     break;
