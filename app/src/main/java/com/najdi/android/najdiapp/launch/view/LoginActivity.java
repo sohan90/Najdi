@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseActivity;
-import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.databinding.ActivityLoginBinding;
 import com.najdi.android.najdiapp.home.view.HomeScreenActivity;
@@ -15,10 +18,6 @@ import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.FragmentHelper;
 import com.najdi.android.najdiapp.utitility.LocaleUtitlity;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
-
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 
 import static com.najdi.android.najdiapp.common.Constants.ARABIC_LAN;
 
@@ -117,20 +116,21 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private void login() {
         viewModel.login().observe(this, baseResponse -> {
             hideProgressDialog();
+            if (baseResponse != null) {
+                if (!baseResponse.isStatus()) {
+                    saveCredential(baseResponse.getUserid(), "");
+                    launchHomeScreen();
+                    finish();
 
-            if (baseResponse != null && baseResponse.getData() != null &&
-                    Integer.parseInt(baseResponse.getCode()) == 200) {
-
-                BaseResponse.Data data = baseResponse.getData();
-                saveCredential(data);
-                launchHomeScreen();
-                finish();
-
-            } else {
-                if (baseResponse != null && baseResponse.getData().getStatus() == 403) {
-                    String message = getString(R.string.incorrect_password);
-                    if (LocaleUtitlity.getCountryLang().equalsIgnoreCase(ARABIC_LAN)) {
-                        message = getString(R.string.incorrect_password_arabic);
+                } else {
+                    String message;
+                    if (baseResponse.getMessage() == null) {
+                         message = getString(R.string.incorrect_password);
+                        if (LocaleUtitlity.getCountryLang().equalsIgnoreCase(ARABIC_LAN)) {
+                            message = getString(R.string.incorrect_password_arabic);
+                        }
+                    } else {
+                        message = baseResponse.getMessage();
                     }
                     DialogUtil.showAlertDialog(this, message,
                             (dialog, which) -> dialog.dismiss());
@@ -139,13 +139,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         });
     }
 
-    private void saveCredential(BaseResponse.Data data) {
-        PreferenceUtils.setValueString(this, PreferenceUtils.USER_LOGIIN_TOKEN, data.getToken());
-        PreferenceUtils.setValueInt(this, PreferenceUtils.USER_ID_KEY, Integer.parseInt(data.getUserId()));
-        PreferenceUtils.setValueString(this, PreferenceUtils.USER_EMAIL_KEY,
-                data.getUserEmail());
-        PreferenceUtils.setValueString(this, PreferenceUtils.USER_NAME_KEY,
-                data.getUserNicename());
+    private void saveCredential(String userId, String token) {
+        PreferenceUtils.setValueString(this, PreferenceUtils.USER_LOGIIN_TOKEN, token);
+        PreferenceUtils.setValueString(this, PreferenceUtils.USER_ID_KEY, "userId");
     }
 
     private void launchHomeScreen() {

@@ -2,6 +2,10 @@ package com.najdi.android.najdiapp.home.viewmodel;
 
 import android.app.Application;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.BaseViewModel;
@@ -11,10 +15,6 @@ import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import static com.najdi.android.najdiapp.common.Constants.APPEND_ATTRIBUTE_STR;
 
@@ -116,7 +116,7 @@ public class ProductDetailViewModel extends BaseViewModel {
     private void createAttributeForSelectedValue(String selectedValue, int selectedId) {
         createHashMap();
         for (ProductListResponse.Attributes attributes : productListResponse.getAttributesList()) {
-            if (attributes.getId() == selectedId) {
+            if (attributes.getId().equals(selectedId)) {
                 attributHashMap.put(APPEND_ATTRIBUTE_STR + attributes.getSlug(), selectedValue);
                 break;
             }
@@ -186,7 +186,7 @@ public class ProductDetailViewModel extends BaseViewModel {
         return getVariaitionQuantity;
     }
 
-    public LiveData<ProductListResponse> getVariationQuantity(int productId, int variationId) {
+    public LiveData<ProductListResponse> getVariationQuantity(String productId, int variationId) {
         return repository.getVariationForProduct(productId, variationId);
     }
 }

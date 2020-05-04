@@ -2,20 +2,19 @@ package com.najdi.android.najdiapp.shoppingcart.viewmodel;
 
 import android.app.Application;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.BaseViewModel;
-import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 import com.najdi.android.najdiapp.shoppingcart.model.UpdateCartRequest;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
 import java.util.HashMap;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 public class CartViewModel extends BaseViewModel {
     private MutableLiveData<String> cartItemKeyLiveData;
@@ -62,9 +61,9 @@ public class CartViewModel extends BaseViewModel {
         return repository.removeCartItem(hashMap);
     }
 
-    public LiveData<ProductListResponse> getIndividualProduct(int productId) {
-        return repository.getIndividualProduct(productId);
-    }
+   /* public LiveData<ProductListResponse> getIndividualProduct(int productId) {
+        return repository.getIndividualProduct(String.valueOf(productId));
+    }*/
 
     public LiveData<BaseResponse> updateQuantity(UpdateCartRequest updateCartRequest) {
         return repository.updateItemQuantity(updateCartRequest);

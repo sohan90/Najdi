@@ -1,9 +1,11 @@
 package com.najdi.android.najdiapp.common;
 
-import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.LocaleUtitlity;
@@ -13,14 +15,13 @@ import com.najdi.android.najdiapp.utitility.ResourceProvider;
 
 import java.util.Locale;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
-import static com.najdi.android.najdiapp.common.Constants.ARABIC_LAN;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.disposables.Disposable;
 
 public class BaseActivity extends AppCompatActivity {
 
     protected ResourceProvider resourProvider;
+    private CompositeDisposable compositeDisposable;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,14 +73,24 @@ public class BaseActivity extends AppCompatActivity {
         return locale;
     }
 
+    protected void addDisposable(Disposable disposable) {
+        getCompositeDisposable().add(disposable);
+    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+    protected void dispose() {
+        getCompositeDisposable().dispose();
+    }
+
+    private CompositeDisposable getCompositeDisposable() {
+        if (compositeDisposable == null || compositeDisposable.isDisposed()) {
+            compositeDisposable = new CompositeDisposable();
+        }
+        return compositeDisposable;
     }
 
     @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(newBase);
+    protected void onDestroy() {
+        super.onDestroy();
+        dispose();
     }
 }

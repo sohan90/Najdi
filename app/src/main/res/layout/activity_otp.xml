@@ -155,7 +155,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:background="@drawable/round_corner_stroke_green_selector"
-                android:text="@string/resend_code_in_30s" />
+                android:text="@string/resend_code_in" />
         </LinearLayout>
     </ScrollView>
 </layout>

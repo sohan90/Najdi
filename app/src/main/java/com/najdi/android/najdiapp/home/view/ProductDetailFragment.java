@@ -5,6 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.google.android.material.textfield.TextInputEditText;
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseFragment;
@@ -12,6 +19,7 @@ import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.databinding.FragmentProductDetailBinding;
 import com.najdi.android.najdiapp.databinding.ItemDetailBinding;
+import com.najdi.android.najdiapp.home.model.AttributeOptionModel;
 import com.najdi.android.najdiapp.home.model.ProductDetailBundleModel;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.home.viewmodel.HomeScreenViewModel;
@@ -24,20 +32,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProviders;
-
 import static com.najdi.android.najdiapp.common.Constants.APPEND_ATTRIBUTE_STR;
 
 public class ProductDetailFragment extends BaseFragment {
     private static final String EXTRA_PRODUCT_DETAIL_KEY = "product_detail_key";
     private FragmentProductDetailBinding binding;
     private HomeScreenViewModel homeScreeViewModel;
-    private int productId;
+    private String productId;
     private ProductDetailViewModel viewModel;
     private CartResponse.CartData cartData;
     private ProductListResponse productListResponse;
@@ -104,16 +105,16 @@ public class ProductDetailFragment extends BaseFragment {
 
     private void fetchProductDetail() {
         showProgressDialog();
-        homeScreeViewModel.getIndividualProduct(productId).observe(this, productListResponse1 -> {
+        homeScreeViewModel.getIndividualProduct(productId).observe(this, baseResponse -> {
             hideProgressDialog();
-            if (productListResponse1 != null) {
-                this.productListResponse = productListResponse1;
+            if (baseResponse != null && baseResponse.isStatus()) {
+                this.productListResponse = baseResponse.getProduct();
                 setViewDataForIncludeLyt();
                 viewModel.setDefaultPrice(productListResponse.getPrice());
                 inflateViewForProductVariation();
                 enableOrDisableAddCartButton();
                 if (cartData == null) {
-                    viewModel.setDefaultQuantity();
+                    //viewModel.setDefaultQuantity();
                 }
             }
         });
@@ -208,7 +209,7 @@ public class ProductDetailFragment extends BaseFragment {
             List<ProductListResponse.Attributes> attributesList = productListResponse.getAttributesList();
             for (ProductListResponse.Attributes attributes : attributesList) {
 
-                List<String> stringList = getListFromMap(attributes.getOptions());
+                List<String> stringList = getListFromMap(attributes.getProductAttributeOptions());
                 View view = LayoutInflater.from(getActivity()).inflate(R.layout.item_detail,
                         binding.container, false);
                 binding.container.addView(view);
@@ -216,19 +217,19 @@ public class ProductDetailFragment extends BaseFragment {
                 ItemDetailBinding detailBinding = ItemDetailBinding.bind(view);
                 detailBinding.name.setText(attributes.getName());
 
-                setDataForSelectedValue(detailBinding.options, attributes.getId(),
-                        attributes.getSlug());
+              /*  setDataForSelectedValue(detailBinding.options, attributes.getId(),
+                        attributes.getSlug());*/
 
                 detailBinding.options.setTag(attributes.getId());
 
                 detailBinding.options.setOnClickListener((v -> {
                     if (getActivity() != null) {
-                        int selectedAttributeId = (int) v.getTag();
+                        String selectedAttributeId = (String) v.getTag();
 
-                        DialogUtil.showPopuwindow(getActivity(), v, stringList, s -> {
+                        DialogUtil.showPopupWindowSpinner(getActivity(), v, stringList, s -> {
 
                             String selectedValue = getSelectedValueFromMap(s);
-                            viewModel.updatePrice(productListResponse, selectedValue, selectedAttributeId);
+                            //viewModel.updatePrice(productListResponse, selectedValue, selectedAttributeId);
                             detailBinding.options.setText(s);
 
                         });
@@ -268,15 +269,12 @@ public class ProductDetailFragment extends BaseFragment {
         }
     }
 
-    private List<String> getListFromMap(List<HashMap<String, String>> hashMapList) {
-        List<String> list = new ArrayList<>();
-        for (HashMap<String, String> stringStringHashMap : hashMapList) {
-            String name = stringStringHashMap.get("name");
-            String slug = stringStringHashMap.get("slug");
-            list.add(name);
-            variationMap.put(name, slug);
+    private List<String> getListFromMap(List<AttributeOptionModel> productAttributeOptions) {
+        List<String> attributesOption = new ArrayList<>();
+        for (AttributeOptionModel productAttributeOption : productAttributeOptions) {
+            attributesOption.add(productAttributeOption.getOptionName());
         }
-        return list;
+        return attributesOption;
     }
 
     private void getProductDetailFromBundle() {

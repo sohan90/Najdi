@@ -8,6 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseFragment;
 import com.najdi.android.najdiapp.common.BaseResponse;
@@ -17,13 +23,6 @@ import com.najdi.android.najdiapp.launch.viewmodel.ForgotPasswordViewModel;
 import com.najdi.android.najdiapp.launch.viewmodel.LoginViewModel;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
-import com.najdi.android.najdiapp.utitility.ToastUtils;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProviders;
 
 import static com.najdi.android.najdiapp.launch.view.OtpActivity.EXTRA_SCREEN_TYPE;
 
@@ -72,7 +71,9 @@ public class ForgotPasswordFragment extends BaseFragment {
             LiveData<BaseResponse> liveData = viewModel.forgotPasswordRequest(lang);
             liveData.observe(this, baseResponse -> {
                 hideProgressDialog();
-                if (baseResponse != null) {
+                if (baseResponse != null && baseResponse.isStatus()) {
+                    PreferenceUtils.setValueString(getActivity(), PreferenceUtils.USER_LOGIIN_TOKEN,
+                            baseResponse.getToken());
                     DialogUtil.showAlertDialog(getActivity(), baseResponse.getData().getMessage(),
                             (dialog, which) -> {
                                 dialog.dismiss();

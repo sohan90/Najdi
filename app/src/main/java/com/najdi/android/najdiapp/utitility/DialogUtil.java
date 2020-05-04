@@ -5,18 +5,16 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListPopupWindow;
 import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.SimpleAdapter;
 
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.GenericClickListener;
@@ -74,7 +72,7 @@ public class DialogUtil {
      *
      * @return Boolean for Progress Dialog visibility
      */
-    public static boolean isProgressDialogVisible() {
+    private static boolean isProgressDialogVisible() {
         return (sProgressAlertDialog != null && sProgressAlertDialog.isShowing());
     }
 
@@ -117,7 +115,7 @@ public class DialogUtil {
         }
     }
 
-    public static void showPopuwindow(Context context, View anchorView, List<String> list,
+    public static void showPopupWindowSpinner(Context context, View anchorView, List<String> list,
                                       GenericClickListener<String> clickListener) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
         View customView = inflater.inflate(R.layout.item_pop_window, null);
@@ -137,5 +135,56 @@ public class DialogUtil {
             popupWindow.dismiss();
         });
 
+    }
+    public static void showPopupWindow(Context context, View anchorView, List<String> list,
+                                       GenericClickListener<String> clickListener) {
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+        View customView = inflater.inflate(R.layout.item_pop_window, null);
+        customView.findViewById(R.id.include_lyt).setVisibility(View.VISIBLE);
+        ArrayAdapter<String> itemsAdapter = new ArrayAdapter<>(context,
+                android.R.layout.simple_list_item_1, list);
+        ListView listView = customView.findViewById(R.id.list);
+        listView.setAdapter(itemsAdapter);
+
+        PopupWindow popupWindow = new PopupWindow(customView, anchorView.getWidth(),
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        popupWindow.setElevation(20);
+        popupWindow.setFocusable(true);
+        popupWindow.update();
+        popupWindow.setHeight(1000);
+        popupWindow.setWidth(700);
+        popupWindow.setTouchInterceptor((v, motionEvent) -> {
+            v.performClick();
+            if (motionEvent.getX() < 0 || motionEvent.getX() > popupWindow.getWidth()) return true;
+            if (motionEvent.getY() < 0 || motionEvent.getY() > popupWindow.getHeight()) return true;
+
+            return false;
+        });
+        popupWindow.showAtLocation(anchorView, Gravity.CENTER, 0, 0);
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            clickListener.onClicked(list.get(position));
+            popupWindow.dismiss();
+        });
+
+    }
+
+    public static void showListPopupWindow(Context context, View anchorView, List<String> list,
+                                           GenericClickListener<String> clickListener,
+                                           PopupWindow.OnDismissListener dismissListener) {
+        if (list == null) return;
+        ListPopupWindow listPopupWindow = new ListPopupWindow(context);
+        listPopupWindow.setAdapter(new ArrayAdapter<>(context,
+                android.R.layout.simple_list_item_1, list));
+        listPopupWindow.setAnchorView(anchorView);
+        listPopupWindow.setWidth(400);
+        listPopupWindow.setHorizontalOffset(-(listPopupWindow.getWidth()/ 2 + anchorView.getWidth()));
+        listPopupWindow.setModal(true);
+        listPopupWindow.setOnDismissListener(dismissListener);
+        listPopupWindow.setOnItemClickListener((parent, view, position, id) -> {
+            listPopupWindow.dismiss();
+            clickListener.onClicked(list.get(position));
+        });
+        listPopupWindow.show();
     }
 }

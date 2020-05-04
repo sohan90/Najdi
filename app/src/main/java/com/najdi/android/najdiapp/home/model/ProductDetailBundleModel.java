@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 public class ProductDetailBundleModel implements Parcelable {
     Parcelable t;
-    int productId;
+    String productId;
     boolean isFromCartScreen;
 
     public ProductDetailBundleModel() {
@@ -21,7 +21,7 @@ public class ProductDetailBundleModel implements Parcelable {
     }
 
     private ProductDetailBundleModel(Parcel in) {
-        productId = in.readInt();
+        productId = in.readString();
         t = in.readParcelable(t.getClass().getClassLoader());
         isFromCartScreen = in.readByte() != 0;
     }
@@ -46,11 +46,11 @@ public class ProductDetailBundleModel implements Parcelable {
         this.t = t;
     }
 
-    public int getProductId() {
+    public String getProductId() {
         return productId;
     }
 
-    public void setProductId(int productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
 
@@ -61,7 +61,7 @@ public class ProductDetailBundleModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(productId);
+        dest.writeString(productId);
         dest.writeParcelable(t, flags);
         dest.writeInt((byte) (isFromCartScreen ? 1 : 0));
     }

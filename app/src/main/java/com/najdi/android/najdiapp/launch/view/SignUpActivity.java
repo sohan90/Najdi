@@ -4,8 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.najdi.android.najdiapp.common.BaseActivity;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.najdi.android.najdiapp.R;
+import com.najdi.android.najdiapp.common.BaseActivity;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.databinding.ActivitySignUpBinding;
@@ -15,15 +21,9 @@ import com.najdi.android.najdiapp.launch.viewmodel.SignUpViewModel;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.FragmentHelper;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
-import com.najdi.android.najdiapp.utitility.ToastUtils;
-
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProviders;
 
 import static com.najdi.android.najdiapp.launch.view.OtpActivity.EXTRA_SCREEN_TYPE;
+import static com.najdi.android.najdiapp.launch.view.OtpActivity.EXTRA_SIGN_UP_TEMP_ID;
 
 public class SignUpActivity extends BaseActivity {
 
@@ -94,10 +94,10 @@ public class SignUpActivity extends BaseActivity {
                 liveData.observe(this, signupResponseModel -> {
                     hideProgressDialog();
                     if (signupResponseModel != null) {
-                        if (signupResponseModel.getCode().equals("200") && signupResponseModel.getData() != null) {
-                            DialogUtil.showAlertDialog(this, signupResponseModel.getData().getMessage(),
+                        if (signupResponseModel.isStatus()) {
+                            DialogUtil.showAlertDialog(this, signupResponseModel.getMessage(),
                                     (dialog, which) -> {
-                                        launchOTPScreen();
+                                        launchOTPScreen(signupResponseModel.getTempId());
                                         finish();
                                     });
 
@@ -115,9 +115,10 @@ public class SignUpActivity extends BaseActivity {
         });
     }
 
-    private void launchOTPScreen() {
+    private void launchOTPScreen(int tempId) {
         Intent intent = new Intent(this, OtpActivity.class);
         intent.putExtra(EXTRA_SCREEN_TYPE, Constants.OtpScreen.SIGN_UP_SCREEN);
+        intent.putExtra(EXTRA_SIGN_UP_TEMP_ID, tempId);
         startActivity(intent);
     }
 

@@ -94,7 +94,7 @@
     <string name="one_time_psd">One Time Password sent to this mobile number</string>
     <string name="please_enter_it_below">Please Enter it Below</string>
     <string name="didn_t_get_the_sms">Didn\'t get the SMS?</string>
-    <string name="resend_code_in_30s">Resend Code in %s</string>
+    <string name="resend_code_in">Resend Code in %s</string>
     <string name="resend_code">Resend Code</string>
     <string name="verify">Verify</string>
     <string name="update_cart_label">Update Cart</string>

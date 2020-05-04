@@ -1,23 +1,24 @@
 package com.najdi.android.najdiapp.home.viewmodel;
 
 import android.app.Application;
-import android.content.Intent;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.najdi.android.najdiapp.checkout.model.OrderResponse;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.BaseViewModel;
+import com.najdi.android.najdiapp.home.model.CityListModelResponse;
 import com.najdi.android.najdiapp.home.model.ProductDetailBundleModel;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
+import com.najdi.android.najdiapp.home.model.ProductModelResponse;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 public class HomeScreenViewModel extends BaseViewModel {
 
@@ -37,9 +38,18 @@ public class HomeScreenViewModel extends BaseViewModel {
         super(application);
     }
 
-    public LiveData<List<ProductListResponse>> getProducts() {
+    public LiveData<ProductModelResponse> getProducts() {
         return repository.getProducts();
     }
+
+    public LiveData<CityListModelResponse> getCityList(){
+        return repository.getCityList();
+    }
+
+    public LiveData<CityListModelResponse> getCategoryList(){
+        return repository.getCategory();
+    }
+
 
     public MutableLiveData<List<ProductListResponse>> getProductList() {
         if (productListLivedata == null) {
@@ -121,7 +131,7 @@ public class HomeScreenViewModel extends BaseViewModel {
     }
 
 
-    public LiveData<ProductListResponse> getIndividualProduct(int productId) {
+    public LiveData<BaseResponse> getIndividualProduct(String productId) {
         return repository.getIndividualProduct(productId);
     }
 

@@ -2,15 +2,14 @@ package com.najdi.android.najdiapp.launch.model;
 
 import android.app.Application;
 
-import com.najdi.android.najdiapp.common.BaseResponse;
-import com.najdi.android.najdiapp.common.BaseViewModel;
-import com.najdi.android.najdiapp.common.Constants;
-import com.najdi.android.najdiapp.home.model.ForgotPaswwordRequest;
-import com.najdi.android.najdiapp.utitility.PreferenceUtils;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+
+import com.najdi.android.najdiapp.common.BaseResponse;
+import com.najdi.android.najdiapp.common.BaseViewModel;
+import com.najdi.android.najdiapp.home.model.ForgotPaswwordRequest;
+import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
 import static com.najdi.android.najdiapp.common.Constants.OtpScreen.CHANGE_MOBILE_VERIFY;
 
@@ -53,12 +52,11 @@ public class OtpViewModel extends BaseViewModel {
         super(application);
     }
 
-    public LiveData<BaseResponse> verifyOtp(String mobile) {
+    public LiveData<BaseResponse> verifyOtp(String tempId) {
         String otp = one.getValue() + two.getValue() + three.getValue() + four.getValue();
         OtpRequestModel otpRequestModel = new OtpRequestModel();
-        otpRequestModel.setMobile(mobile);
+        otpRequestModel.setTempId(tempId);
         otpRequestModel.setOtp(otp);
-        otpRequestModel.setLang(resourceProvider.getCountryLang());
         return repository.verifyOtp(otpRequestModel);
     }
 
@@ -85,7 +83,7 @@ public class OtpViewModel extends BaseViewModel {
     public LiveData<BaseResponse> login(String username, String password) {
         LoginRequestModel loginRequestModel = new LoginRequestModel();
         String phoneNo = "966" + username;
-        loginRequestModel.setUserName(phoneNo);
+        loginRequestModel.setPhone(phoneNo);
         loginRequestModel.setPassword(password);
         return repository.loginToken(loginRequestModel);
     }

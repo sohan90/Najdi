@@ -5,6 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseFragment;
 import com.najdi.android.najdiapp.databinding.FragmentProductBinding;
@@ -14,18 +21,11 @@ import com.najdi.android.najdiapp.home.viewmodel.HomeScreenViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 public class ProductListFragment extends BaseFragment {
     private FragmentProductBinding binding;
     private HomeScreenViewModel homeScreeViewModel;
     private ProductListAdapter adapter;
-    public static final String VISIBILITY = "publish";
+    private static final String VISIBILITY = "publish";
 
 
     public static ProductListFragment createInstance() {
@@ -66,7 +66,8 @@ public class ProductListFragment extends BaseFragment {
         });
     }
 
-    private List<ProductListResponse> getVisibilityProducts(List<ProductListResponse> productListResponses) {
+    private List<ProductListResponse> getVisibilityProducts(List<ProductListResponse>
+                                                                    productListResponses) {
         List<ProductListResponse> list = new ArrayList<>();
         for (int i = 0; i < productListResponses.size(); i++) {
             if (productListResponses.get(i).getStatus().equalsIgnoreCase(VISIBILITY)) {

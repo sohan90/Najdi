@@ -8,7 +8,6 @@ public class SignupRequestModel {
     String first_name;
     String last_name;
     String username;
-    BillingAddress billing;
 
 
     public void setMobile(String mobile) {
@@ -17,10 +16,6 @@ public class SignupRequestModel {
 
     public void setLang(String lang) {
         this.lang = lang;
-    }
-
-    public void setBilling(BillingAddress billing) {
-        this.billing = billing;
     }
 
     public void setEmail(String email) {

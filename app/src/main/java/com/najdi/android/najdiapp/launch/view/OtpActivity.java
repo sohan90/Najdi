@@ -2,10 +2,14 @@ package com.najdi.android.najdiapp.launch.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseActivity;
@@ -17,12 +21,12 @@ import com.najdi.android.najdiapp.launch.model.OtpViewModel;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.LocaleUtitlity;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
-import com.najdi.android.najdiapp.utitility.ToastUtils;
 
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProviders;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import static com.najdi.android.najdiapp.common.Constants.ARABIC_LAN;
 import static com.najdi.android.najdiapp.common.Constants.OTP_TIME;
@@ -35,11 +39,12 @@ import static com.najdi.android.najdiapp.launch.view.ChangePasswordActivity.EXTR
 public class OtpActivity extends BaseActivity {
     ActivityOtpBinding binding;
     private OtpViewModel viewModel;
-    int startSec = OTP_TIME;
     public static final String EXTRA_SCREEN_TYPE = "extra_screen_type_otp";
     public static final String EXTRA_NEW_MOBILE_NO = "extra_mobile_no";
+    public static final String EXTRA_SIGN_UP_TEMP_ID = "extra_temp_id";
     private int screenType;
     private String newMobileNo;
+    private int tempId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,7 +54,7 @@ public class OtpActivity extends BaseActivity {
         initializeViewModel();
         bindViewModel();
         initClickListener();
-        startHandlerFor30S();
+        startTimerFor60s();
         updateViewModel();
     }
 
@@ -64,30 +69,26 @@ public class OtpActivity extends BaseActivity {
             if (getIntent().hasExtra(EXTRA_NEW_MOBILE_NO)) {
                 newMobileNo = getIntent().getStringExtra(EXTRA_NEW_MOBILE_NO);
             }
+            if (getIntent().hasExtra(EXTRA_SIGN_UP_TEMP_ID)) {
+                tempId = getIntent().getIntExtra(EXTRA_SIGN_UP_TEMP_ID, 0);
+            }
         }
     }
 
-    private void startHandlerFor30S() {
+    private void startTimerFor60s() {
         binding.resend.setEnabled(false);
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                int sec = --startSec;
-                String appendSec = sec + "s";
-                binding.resend.setText(getString(R.string.resend_code_in_30s, appendSec));
-                if (sec == 0) {
-                    handler.removeCallbacks(this);
-                    binding.resend.setText(getString(R.string.resend_code));
-                    binding.resend.setEnabled(true);
-                }
-                if (sec > 0) {
-                    handler.postDelayed(this, 1000);
-                }
+        addDisposable(Observable
+                .intervalRange(1, OTP_TIME, 0, 1, TimeUnit.SECONDS)
+                .map(l -> OTP_TIME - l)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(sec -> {
+                    String appendSec = sec + "s";
+                    binding.resend.setText(getString(R.string.resend_code_in, appendSec));
+                }).doOnComplete(() ->
+                        binding.resend.setText(getString(R.string.resend_code)))
+                .subscribe());
 
-
-            }
-        }, 1000);
     }
 
     private void bindViewModel() {
@@ -127,8 +128,7 @@ public class OtpActivity extends BaseActivity {
             hideProgressDialog();
             if (baseResponse != null) {
                 if (baseResponse.getData() != null) {
-                    startSec = OTP_TIME;
-                    startHandlerFor30S();
+                    startTimerFor60s();
                     String phone = PreferenceUtils.getValueString(this, PreferenceUtils.USER_PHONE_NO_KEY);
                     String msg = getString(R.string.verification_password_sent_to, phone);
                     DialogUtil.showAlertDialog(this, msg, (dialog, which) -> dialog.dismiss());
@@ -141,8 +141,7 @@ public class OtpActivity extends BaseActivity {
         showProgressDialog();
         LiveData<BaseResponse> liveData;
         if (screenType == SIGN_UP_SCREEN) {
-            liveData = viewModel.verifyOtp(PreferenceUtils.getValueString(this,
-                    PreferenceUtils.USER_PHONE_NO_KEY));
+            liveData = viewModel.verifyOtp(String.valueOf(tempId));
 
         } else if (screenType == CHANGE_MOBILE_VERIFY) {
 
@@ -156,7 +155,7 @@ public class OtpActivity extends BaseActivity {
 
         liveData.observe(this, baseResponse -> {
             hideProgressDialog();
-            if (baseResponse != null) {
+            if (baseResponse != null && baseResponse.isStatus()) {
                 if (screenType == SIGN_UP_SCREEN) {
                     login();// sign up flow
                 } else if (screenType == CHANGE_MOBILE_VERIFY) {
@@ -167,6 +166,10 @@ public class OtpActivity extends BaseActivity {
                     launchChangePasswordScreen();
                     finish();// forgot password flow
                 }
+            } else {
+                if (baseResponse == null) return;
+                DialogUtil.showAlertDialog(this, baseResponse.getMessage(),
+                        (dialog, which) -> dialog.dismiss());
             }
         });
     }
@@ -186,19 +189,17 @@ public class OtpActivity extends BaseActivity {
         String password = PreferenceUtils.getValueString(this, PreferenceUtils.USER_PASSWORD);
         LiveData<BaseResponse> liveData = viewModel.login(userName, password);
         liveData.observe(this, baseResponse -> {
+
             hideProgressDialog();
-            if (baseResponse != null && Integer.parseInt(baseResponse.getCode()) == 200) {
-                if (baseResponse.getData() != null) {
-                    String loginToken = baseResponse.getData().getToken();
+            if (baseResponse != null && baseResponse.isStatus()) {
+                String loginToken = baseResponse.getToken();
+                PreferenceUtils.setValueString(this, PreferenceUtils.USER_LOGIIN_TOKEN,
+                        loginToken);
+                PreferenceUtils.setValueString(this, PreferenceUtils.USER_ID_KEY,
+                        baseResponse.getUserid());
 
-                    PreferenceUtils.setValueInt(this, PreferenceUtils.USER_ID_KEY,
-                            Integer.parseInt(baseResponse.getData().getUserId()));
+                launchHomeScreen();
 
-                    PreferenceUtils.setValueString(this, PreferenceUtils.USER_LOGIIN_TOKEN,
-                            loginToken);
-
-                    launchHomeScreen();
-                }
             } else {
                 if (baseResponse != null && baseResponse.getData().getStatus() == 403) {
                     String message = getString(R.string.incorrect_password);
@@ -227,7 +228,6 @@ public class OtpActivity extends BaseActivity {
 
         @Override
         public void afterTextChanged(Editable editable) {
-            // TODO Auto-generated method stub
             String text = editable.toString();
             switch (view.getId()) {
 

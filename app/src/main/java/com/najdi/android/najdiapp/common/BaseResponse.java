@@ -1,10 +1,9 @@
 package com.najdi.android.najdiapp.common;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 
 import com.najdi.android.najdiapp.R;
+import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.LocaleUtitlity;
 import com.najdi.android.najdiapp.utitility.ToastUtils;
@@ -17,6 +16,33 @@ public class BaseResponse {
     String code;
     String message;
     Data data;
+
+    //new changes
+    int temp_id;
+    boolean status;
+    String user_id;
+    String token;
+    ProductListResponse product;
+
+    public ProductListResponse getProduct() {
+        return product;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public int getTempId() {
+        return temp_id;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public String getUserid() {
+        return user_id;
+    }
 
     public String getCode() {
         return code;
@@ -33,7 +59,6 @@ public class BaseResponse {
     public class Data {
         int error;
         int status;
-        String message;
         String token;
         String user_id;
         String user_email;
@@ -42,6 +67,8 @@ public class BaseResponse {
         String user_url;
         List<BankResponse> data;
         int count;
+        String message;
+
 
 
         public int getCount() {

@@ -42,7 +42,7 @@ public class RetrofitCallBack<T> implements Callback<T> {
         try {
             mCallback.onFailurResponse(call, new BaseResponse());
         } catch (IllegalStateException e) {
-            mCallback.onSuccesResponse(call, null);
+           // mCallback.onSuccesResponse(call, null);
         }
 
     }

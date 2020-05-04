@@ -4,86 +4,21 @@ import android.os.Build;
 import android.text.Html;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.najdi.android.najdiapp.R;
-import com.najdi.android.najdiapp.home.model.ProductListResponse;
-import com.najdi.android.najdiapp.utitility.GlideApp;
-
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.databinding.BindingAdapter;
-import androidx.databinding.library.baseAdapters.BR;
+
+import com.bumptech.glide.Glide;
+import com.najdi.android.najdiapp.R;
+import com.najdi.android.najdiapp.home.model.ProductListResponse;
 
 public class ProductListItemModel extends BaseObservable {
     private int showDetailButton;
     private ProductListResponse product;
-    private String productImg;
-    private String price;
-    private String title;
-    private String desc;
-
 
     public ProductListItemModel(ProductListResponse productListResponse, int visibility) {
         this.product = productListResponse;
         this.showDetailButton = visibility;
-    }
-
-    public void setProductImg(String productImg) {
-        this.productImg = productImg;
-        notifyPropertyChanged(BR.productImg);
-    }
-
-    @Bindable
-    public boolean isOnSale(){
-        return product.isOn_sale();
-    }
-
-
-    @Bindable
-    public String getProductImg() {
-        return product.getImages().get(0).getSrc();
-    }
-
-    public void setShowDetailButton(int showDetailButton) {
-        this.showDetailButton = showDetailButton;
-    }
-
-    @Bindable
-    public int getShowDetailButton() {
-        return showDetailButton;
-    }
-
-    @BindingAdapter("setImageUrl")
-    public static void setImageUrl(ImageView imageView, String url) {
-        Glide.with(imageView.getContext()).load(url).placeholder(R.drawable.najdi_logo).
-                into(imageView);
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
-        notifyPropertyChanged(BR.price);
-    }
-
-    @Bindable
-    public String getPrice() {
-        String price;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            price = Html.fromHtml(product.getPrice_html(), Html.FROM_HTML_MODE_COMPACT).toString();
-        } else {
-            price = Html.fromHtml(product.getPrice_html()).toString();
-        }
-        return price;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-        notifyPropertyChanged(BR.title);
-
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
-        notifyPropertyChanged(BR.desc);
     }
 
     @Bindable
@@ -92,14 +27,47 @@ public class ProductListItemModel extends BaseObservable {
     }
 
     @Bindable
+    public String getProductImg() {
+        return product.getImage();
+    }
+
+    @BindingAdapter("setImageUrl")
+    public static void setImageUrl(ImageView imageView, String url) {
+        Glide.with(imageView.getContext()).load(url).placeholder(R.drawable.najdi_logo).
+                into(imageView);
+    }
+
+    @Bindable
+    public String getPrice() {
+        String price;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            price = Html.fromHtml(product.getPrice(), Html.FROM_HTML_MODE_COMPACT).toString();
+        } else {
+            price = Html.fromHtml(product.getPrice()).toString();
+        }
+        return price;
+    }
+
+    @Bindable
     public String getDesc() {
-        String desc;
+        String desc = "";
+        if (product.getDescription() == null) return desc;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             desc = Html.fromHtml(product.getDescription(), Html.FROM_HTML_MODE_COMPACT).toString();
         } else {
             desc = Html.fromHtml(product.getDescription()).toString();
         }
         return desc;
+    }
+
+    @Bindable
+    public boolean isOnSale() {
+        return product.isOn_sale();
+    }
+
+    @Bindable
+    public int getShowDetailButton() {
+        return showDetailButton;
     }
 
     public void bind(ProductListResponse productListResponse) {

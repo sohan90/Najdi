@@ -22,15 +22,13 @@ android {
     productFlavors {
         stagging {
             applicationId "com.najdi.android.najdiapp.stagging"
-            buildConfigField 'String', 'NAJDI_END_POINTS', '"https://najdisheep.com/temp/livetest/wp-json/wc/v2/"'
-            buildConfigField 'String', 'NAJDI_CART_BASE_URL', '"https://najdisheep.com/temp/livetest/wp-json/"'
+            buildConfigField 'String', 'BASE_URL', '"https://najdisheep.com/newnajdisheep/api/"'
             buildConfigField 'String', 'BASIC_64_AUTH', '"Basic Y2tfMzFmNTIxOTA3ZDJlZTY0ZmE4ZDMzMjAwNjE0ODY4ZTc3ZDlhOGY3Njpjc184NDU5ZjU4NWIwYzM3MjQ0Y2JjZWViZDYzZTE0MTQ4OWRjZDlkMWU4"'
             dimension "default"
         }
         production {
             applicationId "com.najdi.android.najdiapp"
-            buildConfigField 'String', 'NAJDI_END_POINTS', '"https://najdisheep.com/wp-json/wc/v2/"'
-            buildConfigField 'String', 'NAJDI_CART_BASE_URL', '"https://najdisheep.com/wp-json/"'
+            buildConfigField 'String', 'BASE_URL', '"https://najdisheep.com/newnajdisheep/api"'
             buildConfigField 'String', 'BASIC_64_AUTH', '"Basic Y2tfMGJjMTljMWY0ZGUwNTU4YWQ0MmFjYTU2MDFiY2MyNzVlNTVmOTExZDpjc185MzA3MjVlZTBhOTE2ODkxNDEwZGI5MmQzZWI4MjcxYTcwYjVhMzBm"'
             dimension "default"
         }
@@ -68,7 +66,7 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha05'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta4'
     implementation 'com.google.android.material:material:1.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0-beta01'
@@ -89,4 +87,9 @@ dependencies {
     implementation ('com.github.bumptech.glide:okhttp3-integration:4.2.0'){
         exclude group: 'glide-parent'
     }
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+    // Because RxAndroid releases are few and far between, it is recommended you also
+    // explicitly depend on RxJava's latest version for bug fixes and new features.
+    // (see https://github.com/ReactiveX/RxJava/releases for latest 3.x.x version)
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
 }

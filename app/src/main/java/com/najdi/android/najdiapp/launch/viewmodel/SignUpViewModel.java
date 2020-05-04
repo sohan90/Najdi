@@ -3,19 +3,17 @@ package com.najdi.android.najdiapp.launch.viewmodel;
 import android.app.Application;
 import android.text.TextUtils;
 
-import com.google.android.material.textfield.TextInputLayout;
-import com.najdi.android.najdiapp.common.BaseResponse;
-import com.najdi.android.najdiapp.common.BaseViewModel;
-import com.najdi.android.najdiapp.R;
-import com.najdi.android.najdiapp.launch.model.BillingAddress;
-import com.najdi.android.najdiapp.launch.model.SignupRequestModel;
-import com.najdi.android.najdiapp.launch.model.SignupResponseModel;
-import com.najdi.android.najdiapp.utitility.PreferenceUtils;
-
 import androidx.annotation.NonNull;
 import androidx.databinding.BindingAdapter;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+
+import com.google.android.material.textfield.TextInputLayout;
+import com.najdi.android.najdiapp.R;
+import com.najdi.android.najdiapp.common.BaseResponse;
+import com.najdi.android.najdiapp.common.BaseViewModel;
+import com.najdi.android.najdiapp.launch.model.SignupRequestModel;
+import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
 public class SignUpViewModel extends BaseViewModel {
     public MutableLiveData<String> phoneNo = new MutableLiveData<>();
@@ -68,6 +66,7 @@ public class SignUpViewModel extends BaseViewModel {
         } else {
             confirmPassError.setValue(resourceProvider.getString(R.string.password_does_not_matched));
         }
+
         validateSuccess.setValue(valid);
     }
 

@@ -5,12 +5,11 @@ import android.os.Parcelable;
 
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
 public class ProductListResponse implements Parcelable {
-    int id;
+    String id;
     String name;
     String slug;
     String type;
@@ -27,8 +26,27 @@ public class ProductListResponse implements Parcelable {
     Integer stock_quantity;
     String total_sales;
     List<Image> images;
-    List<Attributes> attributes;
     List<VariationData> variations_data;
+
+    //new changes
+    String category;
+    String image;
+    String cut_price;
+    int isproductattribute;
+    List<Attributes> product_attributes;
+
+
+    public String getCategory() {
+        return category;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public String getCut_price() {
+        return cut_price;
+    }
 
     public boolean isIn_stock() {
         return in_stock;
@@ -39,7 +57,7 @@ public class ProductListResponse implements Parcelable {
     }
 
     public String getTotal_sales() {
-        return total_sales;
+        return total_sales == null ? "0" : total_sales;
     }
 
     public Integer getStock_quantity() {
@@ -51,7 +69,7 @@ public class ProductListResponse implements Parcelable {
 
 
     protected ProductListResponse(Parcel in) {
-        id = in.readInt();
+        id = in.readString();
         name = in.readString();
         slug = in.readString();
         type = in.readString();
@@ -63,13 +81,16 @@ public class ProductListResponse implements Parcelable {
         description = in.readString();
         short_description = in.readString();
         images = in.createTypedArrayList(Image.CREATOR);
-        attributes = in.createTypedArrayList(Attributes.CREATOR);
+        product_attributes = in.createTypedArrayList(Attributes.CREATOR);
         variations_data = in.createTypedArrayList(VariationData.CREATOR);
         price_html = in.readString();
         in_stock = in.readByte() != 0;
         on_sale = in.readByte() != 0;
         total_sales = in.readString();
         stock_quantity = in.readInt();
+        category = in.readString();
+        image = in.readString();
+        cut_price = in.readString();
     }
 
     public static final Creator<ProductListResponse> CREATOR = new Creator<ProductListResponse>() {
@@ -105,7 +126,7 @@ public class ProductListResponse implements Parcelable {
         return short_description;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -122,7 +143,7 @@ public class ProductListResponse implements Parcelable {
     }
 
     public String getStatus() {
-        return status;
+        return status == null ? status = "publish" : status;
     }
 
     public String getPrice_html() {
@@ -150,7 +171,7 @@ public class ProductListResponse implements Parcelable {
     }
 
     public List<Attributes> getAttributesList() {
-        return attributes;
+        return product_attributes;
     }
 
     @Override
@@ -160,7 +181,7 @@ public class ProductListResponse implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
+        dest.writeString(id);
         dest.writeString(name);
         dest.writeString(slug);
         dest.writeString(type);
@@ -172,13 +193,16 @@ public class ProductListResponse implements Parcelable {
         dest.writeString(description);
         dest.writeString(short_description);
         dest.writeTypedList(images);
-        dest.writeTypedList(attributes);
+        dest.writeTypedList(product_attributes);
         dest.writeTypedList(variations_data);
         dest.writeString(price_html);
         dest.writeByte((byte) (in_stock ? 1 : 0));
         dest.writeByte((byte) (on_sale ? 1 : 0));
         dest.writeString(total_sales);
         dest.writeInt(stock_quantity);
+        dest.writeString(category);
+        dest.writeString(image);
+        dest.writeString(cut_price);
     }
 
     public static class Image implements Parcelable {
@@ -230,16 +254,26 @@ public class ProductListResponse implements Parcelable {
     }
 
     public static class Attributes implements Parcelable {
-        int id;
-        String name;
+        String id;
         String slug;
         int position;
         boolean visible;
         List<HashMap<String, String>> options;
 
-        protected Attributes(Parcel in) {
-            id = in.readInt();
-            name = in.readString();
+        //new changes
+
+        String is_required;
+        String price_visibility;
+        String attribute_name;
+        private List<AttributeOptionModel> product_attribute_options;
+
+        public List<AttributeOptionModel> getProductAttributeOptions() {
+            return product_attribute_options;
+        }
+
+        private Attributes(Parcel in) {
+            id = in.readString();
+            attribute_name = in.readString();
             slug = in.readString();
             position = in.readInt();
             visible = in.readByte() != 0;
@@ -257,12 +291,12 @@ public class ProductListResponse implements Parcelable {
             }
         };
 
-        public int getId() {
+        public String getId() {
             return id;
         }
 
         public String getName() {
-            return name;
+            return attribute_name;
         }
 
         public String getSlug() {
@@ -288,8 +322,8 @@ public class ProductListResponse implements Parcelable {
 
         @Override
         public void writeToParcel(Parcel dest, int flags) {
-            dest.writeInt(id);
-            dest.writeString(name);
+            dest.writeString(id);
+            dest.writeString(attribute_name);
             dest.writeString(slug);
             dest.writeInt(position);
             dest.writeByte((byte) (visible ? 1 : 0));

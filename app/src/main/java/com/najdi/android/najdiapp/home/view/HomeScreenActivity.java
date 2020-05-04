@@ -8,6 +8,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.core.view.GravityCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.google.android.material.navigation.NavigationView;
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.checkout.view.BankDetailFragment;
@@ -19,26 +28,20 @@ import com.najdi.android.najdiapp.common.ObservableManager;
 import com.najdi.android.najdiapp.databinding.ActivityHomeScreenBinding;
 import com.najdi.android.najdiapp.databinding.MenuLanSelcBinding;
 import com.najdi.android.najdiapp.databinding.NavHeaderHomeScreenBinding;
+import com.najdi.android.najdiapp.home.model.CityListModelResponse;
 import com.najdi.android.najdiapp.home.model.ProductDetailBundleModel;
 import com.najdi.android.najdiapp.home.viewmodel.HomeScreenViewModel;
 import com.najdi.android.najdiapp.launch.view.LoginActivity;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 import com.najdi.android.najdiapp.shoppingcart.view.CartFragment;
+import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.FragmentHelper;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 import com.najdi.android.najdiapp.utitility.ToastUtils;
 
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.widget.SwitchCompat;
-import androidx.core.view.GravityCompat;
-import androidx.databinding.DataBindingUtil;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 
 import static com.najdi.android.najdiapp.common.Constants.ARABIC_LAN;
 import static com.najdi.android.najdiapp.common.Constants.ENGLISH_LAN;
@@ -70,6 +73,7 @@ public class HomeScreenActivity extends BaseActivity
     private TextView notificationText;
     private ActionBarDrawerToggle toggle;
     private ProductDetailBundleModel productDetailBundleModel;
+    private List<String> categoryStrNameList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +91,53 @@ public class HomeScreenActivity extends BaseActivity
         subscribeForCartCount();
         observeForProductDetailScreenFromCheckout();
         fetchProduct();
+        fetchCityList();
+        fetchCategoryList();
         //fetchCart();
+
+    }
+
+    private void fetchCityList() {
+        viewModel.getCityList().observe(this, cityListModelResponse -> {
+            if (cityListModelResponse != null && cityListModelResponse.isStatus()) {
+                List<CityListModelResponse.City> cityList = cityListModelResponse.getCities();
+                getCityNameList(cityList);
+            }
+        });
+    }
+
+    private void fetchCategoryList() {
+        viewModel.getCategoryList().observe(this, cityListModelResponse -> {
+            if (cityListModelResponse != null && cityListModelResponse.isStatus()) {
+                List<CityListModelResponse.Category> categoryList = cityListModelResponse
+                        .getCategories();
+                getCategory(categoryList);
+            }
+        });
+    }
+
+    private void getCityNameList(List<CityListModelResponse.City> cityList) {
+        addDisposable(io.reactivex.rxjava3.core.Observable.just(cityList)
+                .flatMap(io.reactivex.rxjava3.core.Observable::fromIterable)
+                .map(CityListModelResponse.City::getName)
+                .toList()
+                .subscribe(this::showPopupwindow));
+    }
+
+    private void getCategory(List<CityListModelResponse.Category> categoryList) {
+        addDisposable(io.reactivex.rxjava3.core.Observable.just(categoryList)
+                .flatMap(io.reactivex.rxjava3.core.Observable::fromIterable)
+                .map(CityListModelResponse.Category::getName)
+                .toList()
+                .subscribe(list -> this.categoryStrNameList = list
+                ));
+    }
+
+    private void showPopupwindow(List<String> strings) {
+        binding.include.blurLyt.setAlpha(0.5f);
+        DialogUtil.showPopupWindow(this,
+                binding.include.containerLyt.container, strings, s ->
+                        binding.include.blurLyt.setAlpha(0f));
 
     }
 
@@ -100,7 +150,7 @@ public class HomeScreenActivity extends BaseActivity
     }
 
     private void getCartCount() {
-        viewModel.getCartCount().observe(this, baseResponse -> {
+      /*  viewModel.getCartCount().observe(this, baseResponse -> {
             if (baseResponse != null) {
                 if (baseResponse.getData() != null) {
                     int count = baseResponse.getData().getCount();
@@ -108,7 +158,7 @@ public class HomeScreenActivity extends BaseActivity
                     viewModel.setCartSize(count);
                 }
             }
-        });
+        });*/
     }
 
     private void observeForProductDetailScreenFromCheckout() {
@@ -241,10 +291,11 @@ public class HomeScreenActivity extends BaseActivity
 
     private void fetchProduct() {
         showProgressDialog();
-        viewModel.getProducts().observe(this, productListResponses -> {
+        viewModel.getProducts().observe(this, productModelResponse -> {
             hideProgressDialog();
-            if (productListResponses != null && productListResponses.size() > 0) {
-                viewModel.getProductList().setValue(productListResponses);
+            if (productModelResponse != null && productModelResponse.getProductList() != null &&
+                    productModelResponse.getProductList().size() > 0) {
+                viewModel.getProductList().setValue(productModelResponse.getProductList());
             } else {
                 ToastUtils.getInstance(this).showLongToast(getString(R.string.something_went_wrong));
             }
@@ -267,6 +318,7 @@ public class HomeScreenActivity extends BaseActivity
 
     private void setNavigationBar() {
         setSupportActionBar(binding.include.toolbar);
+        if (getSupportActionBar() == null) return;
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         View viewActionBar = getLayoutInflater().inflate(R.layout.custom_actiob_bar, null);
@@ -275,6 +327,14 @@ public class HomeScreenActivity extends BaseActivity
         toolBarTitle = viewActionBar.findViewById(R.id.title);
         cartImageLyt = viewActionBar.findViewById(R.id.cartImageLyt);
         cartImageLyt.setOnClickListener(v -> launchCartScreen());
+        View filterView = viewActionBar.findViewById(R.id.filter);
+        filterView.setOnClickListener(v -> {
+            if (categoryStrNameList == null) return;
+            binding.include.blurLyt.setAlpha(0.5f);
+            DialogUtil.showListPopupWindow(this, filterView, categoryStrNameList,
+                    this::makeApiCallForCategory,
+                    () -> binding.include.blurLyt.setAlpha(0f));
+        });
         notificationText = viewActionBar.findViewById(R.id.notification_text);
         toolBarTitle.setText(getString(R.string.products));
         drawerLayout = binding.drawerLayout;
@@ -288,6 +348,10 @@ public class HomeScreenActivity extends BaseActivity
         binding.navView.setNavigationItemSelectedListener(this);
         setNavHeader();
         setNavSubItemClicklistener();
+    }
+
+    private void makeApiCallForCategory(String category) {
+
     }
 
     private void launchCartScreen() {
@@ -336,6 +400,7 @@ public class HomeScreenActivity extends BaseActivity
     }
 
     private void setToolBarTitle(String title) {
+        if (getSupportActionBar() == null) return;
         toolBarTitle.setText(title);
         // Show back button
         toggle.setDrawerIndicatorEnabled(false);
@@ -348,6 +413,7 @@ public class HomeScreenActivity extends BaseActivity
 
 
     private void setHomeScreeToolBar() {
+        if (getSupportActionBar() == null) return;
         toolBarTitle.setText(getString(R.string.products));
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         toggle.setDrawerIndicatorEnabled(true);
@@ -364,6 +430,7 @@ public class HomeScreenActivity extends BaseActivity
             if (backStackCount == 1) {
                 finish();
             } else {
+                if (getSupportActionBar() == null) return;
                 getSupportFragmentManager().popBackStackImmediate();
                 Fragment fragment = FragmentHelper.
                         getFragmentById(this, binding.include.containerLyt.container.getId());

@@ -1,11 +1,11 @@
 package com.najdi.android.najdiapp.launch.model;
 
 public class LoginRequestModel {
-    String username;
+    String phone;
     String password;
 
-    public void setUserName(String userName) {
-        this.username = userName;
+    public void setPhone(String userName) {
+        this.phone = userName;
     }
 
     public void setPassword(String password) {

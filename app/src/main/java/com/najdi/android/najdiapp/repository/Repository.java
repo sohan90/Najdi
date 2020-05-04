@@ -1,32 +1,33 @@
 package com.najdi.android.najdiapp.repository;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.najdi.android.najdiapp.checkout.model.OrderRequest;
 import com.najdi.android.najdiapp.checkout.model.OrderResponse;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.home.model.CartRequest;
+import com.najdi.android.najdiapp.home.model.CityListModelResponse;
 import com.najdi.android.najdiapp.home.model.ContactUsRequest;
 import com.najdi.android.najdiapp.home.model.ForgotPaswwordRequest;
 import com.najdi.android.najdiapp.home.model.HtmlResponseForNajdi;
+import com.najdi.android.najdiapp.home.model.ProductId;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
+import com.najdi.android.najdiapp.home.model.ProductModelResponse;
 import com.najdi.android.najdiapp.launch.model.LoginRequestModel;
 import com.najdi.android.najdiapp.launch.model.OtpRequestModel;
 import com.najdi.android.najdiapp.launch.model.SignupRequestModel;
-import com.najdi.android.najdiapp.launch.model.SignupResponseModel;
-import com.najdi.android.najdiapp.launch.view.LoginActivity;
 import com.najdi.android.najdiapp.network.RetrofitCallBack;
 import com.najdi.android.najdiapp.network.RetrofitClient;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 import com.najdi.android.najdiapp.shoppingcart.model.UpdateCartRequest;
-import com.najdi.android.najdiapp.utitility.LocaleUtitlity;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 import com.najdi.android.najdiapp.utitility.ResourceProvider;
 
 import java.util.HashMap;
 import java.util.List;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import retrofit2.Call;
 
 public class Repository {
@@ -77,22 +78,24 @@ public class Repository {
         return liveData;
     }
 
-    public LiveData<List<ProductListResponse>> getProducts() {
-        MutableLiveData<List<ProductListResponse>> liveData = new MutableLiveData<>();
-        RetrofitClient.getInstance().getProducts(resourceProvider.getCountryLang()).enqueue(new RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<List<ProductListResponse>>() {
-            @Override
-            public void onSuccesResponse(Call<List<ProductListResponse>> call, List<ProductListResponse> productListResponses) {
-                liveData.setValue(productListResponses);
-            }
+    public LiveData<ProductModelResponse> getProducts() {
+        MutableLiveData<ProductModelResponse> liveData = new MutableLiveData<>();
+        RetrofitClient.getInstance().getProducts().enqueue(
+                new RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<ProductModelResponse>() {
+                    @Override
+                    public void onSuccesResponse(Call<ProductModelResponse> call,
+                                                 ProductModelResponse productListResponses) {
+                        liveData.setValue(productListResponses);
+                    }
 
-            @Override
-            public void onFailurResponse(Call<List<ProductListResponse>> call, BaseResponse baseResponse) {
-                if (baseResponse != null) {
-                    baseResponse.handleError(resourceProvider.getAppContext());
-                }
-                liveData.setValue(null);
-            }
-        }));
+                    @Override
+                    public void onFailurResponse(Call<ProductModelResponse> call, BaseResponse baseResponse) {
+                        if (baseResponse != null) {
+                            baseResponse.handleError(resourceProvider.getAppContext());
+                        }
+                        liveData.setValue(null);
+                    }
+                }));
         return liveData;
     }
 
@@ -158,20 +161,23 @@ public class Repository {
         return liveData;
     }
 
-    public LiveData<ProductListResponse> getIndividualProduct(int productId) {
-        MutableLiveData<ProductListResponse> liveData = new MutableLiveData<>();
-        RetrofitClient.getInstance().getIndividualProduct(productId, resourceProvider.getCountryLang()).enqueue(new RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<ProductListResponse>() {
-            @Override
-            public void onSuccesResponse(Call<ProductListResponse> call, ProductListResponse productListResponse) {
-                liveData.setValue(productListResponse);
-            }
+    public LiveData<BaseResponse> getIndividualProduct(String id) {
+        ProductId productId = new ProductId();
+        productId.setId(id);
+        MutableLiveData<BaseResponse> liveData = new MutableLiveData<>();
+        RetrofitClient.getInstance().getIndividualProduct(productId)
+                .enqueue(new RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<BaseResponse>() {
+                    @Override
+                    public void onSuccesResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
+                        liveData.setValue(baseResponse);
+                    }
 
-            @Override
-            public void onFailurResponse(Call<ProductListResponse> call, BaseResponse baseResponse) {
-                baseResponse.handleError(resourceProvider.getAppContext());
-                liveData.setValue(null);
-            }
-        }));
+                    @Override
+                    public void onFailurResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
+                        baseResponse.handleError(resourceProvider.getAppContext());
+                        liveData.setValue(null);
+                    }
+                }));
         return liveData;
 
     }
@@ -408,8 +414,8 @@ public class Repository {
 
     public LiveData<BaseResponse> getCartCount() {
         MutableLiveData<BaseResponse> liveData = new MutableLiveData<>();
-        String userId = String.valueOf(PreferenceUtils.getValueInt(resourceProvider.getAppContext(),
-                PreferenceUtils.USER_ID_KEY));
+        String userId = PreferenceUtils.getValueString(resourceProvider.getAppContext(),
+                PreferenceUtils.USER_ID_KEY);
         String token = PreferenceUtils.getValueString(resourceProvider.getAppContext(),
                 PreferenceUtils.USER_LOGIIN_TOKEN);
 
@@ -501,7 +507,7 @@ public class Repository {
 
     public LiveData<BaseResponse> changePassword(ForgotPaswwordRequest forgotPaswwordRequest) {
         MutableLiveData<BaseResponse> liveData = new MutableLiveData<>();
-        RetrofitClient.getInstance().changePasswormd(forgotPaswwordRequest).enqueue(new
+        RetrofitClient.getInstance().changePassword(forgotPaswwordRequest).enqueue(new
                 RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<BaseResponse>() {
             @Override
             public void onSuccesResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
@@ -587,7 +593,7 @@ public class Repository {
         return liveData;
     }
 
-    public LiveData<ProductListResponse> getVariationForProduct(int productId, int variaionId) {
+    public LiveData<ProductListResponse> getVariationForProduct(String productId, int variaionId) {
         MutableLiveData<ProductListResponse> liveData = new MutableLiveData<>();
         RetrofitClient.getInstance().getVartionForSelectedProduct(productId, variaionId).enqueue(new
                 RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<ProductListResponse>() {
@@ -606,6 +612,54 @@ public class Repository {
                 liveData.setValue(null);
             }
         }));
+        return liveData;
+    }
+
+    public LiveData<CityListModelResponse> getCityList() {
+        MutableLiveData<CityListModelResponse> liveData = new MutableLiveData<>();
+        RetrofitClient.getInstance().getCityList().enqueue(new RetrofitCallBack<>
+                (new RetrofitCallBack.CustomCallBack<CityListModelResponse>() {
+                    @Override
+                    public void onSuccesResponse(Call<CityListModelResponse> call,
+                                                 CityListModelResponse cityListModelResponse) {
+                        if (cityListModelResponse != null) {
+                            liveData.setValue(cityListModelResponse);
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailurResponse(Call<CityListModelResponse> call, BaseResponse baseResponse) {
+                        if (baseResponse != null) {
+                            baseResponse.handleError(resourceProvider.getAppContext());
+                        }
+                        liveData.setValue(null);
+                    }
+                }));
+        return liveData;
+    }
+
+    public LiveData<CityListModelResponse> getCategory() {
+        MutableLiveData<CityListModelResponse> liveData = new MutableLiveData<>();
+        RetrofitClient.getInstance().getCategoriesList().enqueue(new RetrofitCallBack<>
+                (new RetrofitCallBack.CustomCallBack<CityListModelResponse>() {
+                    @Override
+                    public void onSuccesResponse(Call<CityListModelResponse> call,
+                                                 CityListModelResponse cityListModelResponse) {
+                        if (cityListModelResponse != null) {
+                            liveData.setValue(cityListModelResponse);
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailurResponse(Call<CityListModelResponse> call, BaseResponse baseResponse) {
+                        if (baseResponse != null) {
+                            baseResponse.handleError(resourceProvider.getAppContext());
+                        }
+                        liveData.setValue(null);
+                    }
+                }));
         return liveData;
     }
 }

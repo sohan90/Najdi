@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_lyt"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/round__grey_selector"
-    android:orientation="vertical"
-    android:padding="20dp">
+    android:orientation="vertical">
 
-   <ListView
-       android:id="@+id/list"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"/>
+    <include
+        android:id="@+id/include_lyt"
+        layout="@layout/header_pop_up"
+        android:visibility="gone" />
+
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

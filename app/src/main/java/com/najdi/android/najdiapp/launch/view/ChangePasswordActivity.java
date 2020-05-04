@@ -3,6 +3,11 @@ package com.najdi.android.najdiapp.launch.view;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseActivity;
 import com.najdi.android.najdiapp.common.BaseResponse;
@@ -10,11 +15,6 @@ import com.najdi.android.najdiapp.databinding.ActivityChangePasswordBinding;
 import com.najdi.android.najdiapp.launch.viewmodel.ForgotPasswordViewModel;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
-
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProviders;
 
 import static com.najdi.android.najdiapp.common.Constants.OtpScreen.CHANGE_PASSWORD_OTP_SCREEN;
 
@@ -79,15 +79,16 @@ public class ChangePasswordActivity extends BaseActivity {
     private void updatePassword() {
         showProgressDialog();
         String phoneNo = PreferenceUtils.getValueString(this, PreferenceUtils.USER_PHONE_NO_KEY);
+        String userId = PreferenceUtils.getValueString(this, PreferenceUtils.USER_ID_KEY);
         LiveData<BaseResponse> liveData;
         if (launchType == CHANGE_PASSWORD_OTP_SCREEN) {
             liveData = viewModel.forgotUpdate(phoneNo, otp, resourProvider.getCountryLang());
         } else {
-            liveData = viewModel.changePassword(phoneNo, resourProvider.getCountryLang());
+            liveData = viewModel.changePassword(userId);
         }
         liveData.observe(this, baseResponse -> {
             hideProgressDialog();
-            if (baseResponse != null) {
+            if (baseResponse != null && baseResponse.isStatus()) {
                 DialogUtil.showAlertDialog(this, getString(R.string.password_upd_msg), (dialog, which) -> {
                     dialog.dismiss();
                     finish();

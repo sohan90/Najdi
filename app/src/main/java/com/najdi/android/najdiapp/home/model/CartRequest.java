@@ -1,16 +1,14 @@
 package com.najdi.android.najdiapp.home.model;
 
-import org.json.JSONObject;
-
 import java.util.HashMap;
 
 public class CartRequest {
-    int product_id;
+    String product_id;
     int variation_id;
     int quantity;
     HashMap<String, String> variation;
 
-    public void setProductId(int product_id) {
+    public void setProductId(String product_id) {
         this.product_id = product_id;
     }
 

@@ -7,7 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.checkout.viewmodel.CheckoutFragmentViewModel;
@@ -25,16 +32,7 @@ import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.ToastUtils;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class CheckoutFragment extends BaseFragment {
     FragmentCheckoutBinding binding;
@@ -101,7 +99,7 @@ public class CheckoutFragment extends BaseFragment {
             public void onEdit(CartResponse.CartData cartData) {
                 if (cartData != null) {
                     ProductDetailBundleModel model = new ProductDetailBundleModel();
-                    model.setProductId(cartData.getProductId());
+                    model.setProductId(String.valueOf(cartData.getProductId()));
                     model.setT(cartData);
                     model.setFromCartScreen(true);
                     notifyObserver(model);
