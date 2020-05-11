@@ -1,11 +1,16 @@
 package com.najdi.android.najdiapp.home.view;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseFragment;
@@ -16,12 +21,6 @@ import com.najdi.android.najdiapp.home.viewmodel.ProfileViewModel;
 import com.najdi.android.najdiapp.launch.view.ChangePasswordActivity;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
-import com.najdi.android.najdiapp.utitility.ToastUtils;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProviders;
 
 import static com.najdi.android.najdiapp.launch.view.ChangePasswordActivity.EXTRA_CHANGE_PASSWORD_LAUNCH_TYPE;
 
@@ -48,7 +47,27 @@ public class ProfileFragment extends BaseFragment {
         bindViewModel();
         setData();
         initClickListener();
+        observeNameField();
+        observeEmailField();
         return binding.getRoot();
+    }
+
+    private void observeEmailField() {
+    viewModel.email.observe(this, s -> {
+        if (!TextUtils.isEmpty(s)){
+            PreferenceUtils.setValueString(getActivity(), PreferenceUtils.USER_EMAIL_KEY,
+                    viewModel.email.getValue());
+        }
+    });
+    }
+
+    private void observeNameField() {
+        viewModel.name.observe(this, s -> {
+            if (!TextUtils.isEmpty(s)){
+                PreferenceUtils.setValueString(getActivity(), PreferenceUtils.USER_NAME_KEY,
+                        viewModel.name.getValue());
+            }
+        });
     }
 
     private void initClickListener() {
@@ -69,13 +88,15 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void updateProfile() {
-        if (binding.name.getText() != null && binding.email.getText() != null) {
-            PreferenceUtils.setValueString(getActivity(), PreferenceUtils.USER_NAME_KEY,
-                    binding.name.getText().toString());
-            PreferenceUtils.setValueString(getActivity(), PreferenceUtils.USER_EMAIL_KEY,
-                    binding.email.getText().toString());
-            DialogUtil.showAlertDialog(getActivity(), getString(R.string.profile_succes_msg),
-                    (dialog, which) -> dialog.dismiss());
+        if(getActivity() == null) return;
+        if (viewModel.validate()) {
+            String userId = PreferenceUtils.getValueString(getActivity(), PreferenceUtils.USER_ID_KEY);
+            viewModel.updateProfile(userId).observe(this, baseResponse -> {
+                if (baseResponse != null){
+                    DialogUtil.showAlertDialog(getActivity(), getString(R.string.profile_succes_msg),
+                            (dialog, which) -> dialog.dismiss());
+                }
+            });
         } else {
             DialogUtil.showAlertDialog(getActivity(), getString(R.string.please_fill),
                     (dialog, which) -> dialog.dismiss());

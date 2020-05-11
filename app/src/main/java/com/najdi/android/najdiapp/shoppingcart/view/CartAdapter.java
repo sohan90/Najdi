@@ -3,22 +3,22 @@ package com.najdi.android.najdiapp.shoppingcart.view;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.databinding.ItemCartBinding;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.RecyclerView;
-
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
     private final AdapterClickLisntener clickListener;
     private List<CartResponse.CartData> cartDataList;
 
-    public CartAdapter(AdapterClickLisntener clickListener, List<CartResponse.CartData> cartDataList) {
+    CartAdapter(AdapterClickLisntener clickListener, List<CartResponse.CartData> cartDataList) {
         this.clickListener = clickListener;
         this.cartDataList = cartDataList;
     }
@@ -49,22 +49,23 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         return cartDataList == null ? 0 : cartDataList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         ItemCartBinding cartBinding;
 
-        public ViewHolder(@NonNull ItemCartBinding binding) {
+        ViewHolder(@NonNull ItemCartBinding binding) {
             super(binding.getRoot());
             cartBinding = binding;
             cartBinding.dec.setOnClickListener(v -> {
                 CartResponse.CartData cartData = cartDataList.get(getAdapterPosition());
-                cartData.setPreviousQuantity(cartData.getQuantity());
-                int updatedQuantity = cartData.getQuantity() - 1;
+                int qty = Integer.parseInt(cartData.getQty());
+                cartData.setPreviousQuantity(qty);
+                int updatedQuantity = qty - 1;
                 if (updatedQuantity > 0) {
-                    int updatedTotal = updatedQuantity * Integer.parseInt(cartData.seletedOptionPrice());
-                    cartData.setQuantity(updatedQuantity);
-                    cartData.setLine_subtotal(updatedTotal);
+                    int updatedTotal = updatedQuantity * Integer.parseInt(cartData.getPrice());
+                    cartData.setQty(String.valueOf(updatedQuantity));
+                    cartData.setSubtotal(String.valueOf(updatedTotal));
                     notifyItemChanged(getAdapterPosition());
-                    clickListener.onUpdateQuantity(getAdapterPosition(), cartData.getTm_cart_item_key(),
+                    clickListener.onUpdateQuantity(getAdapterPosition(), cartData.getId(),
                             updatedQuantity);
                 }
 
@@ -72,13 +73,13 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
             cartBinding.increase.setOnClickListener(v -> {
                 CartResponse.CartData cartData = cartDataList.get(getAdapterPosition());
-                cartData.setPreviousQuantity(cartData.getQuantity());
+                cartData.setPreviousQuantity(Integer.parseInt(cartData.getQty()));
                 int updatedQuantity = cartData.getQuantity() + 1;
-                int updatedTotal = updatedQuantity * Integer.parseInt(cartData.seletedOptionPrice());
+                int updatedTotal = updatedQuantity * Integer.parseInt(cartData.getPrice());
                 cartData.setQuantity(updatedQuantity);
-                cartData.setLine_subtotal(updatedTotal);
+                cartData.setSubtotal(String.valueOf(updatedTotal));
                 notifyItemChanged(getAdapterPosition());
-                clickListener.onUpdateQuantity(getAdapterPosition(), cartData.getTm_cart_item_key(),
+                clickListener.onUpdateQuantity(getAdapterPosition(), cartData.getId(),
                         updatedQuantity);
 
 
@@ -86,9 +87,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
             cartBinding.delete.setOnClickListener(v -> {
                 CartResponse.CartData cartData = cartDataList.get(getAdapterPosition());
-                String cartItemKey = cartData.getTm_cart_item_key();
-                //cartDataList.remove(getAdapterPosition());
-                //notifyItemRemoved(getAdapterPosition());
+                String cartItemKey = cartData.getId();
                 clickListener.onRemoveItem(getAdapterPosition(), cartItemKey);
             });
 

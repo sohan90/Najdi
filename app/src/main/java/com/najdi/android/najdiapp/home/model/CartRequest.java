@@ -1,26 +1,44 @@
 package com.najdi.android.najdiapp.home.model;
 
-import java.util.HashMap;
-
 public class CartRequest {
-    String product_id;
-    int variation_id;
-    int quantity;
-    HashMap<String, String> variation;
+    private String product_id;
+    private int quantity;
+    //new changes
+    private String user_id;
+    private String attributes;
+    private String product_attribute_options;
+    private String price;
+    private String subtotal;
+
+
+    public void setUserId(String user_id) {
+        this.user_id = user_id;
+    }
+
+    public void setAttributes(String attributes) {
+        this.attributes = attributes;
+    }
+
+    public void setProductAttributeOptions(String product_attribute_options) {
+        this.product_attribute_options = product_attribute_options;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public void setSubtotal(String subtotal) {
+        this.subtotal = subtotal;
+    }
 
     public void setProductId(String product_id) {
         this.product_id = product_id;
     }
 
-    public void setVariationId(int variation_id) {
-        this.variation_id = variation_id;
-    }
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
-    public void setVariation(HashMap<String, String> variation) {
-        this.variation = variation;
-    }
+
 }

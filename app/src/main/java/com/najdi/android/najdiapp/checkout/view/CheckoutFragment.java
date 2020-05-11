@@ -149,7 +149,7 @@ public class CheckoutFragment extends BaseFragment {
         showProgressDialog();
 
         UpdateCartRequest updateCartRequest = new UpdateCartRequest();
-        updateCartRequest.setCartItemKey(cartItemKey);
+        updateCartRequest.setId(cartItemKey);
         updateCartRequest.setQuantity(String.valueOf(quantity));
 
         LiveData<BaseResponse> liveData = viewModel.updateQuantity(updateCartRequest);

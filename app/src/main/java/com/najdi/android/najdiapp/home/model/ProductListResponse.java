@@ -36,6 +36,10 @@ public class ProductListResponse implements Parcelable {
     List<Attributes> product_attributes;
 
 
+    public int getTotalAttributeSize() {
+        return isproductattribute;
+    }
+
     public String getCategory() {
         return category;
     }

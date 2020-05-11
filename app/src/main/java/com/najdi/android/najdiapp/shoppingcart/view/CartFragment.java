@@ -32,7 +32,7 @@ import java.util.List;
 
 public class CartFragment extends BaseFragment {
 
-    FragmentCartBinding binding;
+    private FragmentCartBinding binding;
     private HomeScreenViewModel homeScreenViewModel;
     private CartAdapter adapter;
     private CartViewModel viewModel;
@@ -57,6 +57,11 @@ public class CartFragment extends BaseFragment {
         return binding.getRoot();
     }
 
+    private void initializeHomeScreenViewModel() {
+        if (getActivity() == null) return;
+        homeScreenViewModel = ViewModelProviders.of(getActivity()).get(HomeScreenViewModel.class);
+    }
+
     private void initializeClickListener() {
         binding.proceedTxt.setOnClickListener(v -> {
             if (getActivity() == null) return;
@@ -75,18 +80,16 @@ public class CartFragment extends BaseFragment {
         homeScreenViewModel.getSetToolBarTitle().setValue(getString(R.string.cart));
     }
 
-    private void removeItem(int position, String s) {
+    private void removeItem(int position, String cartId) {
         showProgressDialog();
-        LiveData<BaseResponse> baseResponseLiveData = viewModel.removeCart(s);
+        LiveData<BaseResponse> baseResponseLiveData = viewModel.removeCart(cartId);
         baseResponseLiveData.observe(this, baseResponse -> {
             hideProgressDialog();
-            if (baseResponse != null) {
-                updateCartSizeForRemoveItem(adapterList.get(position).getQuantity());
+            if (baseResponse != null && baseResponse.isStatus()) {
+                updateCartSizeForRemoveItem(Integer.parseInt(adapterList.get(position).getQty()));
                 updateAdapterForRemoveItem(position);
-                String message = baseResponse.getData().getMessage();
-                DialogUtil.showAlertDialog(getActivity(), getString(R.string.item_removed), (dialog, which) -> {
-                    dialog.dismiss();
-                });
+                DialogUtil.showAlertDialog(getActivity(), getString(R.string.item_removed),
+                        (dialog, which) -> dialog.dismiss());
             }
         });
     }
@@ -127,17 +130,16 @@ public class CartFragment extends BaseFragment {
         showProgressDialog();
         homeScreenViewModel.getCart().observe(this, cartResponse -> {
             hideProgressDialog();
-            if (cartResponse != null) {
-                if (cartResponse.getData() != null) {
-                    if (cartResponse.getData().getCartdata().size() > 0) {
-                        viewModel.setTotal(cartResponse.getData().getCartdata());
-                        adapterList = cartResponse.getData().getCartdata();
-                        adapter.setData(adapterList);
-                        homeScreenViewModel.getCart().removeObservers(this);
-                    } else {
-                        showEmptyCartValueTxt();
-                    }
+            if (cartResponse != null && cartResponse.isStatus()) {
+                if (cartResponse.getCart() != null && cartResponse.getCart().size() > 0) {
+                    viewModel.setTotal(cartResponse.getCart());
+                    adapterList = cartResponse.getCart();
+                    adapter.setData(adapterList);
+                    homeScreenViewModel.getCart().removeObservers(this);
+                } else {
+                    showEmptyCartValueTxt();
                 }
+
             } else {
                 showEmptyCartValueTxt();
             }
@@ -152,7 +154,6 @@ public class CartFragment extends BaseFragment {
             @Override
             public void onRemoveItem(int position, String cartItemKey) {
                 if (!TextUtils.isEmpty(cartItemKey)) {
-                    //updateTotal();
                     DialogUtil.showAlertWithNegativeButton(getActivity(),
                             getString(R.string.delete_msg), (dialog, which) -> {
                                 dialog.dismiss();
@@ -176,9 +177,9 @@ public class CartFragment extends BaseFragment {
             }
 
             @Override
-            public void onUpdateQuantity(int adapterPosition, String cartItemKey, int quantity) {
+            public void onUpdateQuantity(int adapterPosition, String cartId, int quantity) {
                 updateTotal();
-                updateItemQuantity(adapterPosition, cartItemKey, quantity);
+                updateItemQuantity(adapterPosition, cartId, quantity);
             }
         }, new ArrayList<>());
 
@@ -193,7 +194,7 @@ public class CartFragment extends BaseFragment {
         showProgressDialog();
 
         UpdateCartRequest updateCartRequest = new UpdateCartRequest();
-        updateCartRequest.setCartItemKey(cartItemKey);
+        updateCartRequest.setId(cartItemKey);
         updateCartRequest.setQuantity(String.valueOf(quantity));
 
         LiveData<BaseResponse> liveData = viewModel.updateQuantity(updateCartRequest);
@@ -201,19 +202,15 @@ public class CartFragment extends BaseFragment {
 
             hideProgressDialog();
             updateCart();
-            if (baseResponse != null && baseResponse.getData() != null) {
+            if (baseResponse != null && baseResponse.isStatus()) {
                 DialogUtil.showAlertDialog(getActivity(), getString(R.string.quantity_updated),
                         (dialog, which) -> dialog.dismiss());
             } else {
                 CartResponse.CartData cartData = adapterList.get(adapterPosition);
-                cartData.setQuantity(cartData.getPreviousQuantity());
+                cartData.setQty(String.valueOf(cartData.getPreviousQuantity()));
                 adapter.setData(adapterList);
             }
         });
     }
 
-    private void initializeHomeScreenViewModel() {
-        if (getActivity() == null) return;
-        homeScreenViewModel = ViewModelProviders.of(getActivity()).get(HomeScreenViewModel.class);
-    }
 }

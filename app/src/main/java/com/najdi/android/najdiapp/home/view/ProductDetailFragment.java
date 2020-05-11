@@ -112,9 +112,9 @@ public class ProductDetailFragment extends BaseFragment {
                 setViewDataForIncludeLyt();
                 viewModel.setDefaultPrice(productListResponse.getPrice());
                 inflateViewForProductVariation();
-                enableOrDisableAddCartButton();
+                //enableOrDisableAddCartButton();
                 if (cartData == null) {
-                    //viewModel.setDefaultQuantity();
+                    viewModel.setDefaultQuantity();
                 }
             }
         });
@@ -147,6 +147,12 @@ public class ProductDetailFragment extends BaseFragment {
         binding.setLifecycleOwner(this);
     }
 
+    private void initializeHomeScreenViewModel() {
+        if (getActivity() != null) {
+            homeScreeViewModel = ViewModelProviders.of(getActivity()).get(HomeScreenViewModel.class);
+        }
+    }
+
     private void initializeViewModel() {
         viewModel = ViewModelProviders.of(this).get(ProductDetailViewModel.class);
     }
@@ -170,7 +176,7 @@ public class ProductDetailFragment extends BaseFragment {
     private void updateCart() {
         //update cart :Since api wont support update cart directly so
         // to update cart  first delete product and add with updated product item
-        LiveData<BaseResponse> liveData = viewModel.removeCart(cartData.getTm_cart_item_key());
+        LiveData<BaseResponse> liveData = viewModel.removeCart(cartData.getId());
         liveData.observe(this, baseResponse -> {
             if (baseResponse != null) {
                 addCart();
@@ -179,17 +185,19 @@ public class ProductDetailFragment extends BaseFragment {
     }
 
     private void addCart() {
-        LiveData<BaseResponse> liveData = viewModel.addToCart();
+        LiveData<BaseResponse> liveData = viewModel.addToCart(productId);
         liveData.observe(this, baseResponse -> {
             hideProgressDialog();
-            binding.proceed.setEnabled(true);
-            updateNotificationCartCount();
-            String message = getString(R.string.product_added_success);
-            if (isFromCartScreen) {
-                message = getString(R.string.product_updated_success);
+            if (baseResponse != null && baseResponse.isStatus()) {
+                viewModel.enableProceed.setValue(true);
+                updateNotificationCartCount();
+                String message = getString(R.string.product_added_success);
+                if (isFromCartScreen) {
+                    message = getString(R.string.product_updated_success);
+                }
+                DialogUtil.showAlertDialog(getActivity(), message,
+                        (dialog, which) -> dialog.dismiss());
             }
-            DialogUtil.showAlertDialog(getActivity(), message,
-                    (dialog, which) -> dialog.dismiss());
         });
     }
 
@@ -207,9 +215,13 @@ public class ProductDetailFragment extends BaseFragment {
         binding.container.removeAllViews();
         if (productListResponse != null && productListResponse.getAttributesList() != null) {
             List<ProductListResponse.Attributes> attributesList = productListResponse.getAttributesList();
+
             for (ProductListResponse.Attributes attributes : attributesList) {
 
-                List<String> stringList = getListFromMap(attributes.getProductAttributeOptions());
+                List<AttributeOptionModel> attributeOptLst = attributes.
+                        getProductAttributeOptions();
+                List<String> stringList = getListFromMap(attributeOptLst);
+
                 View view = LayoutInflater.from(getActivity()).inflate(R.layout.item_detail,
                         binding.container, false);
                 binding.container.addView(view);
@@ -221,31 +233,26 @@ public class ProductDetailFragment extends BaseFragment {
                         attributes.getSlug());*/
 
                 detailBinding.options.setTag(attributes.getId());
-
                 detailBinding.options.setOnClickListener((v -> {
+
                     if (getActivity() != null) {
+
                         String selectedAttributeId = (String) v.getTag();
 
-                        DialogUtil.showPopupWindowSpinner(getActivity(), v, stringList, s -> {
+                        DialogUtil.showPopupWindowSpinner(getActivity(), v, stringList, p -> {
 
-                            String selectedValue = getSelectedValueFromMap(s);
-                            //viewModel.updatePrice(productListResponse, selectedValue, selectedAttributeId);
-                            detailBinding.options.setText(s);
+                            AttributeOptionModel attributeOptionModel = attributeOptLst.get(p);
+                            String selectedValue = attributeOptionModel.getOptionName();
+                            String attrOptId = (String) attributeOptionModel.getId();
+                            detailBinding.options.setText(selectedValue);
+                            viewModel.updatePrice(productListResponse.getTotalAttributeSize(),
+                                    selectedAttributeId, attributeOptionModel);
 
                         });
                     }
-
                 }));
             }
         }
-    }
-
-    private String getSelectedValueFromMap(String selectedNameKey) {
-        String slugValue = "";
-        if (variationMap.size() > 0) {
-            slugValue = variationMap.get(selectedNameKey);
-        }
-        return slugValue;
     }
 
     private void reset() {
@@ -262,10 +269,10 @@ public class ProductDetailFragment extends BaseFragment {
             String attribute = APPEND_ATTRIBUTE_STR.concat(key);
             String appendedSlugKey = attribute.concat("_slug");
             String selectedSlugKeyValue = cartData.getVariation().get(appendedSlugKey);
-            viewModel.setTotalPrice(String.valueOf(cartData.getLine_subtotal()));
+            viewModel.setTotalPriceLivdData(String.valueOf(cartData.getLine_subtotal()));
             viewModel.setQuantityCount(cartData.getQuantity());
             optionText.setText(cartData.getVariation().get(attribute));
-            viewModel.updatePrice(productListResponse, selectedSlugKeyValue, id);
+            //viewModel.updatePrice(productListResponse, selectedSlugKeyValue, id);
         }
     }
 
@@ -284,12 +291,6 @@ public class ProductDetailFragment extends BaseFragment {
             productId = model.getProductId();
             cartData = (CartResponse.CartData) model.getT();
             isFromCartScreen = model.isFromCartScreen();
-        }
-    }
-
-    private void initializeHomeScreenViewModel() {
-        if (getActivity() != null) {
-            homeScreeViewModel = ViewModelProviders.of(getActivity()).get(HomeScreenViewModel.class);
         }
     }
 }

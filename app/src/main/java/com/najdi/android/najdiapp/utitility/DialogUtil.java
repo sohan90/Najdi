@@ -116,7 +116,7 @@ public class DialogUtil {
     }
 
     public static void showPopupWindowSpinner(Context context, View anchorView, List<String> list,
-                                      GenericClickListener<String> clickListener) {
+                                      GenericClickListener<Integer> clickListener) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
         View customView = inflater.inflate(R.layout.item_pop_window, null);
         ArrayAdapter<String> itemsAdapter = new ArrayAdapter<>(context,
@@ -131,7 +131,7 @@ public class DialogUtil {
         popupWindow.setFocusable(true);
         popupWindow.showAsDropDown(anchorView, 0, 0);
         listView.setOnItemClickListener((parent, view, position, id) -> {
-            clickListener.onClicked(list.get(position));
+            clickListener.onClicked(position);
             popupWindow.dismiss();
         });
 

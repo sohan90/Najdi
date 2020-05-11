@@ -1,18 +1,20 @@
 package com.najdi.android.najdiapp.shoppingcart.model;
 
 public class UpdateCartRequest {
-    String cart_item_key;
-    String quantity;
+    String id;
+    String qty;
+    String user_id;
 
-    public void setCartItemKey(String cartItemKey) {
-        this.cart_item_key = cartItemKey;
+    public void setUserId(String user_id) {
+        this.user_id = user_id;
+    }
+
+    public void setId(String cartId) {
+        this.id = cartId;
     }
 
     public void setQuantity(String quantity) {
-        this.quantity = quantity;
+        this.qty = quantity;
     }
 
-    public String getCart_item_key() {
-        return cart_item_key;
-    }
 }

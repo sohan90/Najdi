@@ -43,7 +43,7 @@ public class CartViewModel extends BaseViewModel {
     public void setTotal(List<CartResponse.CartData> cartDataList) {
         int subTotal = 0;
         for (CartResponse.CartData cartData : cartDataList) {
-            int total = cartData.getLine_subtotal();
+            int total = Integer.parseInt(cartData.getSubtotal());
             subTotal = total + subTotal;
         }
         String total = String.valueOf(subTotal).concat(" ").
@@ -53,11 +53,11 @@ public class CartViewModel extends BaseViewModel {
     }
 
     public LiveData<BaseResponse> removeCart(String itemKey) {
-        String userId = String.valueOf(PreferenceUtils.getValueInt(resourceProvider.getAppContext(),
-                PreferenceUtils.USER_ID_KEY));
+        String userId = PreferenceUtils.getValueString(resourceProvider.getAppContext(),
+                PreferenceUtils.USER_ID_KEY);
         HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("cart_item_key", itemKey);
-        hashMap.put("customer", userId);
+        hashMap.put("id", itemKey);
+        hashMap.put("user_id", userId);
         return repository.removeCartItem(hashMap);
     }
 

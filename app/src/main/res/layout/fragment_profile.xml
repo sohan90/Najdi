@@ -38,6 +38,7 @@
                 android:hint="@string/name_optional"
                 android:imeOptions="actionNext"
                 android:inputType="textPersonName"
+                android:text="@={viewModel.name}"
                 android:maxLength="20"
 
                 android:maxLines="1"
@@ -62,6 +63,7 @@
                 android:inputType="textEmailAddress"
                 android:maxLength="20"
                 android:maxLines="1"
+                android:text="@={viewModel.email}"
                 android:textColorHint="@color/grey_text"
                 android:textDirection="locale" />
         </com.google.android.material.textfield.TextInputLayout>

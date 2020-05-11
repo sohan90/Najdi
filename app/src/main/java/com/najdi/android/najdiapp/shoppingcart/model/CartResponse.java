@@ -10,6 +10,17 @@ public class CartResponse {
     int code;
     String message;
     Data data;
+    boolean status;
+    List<CartData> cart;
+
+    public List<CartData> getCart() {
+        return cart;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
 
     public int getCode() {
         return code;
@@ -32,7 +43,7 @@ public class CartResponse {
     }
 
     public static class CartData implements Parcelable {
-        private int product_id;
+        private String product_id;
         private int variation_id;
         private HashMap<String, String> variation;
         private int quantity;
@@ -52,9 +63,19 @@ public class CartResponse {
         private int previousQuantity;
         private int previousTotal;
 
+        //new changes
+        String id;
+        String product_name;
+        String qty;
+        String details;
+        String notes;
+        String price;
+        String subtotal;
+        String image;
+
 
         protected CartData(Parcel in) {
-            product_id = in.readInt();
+            product_id = in.readString();
             variation_id = in.readInt();
             quantity = in.readInt();
             tm_epo_product_original_price = in.readString();
@@ -70,6 +91,16 @@ public class CartResponse {
             previousQuantity = in.readInt();
             post_title = in.readString();
             previousTotal = in.readInt();
+            //
+            id = in.readString();
+            product_name = in.readString();
+            qty = in.readString();
+            details = in.readString();
+            notes = in.readString();
+            price = in.readString();
+            subtotal = in.readString();
+            image = in.readString();
+
         }
 
         public static final Creator<CartData> CREATOR = new Creator<CartData>() {
@@ -104,7 +135,7 @@ public class CartResponse {
             this.variation = variation;
         }
 
-        public int getProductId() {
+        public String getProductId() {
             return product_id;
         }
 
@@ -127,7 +158,6 @@ public class CartResponse {
         public void setPreviousQuantity(int previousQuantity) {
             this.previousQuantity = previousQuantity;
         }
-
 
 
         public int getPreviousQuantity() {
@@ -185,7 +215,7 @@ public class CartResponse {
 
         @Override
         public void writeToParcel(Parcel dest, int flags) {
-            dest.writeInt(product_id);
+            dest.writeString(product_id);
             dest.writeInt(variation_id);
             dest.writeInt(quantity);
             dest.writeString(tm_epo_product_original_price);
@@ -201,6 +231,55 @@ public class CartResponse {
             dest.writeInt(previousQuantity);
             dest.writeString(post_title);
             dest.writeInt(previousTotal);
+
+            dest.writeString(id);
+            dest.writeString(product_name);
+            dest.writeString(qty);
+            dest.writeString(details);
+            dest.writeString(notes);
+            dest.writeString(price);
+            dest.writeString(subtotal);
+            dest.writeString(image);
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public String getProduct_name() {
+            return product_name;
+        }
+
+        public String getQty() {
+            return qty;
+        }
+
+        public void setQty(String qty) {
+            this.qty = qty;
+        }
+
+        public void setSubtotal(String subtotal) {
+            this.subtotal = subtotal;
+        }
+
+        public String getDetails() {
+            return details;
+        }
+
+        public String getNotes() {
+            return notes;
+        }
+
+        public String getPrice() {
+            return price;
+        }
+
+        public String getSubtotal() {
+            return subtotal;
+        }
+
+        public String getImage() {
+            return image;
         }
     }
 }

@@ -3,6 +3,10 @@ package com.najdi.android.najdiapp.checkout.viewmodel;
 import android.app.Application;
 import android.location.Address;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.najdi.android.najdiapp.checkout.model.LineItemModelRequest;
 import com.najdi.android.najdiapp.checkout.model.OrderRequest;
 import com.najdi.android.najdiapp.checkout.model.OrderResponse;
@@ -15,10 +19,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 public class CheckoutViewModel extends BaseViewModel {
 
@@ -107,7 +107,7 @@ public class CheckoutViewModel extends BaseViewModel {
 
             LineItemModelRequest lineItemModelRequest = new LineItemModelRequest();
             lineItemModelRequest.setVariation_id(cartData1.getVariationId());
-            lineItemModelRequest.setProduct_id(cartData1.getProductId());
+            lineItemModelRequest.setProduct_id(Integer.parseInt(cartData1.getProductId()));
             lineItemModelRequest.setQuantity(cartData1.getQuantity());
             List<HashMap<String, String>> slugValueMap = getSlugValueFromMap(cartData1.getVariation());
             lineItemModelRequest.setVariations(slugValueMap);

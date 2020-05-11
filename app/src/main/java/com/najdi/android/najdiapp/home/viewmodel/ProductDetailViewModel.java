@@ -1,6 +1,7 @@
 package com.najdi.android.najdiapp.home.viewmodel;
 
 import android.app.Application;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -9,26 +10,32 @@ import androidx.lifecycle.MutableLiveData;
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.BaseViewModel;
+import com.najdi.android.najdiapp.home.model.AttributeOptionModel;
 import com.najdi.android.najdiapp.home.model.CartRequest;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import static com.najdi.android.najdiapp.common.Constants.APPEND_ATTRIBUTE_STR;
-
 public class ProductDetailViewModel extends BaseViewModel {
-    public MutableLiveData<String> totalPrice = new MutableLiveData<>();
+
+    public MutableLiveData<String> totalPriceLivdData = new MutableLiveData<>();
     public MutableLiveData<Integer> quantityCount = new MutableLiveData<>();
     public MutableLiveData<Boolean> enableAddCartButton = new MutableLiveData<>();
     public MutableLiveData<Boolean> enableProceed = new MutableLiveData<>();
-    public MutableLiveData<Boolean> getVariaitionQuantity;
-    private String selectOptionPrice;
+
+    private MutableLiveData<Boolean> getVariaitionQuantity;
+    private int basePrice;
     private HashMap<String, String> attributHashMap;
-    private ProductListResponse productListResponse;
     private int variationId;
     private int setMaxvariationQuantity;
+    private String attriId;
+    private int selectedOptionPrice;
+    private int totalAttribute;
+    private int totalPrice;
 
     public ProductDetailViewModel(@NonNull Application application) {
         super(application);
@@ -36,7 +43,7 @@ public class ProductDetailViewModel extends BaseViewModel {
     }
 
     public void setDefaultPrice(String defaultPrice) {
-        selectOptionPrice = defaultPrice;
+        basePrice = Integer.parseInt(defaultPrice);
     }
 
     public void setDefaultQuantity() {
@@ -44,13 +51,13 @@ public class ProductDetailViewModel extends BaseViewModel {
         incrementQuantity();
     }
 
-    public void setTotalPrice(String totalPrice) {
-        this.totalPrice.setValue(getCurrencyConcatintedString(totalPrice));
+    public void setTotalPriceLivdData(String totalPriceLivdData) {
+        this.totalPriceLivdData.setValue(getCurrencyConcatenatedString(totalPriceLivdData));
     }
 
-    private String getCurrencyConcatintedString(String price) {
-        String priceCurrency = price.concat(" ").concat(resourceProvider.getString(R.string.currency));
-        return priceCurrency;
+    private String getCurrencyConcatenatedString(String price) {
+        return price.concat(" ").concat(resourceProvider
+                .getString(R.string.currency));
     }
 
     public void setQuantityCount(int quantity) {
@@ -58,47 +65,42 @@ public class ProductDetailViewModel extends BaseViewModel {
     }
 
     public void incrementQuantity() {
-        if (quantityCount.getValue() != null && quantityCount.getValue() <= setMaxvariationQuantity) {
+        if (quantityCount.getValue() != null) {//&& quantityCount.getValue() <= setMaxvariationQuantity) {
 
             quantityCount.setValue(quantityCount.getValue() + 1);
-            updateTotalPrice(selectOptionPrice);
+            updateTotalPrice();
             enableAddCartButton();
         }
     }
 
+    public void decrementQuantity() {
+        if (quantityCount.getValue() != null) {//&& quantityCount.getValue() > 1) {
+            quantityCount.setValue(quantityCount.getValue() - 1);
+        }
+        updateTotalPrice();
+        enableAddCartButton();
+    }
 
     public void setMaxVariationQuantity(int quantity) {
         this.setMaxvariationQuantity = quantity;
-    }
-
-    public void decrementQuantity() {
-        if (quantityCount.getValue() != null && quantityCount.getValue() > 1) {
-            quantityCount.setValue(quantityCount.getValue() - 1);
-        }
-        updateTotalPrice(selectOptionPrice);
-        enableAddCartButton();
     }
 
     public int getSetMaxvariationQuantity() {
         return setMaxvariationQuantity;
     }
 
-    public void updatePrice(ProductListResponse productListResponse, String selectedSlugValue, int selectedId) {
-        this.productListResponse = productListResponse;
-        createAttributeForSelectedValue(selectedSlugValue, selectedId);
-        parent:
-        for (ProductListResponse.VariationData variationData : productListResponse.getVariationsData()) {
-            HashMap<String, String> variationType = variationData.getAttributes();
-            for (Map.Entry<String, String> entry : variationType.entrySet()) {
-                if (entry.getValue().equalsIgnoreCase(selectedSlugValue)) {
-                    selectOptionPrice = variationData.getVariationRegularPrice();
-                    variationId = variationData.getVariation_id();
-                    getQuantityLimitForSelectedVariation();
-                    updateTotalPrice(selectOptionPrice);
-                    break parent;
-                }
-            }
+    public void updatePrice(int totalAttribute, String selectedAttrId, AttributeOptionModel attributeOptionModel) {
+        if (attributeOptionModel == null) return;
+        this.totalAttribute = totalAttribute;
+        int attrOptPrice = Integer.parseInt(attributeOptionModel.getOptionPrice());
+        if (TextUtils.isEmpty(attriId) || attriId.equals(selectedAttrId)) {
+            selectedOptionPrice = attrOptPrice;
+        } else {
+            selectedOptionPrice = selectedOptionPrice + attrOptPrice;
         }
+        updateTotalPrice();
+        attriId = selectedAttrId;
+        createAttributeForSelectedValue(selectedAttrId, attributeOptionModel.getId());
     }
 
     private void getQuantityLimitForSelectedVariation() {
@@ -109,30 +111,19 @@ public class ProductDetailViewModel extends BaseViewModel {
         return variationId;
     }
 
-    public void setVariationId(int variationId) {
-        this.variationId = variationId;
-    }
-
-    private void createAttributeForSelectedValue(String selectedValue, int selectedId) {
+    private void createAttributeForSelectedValue(String selectedValue,
+                                                 String optAttrId) {
         createHashMap();
-        for (ProductListResponse.Attributes attributes : productListResponse.getAttributesList()) {
-            if (attributes.getId().equals(selectedId)) {
-                attributHashMap.put(APPEND_ATTRIBUTE_STR + attributes.getSlug(), selectedValue);
-                break;
-            }
-        }
+        attributHashMap.put(selectedValue, optAttrId);
         enableAddCartButton();
     }
 
     private void enableAddCartButton() {
         if (quantityCount.getValue() != null && quantityCount.getValue() > 0 &&
-                attributHashMap != null && attributHashMap.size() == productListResponse
-                .getAttributesList().size()) {
+                attributHashMap != null && attributHashMap.size() == totalAttribute) {
             enableAddCartButton.setValue(true);
-            //enableProceed.setValue(true);
         } else {
             enableAddCartButton.setValue(false);
-            //enableProceed.setValue(false);
         }
     }
 
@@ -142,11 +133,10 @@ public class ProductDetailViewModel extends BaseViewModel {
         }
     }
 
-    private void updateTotalPrice(String selectedOptionPrice) {
-        if (selectedOptionPrice != null && quantityCount.getValue() != null) {
-            int price = Integer.parseInt(selectedOptionPrice);
-            int totPrice = price * quantityCount.getValue();
-            totalPrice.setValue(getCurrencyConcatintedString(String.valueOf(totPrice)));
+    private void updateTotalPrice() {
+        if (quantityCount.getValue() != null) {
+            totalPrice = (this.basePrice + selectedOptionPrice) * quantityCount.getValue();
+            totalPriceLivdData.setValue(getCurrencyConcatenatedString(String.valueOf(totalPrice)));
         }
     }
 
@@ -154,21 +144,30 @@ public class ProductDetailViewModel extends BaseViewModel {
         if (attributHashMap == null) return;
         attributHashMap.clear();
         quantityCount.setValue(0);
-        //totalPrice.setValue("");
-        //enableAddCartButton();
         incrementQuantity();
     }
 
-    public LiveData<BaseResponse> addToCart() {
-        if (quantityCount.getValue() != null && productListResponse != null) {
-            CartRequest cartRequest = new CartRequest();
-            cartRequest.setQuantity(quantityCount.getValue());
-            cartRequest.setProductId(productListResponse.getId());
-            cartRequest.setVariationId(variationId);
-            cartRequest.setVariation(attributHashMap);
-            return repository.addToCart(cartRequest);
+    public LiveData<BaseResponse> addToCart(String productId) {
+        if (attributHashMap == null) return null;
+        List<String> attributeIdList = new ArrayList<>();
+        List<String> attributeOptIdList = new ArrayList<>();
+        for (Map.Entry<String, String> map : attributHashMap.entrySet()) {
+            attributeIdList.add(map.getKey());
+            attributeOptIdList.add(map.getValue());
         }
-        return null;
+        CartRequest cartRequest = new CartRequest();
+        if (quantityCount.getValue() != null) {
+            cartRequest.setProductId(productId);
+            cartRequest.setAttributes(attributeIdList.toString().replace("[","")
+            .replace("]",""));
+            cartRequest.setProductAttributeOptions(attributeOptIdList.toString()
+                    .replace("[","").replace("]",""));
+            cartRequest.setPrice(String.valueOf(basePrice));
+            cartRequest.setSubtotal(String.valueOf(totalPrice));
+            cartRequest.setQuantity(quantityCount.getValue());
+
+        }
+        return repository.addToCart(cartRequest);
     }
 
     public LiveData<BaseResponse> removeCart(String itemKey) {
