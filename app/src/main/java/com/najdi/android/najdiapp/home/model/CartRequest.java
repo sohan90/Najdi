@@ -2,7 +2,7 @@ package com.najdi.android.najdiapp.home.model;
 
 public class CartRequest {
     private String product_id;
-    private int quantity;
+    private int qty;
     //new changes
     private String user_id;
     private String attributes;
@@ -37,7 +37,7 @@ public class CartRequest {
 
 
     public void setQuantity(int quantity) {
-        this.quantity = quantity;
+        this.qty = quantity;
     }
 
 

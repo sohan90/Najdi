@@ -2,12 +2,11 @@ package com.najdi.android.najdiapp.checkout.model;
 
 import android.widget.TextView;
 
-import com.najdi.android.najdiapp.R;
-import com.najdi.android.najdiapp.utitility.LocaleUtitlity;
-import com.najdi.android.najdiapp.utitility.MathUtils;
-
 import androidx.core.content.ContextCompat;
 import androidx.databinding.BindingAdapter;
+
+import com.najdi.android.najdiapp.R;
+import com.najdi.android.najdiapp.utitility.MathUtils;
 
 import static com.najdi.android.najdiapp.utitility.MathUtils.ORDER_COMPLETE_DATE_FORMAT;
 import static com.najdi.android.najdiapp.utitility.MathUtils.ORDER_STATUS_DATE_FORMAT;
@@ -23,7 +22,12 @@ public class OrderResponse {
     String total;
     String payment_method;
     String payment_method_title;
+    String message;
 
+
+    public String getMessage() {
+        return message;
+    }
 
     public String getId() {
         return "#" +String.valueOf(id);

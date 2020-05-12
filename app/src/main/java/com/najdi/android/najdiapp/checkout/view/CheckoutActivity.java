@@ -101,8 +101,8 @@ public class CheckoutActivity extends BaseActivity {
 
     private void fetchCartCount() {
         viewModel.getCartCount().observe(this, baseResponse -> {
-            if (baseResponse != null && baseResponse.getData() != null) {
-                updateCartValueTxt(baseResponse.getData().getCount());
+            if (baseResponse != null && baseResponse.isStatus()) {
+                updateCartValueTxt(baseResponse.getTotalItems());
             }
         });
     }
@@ -121,15 +121,15 @@ public class CheckoutActivity extends BaseActivity {
         viewModel.getCheckoutLiveData().observe(this, paymentMode -> {
             if (paymentMode != null) {
                 showProgressDialog();
-                int userId = PreferenceUtils.getValueInt(this, PreferenceUtils.USER_ID_KEY);
+                String userId = PreferenceUtils.getValueString(this, PreferenceUtils.USER_ID_KEY);
                 createOrder(userId, paymentMode);
             }
         });
     }
 
-    private void createOrder(int userId, String paymentMode) {
+    private void createOrder(String userId, String paymentMode) {
         LiveData<OrderResponse> orderResponseLiveData =
-                viewModel.createOrder(userId, cartResponse.getData().getCartdata(), paymentMode, billing);
+                viewModel.createOrder(userId, cartResponse.getCart(), paymentMode, billing);
 
         orderResponseLiveData.observe(this, orderResponse -> {
             hideProgressDialog();
@@ -160,7 +160,7 @@ public class CheckoutActivity extends BaseActivity {
 
     private void fetchCart() {
         viewModel.fetchCart().observe(this, cartResponse -> {
-            if (cartResponse != null) {
+            if (cartResponse != null && cartResponse.isStatus()) {
                 this.cartResponse = cartResponse;
                 viewModel.getCartResponseMutableLiveData().setValue(cartResponse);
             }
@@ -366,14 +366,12 @@ public class CheckoutActivity extends BaseActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case LOCATION_PERMISSION_REQUEST_CODE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    accessLastLocation();
-                } else {
-                    ToastUtils.getInstance(this).showShortToast(getString(R.string.permission_denied));
-                }
-                break;
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                accessLastLocation();
+            } else {
+                ToastUtils.getInstance(this).showShortToast(getString(R.string.permission_denied));
+            }
         }
     }
 

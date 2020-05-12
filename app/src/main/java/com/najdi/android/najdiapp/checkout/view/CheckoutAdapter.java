@@ -5,6 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.databinding.InflateFragCheckoutBinding;
 import com.najdi.android.najdiapp.databinding.InflateVariationItemBinding;
@@ -13,10 +17,6 @@ import com.najdi.android.najdiapp.shoppingcart.view.CartAdapter;
 
 import java.util.List;
 import java.util.Map;
-
-import androidx.annotation.NonNull;
-import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHolder> {
 
@@ -53,24 +53,22 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHo
         holder.binding.setCartModel(cartData);
         holder.binding.variationContainer.removeAllViews();
         LayoutInflater inflater = LayoutInflater.from(holder.binding.getRoot().getContext());
+
         for (Map.Entry<String, String> entry : cartData.getVariation().entrySet()) {
-            if (entry.getKey().equalsIgnoreCase("attribute_pa_cutting-way")) {
-                continue;
-            }
+
             View view = inflater.inflate(R.layout.inflate_variation_item,
                     holder.binding.variationContainer, false);
 
             InflateVariationItemBinding binding = InflateVariationItemBinding.bind(view);
 
-            if (entry.getKey().endsWith("_slug")) continue;
-
-            String replaceKey = entry.getKey().replace("attribute_pa_", "");
+            String replaceKey = entry.getKey();
 
             String translatedKey;
             try {
                 translatedKey = (String) view.getContext().getResources().
                         getText(view.getContext().getResources().
-                                getIdentifier(replaceKey, "string", view.getContext().getPackageName()));
+                                getIdentifier(replaceKey, "string",
+                                        view.getContext().getPackageName()));
             } catch (Resources.NotFoundException e) {
 
                 translatedKey = replaceKey;
@@ -99,37 +97,35 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHo
             binding.close.setOnClickListener(v -> {
 
                 CartResponse.CartData cartData = dataList.get(getAdapterPosition());
-                String cartItemKey = cartData.getTm_cart_item_key();
+                String cartItemKey = cartData.getId();
                 clickListener.onRemoveItem(getAdapterPosition(), cartItemKey);
-                //dataList.remove(getAdapterPosition());
-                //notifyItemRemoved(getAdapterPosition());
 
             });
 
             binding.increase.setOnClickListener(v -> {
                 CartResponse.CartData cartData = dataList.get(getAdapterPosition());
-                int updatedQuantity = cartData.getQuantity() + 1;
-                updateQuantity(updatedQuantity, cartData.getQuantity());
+                int updatedQuantity = Integer.parseInt(cartData.getQty()) + 1;
+                updateQuantity(updatedQuantity, Integer.parseInt(cartData.getQty()));
             });
 
             binding.decrease.setOnClickListener(v -> {
                 CartResponse.CartData cartData = dataList.get(getAdapterPosition());
-                int updatedQuantity = cartData.getQuantity() - 1;
+                int updatedQuantity = Integer.parseInt(cartData.getQty()) - 1;
                 if (updatedQuantity > 0) {
-                    updateQuantity(updatedQuantity, cartData.getQuantity());
+                    updateQuantity(updatedQuantity, Integer.parseInt(cartData.getQty()));
                 }
             });
         }
 
         private void updateQuantity(int updatedQuantity, int previousQuantity) {
             CartResponse.CartData cartData = dataList.get(getAdapterPosition());
-            int updatedTotal = updatedQuantity * Integer.parseInt(cartData.seletedOptionPrice());
+            int updatedTotal = updatedQuantity * Integer.parseInt(cartData.getPrice());
             cartData.setPreviousQuantity(previousQuantity);
-            cartData.setPreviousTotal(cartData.getLine_subtotal());
-            cartData.setQuantity(updatedQuantity);
-            cartData.setLine_subtotal(updatedTotal);
+            cartData.setPreviousTotal(Integer.parseInt(cartData.getSubtotal()));
+            cartData.setQty(String.valueOf(updatedQuantity));
+            cartData.setSubtotal(String.valueOf(updatedTotal));
             notifyItemChanged(getAdapterPosition());
-            clickListener.onUpdateQuantity(getAdapterPosition(), cartData.getTm_cart_item_key(),
+            clickListener.onUpdateQuantity(getAdapterPosition(), cartData.getId(),
                     updatedQuantity);
         }
     }

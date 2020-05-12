@@ -42,6 +42,14 @@ public class HomeScreenViewModel extends BaseViewModel {
         return repository.getProducts();
     }
 
+    public LiveData<ProductModelResponse> getCityBasedProducts(String cityId) {
+        return repository.getCityBasedProducts(cityId);
+    }
+
+    public LiveData<ProductModelResponse> getCategoryBasedProducts(String catId) {
+        return repository.getCategoryBasedProducts(catId);
+    }
+
     public LiveData<CityListModelResponse> getCityList(){
         return repository.getCityList();
     }

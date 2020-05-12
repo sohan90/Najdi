@@ -74,6 +74,7 @@ public class HomeScreenActivity extends BaseActivity
     private ActionBarDrawerToggle toggle;
     private ProductDetailBundleModel productDetailBundleModel;
     private List<String> categoryStrNameList;
+    private List<CityListModelResponse.Category> categoryList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +112,7 @@ public class HomeScreenActivity extends BaseActivity
             if (cityListModelResponse != null && cityListModelResponse.isStatus()) {
                 List<CityListModelResponse.Category> categoryList = cityListModelResponse
                         .getCategories();
-                getCategory(categoryList);
+                getCategoryNameList(categoryList);
             }
         });
     }
@@ -121,10 +122,11 @@ public class HomeScreenActivity extends BaseActivity
                 .flatMap(io.reactivex.rxjava3.core.Observable::fromIterable)
                 .map(CityListModelResponse.City::getName)
                 .toList()
-                .subscribe(this::showPopupwindow));
+                .subscribe(strings -> showPopupwindow(strings, cityList)));
     }
 
-    private void getCategory(List<CityListModelResponse.Category> categoryList) {
+    private void getCategoryNameList(List<CityListModelResponse.Category> categoryList) {
+        this.categoryList = categoryList;
         addDisposable(io.reactivex.rxjava3.core.Observable.just(categoryList)
                 .flatMap(io.reactivex.rxjava3.core.Observable::fromIterable)
                 .map(CityListModelResponse.Category::getName)
@@ -133,11 +135,14 @@ public class HomeScreenActivity extends BaseActivity
                 ));
     }
 
-    private void showPopupwindow(List<String> strings) {
+    private void showPopupwindow(List<String> strings, List<CityListModelResponse.City> cityList) {
         binding.include.blurLyt.setAlpha(0.5f);
         DialogUtil.showPopupWindow(this,
-                binding.include.containerLyt.container, strings, s ->
-                        binding.include.blurLyt.setAlpha(0f));
+                binding.include.containerLyt.container, strings, pos -> {
+                    binding.include.blurLyt.setAlpha(0f);
+                    CityListModelResponse.City city = cityList.get(pos);
+                    fetchCityBasedProducts(city.getId());
+                });
 
     }
 
@@ -150,15 +155,15 @@ public class HomeScreenActivity extends BaseActivity
     }
 
     private void getCartCount() {
-      /*  viewModel.getCartCount().observe(this, baseResponse -> {
+        viewModel.getCartCount().observe(this, baseResponse -> {
             if (baseResponse != null) {
-                if (baseResponse.getData() != null) {
-                    int count = baseResponse.getData().getCount();
+                if (baseResponse.isStatus()) {
+                    int count = baseResponse.getTotalItems();
                     updateCartCountTxt(count);
                     viewModel.setCartSize(count);
                 }
             }
-        });*/
+        });
     }
 
     private void observeForProductDetailScreenFromCheckout() {
@@ -302,6 +307,32 @@ public class HomeScreenActivity extends BaseActivity
         });
     }
 
+    private void fetchCityBasedProducts(String cityId) {
+        showProgressDialog();
+        viewModel.getCityBasedProducts(cityId).observe(this, productModelResponse -> {
+            hideProgressDialog();
+            if (productModelResponse != null && productModelResponse.getProductList() != null &&
+                    productModelResponse.getProductList().size() > 0) {
+                viewModel.getProductList().setValue(productModelResponse.getProductList());
+            } else {
+                ToastUtils.getInstance(this).showLongToast(getString(R.string.something_went_wrong));
+            }
+        });
+    }
+
+    private void fetchCategoryBasedProducts(String catId) {
+        showProgressDialog();
+        viewModel.getCategoryBasedProducts(catId).observe(this, productModelResponse -> {
+            hideProgressDialog();
+            if (productModelResponse != null && productModelResponse.getProductList() != null &&
+                    productModelResponse.getProductList().size() > 0) {
+                viewModel.getProductList().setValue(productModelResponse.getProductList());
+            } else {
+                ToastUtils.getInstance(this).showLongToast(getString(R.string.something_went_wrong));
+            }
+        });
+    }
+
     private void fetchCart() {
         viewModel.getCart().observe(this, cartResponse -> {
             if (cartResponse != null) {
@@ -332,7 +363,10 @@ public class HomeScreenActivity extends BaseActivity
             if (categoryStrNameList == null) return;
             binding.include.blurLyt.setAlpha(0.5f);
             DialogUtil.showListPopupWindow(this, filterView, categoryStrNameList,
-                    this::makeApiCallForCategory,
+                    pos -> {
+                        CityListModelResponse.Category category = categoryList.get(pos);
+                        fetchCategoryBasedProducts(category.getId());
+                    },
                     () -> binding.include.blurLyt.setAlpha(0f));
         });
         notificationText = viewActionBar.findViewById(R.id.notification_text);
@@ -348,10 +382,6 @@ public class HomeScreenActivity extends BaseActivity
         binding.navView.setNavigationItemSelectedListener(this);
         setNavHeader();
         setNavSubItemClicklistener();
-    }
-
-    private void makeApiCallForCategory(String category) {
-
     }
 
     private void launchCartScreen() {

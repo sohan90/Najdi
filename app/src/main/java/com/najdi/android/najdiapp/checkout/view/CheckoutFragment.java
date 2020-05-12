@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CheckoutFragment extends BaseFragment {
-    FragmentCheckoutBinding binding;
+    private FragmentCheckoutBinding binding;
     private CheckoutViewModel activityViewModel;
     private CheckoutAdapter checkoutAdapter;
     private CheckoutFragmentViewModel viewModel;
@@ -130,10 +130,9 @@ public class CheckoutFragment extends BaseFragment {
 
                 updateAdapterForRemoveItem(position);
                 activityViewModel.getCartCountNotification().setValue(true);
-                String message = baseResponse.getData().getMessage();
-                DialogUtil.showAlertDialog(getActivity(), getString(R.string.item_removed), (dialog, which) -> {
-                    dialog.dismiss();
-                });
+                //String message = baseResponse.getData().getMessage();
+                DialogUtil.showAlertDialog(getActivity(), getString(R.string.item_removed), (dialog, which) ->
+                        dialog.dismiss());
             }
         });
     }
@@ -156,10 +155,10 @@ public class CheckoutFragment extends BaseFragment {
         liveData.observe(this, baseResponse -> {
 
             hideProgressDialog();
-            if (baseResponse != null && baseResponse.getData() != null) {
+            if (baseResponse != null && baseResponse.isStatus()) {
                 activityViewModel.updateCart().setValue(true);
                 ToastUtils.getInstance(getActivity()).
-                        showShortToast(baseResponse.getData().getMessage());
+                        showShortToast(baseResponse.getMessage());
             } else {
                 // failure case
                 CartResponse.CartData cartData = adapterList.get(adapterPosition);
@@ -190,9 +189,10 @@ public class CheckoutFragment extends BaseFragment {
         activityViewModel.getCartResponseMutableLiveData().observe(getViewLifecycleOwner(),
                 cartResponse -> {
                     hideProgressDialog();
-                    if (cartResponse != null && cartResponse.getData().getCartdata() != null) {
-                        viewModel.udpateTotal(cartResponse.getData().getCartdata());
-                        viewModel.sortvariation(cartResponse).observe(this, cartData -> {
+                    if (cartResponse != null && cartResponse.isStatus()) {
+                        viewModel.udpateTotal(cartResponse.getCart());
+                        viewModel.getVariationDetails(cartResponse.getCart())
+                                .observe(this, cartData -> {
                             adapterList = cartData;
                             updateAdapter(adapterList);
                         });

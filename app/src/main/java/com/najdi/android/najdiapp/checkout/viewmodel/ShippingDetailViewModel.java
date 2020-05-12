@@ -3,12 +3,12 @@ package com.najdi.android.najdiapp.checkout.viewmodel;
 import android.app.Application;
 import android.location.Address;
 
-import com.najdi.android.najdiapp.common.BaseViewModel;
-import com.najdi.android.najdiapp.launch.model.BillingAddress;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+
+import com.najdi.android.najdiapp.common.BaseViewModel;
+import com.najdi.android.najdiapp.launch.model.BillingAddress;
 
 public class ShippingDetailViewModel extends BaseViewModel {
     private MutableLiveData<String> name = new MutableLiveData<>();
@@ -20,6 +20,7 @@ public class ShippingDetailViewModel extends BaseViewModel {
     private MutableLiveData<String> province = new MutableLiveData<>();
     private MutableLiveData<String> postalCode = new MutableLiveData<>();
     private MutableLiveData<Boolean> proceed = new MutableLiveData<>();
+    private Address googleAddress;
 
 
     public ShippingDetailViewModel(@NonNull Application application) {
@@ -33,6 +34,7 @@ public class ShippingDetailViewModel extends BaseViewModel {
     }
 
     public void updateAddress(Address address) {
+        googleAddress = address;
         buildingNO.setValue(address.getFeatureName());
         street.setValue(address.getSubLocality());
         city.setValue(address.getLocality());
@@ -91,16 +93,17 @@ public class ShippingDetailViewModel extends BaseViewModel {
 
     public BillingAddress getBillingObject() {
         BillingAddress billing = new BillingAddress();
-        billing.setFirst_name(name.getValue());
-        billing.setLast_name(name.getValue());
+        billing.setFull_name(name.getValue());
         billing.setEmail(email.getValue());
         billing.setPhone(phoneNo.getValue().replace("966",""));
-        billing.setAddress_1(buildingNO.getValue());
-        billing.setAddress_2(street.getValue());
+        billing.setAddress(buildingNO.getValue());
+        billing.setMap_address(street.getValue());
         billing.setCity(city.getValue());
         billing.setState(province.getValue());
         billing.setPostcode(postalCode.getValue());
         billing.setCountry(province.getValue());
+        billing.setLat(String.valueOf(googleAddress.getLatitude()));
+        billing.setLng(String.valueOf(googleAddress.getLongitude()));
         return billing;
     }
 }

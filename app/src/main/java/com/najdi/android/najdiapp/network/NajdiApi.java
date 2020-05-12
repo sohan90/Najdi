@@ -1,7 +1,6 @@
 package com.najdi.android.najdiapp.network;
 
 import com.najdi.android.najdiapp.BuildConfig;
-import com.najdi.android.najdiapp.checkout.model.OrderRequest;
 import com.najdi.android.najdiapp.checkout.model.OrderResponse;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.home.model.CartRequest;
@@ -14,6 +13,7 @@ import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.home.model.ProductModelResponse;
 import com.najdi.android.najdiapp.home.model.UpdateProfileModelRequest;
 import com.najdi.android.najdiapp.home.model.UserId;
+import com.najdi.android.najdiapp.launch.model.BillingAddress;
 import com.najdi.android.najdiapp.launch.model.LoginRequestModel;
 import com.najdi.android.najdiapp.launch.model.OtpRequestModel;
 import com.najdi.android.najdiapp.launch.model.SignupRequestModel;
@@ -41,6 +41,14 @@ public interface NajdiApi {
     @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
     Call<BaseResponse> loginUser(@Query("lang") String lang, @Body LoginRequestModel loginRequestModel);
 
+    @POST("list_products_cities")
+    @Headers({"Content-Type:application/json"})
+    Call<ProductModelResponse> getCityBasedProducts(@Body  HashMap<String, String> city);
+
+    @POST("list_products_cat")
+    @Headers({"Content-Type:application/json"})
+    Call<ProductModelResponse> getCategoryBasedProducts(@Body  HashMap<String, String> category);
+
     @GET("list_products")
     @Headers({"Content-Type:application/json"})
     Call<ProductModelResponse> getProducts();
@@ -57,9 +65,9 @@ public interface NajdiApi {
     @Headers({"Content-Type:application/json"})
     Call<BaseResponse> getIndividualProduct(@Body ProductId productId);
 
-    @POST("orders")
-    @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
-    Call<OrderResponse> createOrder(@Query("lang") String lang, @Query("customer") int userId, @Body OrderRequest orderRequest);
+    @POST("place_order")
+    @Headers({"Content-Type:application/json"})
+    Call<OrderResponse> createOrder(@Body BillingAddress billingAddress);
 
     @GET("orders")
     @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
@@ -85,9 +93,9 @@ public interface NajdiApi {
     @Headers({"Content-Type:application/json"})
     Call<BaseResponse> loginToken(@Body LoginRequestModel loginRequestModel);
 
-    @POST("cart/clear")
-    @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
-    Call<BaseResponse> clearCart(@Query("lang") String lang, @Query("customer") String userId);
+    @POST("app_empty_cart")
+    @Headers({"Content-Type:application/json"})
+    Call<BaseResponse> clearCart(UserId userId);
 
     @GET("customapi/banklist")
     @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
@@ -97,9 +105,9 @@ public interface NajdiApi {
     @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
     Call<BaseResponse> contactUs(@Query("lang") String lang, @Body ContactUsRequest request);
 
-    @GET("customapi/count_items")
-    @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
-    Call<BaseResponse> getCartCount(@Query("lang") String lang, @Query("customer") String userId);
+    @POST("app_count_cart_items")
+    @Headers({"Content-Type:application/json"})
+    Call<BaseResponse> getCartCount(@Body UserId userId);
 
     @POST("customapi/forgot")
     @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})

@@ -7,18 +7,13 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.najdi.android.najdiapp.checkout.model.LineItemModelRequest;
-import com.najdi.android.najdiapp.checkout.model.OrderRequest;
 import com.najdi.android.najdiapp.checkout.model.OrderResponse;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.BaseViewModel;
 import com.najdi.android.najdiapp.launch.model.BillingAddress;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class CheckoutViewModel extends BaseViewModel {
 
@@ -87,9 +82,9 @@ public class CheckoutViewModel extends BaseViewModel {
         return checkoutLiveData;
     }
 
-    public LiveData<OrderResponse> createOrder(int userId, List<CartResponse.CartData> cartData,
+    public LiveData<OrderResponse> createOrder(String userId, List<CartResponse.CartData> cartData,
                                                String paymentMode, BillingAddress billingAddress) {
-        OrderRequest orderRequest = new OrderRequest();
+        /*OrderRequest orderRequest = new OrderRequest();
         orderRequest.setCustomer_id(String.valueOf(userId));
         orderRequest.setBilling(billingAddress);
         orderRequest.setShipping(billingAddress);
@@ -114,23 +109,8 @@ public class CheckoutViewModel extends BaseViewModel {
             list.add(lineItemModelRequest);
         }
 
-        orderRequest.setLine_items(list);
-        return repository.createOrder(userId, orderRequest);
-    }
-
-    private List<HashMap<String, String>> getSlugValueFromMap(HashMap<String, String> variation) {
-        List<HashMap<String, String>> list = new ArrayList<>();
-        for (Map.Entry<String, String> entry : variation.entrySet()) {
-            if (entry.getKey().endsWith("_slug") || entry.getKey().endsWith("minced_meat")) {
-                HashMap<String, String> hashMap = new HashMap<>();
-                String pa_key = entry.getKey().replace("attribute_", "");
-                String key = pa_key.replace("_slug", "");
-                hashMap.put("key", key);
-                hashMap.put("value", entry.getValue());
-                list.add(hashMap);
-            }
-        }
-        return list;
+        orderRequest.setLine_items(list);*/
+        return repository.createOrder(userId, billingAddress);
     }
 
     public MutableLiveData<OrderResponse> orderResponseMutableLiveData() {

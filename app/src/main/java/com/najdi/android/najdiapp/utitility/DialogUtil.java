@@ -137,7 +137,7 @@ public class DialogUtil {
 
     }
     public static void showPopupWindow(Context context, View anchorView, List<String> list,
-                                       GenericClickListener<String> clickListener) {
+                                       GenericClickListener<Integer> clickListener) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
         View customView = inflater.inflate(R.layout.item_pop_window, null);
         customView.findViewById(R.id.include_lyt).setVisibility(View.VISIBLE);
@@ -163,14 +163,14 @@ public class DialogUtil {
         });
         popupWindow.showAtLocation(anchorView, Gravity.CENTER, 0, 0);
         listView.setOnItemClickListener((parent, view, position, id) -> {
-            clickListener.onClicked(list.get(position));
+            clickListener.onClicked(position);
             popupWindow.dismiss();
         });
 
     }
 
     public static void showListPopupWindow(Context context, View anchorView, List<String> list,
-                                           GenericClickListener<String> clickListener,
+                                           GenericClickListener<Integer> clickListener,
                                            PopupWindow.OnDismissListener dismissListener) {
         if (list == null) return;
         ListPopupWindow listPopupWindow = new ListPopupWindow(context);
@@ -183,7 +183,7 @@ public class DialogUtil {
         listPopupWindow.setOnDismissListener(dismissListener);
         listPopupWindow.setOnItemClickListener((parent, view, position, id) -> {
             listPopupWindow.dismiss();
-            clickListener.onClicked(list.get(position));
+            clickListener.onClicked(position);
         });
         listPopupWindow.show();
     }

@@ -15,6 +15,7 @@ import static com.najdi.android.najdiapp.common.Constants.ARABIC_LAN;
 public class BaseResponse {
     String code;
     String message;
+    int total_items;
     Data data;
 
     //new changes
@@ -23,6 +24,10 @@ public class BaseResponse {
     String user_id;
     String token;
     ProductListResponse product;
+
+    public int getTotalItems() {
+        return total_items;
+    }
 
     public ProductListResponse getProduct() {
         return product;

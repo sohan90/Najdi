@@ -2,6 +2,10 @@ package com.najdi.android.najdiapp.checkout.viewmodel;
 
 import android.app.Application;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.BaseViewModel;
@@ -12,10 +16,6 @@ import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 public class CheckoutFragmentViewModel extends BaseViewModel {
     private MutableLiveData<String> subTotal = new MutableLiveData<>();
@@ -58,10 +58,25 @@ public class CheckoutFragmentViewModel extends BaseViewModel {
         return adapterList;
     }
 
+    //Response from server "details": "Size:Full,Cutting way:Quarters,Head & Legs:Skin Removed,Packaging:Normal"
+    public LiveData<List<CartResponse.CartData>> getVariationDetails(List<CartResponse.CartData> cartDataList) {
+        for (CartResponse.CartData cartData : cartDataList) {
+            HashMap<String, String> map = new HashMap<>();
+            String[] subDetail = cartData.getDetails().split(",");
+            for (String s : subDetail) {
+                String[] variation = s.split(":");//"Size:Full
+                map.put(variation[0], variation[1]);//Size, Full
+                cartData.setVariation(map);
+            }
+        }
+        adapterList.setValue(cartDataList);
+        return adapterList;
+    }
+
     public void udpateTotal(List<CartResponse.CartData> cartDataList) {
         int total = 0;
         for (CartResponse.CartData cartData : cartDataList) {
-            total += cartData.getLine_subtotal();
+            total += Integer.parseInt(cartData.getSubtotal());
         }
         String totalStr = String.valueOf(total).concat(" ").
                 concat(resourceProvider.getString(R.string.currency));

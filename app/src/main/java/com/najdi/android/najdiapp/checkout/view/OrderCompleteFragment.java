@@ -7,16 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.checkout.viewmodel.CheckoutViewModel;
 import com.najdi.android.najdiapp.common.BaseFragment;
 import com.najdi.android.najdiapp.common.ObservableManager;
 import com.najdi.android.najdiapp.databinding.FragmentCheckoutStep3Binding;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProviders;
 
 import static com.najdi.android.najdiapp.common.Constants.LAUNCH_PRODUCT;
 import static com.najdi.android.najdiapp.common.Constants.LAUNC_BANK_ACCOUNT;
@@ -76,6 +76,7 @@ public class OrderCompleteFragment extends BaseFragment {
 
     private void subscribeForOrderResponse() {
         activityViewModel.orderResponseMutableLiveData().observe(this, orderResponse -> {
+            if (orderResponse.getTotal() == null) return;
             binding.setViewModel(orderResponse);
             String total = orderResponse.getTotal().concat(" "+getString(R.string.currency));
             binding.totalValue.setText(total);

@@ -12,7 +12,45 @@ public class BillingAddress {
     String country;
     String email;
     String phone;
+    String lat;
+    String lng;
+    String user_id;
+    String full_name;
+    String address;
+    String map_address;
 
+
+    public void setUserId(String user_id) {
+        this.user_id = user_id;
+    }
+
+    public void setFull_name(String full_name) {
+        this.full_name = full_name;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setMap_address(String map_address) {
+        this.map_address = map_address;
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
+    }
+
+    public String getLat() {
+        return lat;
+    }
+
+    public void setLng(String lng) {
+        this.lng = lng;
+    }
+
+    public String getLng() {
+        return lng;
+    }
 
     public void setFirst_name(String first_name) {
         this.first_name = first_name;

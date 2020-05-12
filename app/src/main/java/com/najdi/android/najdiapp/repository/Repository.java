@@ -3,7 +3,6 @@ package com.najdi.android.najdiapp.repository;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.najdi.android.najdiapp.checkout.model.OrderRequest;
 import com.najdi.android.najdiapp.checkout.model.OrderResponse;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.Constants;
@@ -17,6 +16,7 @@ import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.home.model.ProductModelResponse;
 import com.najdi.android.najdiapp.home.model.UpdateProfileModelRequest;
 import com.najdi.android.najdiapp.home.model.UserId;
+import com.najdi.android.najdiapp.launch.model.BillingAddress;
 import com.najdi.android.najdiapp.launch.model.LoginRequestModel;
 import com.najdi.android.najdiapp.launch.model.OtpRequestModel;
 import com.najdi.android.najdiapp.launch.model.SignupRequestModel;
@@ -102,6 +102,52 @@ public class Repository {
     }
 
 
+    public LiveData<ProductModelResponse> getCityBasedProducts(String cityId) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("city_id", cityId);
+        MutableLiveData<ProductModelResponse> liveData = new MutableLiveData<>();
+        RetrofitClient.getInstance().getCityBasedProducts(map).enqueue(
+                new RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<ProductModelResponse>() {
+                    @Override
+                    public void onSuccesResponse(Call<ProductModelResponse> call,
+                                                 ProductModelResponse productListResponses) {
+                        liveData.setValue(productListResponses);
+                    }
+
+                    @Override
+                    public void onFailurResponse(Call<ProductModelResponse> call, BaseResponse baseResponse) {
+                        if (baseResponse != null) {
+                            baseResponse.handleError(resourceProvider.getAppContext());
+                        }
+                        liveData.setValue(null);
+                    }
+                }));
+        return liveData;
+    }
+
+    public LiveData<ProductModelResponse> getCategoryBasedProducts(String catId) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("cat_id", catId);
+        MutableLiveData<ProductModelResponse> liveData = new MutableLiveData<>();
+        RetrofitClient.getInstance().getCategoryBasedProducts(map).enqueue(
+                new RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<ProductModelResponse>() {
+                    @Override
+                    public void onSuccesResponse(Call<ProductModelResponse> call,
+                                                 ProductModelResponse productListResponses) {
+                        liveData.setValue(productListResponses);
+                    }
+
+                    @Override
+                    public void onFailurResponse(Call<ProductModelResponse> call, BaseResponse baseResponse) {
+                        if (baseResponse != null) {
+                            baseResponse.handleError(resourceProvider.getAppContext());
+                        }
+                        liveData.setValue(null);
+                    }
+                }));
+        return liveData;
+    }
+
     public LiveData<BaseResponse> addToCart(CartRequest cartRequest) {
         MutableLiveData<BaseResponse> liveData = new MutableLiveData<>();
         String userId = PreferenceUtils.getValueString(resourceProvider.getAppContext(),
@@ -132,7 +178,7 @@ public class Repository {
         UserId userId1 = new UserId();
         userId1.setUserId(userId);
         RetrofitClient.getInstance().getCart(userId1
-                ).enqueue(new RetrofitCallBack<>(new RetrofitCallBack.
+        ).enqueue(new RetrofitCallBack<>(new RetrofitCallBack.
                 CustomCallBack<CartResponse>() {
             @Override
             public void onSuccesResponse(Call<CartResponse> call, CartResponse cartResponse) {
@@ -154,18 +200,18 @@ public class Repository {
                 PreferenceUtils.USER_LOGIIN_TOKEN);
         RetrofitClient.getInstance().removeCartItem(cartItem)
                 .enqueue(new RetrofitCallBack<>(new RetrofitCallBack.
-                CustomCallBack<BaseResponse>() {
-            @Override
-            public void onSuccesResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
-                liveData.setValue(baseResponse);
-            }
+                        CustomCallBack<BaseResponse>() {
+                    @Override
+                    public void onSuccesResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
+                        liveData.setValue(baseResponse);
+                    }
 
-            @Override
-            public void onFailurResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
-                baseResponse.handleError(resourceProvider.getAppContext());
-                liveData.setValue(null);
-            }
-        }));
+                    @Override
+                    public void onFailurResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
+                        baseResponse.handleError(resourceProvider.getAppContext());
+                        liveData.setValue(null);
+                    }
+                }));
         return liveData;
     }
 
@@ -190,23 +236,24 @@ public class Repository {
 
     }
 
-    public LiveData<OrderResponse> createOrder(int userId, OrderRequest orderRequest) {
+    public LiveData<OrderResponse> createOrder(String userId, BillingAddress billingAddress) {
         MutableLiveData<OrderResponse> liveData = new MutableLiveData<>();
-        RetrofitClient.getInstance().createOrder(resourceProvider.getCountryLang(),
-                userId, orderRequest).enqueue(new RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<OrderResponse>() {
-            @Override
-            public void onSuccesResponse(Call<OrderResponse> call, OrderResponse orderResponse) {
-                if (orderResponse != null) {
-                    liveData.setValue(orderResponse);
-                }
-            }
+        billingAddress.setUserId(userId);
+        RetrofitClient.getInstance().createOrder(billingAddress)
+                .enqueue(new RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<OrderResponse>() {
+                    @Override
+                    public void onSuccesResponse(Call<OrderResponse> call, OrderResponse orderResponse) {
+                        if (orderResponse != null) {
+                            liveData.setValue(orderResponse);
+                        }
+                    }
 
-            @Override
-            public void onFailurResponse(Call<OrderResponse> call, BaseResponse baseResponse) {
-                baseResponse.handleError(resourceProvider.getAppContext());
-                liveData.setValue(null);
-            }
-        }));
+                    @Override
+                    public void onFailurResponse(Call<OrderResponse> call, BaseResponse baseResponse) {
+                        baseResponse.handleError(resourceProvider.getAppContext());
+                        liveData.setValue(null);
+                    }
+                }));
         return liveData;
     }
 
@@ -233,8 +280,8 @@ public class Repository {
 
     public LiveData<BaseResponse> updateItemQuantity(UpdateCartRequest updateCartRequest) {
         MutableLiveData<BaseResponse> liveData = new MutableLiveData<>();
-        String userId = String.valueOf(PreferenceUtils.getValueInt(resourceProvider.getAppContext(),
-                PreferenceUtils.USER_ID_KEY));
+        String userId = PreferenceUtils.getValueString(resourceProvider.getAppContext(),
+                PreferenceUtils.USER_ID_KEY);
         updateCartRequest.setUserId(userId);
         RetrofitClient.getInstance().updateItemQuantity(updateCartRequest).enqueue(new
                 RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<BaseResponse>() {
@@ -301,14 +348,13 @@ public class Repository {
     }
 
     public LiveData<BaseResponse> clearCart() {
-        String loginToken = PreferenceUtils.getValueString(resourceProvider.getAppContext(),
-                PreferenceUtils.USER_LOGIIN_TOKEN);
-
-        String userId = String.valueOf(PreferenceUtils.getValueInt(resourceProvider.getAppContext(),
-                PreferenceUtils.USER_ID_KEY));
         MutableLiveData<BaseResponse> liveData = new MutableLiveData<>();
-        RetrofitClient.getInstance().clearCart(resourceProvider.getCountryLang(),
-                userId).enqueue(new RetrofitCallBack<>(new RetrofitCallBack.
+        String userId = PreferenceUtils.getValueString(resourceProvider.getAppContext(),
+                PreferenceUtils.USER_ID_KEY);
+        UserId userId1 = new UserId();
+        userId1.setUserId(userId);
+
+        RetrofitClient.getInstance().clearCart(userId1).enqueue(new RetrofitCallBack<>(new RetrofitCallBack.
                 CustomCallBack<BaseResponse>() {
             @Override
             public void onSuccesResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
@@ -421,10 +467,9 @@ public class Repository {
         MutableLiveData<BaseResponse> liveData = new MutableLiveData<>();
         String userId = PreferenceUtils.getValueString(resourceProvider.getAppContext(),
                 PreferenceUtils.USER_ID_KEY);
-        String token = PreferenceUtils.getValueString(resourceProvider.getAppContext(),
-                PreferenceUtils.USER_LOGIIN_TOKEN);
-
-        RetrofitClient.getInstance().getCartCount(resourceProvider.getCountryLang(), userId).enqueue(new
+        UserId userId1 = new UserId();
+        userId1.setUserId(userId);
+        RetrofitClient.getInstance().getCartCount(userId1).enqueue(new
                 RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<BaseResponse>() {
             @Override
             public void onSuccesResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
