@@ -2,10 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
         <variable
             name="viewModel"
-            type="com.najdi.android.najdiapp.checkout.viewmodel.ShippingDetailViewModel"/>
+            type="com.najdi.android.najdiapp.checkout.viewmodel.ShippingDetailViewModel" />
     </data>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,16 +17,19 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_above="@id/continue_txt"
+            android:fillViewport="true"
             android:fitsSystemWindows="true"
-            android:scrollbars="none"
-            android:layout_above="@id/location_btn">
+            android:scrollbars="none">
 
             <LinearLayout
                 android:id="@+id/detail_lyt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:paddingRight="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/name"
@@ -32,9 +37,10 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/name"
                     android:imeOptions="actionNext"
+                    android:text="@={viewModel.name}"
                     android:inputType="textAutoComplete"
-                    android:textDirection="locale"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:textDirection="locale" />
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/ph_txt"
@@ -43,10 +49,10 @@
                     android:layout_marginTop="10dp"
                     android:hint="@string/phone"
                     android:imeOptions="actionNext"
-                    android:text="@={viewModel.phoneNo}"
                     android:inputType="number"
-                    android:textDirection="locale"
-                    android:padding="10dp" />
+                    android:padding="10dp"
+                    android:text="@={viewModel.phoneNo}"
+                    android:textDirection="locale" />
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/em_txt"
@@ -55,102 +61,161 @@
                     android:layout_marginTop="10dp"
                     android:hint="@string/email"
                     android:imeOptions="actionNext"
-                    android:textDirection="locale"
+                    android:inputType="textAutoComplete"
+                    android:padding="10dp"
                     android:text="@={viewModel.email}"
-                    android:inputType="textAutoComplete"
-                    android:padding="10dp" />
+                    android:textDirection="locale" />
 
-                <TextView
-                    android:id="@+id/select_title"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:padding="10dp"
-                    android:text="@string/shipping_details"
-                    android:textSize="18sp"
-                    android:textDirection="locale"
-                    android:textStyle="bold"
-                    android:visibility="visible" />
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/street"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:hint="@string/street"
-                    android:imeOptions="actionNext"
-                    android:textDirection="locale"
-                    android:text="@={viewModel.street}"
-                    android:inputType="textAutoComplete"
-                    android:padding="10dp" />
+                    <TextView
+                        android:id="@+id/select_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:padding="10dp"
+                        android:text="@string/shipping_details"
+                        android:textDirection="locale"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:visibility="visible" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/building_no"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:hint="@string/building_number"
-                    android:imeOptions="actionNext"
-                    android:text="@={viewModel.buildingNO}"
-                    android:inputType="textAutoComplete"
-                    android:padding="10dp"
-                    android:textDirection="locale"
-                    android:textAllCaps="true" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/street"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:hint="@string/street"
+                        android:imeOptions="actionNext"
+                        android:inputType="textAutoComplete"
+                        android:padding="10dp"
+                        android:text="@={viewModel.street}"
+                        android:textDirection="locale" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/city"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:hint="@string/city"
-                    android:imeOptions="actionNext"
-                    android:textDirection="locale"
-                    android:text="@={viewModel.city}"
-                    android:inputType="textAutoComplete"
-                    android:padding="10dp"
-                    android:textAllCaps="true" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/building_no"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:hint="@string/building_number"
+                        android:imeOptions="actionNext"
+                        android:inputType="textAutoComplete"
+                        android:padding="10dp"
+                        android:text="@={viewModel.buildingNO}"
+                        android:textAllCaps="true"
+                        android:textDirection="locale" />
 
-                <EditText
-                    android:id="@+id/province"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:hint="@string/province"
-                    android:textDirection="locale"
-                    android:text="@={viewModel.province}"
-                    android:inputType="textAutoComplete"
-                    android:padding="10dp"
-                    android:textAllCaps="true" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/city"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:hint="@string/city"
+                        android:imeOptions="actionNext"
+                        android:inputType="textAutoComplete"
+                        android:padding="10dp"
+                        android:text="@={viewModel.city}"
+                        android:textAllCaps="true"
+                        android:textDirection="locale" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/postal_code"
+                    <EditText
+                        android:id="@+id/province"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:hint="@string/province"
+                        android:inputType="textAutoComplete"
+                        android:padding="10dp"
+                        android:text="@={viewModel.province}"
+                        android:textAllCaps="true"
+                        android:textDirection="locale" />
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/postal_code"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:hint="@string/postal_code"
+                        android:imeOptions="actionDone"
+                        android:inputType="number"
+                        android:padding="10dp"
+                        android:text="@={viewModel.postalCode}"
+                        android:textAllCaps="true"
+                        android:textDirection="locale" />
+                </LinearLayout>
+
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:hint="@string/postal_code"
-                    android:imeOptions="actionDone"
-                    android:textDirection="locale"
-                    android:text="@={viewModel.postalCode}"
-                    android:inputType="number"
-                    android:padding="10dp"
-                    android:textAllCaps="true" />
+                    android:layout_height="match_parent">
+
+                    <fragment
+                        android:id="@+id/map"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="170dp"
+                        android:layout_gravity="bottom"
+                        android:layout_margin="10dp"
+                        android:background="@color/white"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/map_address"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="20dp"
+                            android:maxLines="2"
+                            android:text="@{viewModel.fullAddress}"
+                            android:textDirection="locale"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/enter_location"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/map_address"
+                            android:padding="10dp"
+                            android:text="@string/enter_your_location"
+                            android:textColor="@color/b7b7b7"
+                            android:textDirection="locale"
+                            android:visibility="gone" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:visibility="gone"
+                            android:layout_below="@id/enter_location"
+                            android:background="@color/green_default" />
+
+
+                        <Button
+                            android:id="@+id/location_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginBottom="15dp"
+                            android:background="@drawable/round_corner_solid_green_selector"
+                            android:padding="15dp"
+                            android:text="@string/use_current_location"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white"
+                            android:textStyle="bold" />
+                    </RelativeLayout>
+
+                </FrameLayout>
             </LinearLayout>
 
         </ScrollView>
 
-        <Button
-            android:id="@+id/location_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/continue_txt"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/round_corner_solid_green_selector"
-            android:padding="15dp"
-            android:text="@string/use_current_location"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
 
         <Button
             android:id="@+id/continue_txt"
@@ -162,6 +227,12 @@
             android:textColor="@color/white"
             android:textStyle="bold" />
 
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/autocomplete_fragment"
+            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
     </RelativeLayout>
 </layout>
 

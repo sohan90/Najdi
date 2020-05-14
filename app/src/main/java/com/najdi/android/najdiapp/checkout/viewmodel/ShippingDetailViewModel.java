@@ -10,6 +10,8 @@ import androidx.lifecycle.MutableLiveData;
 import com.najdi.android.najdiapp.common.BaseViewModel;
 import com.najdi.android.najdiapp.launch.model.BillingAddress;
 
+import java.util.Objects;
+
 public class ShippingDetailViewModel extends BaseViewModel {
     private MutableLiveData<String> name = new MutableLiveData<>();
     private MutableLiveData<String> email = new MutableLiveData<>();
@@ -19,7 +21,7 @@ public class ShippingDetailViewModel extends BaseViewModel {
     private MutableLiveData<String> city = new MutableLiveData<>();
     private MutableLiveData<String> province = new MutableLiveData<>();
     private MutableLiveData<String> postalCode = new MutableLiveData<>();
-    private MutableLiveData<Boolean> proceed = new MutableLiveData<>();
+    private MutableLiveData<String> fullAddress = new MutableLiveData<>();
     private Address googleAddress;
 
 
@@ -35,11 +37,14 @@ public class ShippingDetailViewModel extends BaseViewModel {
 
     public void updateAddress(Address address) {
         googleAddress = address;
-        buildingNO.setValue(address.getFeatureName());
-        street.setValue(address.getSubLocality());
-        city.setValue(address.getLocality());
-        province.setValue(address.getAdminArea());
-        postalCode.setValue(address.getPostalCode());
+        String fullAddressStr = address.getFeatureName() + " " + address.getSubLocality()
+                + " " + address.getLocality() + " " + address.getAdminArea() + " "
+                + address.getPostalCode();
+        fullAddress.setValue(fullAddressStr);
+    }
+
+    public MutableLiveData<String> getFullAddress() {
+        return fullAddress;
     }
 
     public MutableLiveData<String> getStreet() {
@@ -75,16 +80,13 @@ public class ShippingDetailViewModel extends BaseViewModel {
     }
 
     public LiveData<Boolean> validate() {
+        MutableLiveData<Boolean> proceed = new MutableLiveData<>();
         boolean canProceed = true;
-        if (buildingNO.getValue() == null) {
+        if (name.getValue() == null) {
             canProceed = false;
-        } else if (city.getValue() == null) {
+        } else if (email.getValue() == null) {
             canProceed = false;
-        } else if (province.getValue() == null) {
-            canProceed = false;
-        } else if (postalCode.getValue() == null) {
-            canProceed = false;
-        } else if (street.getValue() == null) {
+        } else if (fullAddress.getValue() == null) {
             canProceed = false;
         }
         proceed.setValue(canProceed);
@@ -95,7 +97,8 @@ public class ShippingDetailViewModel extends BaseViewModel {
         BillingAddress billing = new BillingAddress();
         billing.setFull_name(name.getValue());
         billing.setEmail(email.getValue());
-        billing.setPhone(phoneNo.getValue().replace("966",""));
+        billing.setPhone(Objects.requireNonNull(phoneNo.getValue())
+                .replace("966", ""));
         billing.setAddress(buildingNO.getValue());
         billing.setMap_address(street.getValue());
         billing.setCity(city.getValue());

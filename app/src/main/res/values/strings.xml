@@ -161,4 +161,5 @@
     <string name="password_upd_msg">Password updated successfully</string>
     <string name="iban">IBAN</string>
     <string name="password_does_not_matched">Password does not matched</string>
+    <string name="enter_your_location">Enter your location</string>
 </resources>

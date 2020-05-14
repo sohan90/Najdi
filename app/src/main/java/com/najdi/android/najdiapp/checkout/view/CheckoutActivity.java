@@ -1,6 +1,7 @@
 package com.najdi.android.najdiapp.checkout.view;
 
 import android.Manifest;
+import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -19,7 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationAvailability;
@@ -31,6 +32,7 @@ import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.checkout.FetchAddressIntentService;
 import com.najdi.android.najdiapp.checkout.model.OrderResponse;
 import com.najdi.android.najdiapp.checkout.viewmodel.CheckoutViewModel;
+import com.najdi.android.najdiapp.common.AnimationEndListener;
 import com.najdi.android.najdiapp.common.BaseActivity;
 import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.common.ObservableManager;
@@ -44,7 +46,6 @@ import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 import com.najdi.android.najdiapp.utitility.ToastUtils;
 
 import static com.najdi.android.najdiapp.common.Constants.LAUNCH_CART;
-import static com.najdi.android.najdiapp.common.Constants.LAUNCH_PRODUCT;
 import static com.najdi.android.najdiapp.utitility.GpsUtils.GPS_REQUEST;
 import static com.najdi.android.najdiapp.utitility.PermissionUtils.LOCATION_PERMISSION_REQUEST_CODE;
 
@@ -178,7 +179,15 @@ public class CheckoutActivity extends BaseActivity {
     }
 
     private void handleProgress(Integer progress) {
+        if (progress == 50) {
+            replaceFragment(STEP_TWO);
+        } else if (progress == 100) {
+            replaceFragment(STEP_THREE);
+        }
         animateProgress(progress);
+    }
+
+    private void enableButton(Integer progress) {
         switch (progress) {
             case 0:
                 binding.one.setEnabled(true);
@@ -189,12 +198,10 @@ public class CheckoutActivity extends BaseActivity {
             case 50:
                 binding.two.setEnabled(true);
                 binding.three.setEnabled(false);
-                replaceFragment(STEP_TWO);
                 break;
 
             case 100:
                 binding.three.setEnabled(true);
-                replaceFragment(STEP_THREE);
                 break;
         }
     }
@@ -203,6 +210,13 @@ public class CheckoutActivity extends BaseActivity {
         ObjectAnimator animation = ObjectAnimator.ofInt(binding.progressId,
                 "progress", progress);
         animation.setDuration(600);
+        animation.setInterpolator(new LinearInterpolator());
+        animation.addListener(new AnimationEndListener() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                enableButton(progress);
+            }
+        });
         animation.setInterpolator(new LinearInterpolator());
         animation.start();
     }
@@ -233,7 +247,7 @@ public class CheckoutActivity extends BaseActivity {
         Intent intent = new Intent(this, FetchAddressIntentService.class);
         intent.putExtra(Constants.RECEIVER, resultReceiver);
         intent.putExtra(Constants.LOCATION_DATA_EXTRA, location);
-        startService(intent);
+        FetchAddressIntentService.enqueueWork(this, intent);
     }
 
     private void intializeLocationReq() {
@@ -248,7 +262,7 @@ public class CheckoutActivity extends BaseActivity {
     }
 
     private void initializeViewModel() {
-        viewModel = ViewModelProviders.of(this).get(CheckoutViewModel.class);
+        viewModel = new ViewModelProvider(this).get(CheckoutViewModel.class);
     }
 
     private void subscribeGetCurrentLocation() {
@@ -287,7 +301,6 @@ public class CheckoutActivity extends BaseActivity {
                 .addOnSuccessListener(this, location -> {
                     if (location != null) {
                         handleLocation(location);
-                        ToastUtils.getInstance(CheckoutActivity.this).showShortToast("" + location.getLongitude());
                     } else {
                         fusedLocationClient.requestLocationUpdates(locationRequest,
                                 locationCallback, null);
@@ -312,9 +325,10 @@ public class CheckoutActivity extends BaseActivity {
         });
     }
 
-    private void setTitle(String title){
+    private void setTitle(String title) {
         binding.toolbar.title.setText(title);
     }
+
     private void replaceFragment(int step) {
         Fragment fragment = null;
         String fragmentTag = null;
@@ -345,21 +359,12 @@ public class CheckoutActivity extends BaseActivity {
         int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
         if (backStackCount == 1 || backStackCount == 3) {
             finish();
-            launchHomeScreen();
         } else if (backStackCount == 2) {
             setTitle(getString(R.string.shipping_details));
             getSupportFragmentManager().popBackStackImmediate();
             animateProgress(0);
             binding.two.setEnabled(false);
         }
-    }
-
-    private void launchHomeScreen() {
-        new Handler().postDelayed(() -> {
-            Intent intent = new Intent();
-            intent.putExtra(LAUNCH_PRODUCT, true);
-            ObservableManager.getInstance().notifyData(intent);
-        }, 100);
     }
 
     @Override
@@ -393,9 +398,7 @@ public class CheckoutActivity extends BaseActivity {
 
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
-            if (resultData == null) {
-                return;
-            }
+            if (resultData == null) return;
             handleAddress(resultData);
         }
     }
