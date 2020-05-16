@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -59,13 +59,14 @@ public class CartFragment extends BaseFragment {
 
     private void initializeHomeScreenViewModel() {
         if (getActivity() == null) return;
-        homeScreenViewModel = ViewModelProviders.of(getActivity()).get(HomeScreenViewModel.class);
+        homeScreenViewModel = new ViewModelProvider(getActivity()).get(HomeScreenViewModel.class);
     }
 
     private void initializeClickListener() {
         binding.proceedTxt.setOnClickListener(v -> {
             if (getActivity() == null) return;
             homeScreenViewModel.getLaunchCheckoutActivity().setValue(true);
+
         });
     }
 
@@ -83,7 +84,7 @@ public class CartFragment extends BaseFragment {
     private void removeItem(int position, String cartId) {
         showProgressDialog();
         LiveData<BaseResponse> baseResponseLiveData = viewModel.removeCart(cartId);
-        baseResponseLiveData.observe(this, baseResponse -> {
+        baseResponseLiveData.observe(getViewLifecycleOwner(), baseResponse -> {
             hideProgressDialog();
             if (baseResponse != null && baseResponse.isStatus()) {
                 updateCartSizeForRemoveItem(Integer.parseInt(adapterList.get(position).getQty()));
@@ -123,12 +124,12 @@ public class CartFragment extends BaseFragment {
     }
 
     private void initializeViewModel() {
-        viewModel = ViewModelProviders.of(this).get(CartViewModel.class);
+        viewModel = new ViewModelProvider(this).get(CartViewModel.class);
     }
 
     private void subscribeForCartResponse() {
         showProgressDialog();
-        homeScreenViewModel.getCart().observe(this, cartResponse -> {
+        homeScreenViewModel.getCart().observe(getViewLifecycleOwner(), cartResponse -> {
             hideProgressDialog();
             if (cartResponse != null && cartResponse.isStatus()) {
                 if (cartResponse.getCart() != null && cartResponse.getCart().size() > 0) {

@@ -95,7 +95,7 @@ public interface NajdiApi {
 
     @POST("app_empty_cart")
     @Headers({"Content-Type:application/json"})
-    Call<BaseResponse> clearCart(UserId userId);
+    Call<BaseResponse> clearCart(@Body UserId userId);
 
     @GET("customapi/banklist")
     @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})

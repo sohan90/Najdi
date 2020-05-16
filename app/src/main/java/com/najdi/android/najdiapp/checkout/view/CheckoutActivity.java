@@ -135,9 +135,13 @@ public class CheckoutActivity extends BaseActivity {
         orderResponseLiveData.observe(this, orderResponse -> {
             hideProgressDialog();
             if (orderResponse != null) {
-                clearCart();
-                viewModel.orderResponseMutableLiveData().setValue(orderResponse);
-                handleProgress(100);
+                if (orderResponse.isStatus()) {
+                    viewModel.orderResponseMutableLiveData().setValue(orderResponse);
+                    handleProgress(100);
+                    clearCart();
+                } else {
+                    ToastUtils.getInstance(this).showLongToast(orderResponse.getMessage());
+                }
             }
         });
     }
@@ -145,7 +149,7 @@ public class CheckoutActivity extends BaseActivity {
     private void clearCart() {
         viewModel.clearCart().observe(this, baseResponse -> {
             hideProgressDialog();
-            if (baseResponse != null) {
+            if (baseResponse != null && baseResponse.isStatus()) {
                 binding.toolbar.notificationText.setText("0");
             }
         });
@@ -241,7 +245,7 @@ public class CheckoutActivity extends BaseActivity {
         };
     }
 
-    private void handleLocation(Location location) {
+    public void handleLocation(Location location) {
         showProgressDialog();
         AddressResultReceiver resultReceiver = new AddressResultReceiver(new Handler());
         Intent intent = new Intent(this, FetchAddressIntentService.class);

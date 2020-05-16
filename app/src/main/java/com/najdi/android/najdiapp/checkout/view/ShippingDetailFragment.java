@@ -1,6 +1,8 @@
 package com.najdi.android.najdiapp.checkout.view;
 
+import android.content.Context;
 import android.location.Address;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.checkout.viewmodel.CheckoutViewModel;
@@ -27,13 +30,25 @@ import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
 public class ShippingDetailFragment extends BaseFragment implements OnMapReadyCallback {
+    private static final int DEFAULT_ZOOM_LEVEL = 14;
     private FragmentCheckoutStep1Binding binding;
     private CheckoutViewModel activityViewModel;
     private ShippingDetailViewModel viewModel;
     private GoogleMap map;
+    private CheckoutActivity activity;
+    private boolean isDragging;
+    private Marker draggedMarker;
 
     public static ShippingDetailFragment createInstance() {
         return new ShippingDetailFragment();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof CheckoutActivity) {
+            activity = (CheckoutActivity) context;
+        }
     }
 
     @Nullable
@@ -64,6 +79,33 @@ public class ShippingDetailFragment extends BaseFragment implements OnMapReadyCa
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         initMapSettings();
+        initMapClickListener();
+    }
+
+    private void initMapClickListener() {
+        map.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+            @Override
+            public void onMarkerDragStart(Marker marker) {
+
+            }
+
+            @Override
+            public void onMarkerDrag(Marker marker) {
+
+            }
+
+            @Override
+            public void onMarkerDragEnd(Marker marker) {
+                draggedMarker = marker;
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(),
+                        DEFAULT_ZOOM_LEVEL));
+                isDragging = true;
+                Location location = new Location("");
+                location.setLatitude(marker.getPosition().latitude);
+                location.setLongitude(marker.getPosition().longitude);
+                activity.handleLocation(location);
+            }
+        });
     }
 
     private void initMapSettings() {
@@ -71,6 +113,14 @@ public class ShippingDetailFragment extends BaseFragment implements OnMapReadyCa
         map.getUiSettings().setZoomControlsEnabled(true);
         map.getUiSettings().setZoomGesturesEnabled(true);
         map.getUiSettings().setCompassEnabled(true);
+        map.setMyLocationEnabled(true);
+        map.getUiSettings().setMyLocationButtonEnabled(true);
+        map.setOnMyLocationButtonClickListener(() -> {
+            if (draggedMarker == null) return false;
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(draggedMarker.getPosition(),
+                    DEFAULT_ZOOM_LEVEL));
+            return true;
+        });
     }
 
     private void bindViewModel() {
@@ -84,22 +134,22 @@ public class ShippingDetailFragment extends BaseFragment implements OnMapReadyCa
 
     private void subscribeForAddress() {
         activityViewModel.getAddressMutableLiveData().observe(getViewLifecycleOwner(),
-                address -> {
-                    map.setMyLocationEnabled(true);
-                    map.getUiSettings().setMyLocationButtonEnabled(true);
-                    navigateMapToCurrentAddress(address);
-                });
+                this::navigateMapToCurrentAddress);
     }
 
     private void navigateMapToCurrentAddress(Address address) {
         if (address != null) {
-            map.clear();
-            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-            MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(latLng);
-            map.addMarker(markerOptions);
-            map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
+            if (!isDragging) {
+                map.clear();
+                LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(latLng);
+                map.addMarker(markerOptions).setDraggable(true);
+                map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM_LEVEL));
+
+            }
+            isDragging = false;
             viewModel.updateAddress(address);
         }
     }
@@ -116,6 +166,7 @@ public class ShippingDetailFragment extends BaseFragment implements OnMapReadyCa
         binding.continueTxt.setOnClickListener(v ->
                 viewModel.validate().observe(getViewLifecycleOwner(), proceed -> {
                     if (proceed) {
+                        saveDetails();
                         BillingAddress billingAddress = viewModel.getBillingObject();
                         activityViewModel.getBillingMutableLiveData().setValue(billingAddress);
                         activityViewModel.getProgressPercentage().setValue(50);
@@ -124,6 +175,15 @@ public class ShippingDetailFragment extends BaseFragment implements OnMapReadyCa
                                 (dialog, which) -> dialog.dismiss());
                     }
                 }));
+    }
+
+    private void saveDetails() {
+        PreferenceUtils.setValueString(getActivity(), PreferenceUtils.USER_NAME_KEY,
+                viewModel.getName().getValue());
+        PreferenceUtils.setValueString(getActivity(), PreferenceUtils.USER_EMAIL_KEY,
+                viewModel.getEmail().getValue());
+        PreferenceUtils.setValueString(getActivity(), PreferenceUtils.USER_PHONE_NO_KEY,
+                viewModel.getPhoneNo().getValue());
     }
 
     private void updateDetails() {

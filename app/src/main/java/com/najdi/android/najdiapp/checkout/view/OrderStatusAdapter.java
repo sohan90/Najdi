@@ -3,15 +3,15 @@ package com.najdi.android.najdiapp.checkout.view;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.checkout.model.OrderResponse;
 import com.najdi.android.najdiapp.databinding.ItemOrderStatusBinding;
 
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.ViewHolder> {
 
@@ -40,10 +40,10 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         OrderResponse orderResponse = list.get(position);
         holder.binding.setViewModel(orderResponse);
-        String status = orderResponse.getStatus();
-        if (orderResponse.getStatus().equals("pending")) {
+        String status = orderResponse.getOrderStatusLabel();
+        if (orderResponse.getOrderStatusLabel().equals("pending")) {
             status = holder.binding.getRoot().getContext().getString(R.string.pending);
-        } else if (orderResponse.getStatus().equals("completed")) {
+        } else if (orderResponse.getOrderStatusLabel().equals("completed")) {
             status = holder.binding.getRoot().getContext().getString(R.string.completed);
         }
         holder.binding.status.setText(status);

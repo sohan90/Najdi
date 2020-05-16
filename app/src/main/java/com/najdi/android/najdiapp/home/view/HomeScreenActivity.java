@@ -42,6 +42,9 @@ import com.najdi.android.najdiapp.utitility.ToastUtils;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 
 import static com.najdi.android.najdiapp.common.Constants.ARABIC_LAN;
 import static com.najdi.android.najdiapp.common.Constants.ENGLISH_LAN;
@@ -173,7 +176,12 @@ public class HomeScreenActivity extends BaseActivity
     private void subscribeForLaunchCheckoutScreen() {
         viewModel.getLaunchCheckoutActivity().observe(this, aBoolean -> {
             if (aBoolean) {
+                addDisposable(io.reactivex.rxjava3.core.Observable.timer(500, TimeUnit.MILLISECONDS)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnNext(i -> FragmentHelper.popBackStackImmediate(this))
+                        .subscribe());
                 launchCheckOutActivity();
+
             }
         });
     }

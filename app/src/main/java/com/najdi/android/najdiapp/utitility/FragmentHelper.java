@@ -1,13 +1,13 @@
 package com.najdi.android.najdiapp.utitility;
 
 
-import com.najdi.android.najdiapp.R;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.najdi.android.najdiapp.R;
 
 public class FragmentHelper {
     public static void addFragment(AppCompatActivity context, Fragment fragment, String tag,
@@ -95,6 +95,10 @@ public class FragmentHelper {
         manager.popBackStack();
     }
 
+    public static void popBackStackImmediate(FragmentActivity context) {
+        FragmentManager manager = context.getSupportFragmentManager();
+        manager.popBackStackImmediate();
+    }
     /**
      * <p> Close the all the fragment till the given tag name</p>
      *

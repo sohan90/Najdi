@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -62,6 +62,11 @@ public class CheckoutFragment extends BaseFragment {
         return binding.getRoot();
     }
 
+    private void initializeActivityViewModel() {
+        if (getActivity() == null) return;
+        activityViewModel = new ViewModelProvider(getActivity()).get(CheckoutViewModel.class);
+    }
+
     private void initializeClickListener() {
         binding.includeLyt.placeOrder.setOnClickListener(v -> {
             int checkedId = binding.includeLyt.radiGrp.getCheckedRadioButtonId();
@@ -76,7 +81,7 @@ public class CheckoutFragment extends BaseFragment {
     }
 
     private void initializeViewModel() {
-        viewModel = ViewModelProviders.of(this).get(CheckoutFragmentViewModel.class);
+        viewModel = new ViewModelProvider(this).get(CheckoutFragmentViewModel.class);
     }
 
     private void initializeRecyclerViewAdapter() {
@@ -179,11 +184,6 @@ public class CheckoutFragment extends BaseFragment {
         }
     }
 
-    private void initializeActivityViewModel() {
-        if (getActivity() == null) return;
-        activityViewModel = ViewModelProviders.of(getActivity()).get(CheckoutViewModel.class);
-    }
-
     private void subscribeForCartResponse() {
         showProgressDialog();
         activityViewModel.getCartResponseMutableLiveData().observe(getViewLifecycleOwner(),
@@ -192,7 +192,7 @@ public class CheckoutFragment extends BaseFragment {
                     if (cartResponse != null && cartResponse.isStatus()) {
                         viewModel.udpateTotal(cartResponse.getCart());
                         viewModel.getVariationDetails(cartResponse.getCart())
-                                .observe(this, cartData -> {
+                                .observe(getViewLifecycleOwner(), cartData -> {
                             adapterList = cartData;
                             updateAdapter(adapterList);
                         });
