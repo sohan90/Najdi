@@ -20,7 +20,7 @@ public class ProductListResponse implements Parcelable {
     String regular_price;
     String sale_price;
     String description;
-    String short_description;
+    String short_desc;
     boolean in_stock;
     boolean on_sale;
     Integer stock_quantity;
@@ -83,7 +83,7 @@ public class ProductListResponse implements Parcelable {
         regular_price = in.readString();
         sale_price = in.readString();
         description = in.readString();
-        short_description = in.readString();
+        short_desc = in.readString();
         images = in.createTypedArrayList(Image.CREATOR);
         product_attributes = in.createTypedArrayList(Attributes.CREATOR);
         variations_data = in.createTypedArrayList(VariationData.CREATOR);
@@ -127,7 +127,7 @@ public class ProductListResponse implements Parcelable {
     }
 
     public String getShortDescription() {
-        return short_description;
+        return short_desc;
     }
 
     public String getId() {
@@ -195,7 +195,7 @@ public class ProductListResponse implements Parcelable {
         dest.writeString(regular_price);
         dest.writeString(sale_price);
         dest.writeString(description);
-        dest.writeString(short_description);
+        dest.writeString(short_desc);
         dest.writeTypedList(images);
         dest.writeTypedList(product_attributes);
         dest.writeTypedList(variations_data);

@@ -94,7 +94,7 @@
                 android:gravity="start"
                 android:lineSpacingExtra="5dp"
                 android:maxLines="4"
-                android:text="@{viewModel.desc}"
+                android:text="@{viewModel.shortDesc}"
                 android:textColor="@color/black" />
 
             <Button

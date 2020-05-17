@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseFragment;
@@ -28,9 +28,8 @@ import static com.najdi.android.najdiapp.launch.view.OtpActivity.EXTRA_SCREEN_TY
 
 public class ForgotPasswordFragment extends BaseFragment {
 
-    FragmentForgotPasswordBinding binding;
+    private FragmentForgotPasswordBinding binding;
     private ForgotPasswordViewModel viewModel;
-    private LoginViewModel loginActivityViewModel;
 
     public static ForgotPasswordFragment createInstance() {
         return new ForgotPasswordFragment();
@@ -112,11 +111,11 @@ public class ForgotPasswordFragment extends BaseFragment {
 
     private void initActivityViewModel() {
         if (getActivity() == null) return;
-        loginActivityViewModel = ViewModelProviders.of(getActivity()).get(LoginViewModel.class);
+        LoginViewModel loginActivityViewModel = new ViewModelProvider(getActivity()).get(LoginViewModel.class);
         loginActivityViewModel.getToolbarTitle().setValue(getString(R.string.forgot_password));
     }
 
     private void initViewModel() {
-        viewModel = ViewModelProviders.of(this).get(ForgotPasswordViewModel.class);
+        viewModel = new ViewModelProvider(this).get(ForgotPasswordViewModel.class);
     }
 }

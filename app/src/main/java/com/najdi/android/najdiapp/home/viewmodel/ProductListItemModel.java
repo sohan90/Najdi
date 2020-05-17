@@ -61,6 +61,11 @@ public class ProductListItemModel extends BaseObservable {
     }
 
     @Bindable
+    public String getShortDesc(){
+        return product.getShortDescription();
+    }
+
+    @Bindable
     public boolean isOnSale() {
         return product.isOn_sale();
     }
