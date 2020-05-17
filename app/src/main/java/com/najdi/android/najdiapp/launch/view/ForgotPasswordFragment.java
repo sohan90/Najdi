@@ -69,12 +69,12 @@ public class ForgotPasswordFragment extends BaseFragment {
             showProgressDialog();
             String lang = resourceProvider.getCountryLang();
             LiveData<BaseResponse> liveData = viewModel.forgotPasswordRequest(lang);
-            liveData.observe(this, baseResponse -> {
+            liveData.observe(getViewLifecycleOwner(), baseResponse -> {
                 hideProgressDialog();
                 if (baseResponse != null && baseResponse.isStatus()) {
                     PreferenceUtils.setValueString(getActivity(), PreferenceUtils.USER_LOGIIN_TOKEN,
                             baseResponse.getToken());
-                    DialogUtil.showAlertDialog(getActivity(), baseResponse.getData().getMessage(),
+                    DialogUtil.showAlertDialog(getActivity(), baseResponse.getMessage(),
                             (dialog, which) -> {
                                 dialog.dismiss();
                                 launchOtpScreen();

@@ -2,14 +2,12 @@ package com.najdi.android.najdiapp.home.viewmodel;
 
 import android.app.Application;
 
-import com.najdi.android.najdiapp.common.BaseViewModel;
-import com.najdi.android.najdiapp.common.Constants;
-import com.najdi.android.najdiapp.home.model.HtmlResponseForNajdi;
-import com.najdi.android.najdiapp.utitility.LocaleUtitlity;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+
+import com.najdi.android.najdiapp.common.BaseResponse;
+import com.najdi.android.najdiapp.common.BaseViewModel;
 
 public class AboutViewModel extends BaseViewModel {
     private static final int ABOUT_US_ENG = 576;
@@ -26,28 +24,16 @@ public class AboutViewModel extends BaseViewModel {
     }
 
 
-    public LiveData<HtmlResponseForNajdi> getAboutUs() {
-        int pageId = ABOUT_US_ENG;
-        if (LocaleUtitlity.getCountryLang().equals(Constants.ARABIC_LAN)) {
-            pageId = ABOUT_US_ARABIC;
-        }
-        return repository.getHtmlConent(pageId);
+    public LiveData<BaseResponse> getAboutUs() {
+        return repository.getAboutUs();
     }
 
-    public LiveData<HtmlResponseForNajdi> privacyPolicy() {
-        int pageId = PRIVACY_ENG;
-        if (LocaleUtitlity.getCountryLang().equals(Constants.ARABIC_LAN)) {
-            pageId = PRIVACY_ARABIC;
-        }
-        return repository.getHtmlConent(pageId);
+    public LiveData<BaseResponse> privacyPolicy() {
+        return repository.getPrivacyPolicy();
     }
 
-    public LiveData<HtmlResponseForNajdi> termsCondition() {
-        int pageId = TERMS_ENG;
-        if (LocaleUtitlity.getCountryLang().equals(Constants.ARABIC_LAN)) {
-            pageId = TERMS_ARABIC;
-        }
-        return repository.getHtmlConent(pageId);
+    public LiveData<BaseResponse> termsCondition() {
+        return repository.getTermsCondition();
     }
 
     public void setHtmlContent(String content){

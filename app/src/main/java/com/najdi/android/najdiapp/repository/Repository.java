@@ -10,7 +10,6 @@ import com.najdi.android.najdiapp.home.model.CartRequest;
 import com.najdi.android.najdiapp.home.model.CityListModelResponse;
 import com.najdi.android.najdiapp.home.model.ContactUsRequest;
 import com.najdi.android.najdiapp.home.model.ForgotPaswwordRequest;
-import com.najdi.android.najdiapp.home.model.HtmlResponseForNajdi;
 import com.najdi.android.najdiapp.home.model.ProductId;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.home.model.ProductModelResponse;
@@ -28,7 +27,6 @@ import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 import com.najdi.android.najdiapp.utitility.ResourceProvider;
 
 import java.util.HashMap;
-import java.util.List;
 
 import retrofit2.Call;
 
@@ -257,19 +255,21 @@ public class Repository {
         return liveData;
     }
 
-    public LiveData<List<OrderResponse>> getOrderStatus(int userId) {
-        MutableLiveData<List<OrderResponse>> liveData = new MutableLiveData<>();
-        RetrofitClient.getInstance().getOrderStatus(resourceProvider.getCountryLang(), userId).enqueue(new
-                RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<List<OrderResponse>>() {
+    public LiveData<BaseResponse> getOrderStatus(String userId) {
+        UserId userId1 = new UserId();
+        userId1.setUserId(userId);
+        MutableLiveData<BaseResponse> liveData = new MutableLiveData<>();
+        RetrofitClient.getInstance().getOrderStatus(userId1).enqueue(new
+                RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<BaseResponse>() {
             @Override
-            public void onSuccesResponse(Call<List<OrderResponse>> call, List<OrderResponse> orderResponses) {
+            public void onSuccesResponse(Call<BaseResponse> call, BaseResponse orderResponses) {
                 if (orderResponses != null) {
                     liveData.setValue(orderResponses);
                 }
             }
 
             @Override
-            public void onFailurResponse(Call<List<OrderResponse>> call, BaseResponse baseResponse) {
+            public void onFailurResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
                 baseResponse.handleError(resourceProvider.getAppContext());
                 liveData.setValue(null);
             }
@@ -421,7 +421,7 @@ public class Repository {
 
     public LiveData<BaseResponse> getBankDetails() {
         MutableLiveData<BaseResponse> liveData = new MutableLiveData<>();
-        RetrofitClient.getInstance().getBankDetails(resourceProvider.getCountryLang()).enqueue(new
+        RetrofitClient.getInstance().getBankDetails().enqueue(new
                 RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<BaseResponse>() {
             @Override
             public void onSuccesResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
@@ -489,19 +489,63 @@ public class Repository {
         return liveData;
     }
 
-    public LiveData<HtmlResponseForNajdi> getHtmlConent(int pageId) {
-        MutableLiveData<HtmlResponseForNajdi> liveData = new MutableLiveData<>();
-        RetrofitClient.getInstance().getHtmlTermsAboutUsPrivacyPolicy(pageId).enqueue(new
-                RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<HtmlResponseForNajdi>() {
+    public LiveData<BaseResponse> getAboutUs() {
+        MutableLiveData<BaseResponse> liveData = new MutableLiveData<>();
+        RetrofitClient.getInstance().getAboutUs().enqueue(new
+                RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<BaseResponse>() {
             @Override
-            public void onSuccesResponse(Call<HtmlResponseForNajdi> call, HtmlResponseForNajdi htmlResponseForNajdi) {
-                if (htmlResponseForNajdi != null) {
-                    liveData.setValue(htmlResponseForNajdi);
+            public void onSuccesResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
+                if (baseResponse != null) {
+                    liveData.setValue(baseResponse);
                 }
             }
 
             @Override
-            public void onFailurResponse(Call<HtmlResponseForNajdi> call, BaseResponse baseResponse) {
+            public void onFailurResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
+                if (baseResponse != null) {
+                    baseResponse.handleError(resourceProvider.getAppContext());
+                }
+                liveData.setValue(null);
+            }
+        }));
+        return liveData;
+    }
+
+    public LiveData<BaseResponse> getTermsCondition() {
+        MutableLiveData<BaseResponse> liveData = new MutableLiveData<>();
+        RetrofitClient.getInstance().getTermsCondition().enqueue(new
+                RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<BaseResponse>() {
+            @Override
+            public void onSuccesResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
+                if (baseResponse != null) {
+                    liveData.setValue(baseResponse);
+                }
+            }
+
+            @Override
+            public void onFailurResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
+                if (baseResponse != null) {
+                    baseResponse.handleError(resourceProvider.getAppContext());
+                }
+                liveData.setValue(null);
+            }
+        }));
+        return liveData;
+    }
+
+    public LiveData<BaseResponse> getPrivacyPolicy() {
+        MutableLiveData<BaseResponse> liveData = new MutableLiveData<>();
+        RetrofitClient.getInstance().getPrivacyPolicy().enqueue(new
+                RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<BaseResponse>() {
+            @Override
+            public void onSuccesResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
+                if (baseResponse != null) {
+                    liveData.setValue(baseResponse);
+                }
+            }
+
+            @Override
+            public void onFailurResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
                 if (baseResponse != null) {
                     baseResponse.handleError(resourceProvider.getAppContext());
                 }

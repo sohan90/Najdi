@@ -102,8 +102,7 @@ public class SignUpActivity extends BaseActivity {
                                     });
 
                         } else {
-                            if (signupResponseModel.getData() == null) return;
-                            DialogUtil.showAlertDialog(this, signupResponseModel.getData().
+                            DialogUtil.showAlertDialog(this, signupResponseModel.
                                             getMessage(),
                                     (dialog, which) -> dialog.dismiss());
                         }

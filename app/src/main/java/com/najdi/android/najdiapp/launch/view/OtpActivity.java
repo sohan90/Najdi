@@ -127,12 +127,11 @@ public class OtpActivity extends BaseActivity {
         liveData.observe(this, baseResponse -> {
             hideProgressDialog();
             if (baseResponse != null) {
-                if (baseResponse.getData() != null) {
-                    startTimerFor60s();
-                    String phone = PreferenceUtils.getValueString(this, PreferenceUtils.USER_PHONE_NO_KEY);
-                    String msg = getString(R.string.verification_password_sent_to, phone);
-                    DialogUtil.showAlertDialog(this, msg, (dialog, which) -> dialog.dismiss());
-                }
+                startTimerFor60s();
+                String phone = PreferenceUtils.getValueString(this, PreferenceUtils.USER_PHONE_NO_KEY);
+                String msg = getString(R.string.verification_password_sent_to, phone);
+                DialogUtil.showAlertDialog(this, msg, (dialog, which) -> dialog.dismiss());
+
             }
         });
     }
@@ -201,7 +200,7 @@ public class OtpActivity extends BaseActivity {
                 launchHomeScreen();
 
             } else {
-                if (baseResponse != null && baseResponse.getData().getStatus() == 403) {
+                if (baseResponse != null && baseResponse.getCode() == 403) {
                     String message = getString(R.string.incorrect_password);
                     if (LocaleUtitlity.getCountryLang().equalsIgnoreCase(ARABIC_LAN)) {
                         message = getString(R.string.incorrect_password_arabic);

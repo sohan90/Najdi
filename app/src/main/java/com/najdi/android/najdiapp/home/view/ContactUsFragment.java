@@ -7,6 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseFragment;
 import com.najdi.android.najdiapp.common.BaseResponse;
@@ -15,19 +21,11 @@ import com.najdi.android.najdiapp.home.viewmodel.ContactUsViewModel;
 import com.najdi.android.najdiapp.home.viewmodel.HomeScreenViewModel;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
-import com.najdi.android.najdiapp.utitility.ToastUtils;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProviders;
 
 public class ContactUsFragment extends BaseFragment implements TextWatcher {
 
-    ContactUsBinding binding;
+    private ContactUsBinding binding;
     private ContactUsViewModel viewModel;
-    private HomeScreenViewModel activityViewModel;
 
     public static ContactUsFragment createInstance() {
         return new ContactUsFragment();
@@ -48,7 +46,8 @@ public class ContactUsFragment extends BaseFragment implements TextWatcher {
 
     private void initiazeActivityViewModel() {
         if (getActivity() == null) return;
-        activityViewModel = ViewModelProviders.of(getActivity()).get(HomeScreenViewModel.class);
+        HomeScreenViewModel activityViewModel = new ViewModelProvider(getActivity())
+                .get(HomeScreenViewModel.class);
         activityViewModel.getSetToolBarTitle().setValue(getString(R.string.contact_us));
     }
 
@@ -59,25 +58,29 @@ public class ContactUsFragment extends BaseFragment implements TextWatcher {
     }
 
     private void initializeViewModel() {
-        viewModel = ViewModelProviders.of(this).get(ContactUsViewModel.class);
+        viewModel = new ViewModelProvider(this).get(ContactUsViewModel.class);
     }
 
 
     private void initClickListner() {
         binding.message.addTextChangedListener(this);
+
         binding.send.setOnClickListener(v -> {
+
+            if (getActivity() == null) return;
+
+            String userId = PreferenceUtils.getValueString(getActivity(), PreferenceUtils.USER_ID_KEY);
             String phoneNo = PreferenceUtils.getValueString(getActivity(), PreferenceUtils.USER_PHONE_NO_KEY);
-            LiveData<BaseResponse> liveData = viewModel.contactUs(phoneNo);
+            LiveData<BaseResponse> liveData = viewModel.contactUs(phoneNo, userId);
             if (liveData != null) {
                 showProgressDialog();
-                liveData.observe(this, baseResponse -> {
+                liveData.observe(getViewLifecycleOwner(), baseResponse -> {
                     hideProgressDialog();
-                    if (baseResponse != null && baseResponse.getData() != null) {
+                    if (baseResponse != null && baseResponse.isStatus()) {
                         viewModel.getMessage().setValue("");
-                        String message = baseResponse.getData().getMessage();
-                        DialogUtil.showAlertDialog(getActivity(), getString(R.string.message_success), (dialog, which) -> {
-                            dialog.dismiss();
-                        });
+                        DialogUtil.showAlertDialog(getActivity(),
+                                getString(R.string.message_success), (dialog, which) ->
+                                        dialog.dismiss());
                     }
                 });
             }

@@ -1,7 +1,6 @@
 package com.najdi.android.najdiapp.home.viewmodel;
 
 import android.app.Application;
-import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -30,12 +29,10 @@ public class ProductDetailViewModel extends BaseViewModel {
     private MutableLiveData<Boolean> getVariaitionQuantity;
     private int basePrice;
     private HashMap<String, String> attributHashMap;
-    private int variationId;
     private int setMaxvariationQuantity;
-    private String attriId;
-    private int selectedOptionPrice;
     private int totalAttribute;
     private int totalPrice;
+    private HashMap<String, Integer> attrOptPriceMap = new HashMap<>();
 
     public ProductDetailViewModel(@NonNull Application application) {
         super(application);
@@ -89,17 +86,15 @@ public class ProductDetailViewModel extends BaseViewModel {
         return setMaxvariationQuantity;
     }
 
-    public void updatePrice(int totalAttribute, String selectedAttrId, AttributeOptionModel attributeOptionModel) {
+    public void updatePrice(int totalAttribute, String selectedAttrId, AttributeOptionModel
+            attributeOptionModel) {
+
         if (attributeOptionModel == null) return;
+
         this.totalAttribute = totalAttribute;
         int attrOptPrice = Integer.parseInt(attributeOptionModel.getOptionPrice());
-        if (TextUtils.isEmpty(attriId) || attriId.equals(selectedAttrId)) {
-            selectedOptionPrice = attrOptPrice;
-        } else {
-            selectedOptionPrice = selectedOptionPrice + attrOptPrice;
-        }
+        attrOptPriceMap.put(selectedAttrId, attrOptPrice);
         updateTotalPrice();
-        attriId = selectedAttrId;
         createAttributeForSelectedValue(selectedAttrId, attributeOptionModel.getId());
     }
 
@@ -108,7 +103,7 @@ public class ProductDetailViewModel extends BaseViewModel {
     }
 
     public int getVariationId() {
-        return variationId;
+        return 0;
     }
 
     private void createAttributeForSelectedValue(String selectedValue,
@@ -135,9 +130,18 @@ public class ProductDetailViewModel extends BaseViewModel {
 
     private void updateTotalPrice() {
         if (quantityCount.getValue() != null) {
-            totalPrice = (this.basePrice + selectedOptionPrice) * quantityCount.getValue();
+            int totalSelectionPrice = getPriceFromMap();
+            totalPrice = (this.basePrice + totalSelectionPrice) * quantityCount.getValue();
             totalPriceLivdData.setValue(getCurrencyConcatenatedString(String.valueOf(totalPrice)));
         }
+    }
+
+    private int getPriceFromMap() {
+        int totalPrice = 0;
+        for (Map.Entry<String, Integer> map : attrOptPriceMap.entrySet()) {
+            totalPrice = totalPrice + map.getValue();
+        }
+        return totalPrice;
     }
 
     public void reset() {
@@ -158,10 +162,10 @@ public class ProductDetailViewModel extends BaseViewModel {
         CartRequest cartRequest = new CartRequest();
         if (quantityCount.getValue() != null) {
             cartRequest.setProductId(productId);
-            cartRequest.setAttributes(attributeIdList.toString().replace("[","")
-            .replace("]",""));
+            cartRequest.setAttributes(attributeIdList.toString().replace("[", "")
+                    .replace("]", ""));
             cartRequest.setProductAttributeOptions(attributeOptIdList.toString()
-                    .replace("[","").replace("]",""));
+                    .replace("[", "").replace("]", ""));
             cartRequest.setPrice(String.valueOf(basePrice));
             cartRequest.setSubtotal(String.valueOf(totalPrice));
             cartRequest.setQuantity(quantityCount.getValue());
@@ -171,11 +175,11 @@ public class ProductDetailViewModel extends BaseViewModel {
     }
 
     public LiveData<BaseResponse> removeCart(String itemKey) {
-        String userId = String.valueOf(PreferenceUtils.getValueInt(resourceProvider.getAppContext(),
+        String userId = String.valueOf(PreferenceUtils.getValueString(resourceProvider.getAppContext(),
                 PreferenceUtils.USER_ID_KEY));
         HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("cart_item_key", itemKey);
-        hashMap.put("customer", userId);
+        hashMap.put("id", itemKey);
+        hashMap.put("user_id", userId);
         return repository.removeCartItem(hashMap);
     }
 

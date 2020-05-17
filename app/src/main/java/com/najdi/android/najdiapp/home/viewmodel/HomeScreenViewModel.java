@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.najdi.android.najdiapp.checkout.model.OrderResponse;
+import com.najdi.android.najdiapp.checkout.model.OrderStatus;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.BaseViewModel;
 import com.najdi.android.najdiapp.home.model.CityListModelResponse;
@@ -15,6 +15,7 @@ import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.home.model.ProductModelResponse;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -50,11 +51,11 @@ public class HomeScreenViewModel extends BaseViewModel {
         return repository.getCategoryBasedProducts(catId);
     }
 
-    public LiveData<CityListModelResponse> getCityList(){
+    public LiveData<CityListModelResponse> getCityList() {
         return repository.getCityList();
     }
 
-    public LiveData<CityListModelResponse> getCategoryList(){
+    public LiveData<CityListModelResponse> getCategoryList() {
         return repository.getCategory();
     }
 
@@ -134,8 +135,25 @@ public class HomeScreenViewModel extends BaseViewModel {
         return cartSize;
     }
 
-    public LiveData<List<OrderResponse>> getOrderStatus(int userId) {
+    public LiveData<BaseResponse> getOrderStatus(String userId) {
         return repository.getOrderStatus(userId);
+    }
+
+    public LiveData<List<OrderStatus.Detail>> getAdapterList(List<OrderStatus> orderStatusList) {
+        MutableLiveData<List<OrderStatus.Detail>> liveData = new MutableLiveData<>();
+        List<OrderStatus.Detail> detailList = new ArrayList<>();
+        for (OrderStatus orderStatus : orderStatusList) {
+            for (OrderStatus.Detail detail : orderStatus.getDetails()) {
+                detail.orderId = orderStatus.getOrder_id();
+                detail.orderStatusLabel = orderStatus.getOrderStatusLabel();
+                detail.orderStatus = orderStatus.getOrder_status();
+                detail.paymentMethod = orderStatus.getPayment_method();
+                detail.totalPrice = orderStatus.getTotal_price();
+                detailList.add(detail);
+            }
+        }
+        liveData.setValue(detailList);
+        return liveData;
     }
 
 

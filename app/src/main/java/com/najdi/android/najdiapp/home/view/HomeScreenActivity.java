@@ -15,7 +15,7 @@ import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.navigation.NavigationView;
 import com.najdi.android.najdiapp.R;
@@ -32,7 +32,6 @@ import com.najdi.android.najdiapp.home.model.CityListModelResponse;
 import com.najdi.android.najdiapp.home.model.ProductDetailBundleModel;
 import com.najdi.android.najdiapp.home.viewmodel.HomeScreenViewModel;
 import com.najdi.android.najdiapp.launch.view.LoginActivity;
-import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 import com.najdi.android.najdiapp.shoppingcart.view.CartFragment;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.FragmentHelper;
@@ -97,8 +96,6 @@ public class HomeScreenActivity extends BaseActivity
         fetchProduct();
         fetchCityList();
         fetchCategoryList();
-        //fetchCart();
-
     }
 
     private void fetchCityList() {
@@ -219,7 +216,7 @@ public class HomeScreenActivity extends BaseActivity
     }
 
     private void initializeViewModel() {
-        viewModel = ViewModelProviders.of(this).get(HomeScreenViewModel.class);
+        viewModel = new ViewModelProvider(this).get(HomeScreenViewModel.class);
     }
 
     private void replaceFragment(int screenName) {
@@ -291,7 +288,6 @@ public class HomeScreenActivity extends BaseActivity
             if (model != null) {
                 this.productDetailBundleModel = model;
                 setToolBarTitle(getString(R.string.product_details));
-                //updateCartCountTxt(viewModel.getCartSize());
                 replaceFragment(PRODUCT_DETAIL);
 
             }
@@ -337,15 +333,6 @@ public class HomeScreenActivity extends BaseActivity
                 viewModel.getProductList().setValue(productModelResponse.getProductList());
             } else {
                 ToastUtils.getInstance(this).showLongToast(getString(R.string.something_went_wrong));
-            }
-        });
-    }
-
-    private void fetchCart() {
-        viewModel.getCart().observe(this, cartResponse -> {
-            if (cartResponse != null) {
-                CartResponse.Data data = cartResponse.getData();
-                int cartSize = data.getCartdata().size();
             }
         });
     }

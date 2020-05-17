@@ -10,9 +10,8 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.textfield.TextInputEditText;
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseFragment;
 import com.najdi.android.najdiapp.common.BaseResponse;
@@ -31,8 +30,6 @@ import com.najdi.android.najdiapp.utitility.DialogUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import static com.najdi.android.najdiapp.common.Constants.APPEND_ATTRIBUTE_STR;
 
 public class ProductDetailFragment extends BaseFragment {
     private static final String EXTRA_PRODUCT_DETAIL_KEY = "product_detail_key";
@@ -84,7 +81,7 @@ public class ProductDetailFragment extends BaseFragment {
         LiveData<ProductListResponse> liveData = viewModel.getVariationQuantity(productListResponse.getId(),
                 viewModel.getVariationId());
 
-        liveData.observe(this, productListResponse1 -> {
+        liveData.observe(getViewLifecycleOwner(), productListResponse1 -> {
             hideProgressDialog();
             if (productListResponse1 != null) {
                 viewModel.setMaxVariationQuantity(productListResponse1.getStock_quantity());
@@ -105,7 +102,7 @@ public class ProductDetailFragment extends BaseFragment {
 
     private void fetchProductDetail() {
         showProgressDialog();
-        homeScreeViewModel.getIndividualProduct(productId).observe(this, baseResponse -> {
+        homeScreeViewModel.getIndividualProduct(productId).observe(getViewLifecycleOwner(), baseResponse -> {
             hideProgressDialog();
             if (baseResponse != null && baseResponse.isStatus()) {
                 this.productListResponse = baseResponse.getProduct();
@@ -115,6 +112,8 @@ public class ProductDetailFragment extends BaseFragment {
                 //enableOrDisableAddCartButton();
                 if (cartData == null) {
                     viewModel.setDefaultQuantity();
+                } else {
+                    viewModel.setQuantityCount(Integer.parseInt(cartData.getQty()));
                 }
             }
         });
@@ -149,12 +148,12 @@ public class ProductDetailFragment extends BaseFragment {
 
     private void initializeHomeScreenViewModel() {
         if (getActivity() != null) {
-            homeScreeViewModel = ViewModelProviders.of(getActivity()).get(HomeScreenViewModel.class);
+            homeScreeViewModel = new ViewModelProvider(getActivity()).get(HomeScreenViewModel.class);
         }
     }
 
     private void initializeViewModel() {
-        viewModel = ViewModelProviders.of(this).get(ProductDetailViewModel.class);
+        viewModel = new ViewModelProvider(this).get(ProductDetailViewModel.class);
     }
 
     private void initializeClickListener() {
@@ -177,8 +176,8 @@ public class ProductDetailFragment extends BaseFragment {
         //update cart :Since api wont support update cart directly so
         // to update cart  first delete product and add with updated product item
         LiveData<BaseResponse> liveData = viewModel.removeCart(cartData.getId());
-        liveData.observe(this, baseResponse -> {
-            if (baseResponse != null) {
+        liveData.observe(getViewLifecycleOwner(), baseResponse -> {
+            if (baseResponse != null && baseResponse.isStatus()) {
                 addCart();
             }
         });
@@ -186,7 +185,7 @@ public class ProductDetailFragment extends BaseFragment {
 
     private void addCart() {
         LiveData<BaseResponse> liveData = viewModel.addToCart(productId);
-        liveData.observe(this, baseResponse -> {
+        liveData.observe(getViewLifecycleOwner(), baseResponse -> {
             hideProgressDialog();
             if (baseResponse != null && baseResponse.isStatus()) {
                 viewModel.enableProceed.setValue(true);
@@ -229,9 +228,6 @@ public class ProductDetailFragment extends BaseFragment {
                 ItemDetailBinding detailBinding = ItemDetailBinding.bind(view);
                 detailBinding.name.setText(attributes.getName());
 
-              /*  setDataForSelectedValue(detailBinding.options, attributes.getId(),
-                        attributes.getSlug());*/
-
                 detailBinding.options.setTag(attributes.getId());
                 detailBinding.options.setOnClickListener((v -> {
 
@@ -262,18 +258,6 @@ public class ProductDetailFragment extends BaseFragment {
             detailBinding.options.setText("");
         }
         viewModel.reset();
-    }
-
-    private void setDataForSelectedValue(TextInputEditText optionText, int id, String key) {
-        if (cartData != null && cartData.getVariation().size() > 0) {
-            String attribute = APPEND_ATTRIBUTE_STR.concat(key);
-            String appendedSlugKey = attribute.concat("_slug");
-            String selectedSlugKeyValue = cartData.getVariation().get(appendedSlugKey);
-            viewModel.setTotalPriceLivdData(String.valueOf(cartData.getLine_subtotal()));
-            viewModel.setQuantityCount(cartData.getQuantity());
-            optionText.setText(cartData.getVariation().get(attribute));
-            //viewModel.updatePrice(productListResponse, selectedSlugKeyValue, id);
-        }
     }
 
     private List<String> getListFromMap(List<AttributeOptionModel> productAttributeOptions) {

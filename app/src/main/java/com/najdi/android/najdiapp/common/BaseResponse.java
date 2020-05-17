@@ -3,6 +3,7 @@ package com.najdi.android.najdiapp.common;
 import android.content.Context;
 
 import com.najdi.android.najdiapp.R;
+import com.najdi.android.najdiapp.checkout.model.OrderStatus;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.LocaleUtitlity;
@@ -16,7 +17,7 @@ public class BaseResponse {
     String code;
     String message;
     int total_items;
-    Data data;
+    List<BankResponse> data;
 
     //new changes
     int temp_id;
@@ -24,6 +25,11 @@ public class BaseResponse {
     String user_id;
     String token;
     ProductListResponse product;
+    List<OrderStatus> orders;
+
+    public List<OrderStatus> getOrders() {
+        return orders;
+    }
 
     public int getTotalItems() {
         return total_items;
@@ -49,15 +55,15 @@ public class BaseResponse {
         return user_id;
     }
 
-    public String getCode() {
-        return code;
+    public int getCode() {
+        return Integer.parseInt(code);
     }
 
     public String getMessage() {
         return message;
     }
 
-    public Data getData() {
+    public List<BankResponse> getData() {
         return data;
     }
 
@@ -73,7 +79,6 @@ public class BaseResponse {
         List<BankResponse> data;
         int count;
         String message;
-
 
 
         public int getCount() {
@@ -123,17 +128,17 @@ public class BaseResponse {
 
 
     public class BankResponse {
-        String account_name;
+        String account_holder_name;
         String account_number;
         String bank_name;
         String sort_code;
-        String bank_logo;
-        String iban;
+        String bank_image;
+        String iban_number;
         String bic;
 
 
         public String getAccount_name() {
-            return account_name;
+            return account_holder_name;
         }
 
         public String getAccount_number() {
@@ -149,11 +154,11 @@ public class BaseResponse {
         }
 
         public String getBank_logo() {
-            return bank_logo;
+            return bank_image;
         }
 
         public String getIban() {
-            return iban;
+            return iban_number;
         }
 
         public String getBic() {
@@ -163,7 +168,7 @@ public class BaseResponse {
 
     public void handleError(Context context) {
         if (data != null) {
-            switch (data.getStatus()) {
+            switch (Integer.parseInt(code)) {
                 case 400:
                 case 500:
                 case 404:
@@ -176,24 +181,23 @@ public class BaseResponse {
     }
 
     public void handleErrorForDialog(Context context) {
-        if (data != null) {
-            switch (data.getStatus()) {
-                case 401:
-                    DialogUtil.showAlertDialog(context, context.getString(R.string.enter_correct_code),
-                            (dialog, which) -> dialog.dismiss());
-                    break;
+        switch (getCode()) {
+            case 401:
+                DialogUtil.showAlertDialog(context, context.getString(R.string.enter_correct_code),
+                        (dialog, which) -> dialog.dismiss());
+                break;
 
-                case 403:
-                    if (data.getMessage() != null) {
-                        String message = context.getString(R.string.incorrect_password);
-                        if (LocaleUtitlity.getCountryLang().equals(ARABIC_LAN)) {
-                            message = context.getString(R.string.incorrect_password_arabic);
-                        }
-                        DialogUtil.showAlertDialog(context, message,
-                                (dialog, which) -> dialog.dismiss());
+            case 403:
+                if (message != null) {
+                    String message = context.getString(R.string.incorrect_password);
+                    if (LocaleUtitlity.getCountryLang().equals(ARABIC_LAN)) {
+                        message = context.getString(R.string.incorrect_password_arabic);
                     }
-            }
+                    DialogUtil.showAlertDialog(context, message,
+                            (dialog, which) -> dialog.dismiss());
+                }
         }
     }
+
 
 }

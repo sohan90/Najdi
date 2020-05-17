@@ -7,7 +7,6 @@ import com.najdi.android.najdiapp.home.model.CartRequest;
 import com.najdi.android.najdiapp.home.model.CityListModelResponse;
 import com.najdi.android.najdiapp.home.model.ContactUsRequest;
 import com.najdi.android.najdiapp.home.model.ForgotPaswwordRequest;
-import com.najdi.android.najdiapp.home.model.HtmlResponseForNajdi;
 import com.najdi.android.najdiapp.home.model.ProductId;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.home.model.ProductModelResponse;
@@ -21,7 +20,6 @@ import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 import com.najdi.android.najdiapp.shoppingcart.model.UpdateCartRequest;
 
 import java.util.HashMap;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -69,9 +67,9 @@ public interface NajdiApi {
     @Headers({"Content-Type:application/json"})
     Call<OrderResponse> createOrder(@Body BillingAddress billingAddress);
 
-    @GET("orders")
-    @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
-    Call<List<OrderResponse>> getOrderStatus(@Query("lang") String lang, @Query("customer") int userId);
+    @POST("app_my_orders")
+    @Headers({"Content-Type:application/json"})
+    Call<BaseResponse> getOrderStatus(@Body UserId userId);
 
     @POST("app_update_cart_qty")
     @Headers({"Content-Type:application/json"})
@@ -97,11 +95,11 @@ public interface NajdiApi {
     @Headers({"Content-Type:application/json"})
     Call<BaseResponse> clearCart(@Body UserId userId);
 
-    @GET("customapi/banklist")
-    @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
-    Call<BaseResponse> getBankDetails(@Query("lang") String lang);
+    @GET("app_bank_details")
+    @Headers({"Content-Type:application/json"})
+    Call<BaseResponse> getBankDetails();
 
-    @POST("customapi/contactus")
+    @POST("app_contact_form")
     @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
     Call<BaseResponse> contactUs(@Query("lang") String lang, @Body ContactUsRequest request);
 
@@ -134,9 +132,17 @@ public interface NajdiApi {
     Call<BaseResponse> changePassword(@Body ForgotPaswwordRequest request);
 
 
-    @GET("wp/v2/pages/{page_id}")
-    @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
-    Call<HtmlResponseForNajdi> getHtmlTermsAboutUsPrivacyPolicy(@Path("page_id") int pageId);
+    @GET("app_about_us")
+    @Headers({"Content-Type:application/json"})
+    Call<BaseResponse> getAboutUs();
+
+    @GET("app_privacy_policy")
+    @Headers({"Content-Type:application/json"})
+    Call<BaseResponse> getPrivacyPolicy();
+
+    @GET("app_terms_conditions")
+    @Headers({"Content-Type:application/json"})
+    Call<BaseResponse> getTermsCondition();
 
     @GET("wc/v2/products/{product_id}/variations/{variation_id}")
     @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
