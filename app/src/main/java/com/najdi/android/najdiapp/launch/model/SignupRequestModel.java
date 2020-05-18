@@ -8,7 +8,12 @@ public class SignupRequestModel {
     String first_name;
     String last_name;
     String username;
+    String fcm_token;
+    String device_type = "ANDROID";
 
+    public void setFcmToken(String fcm_token) {
+        this.fcm_token = fcm_token;
+    }
 
     public void setMobile(String mobile) {
         this.mobile = mobile;

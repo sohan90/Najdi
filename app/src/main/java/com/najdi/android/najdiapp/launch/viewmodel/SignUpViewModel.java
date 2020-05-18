@@ -70,10 +70,11 @@ public class SignUpViewModel extends BaseViewModel {
         validateSuccess.setValue(valid);
     }
 
-    public LiveData<BaseResponse> registerUser() {
+    public LiveData<BaseResponse> registerUser(String fcmToken) {
         SignupRequestModel signupRequestModel = new SignupRequestModel();
         signupRequestModel.setPassword(password.getValue());
         signupRequestModel.setMobile(phoneNo.getValue());
+        signupRequestModel.setFcmToken(fcmToken);
         signupRequestModel.setLang(resourceProvider.getCountryLang());
         if (!TextUtils.isEmpty(name.getValue())) {
             signupRequestModel.setUsername(name.getValue());

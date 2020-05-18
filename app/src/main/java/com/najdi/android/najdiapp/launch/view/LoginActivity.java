@@ -20,6 +20,7 @@ import com.najdi.android.najdiapp.utitility.LocaleUtitlity;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
 import static com.najdi.android.najdiapp.common.Constants.ARABIC_LAN;
+import static com.najdi.android.najdiapp.utitility.PreferenceUtils.FCM_TOKEN_KEY;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
@@ -114,7 +115,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void login() {
-        viewModel.login().observe(this, baseResponse -> {
+        String fcmToken = PreferenceUtils.getValueString(this, FCM_TOKEN_KEY);
+        viewModel.login(fcmToken).observe(this, baseResponse -> {
             hideProgressDialog();
             if (baseResponse != null) {
                 if (!baseResponse.isStatus()) {

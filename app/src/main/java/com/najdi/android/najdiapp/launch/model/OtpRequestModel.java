@@ -4,7 +4,7 @@ public class OtpRequestModel {
     String mobile;
     String lang;
     String otp;
-    String tempId;
+    String temp_Id;
 
 
     public void setLang(String lang) {
@@ -20,6 +20,6 @@ public class OtpRequestModel {
     }
 
     public void setTempId(String tempId) {
-        this.tempId = tempId;
+        this.temp_Id = tempId;
     }
 }

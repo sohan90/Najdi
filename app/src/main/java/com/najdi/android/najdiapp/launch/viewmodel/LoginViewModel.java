@@ -61,11 +61,12 @@ public class LoginViewModel extends BaseViewModel {
         validationStatus.setValue(isValid);
     }
 
-    public LiveData<BaseResponse> login() {
+    public LiveData<BaseResponse> login(String fcmToken) {
         LoginRequestModel requestModel = new LoginRequestModel();
         String phoneNo = "966" + this.phoneNo.getValue();
         requestModel.setPhone(phoneNo);
         requestModel.setPassword(password.getValue());
+        requestModel.setFcmToken(fcmToken);
         PreferenceUtils.setValueString(resourceProvider.getAppContext(),
                 PreferenceUtils.USER_PHONE_NO_KEY, this.phoneNo.getValue());
         PreferenceUtils.setValueString(resourceProvider.getAppContext(),

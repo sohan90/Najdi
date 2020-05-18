@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "64294238843",
+    "firebase_url": "https://najdi-bab51.firebaseio.com",
+    "project_id": "najdi-bab51",
+    "storage_bucket": "najdi-bab51.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:64294238843:android:15000758c2deb79657c0de",
+        "android_client_info": {
+          "package_name": "com.najdi.android.najdiapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "64294238843-pnua7cdrbhlfcdr8mlmkfrc5rjeuful4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7LyAA791KumOI4depqLDj_8YE5P7F3GI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "64294238843-pnua7cdrbhlfcdr8mlmkfrc5rjeuful4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "64294238843-37c16b2oa7skjsferdr401oaptncrq1b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.Najdi"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

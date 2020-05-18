@@ -85,8 +85,10 @@ public class OtpActivity extends BaseActivity {
                 .doOnNext(sec -> {
                     String appendSec = sec + "s";
                     binding.resend.setText(getString(R.string.resend_code_in, appendSec));
-                }).doOnComplete(() ->
-                        binding.resend.setText(getString(R.string.resend_code)))
+                }).doOnComplete(() -> {
+                    binding.resend.setEnabled(true);
+                    binding.resend.setText(getString(R.string.resend_code));
+                })
                 .subscribe());
 
     }

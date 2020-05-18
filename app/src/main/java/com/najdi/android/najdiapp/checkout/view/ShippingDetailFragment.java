@@ -113,8 +113,7 @@ public class ShippingDetailFragment extends BaseFragment implements OnMapReadyCa
         map.getUiSettings().setZoomControlsEnabled(true);
         map.getUiSettings().setZoomGesturesEnabled(true);
         map.getUiSettings().setCompassEnabled(true);
-        map.setMyLocationEnabled(true);
-        map.getUiSettings().setMyLocationButtonEnabled(true);
+
         map.setOnMyLocationButtonClickListener(() -> {
             if (draggedMarker == null) return false;
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(draggedMarker.getPosition(),
@@ -138,6 +137,8 @@ public class ShippingDetailFragment extends BaseFragment implements OnMapReadyCa
     }
 
     private void navigateMapToCurrentAddress(Address address) {
+        map.setMyLocationEnabled(true);
+        map.getUiSettings().setMyLocationButtonEnabled(true);
         if (address != null) {
             if (!isDragging) {
                 map.clear();

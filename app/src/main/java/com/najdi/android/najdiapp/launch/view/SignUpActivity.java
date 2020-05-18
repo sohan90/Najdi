@@ -24,6 +24,7 @@ import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
 import static com.najdi.android.najdiapp.launch.view.OtpActivity.EXTRA_SCREEN_TYPE;
 import static com.najdi.android.najdiapp.launch.view.OtpActivity.EXTRA_SIGN_UP_TEMP_ID;
+import static com.najdi.android.najdiapp.utitility.PreferenceUtils.FCM_TOKEN_KEY;
 
 public class SignUpActivity extends BaseActivity {
 
@@ -90,7 +91,8 @@ public class SignUpActivity extends BaseActivity {
     private void subscribeValidationStatus() {
         viewModel.getValidationStatus().observe(this, valid -> {
             if (valid) {
-                LiveData<BaseResponse> liveData = viewModel.registerUser();
+                String fcmToken = PreferenceUtils.getValueString(this, FCM_TOKEN_KEY);
+                LiveData<BaseResponse> liveData = viewModel.registerUser(fcmToken);
                 liveData.observe(this, signupResponseModel -> {
                     hideProgressDialog();
                     if (signupResponseModel != null) {
