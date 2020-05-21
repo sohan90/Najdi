@@ -119,8 +119,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         viewModel.login(fcmToken).observe(this, baseResponse -> {
             hideProgressDialog();
             if (baseResponse != null) {
-                if (!baseResponse.isStatus()) {
-                    saveCredential(baseResponse.getUserid(), "");
+                if (baseResponse.isStatus()) {
+                    saveCredential(baseResponse.getUserid(), baseResponse.getUserToken());
                     launchHomeScreen();
                     finish();
 
@@ -143,7 +143,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     private void saveCredential(String userId, String token) {
         PreferenceUtils.setValueString(this, PreferenceUtils.USER_LOGIIN_TOKEN, token);
-        PreferenceUtils.setValueString(this, PreferenceUtils.USER_ID_KEY, "userId");
+        PreferenceUtils.setValueString(this, PreferenceUtils.USER_ID_KEY, userId);
     }
 
     private void launchHomeScreen() {

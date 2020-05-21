@@ -9,7 +9,11 @@ public class CartRequest {
     private String product_attribute_options;
     private String price;
     private String subtotal;
+    private String lang;
 
+    public void setLang(String lang) {
+        this.lang = lang;
+    }
 
     public void setUserId(String user_id) {
         this.user_id = user_id;

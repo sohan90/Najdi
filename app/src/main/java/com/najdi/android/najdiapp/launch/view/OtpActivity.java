@@ -34,7 +34,8 @@ import static com.najdi.android.najdiapp.common.Constants.OtpScreen.CHANGE_MOBIL
 import static com.najdi.android.najdiapp.common.Constants.OtpScreen.FORGOT_PASSWORD_SCREEN;
 import static com.najdi.android.najdiapp.common.Constants.OtpScreen.SIGN_UP_SCREEN;
 import static com.najdi.android.najdiapp.launch.view.ChangePasswordActivity.EXTRA_CHANGE_PASSWORD_LAUNCH_TYPE;
-import static com.najdi.android.najdiapp.launch.view.ChangePasswordActivity.EXTRA_OTP_CODE;
+import static com.najdi.android.najdiapp.launch.view.ChangePasswordActivity.EXTRA_TOKEN;
+import static com.najdi.android.najdiapp.launch.view.ChangePasswordActivity.EXTRA_USER_ID;
 
 public class OtpActivity extends BaseActivity {
     ActivityOtpBinding binding;
@@ -44,7 +45,7 @@ public class OtpActivity extends BaseActivity {
     public static final String EXTRA_SIGN_UP_TEMP_ID = "extra_temp_id";
     private int screenType;
     private String newMobileNo;
-    private int tempId;
+    private String tempId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,7 +71,7 @@ public class OtpActivity extends BaseActivity {
                 newMobileNo = getIntent().getStringExtra(EXTRA_NEW_MOBILE_NO);
             }
             if (getIntent().hasExtra(EXTRA_SIGN_UP_TEMP_ID)) {
-                tempId = getIntent().getIntExtra(EXTRA_SIGN_UP_TEMP_ID, 0);
+                tempId = getIntent().getStringExtra(EXTRA_SIGN_UP_TEMP_ID);
             }
         }
     }
@@ -150,8 +151,8 @@ public class OtpActivity extends BaseActivity {
                     PreferenceUtils.USER_PHONE_NO_KEY), newMobileNo);// change mobile no verification
         } else {
 
-            liveData = viewModel.verifyOtpForForgotPassword(PreferenceUtils.getValueString(this,
-                    PreferenceUtils.USER_PHONE_NO_KEY));// forgot password flow
+            String token = PreferenceUtils.getValueString(this, PreferenceUtils.USER_LOGIIN_TOKEN);
+            liveData = viewModel.verifyOtpForForgotPassword(tempId, token);// forgot password flow
         }
 
         liveData.observe(this, baseResponse -> {
@@ -164,7 +165,7 @@ public class OtpActivity extends BaseActivity {
                             PreferenceUtils.USER_PHONE_NO_KEY, newMobileNo);
                     finish();
                 } else {
-                    launchChangePasswordScreen();
+                    launchChangePasswordScreen(baseResponse.getToken(), baseResponse.getUserid());
                     finish();// forgot password flow
                 }
             } else {
@@ -175,12 +176,11 @@ public class OtpActivity extends BaseActivity {
         });
     }
 
-    private void launchChangePasswordScreen() {
-        String otp = viewModel.getOne().getValue() + viewModel.getTwo().getValue() +
-                viewModel.getThree().getValue() + viewModel.getFour().getValue();
+    private void launchChangePasswordScreen(String token, String userId) {
         Intent intent = new Intent(this, ChangePasswordActivity.class);
-        intent.putExtra(EXTRA_CHANGE_PASSWORD_LAUNCH_TYPE, Constants.OtpScreen.CHANGE_PASSWORD_OTP_SCREEN);
-        intent.putExtra(EXTRA_OTP_CODE, otp);
+        intent.putExtra(EXTRA_CHANGE_PASSWORD_LAUNCH_TYPE, Constants.OtpScreen.RESET_PASSWORD_OTP_SCREEN);
+        intent.putExtra(EXTRA_TOKEN, token);
+        intent.putExtra(EXTRA_USER_ID, userId);
         startActivity(intent);
     }
 
@@ -188,12 +188,13 @@ public class OtpActivity extends BaseActivity {
         showProgressDialog();
         String userName = PreferenceUtils.getValueString(this, PreferenceUtils.USER_PHONE_NO_KEY);
         String password = PreferenceUtils.getValueString(this, PreferenceUtils.USER_PASSWORD);
-        LiveData<BaseResponse> liveData = viewModel.login(userName, password);
+        String fcmToken = PreferenceUtils.getValueString(this, PreferenceUtils.FCM_TOKEN_KEY);
+        LiveData<BaseResponse> liveData = viewModel.login(userName, password, fcmToken);
         liveData.observe(this, baseResponse -> {
 
             hideProgressDialog();
             if (baseResponse != null && baseResponse.isStatus()) {
-                String loginToken = baseResponse.getToken();
+                String loginToken = baseResponse.getUserToken();
                 PreferenceUtils.setValueString(this, PreferenceUtils.USER_LOGIIN_TOKEN,
                         loginToken);
                 PreferenceUtils.setValueString(this, PreferenceUtils.USER_ID_KEY,
@@ -202,7 +203,7 @@ public class OtpActivity extends BaseActivity {
                 launchHomeScreen();
 
             } else {
-                if (baseResponse != null && baseResponse.getCode() == 403) {
+                if (baseResponse != null && !baseResponse.isStatus()) {
                     String message = getString(R.string.incorrect_password);
                     if (LocaleUtitlity.getCountryLang().equalsIgnoreCase(ARABIC_LAN)) {
                         message = getString(R.string.incorrect_password_arabic);

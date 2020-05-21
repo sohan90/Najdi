@@ -25,6 +25,7 @@ import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
 import static com.najdi.android.najdiapp.launch.view.OtpActivity.EXTRA_SCREEN_TYPE;
+import static com.najdi.android.najdiapp.launch.view.OtpActivity.EXTRA_SIGN_UP_TEMP_ID;
 
 public class ForgotPasswordFragment extends BaseFragment {
 
@@ -71,12 +72,10 @@ public class ForgotPasswordFragment extends BaseFragment {
             liveData.observe(getViewLifecycleOwner(), baseResponse -> {
                 hideProgressDialog();
                 if (baseResponse != null && baseResponse.isStatus()) {
-                    PreferenceUtils.setValueString(getActivity(), PreferenceUtils.USER_LOGIIN_TOKEN,
-                            baseResponse.getToken());
                     DialogUtil.showAlertDialog(getActivity(), baseResponse.getMessage(),
                             (dialog, which) -> {
                                 dialog.dismiss();
-                                launchOtpScreen();
+                                launchOtpScreen(baseResponse.getTempId());
                             });
                 }
             });
@@ -103,8 +102,9 @@ public class ForgotPasswordFragment extends BaseFragment {
         });
     }
 
-    private void launchOtpScreen() {
+    private void launchOtpScreen(String tempId) {
         Intent intent = new Intent(getActivity(), OtpActivity.class);
+        intent.putExtra(EXTRA_SIGN_UP_TEMP_ID, tempId);
         intent.putExtra(EXTRA_SCREEN_TYPE, Constants.OtpScreen.FORGOT_PASSWORD_SCREEN);
         startActivity(intent);
     }

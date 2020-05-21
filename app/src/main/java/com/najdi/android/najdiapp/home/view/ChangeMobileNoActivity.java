@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseActivity;
@@ -74,6 +74,6 @@ public class ChangeMobileNoActivity extends BaseActivity {
     }
 
     private void initViewModel() {
-        viewModel = ViewModelProviders.of(this).get(ChangeMobileNoViewModel.class);
+        viewModel = new ViewModelProvider(this).get(ChangeMobileNoViewModel.class);
     }
 }

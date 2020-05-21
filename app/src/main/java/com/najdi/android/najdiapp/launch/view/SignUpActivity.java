@@ -116,7 +116,7 @@ public class SignUpActivity extends BaseActivity {
         });
     }
 
-    private void launchOTPScreen(int tempId) {
+    private void launchOTPScreen(String tempId) {
         Intent intent = new Intent(this, OtpActivity.class);
         intent.putExtra(EXTRA_SCREEN_TYPE, Constants.OtpScreen.SIGN_UP_SCREEN);
         intent.putExtra(EXTRA_SIGN_UP_TEMP_ID, tempId);

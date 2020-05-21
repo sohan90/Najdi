@@ -57,14 +57,16 @@ public class OtpViewModel extends BaseViewModel {
         OtpRequestModel otpRequestModel = new OtpRequestModel();
         otpRequestModel.setTempId(tempId);
         otpRequestModel.setOtp(otp);
+        otpRequestModel.setLang(resourceProvider.getCountryLang());
         return repository.verifyOtp(otpRequestModel);
     }
 
-    public LiveData<BaseResponse> verifyOtpForForgotPassword(String mobile) {
+    public LiveData<BaseResponse> verifyOtpForForgotPassword(String tempId, String token) {
         String otp = one.getValue() + two.getValue() + three.getValue() + four.getValue();
         OtpRequestModel otpRequestModel = new OtpRequestModel();
-        otpRequestModel.setMobile(mobile);
+        otpRequestModel.setTempId(tempId);
         otpRequestModel.setOtp(otp);
+        otpRequestModel.setToken(token);
         otpRequestModel.setLang(resourceProvider.getCountryLang());
         return repository.verifyForgotOtp(otpRequestModel);
     }
@@ -80,11 +82,13 @@ public class OtpViewModel extends BaseViewModel {
     }
 
 
-    public LiveData<BaseResponse> login(String username, String password) {
+    public LiveData<BaseResponse> login(String username, String password, String fcmToken) {
         LoginRequestModel loginRequestModel = new LoginRequestModel();
-        String phoneNo = "966" + username;
-        loginRequestModel.setPhone(phoneNo);
+        // String phoneNo = "966" + username;
+        loginRequestModel.setPhone(username);
         loginRequestModel.setPassword(password);
+        loginRequestModel.setFcmToken(fcmToken);
+        loginRequestModel.setLang(resourceProvider.getCountryLang());
         return repository.loginToken(loginRequestModel);
     }
 
@@ -92,8 +96,8 @@ public class OtpViewModel extends BaseViewModel {
         String phoneNo = PreferenceUtils.getValueString(resourceProvider.getAppContext(),
                 PreferenceUtils.USER_PHONE_NO_KEY);
         OtpRequestModel otpRequestModel = new OtpRequestModel();
-        otpRequestModel.setMobile(phoneNo);
-        otpRequestModel.setLang(resourceProvider.getCountryLang());
+        //otpRequestModel.setMobile(phoneNo);
+        //otpRequestModel.setLang(resourceProvider.getCountryLang());
         return repository.resendOtp(otpRequestModel);
     }
 
@@ -101,16 +105,16 @@ public class OtpViewModel extends BaseViewModel {
         String phoneNo = PreferenceUtils.getValueString(resourceProvider.getAppContext(),
                 PreferenceUtils.USER_PHONE_NO_KEY);
         OtpRequestModel otpRequestModel = new OtpRequestModel();
-        otpRequestModel.setMobile(phoneNo);
-        otpRequestModel.setLang(resourceProvider.getCountryLang());
+        //otpRequestModel.setMobile(phoneNo);
+        //otpRequestModel.setLang(resourceProvider.getCountryLang());
         return repository.forgotresendOtp(otpRequestModel);
     }
 
 
     public LiveData<BaseResponse> resendOtp(String newMobileNo) {
         OtpRequestModel otpRequestModel = new OtpRequestModel();
-        otpRequestModel.setMobile(newMobileNo);
-        otpRequestModel.setLang(resourceProvider.getCountryLang());
+        //otpRequestModel.setMobile(newMobileNo);
+        //otpRequestModel.setLang(resourceProvider.getCountryLang());
         return repository.resendOtp(otpRequestModel);
     }
 

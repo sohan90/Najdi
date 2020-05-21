@@ -75,6 +75,11 @@ public class ShippingDetailFragment extends BaseFragment implements OnMapReadyCa
         mapFragment.getMapAsync(this);
     }
 
+    private void initalizeActivityViewModel() {
+        if (getActivity() == null) return;
+        activityViewModel = new ViewModelProvider(getActivity()).get(CheckoutViewModel.class);
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
@@ -153,11 +158,6 @@ public class ShippingDetailFragment extends BaseFragment implements OnMapReadyCa
             isDragging = false;
             viewModel.updateAddress(address);
         }
-    }
-
-    private void initalizeActivityViewModel() {
-        if (getActivity() == null) return;
-        activityViewModel = new ViewModelProvider(getActivity()).get(CheckoutViewModel.class);
     }
 
     private void initClickListeners() {

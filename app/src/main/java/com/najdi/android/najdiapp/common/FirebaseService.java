@@ -70,7 +70,7 @@ public class FirebaseService extends FirebaseMessagingService {
                 .Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher)  //a resource for your custom small icon
                 .setContentTitle(title) //the "title" value you sent in your notification
-                .setContentText(message) //ditto
+                .setContentText(message == null ? "" : message) //ditto
                 .setAutoCancel(true)  //dismisses the notification on click
                 .setSound(defaultSoundUri)
                 .setContentIntent(activityPendingIntent);

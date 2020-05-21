@@ -31,8 +31,9 @@ public class ProfileViewModel extends BaseViewModel {
     public LiveData<BaseResponse> updateProfile(String userId){
         UpdateProfileModelRequest request = new UpdateProfileModelRequest();
         request.setId(userId);
-        request.setFirstName(name.getValue());
+        request.setFullName(name.getValue());
         request.setEmail(email.getValue());
+        request.setLang(resourceProvider.getCountryLang());
         return repository.updateProfile(request);
     }
 

@@ -6,7 +6,7 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseActivity;
@@ -16,15 +16,18 @@ import com.najdi.android.najdiapp.launch.viewmodel.ForgotPasswordViewModel;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
-import static com.najdi.android.najdiapp.common.Constants.OtpScreen.CHANGE_PASSWORD_OTP_SCREEN;
+import static com.najdi.android.najdiapp.common.Constants.OtpScreen.RESET_PASSWORD_OTP_SCREEN;
 
 public class ChangePasswordActivity extends BaseActivity {
     public static final String EXTRA_CHANGE_PASSWORD_LAUNCH_TYPE = "change_password_screen_type";
     public static final String EXTRA_OTP_CODE = "extra_otp_code";
+    public static final String EXTRA_USER_ID = "extra_user_id";
+    public static final String EXTRA_TOKEN = "extra_token";
     private ForgotPasswordViewModel viewModel;
     ActivityChangePasswordBinding binding;
     private int launchType;
-    private String otp;
+    private String token;
+    private String userId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,7 +46,8 @@ public class ChangePasswordActivity extends BaseActivity {
     }
 
     private void initUi() {
-        if (launchType == CHANGE_PASSWORD_OTP_SCREEN) {
+        if (launchType == RESET_PASSWORD_OTP_SCREEN) {
+            viewModel.getOldPassword().setValue("");// setting default value while validating
             binding.oldPasswordLyt.setVisibility(View.GONE);
         } else {
             binding.oldPasswordLyt.setVisibility(View.VISIBLE);
@@ -56,14 +60,15 @@ public class ChangePasswordActivity extends BaseActivity {
     private void getLaunchTypeFromBundle() {
         if (getIntent() != null) {
             launchType = getIntent().getIntExtra(EXTRA_CHANGE_PASSWORD_LAUNCH_TYPE, -1);
-            if (getIntent().hasExtra(EXTRA_OTP_CODE)) {
-                otp = getIntent().getStringExtra(EXTRA_OTP_CODE);
+            if (getIntent().hasExtra(EXTRA_TOKEN) && getIntent().hasExtra(EXTRA_USER_ID)) {
+                token = getIntent().getStringExtra(EXTRA_TOKEN);
+                userId = getIntent().getStringExtra(EXTRA_USER_ID);
             }
         }
     }
 
     private void initViewModel() {
-        viewModel = ViewModelProviders.of(this).get(ForgotPasswordViewModel.class);
+        viewModel = new ViewModelProvider(this).get(ForgotPasswordViewModel.class);
     }
 
     private void initClickListener() {
@@ -78,12 +83,11 @@ public class ChangePasswordActivity extends BaseActivity {
 
     private void updatePassword() {
         showProgressDialog();
-        String phoneNo = PreferenceUtils.getValueString(this, PreferenceUtils.USER_PHONE_NO_KEY);
-        String userId = PreferenceUtils.getValueString(this, PreferenceUtils.USER_ID_KEY);
         LiveData<BaseResponse> liveData;
-        if (launchType == CHANGE_PASSWORD_OTP_SCREEN) {
-            liveData = viewModel.forgotUpdate(phoneNo, otp, resourProvider.getCountryLang());
+        if (launchType == RESET_PASSWORD_OTP_SCREEN) {
+            liveData = viewModel.forgotUpdate(token, this.userId);
         } else {
+            String userId = PreferenceUtils.getValueString(this, PreferenceUtils.USER_ID_KEY);
             liveData = viewModel.changePassword(userId);
         }
         liveData.observe(this, baseResponse -> {

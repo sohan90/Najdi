@@ -24,6 +24,7 @@ import java.util.HashMap;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -41,23 +42,26 @@ public interface NajdiApi {
 
     @POST("list_products_cities")
     @Headers({"Content-Type:application/json"})
-    Call<ProductModelResponse> getCityBasedProducts(@Body  HashMap<String, String> city);
+    Call<ProductModelResponse> getCityBasedProducts(@Header("_token")String value,
+                                                    @Body  HashMap<String, String> city);
 
     @POST("list_products_cat")
     @Headers({"Content-Type:application/json"})
-    Call<ProductModelResponse> getCategoryBasedProducts(@Body  HashMap<String, String> category);
+    Call<ProductModelResponse> getCategoryBasedProducts(@Header("_token")String value,
+                                                        @Body  HashMap<String, String> category);
 
     @GET("list_products")
     @Headers({"Content-Type:application/json"})
-    Call<ProductModelResponse> getProducts();
+    Call<ProductModelResponse> getProducts(@Query("lang") String value);
 
     @POST("app_list_cart")
     @Headers({"Content-Type:application/json"})
-    Call<CartResponse> getCart(@Body UserId userId);
+    Call<CartResponse> getCart(@Header("_token")String value, @Body UserId userId);
 
     @POST("app_remove_item")
     @Headers({"Content-Type:application/json"})
-    Call<BaseResponse> removeCartItem(@Body HashMap<String, String> cartObj);
+    Call<BaseResponse> removeCartItem(@Header("_token")String value,
+                                      @Body HashMap<String, String> cartObj);
 
     @POST("product_details")
     @Headers({"Content-Type:application/json"})
@@ -65,15 +69,16 @@ public interface NajdiApi {
 
     @POST("place_order")
     @Headers({"Content-Type:application/json"})
-    Call<OrderResponse> createOrder(@Body BillingAddress billingAddress);
+    Call<OrderResponse> createOrder(@Header("_token")String value,
+                                    @Body BillingAddress billingAddress);
 
     @POST("app_my_orders")
     @Headers({"Content-Type:application/json"})
-    Call<BaseResponse> getOrderStatus(@Body UserId userId);
+    Call<BaseResponse> getOrderStatus(@Header("_token")String value, @Body UserId userId);
 
     @POST("app_update_cart_qty")
     @Headers({"Content-Type:application/json"})
-    Call<BaseResponse> updateItemQuantity(@Body UpdateCartRequest cartRequest);
+    Call<BaseResponse> updateItemQuantity(@Header("_token")String value, @Body UpdateCartRequest cartRequest);
 
     @POST("app_verify")
     @Headers({"Content-Type:application/json"})
@@ -93,26 +98,26 @@ public interface NajdiApi {
 
     @POST("app_empty_cart")
     @Headers({"Content-Type:application/json"})
-    Call<BaseResponse> clearCart(@Body UserId userId);
+    Call<BaseResponse> clearCart(@Header("_token")String value, @Body UserId userId);
 
     @GET("app_bank_details")
     @Headers({"Content-Type:application/json"})
-    Call<BaseResponse> getBankDetails();
+    Call<BaseResponse> getBankDetails(@Query("lang")String value);
 
     @POST("app_contact_form")
-    @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
-    Call<BaseResponse> contactUs(@Query("lang") String lang, @Body ContactUsRequest request);
+    @Headers({"Content-Type:application/json"})
+    Call<BaseResponse> contactUs(@Header("_token")String value, @Body ContactUsRequest request);
 
     @POST("app_count_cart_items")
     @Headers({"Content-Type:application/json"})
-    Call<BaseResponse> getCartCount(@Body UserId userId);
+    Call<BaseResponse> getCartCount(@Header("-token")String value, @Body UserId userId);
 
-    @POST("customapi/forgot")
-    @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
+    @POST("app_forgot_password")
+    @Headers({"Content-Type:application/json"})
     Call<BaseResponse> forgotPassword(@Body ForgotPaswwordRequest request);
 
-    @POST("customapi/forgot_verify")
-    @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
+    @POST("app_forgot_password_verify")
+    @Headers({"Content-Type:application/json"})
     Call<BaseResponse> forgotVerify(@Body OtpRequestModel request);
 
     @POST("app_reset_password")
@@ -129,20 +134,21 @@ public interface NajdiApi {
 
     @POST("app_user_change_password")
     @Headers({"Content-Type:application/json"})
-    Call<BaseResponse> changePassword(@Body ForgotPaswwordRequest request);
+    Call<BaseResponse> changePassword(@Header("_token") String value,
+                                      @Body ForgotPaswwordRequest request);
 
 
     @GET("app_about_us")
     @Headers({"Content-Type:application/json"})
-    Call<BaseResponse> getAboutUs();
+    Call<BaseResponse> getAboutUs(@Query("lang")String value);
 
     @GET("app_privacy_policy")
     @Headers({"Content-Type:application/json"})
-    Call<BaseResponse> getPrivacyPolicy();
+    Call<BaseResponse> getPrivacyPolicy(@Query("lang")String value);
 
     @GET("app_terms_conditions")
     @Headers({"Content-Type:application/json"})
-    Call<BaseResponse> getTermsCondition();
+    Call<BaseResponse> getTermsCondition(@Query("lang")String value);
 
     @GET("wc/v2/products/{product_id}/variations/{variation_id}")
     @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
@@ -152,17 +158,18 @@ public interface NajdiApi {
 
     @GET("list_cities")
     @Headers({"Content-Type:application/json"})
-    Call<CityListModelResponse> getCityList();
+    Call<CityListModelResponse> getCityList(@Query("lang") String lang);
 
     @GET("list_categories")
     @Headers({"Content-Type:application/json"})
-    Call<CityListModelResponse> getCategoriesList();
+    Call<CityListModelResponse> getCategoriesList(@Query("lang") String lang);
 
     @POST("app_user_update_profile")
     @Headers({"Content-Type:application/json"})
-    Call<BaseResponse> updateProfile(@Body UpdateProfileModelRequest profileModelRequest);
+    Call<BaseResponse> updateProfile(@Header("_token") String value,
+                                     @Body UpdateProfileModelRequest profileModelRequest);
 
     @POST("app_add_to_cart")
     @Headers({"Content-Type:application/json"})
-    Call<BaseResponse> addToCart(@Body CartRequest cartRequest);
+    Call<BaseResponse> addToCart(@Header("_token") String value, @Body CartRequest cartRequest);
 }

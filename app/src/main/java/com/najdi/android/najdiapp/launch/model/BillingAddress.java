@@ -18,7 +18,11 @@ public class BillingAddress {
     String full_name;
     String address;
     String map_address;
+    String lang;
 
+    public void setLang(String lang) {
+        this.lang = lang;
+    }
 
     public void setUserId(String user_id) {
         this.user_id = user_id;

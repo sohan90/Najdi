@@ -2,22 +2,27 @@ package com.najdi.android.najdiapp.home.model;
 
 public class UpdateProfileModelRequest {
     private String id;
-    private String first_name;
+    private String full_name;
     private String last_name;
     private String email;
     private String address;
     private String city;
+    private String lang;
     private String zip;
     private String phone;
     private String password;
 
 
+    public void setLang(String lang) {
+        this.lang = lang;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
 
-    public void setFirstName(String first_name) {
-        this.first_name = first_name;
+    public void setFullName(String first_name) {
+        this.full_name = first_name;
     }
 
     public void setLastName(String last_name) {

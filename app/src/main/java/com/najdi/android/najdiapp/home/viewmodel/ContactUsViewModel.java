@@ -29,6 +29,7 @@ public class ContactUsViewModel extends BaseViewModel {
             ContactUsRequest contactUsRequest = new ContactUsRequest();
             contactUsRequest.setMessage(message.getValue() + " " + "\n" + phone);
             contactUsRequest.setUseId(userId);
+            contactUsRequest.setLang(resourceProvider.getCountryLang());
 
             liveData = repository.contactUs(contactUsRequest);
         }

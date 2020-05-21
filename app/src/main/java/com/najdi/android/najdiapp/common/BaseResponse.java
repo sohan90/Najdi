@@ -20,9 +20,10 @@ public class BaseResponse {
     List<BankResponse> data;
 
     //new changes
-    int temp_id;
+    String temp_id;
     boolean status;
     String user_id;
+    String _token;//user token
     String token;
     ProductListResponse product;
     List<OrderStatus> orders;
@@ -39,11 +40,15 @@ public class BaseResponse {
         return product;
     }
 
+    public String getUserToken() {
+        return _token;
+    }
+
     public String getToken() {
         return token;
     }
 
-    public int getTempId() {
+    public String getTempId() {
         return temp_id;
     }
 
@@ -56,7 +61,7 @@ public class BaseResponse {
     }
 
     public int getCode() {
-        return Integer.parseInt(code);
+        return code == null ? 0 : Integer.parseInt(code);
     }
 
     public String getMessage() {

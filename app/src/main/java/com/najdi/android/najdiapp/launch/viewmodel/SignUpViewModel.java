@@ -77,7 +77,7 @@ public class SignUpViewModel extends BaseViewModel {
         signupRequestModel.setFcmToken(fcmToken);
         signupRequestModel.setLang(resourceProvider.getCountryLang());
         if (!TextUtils.isEmpty(name.getValue())) {
-            signupRequestModel.setUsername(name.getValue());
+            signupRequestModel.setFullName(name.getValue());
             PreferenceUtils.setValueString(resourceProvider.getAppContext(), PreferenceUtils.USER_NAME_KEY,
                     name.getValue());
         }

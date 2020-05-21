@@ -14,6 +14,11 @@ public class ForgotPaswwordRequest {
     String cp;
     String np;
     String cnp;
+    String user_id;
+
+    public void setUserId(String user_id) {
+        this.user_id = user_id;
+    }
 
     public void setCp(String cp) {
         this.cp = cp;
@@ -27,7 +32,7 @@ public class ForgotPaswwordRequest {
         this.cnp = cnp;
     }
 
-    public void setUserid(String user_id) {
+    public void setId(String user_id) {
         this.id = user_id;
     }
 

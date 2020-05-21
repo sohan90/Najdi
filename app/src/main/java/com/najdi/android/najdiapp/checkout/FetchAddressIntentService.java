@@ -16,7 +16,6 @@ import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.utitility.LocaleUtitlity;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class FetchAddressIntentService extends JobIntentService {
@@ -35,7 +34,7 @@ public class FetchAddressIntentService extends JobIntentService {
         // Get the location passed to this service through an extra.
         Location location = intent.getParcelableExtra(Constants.LOCATION_DATA_EXTRA);
         resultReceiver = intent.getParcelableExtra(Constants.RECEIVER);
-        if (isStopped()) return;
+        if (isStopped() || location == null) return;
         handleAddress(geocoder, location);
     }
 
@@ -65,12 +64,6 @@ public class FetchAddressIntentService extends JobIntentService {
             deliverResultToReceiver(Constants.FAILURE_RESULT, null);
         } else {
             Address address = addresses.get(0);
-            ArrayList<String> addressFragments = new ArrayList<>();
-            // Fetch the address lines using getAddressLine,
-            // join them, and send them to the thread.
-            for (int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
-                addressFragments.add(address.getAddressLine(i));
-            }
             deliverResultToReceiver(Constants.SUCCESS_RESULT, address);
         }
     }

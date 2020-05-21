@@ -56,14 +56,12 @@ public class ForgotPasswordViewModel extends BaseViewModel {
         return repository.forgotPasswordRequest(forgotPaswwordRequest);
     }
 
-    public LiveData<BaseResponse> forgotUpdate(String phoneNo, String otp, String lang) {
+    public LiveData<BaseResponse> forgotUpdate(String token, String userId) {
         ForgotPaswwordRequest forgotPaswwordRequest = new ForgotPaswwordRequest();
-        forgotPaswwordRequest.setUserid(PreferenceUtils.getValueString(resourceProvider.getActivityContext(),
-                PreferenceUtils.USER_ID_KEY));
-        forgotPaswwordRequest.setToken(PreferenceUtils.getValueString(resourceProvider.getActivityContext(),
-                PreferenceUtils.USER_LOGIIN_TOKEN));
+        forgotPaswwordRequest.setToken(token);
+        forgotPaswwordRequest.setUserId(userId);
         forgotPaswwordRequest.setPassword(password.getValue());
-
+        forgotPaswwordRequest.setLang(resourceProvider.getCountryLang());
         return repository.forgotUpdate(forgotPaswwordRequest);
     }
 
@@ -72,7 +70,7 @@ public class ForgotPasswordViewModel extends BaseViewModel {
         forgotPaswwordRequest.setCp(oldPassword.getValue());
         forgotPaswwordRequest.setNp(password.getValue());
         forgotPaswwordRequest.setCnp(confirmPassword.getValue());
-        forgotPaswwordRequest.setUserid(id);
+        forgotPaswwordRequest.setId(id);
         return repository.changePassword(forgotPaswwordRequest);
     }
 

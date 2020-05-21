@@ -99,22 +99,24 @@ public class HomeScreenActivity extends BaseActivity
     }
 
     private void fetchCityList() {
-        viewModel.getCityList().observe(this, cityListModelResponse -> {
-            if (cityListModelResponse != null && cityListModelResponse.isStatus()) {
-                List<CityListModelResponse.City> cityList = cityListModelResponse.getCities();
-                getCityNameList(cityList);
-            }
-        });
+        viewModel.getCityList(resourProvider.getCountryLang())
+                .observe(this, cityListModelResponse -> {
+                    if (cityListModelResponse != null && cityListModelResponse.isStatus()) {
+                        List<CityListModelResponse.City> cityList = cityListModelResponse.getCities();
+                        getCityNameList(cityList);
+                    }
+                });
     }
 
     private void fetchCategoryList() {
-        viewModel.getCategoryList().observe(this, cityListModelResponse -> {
-            if (cityListModelResponse != null && cityListModelResponse.isStatus()) {
-                List<CityListModelResponse.Category> categoryList = cityListModelResponse
-                        .getCategories();
-                getCategoryNameList(categoryList);
-            }
-        });
+        viewModel.getCategoryList(resourProvider.getCountryLang())
+                .observe(this, cityListModelResponse -> {
+                    if (cityListModelResponse != null && cityListModelResponse.isStatus()) {
+                        List<CityListModelResponse.Category> categoryList = cityListModelResponse
+                                .getCategories();
+                        getCategoryNameList(categoryList);
+                    }
+                });
     }
 
     private void getCityNameList(List<CityListModelResponse.City> cityList) {
@@ -326,15 +328,16 @@ public class HomeScreenActivity extends BaseActivity
 
     private void fetchCategoryBasedProducts(String catId) {
         showProgressDialog();
-        viewModel.getCategoryBasedProducts(catId).observe(this, productModelResponse -> {
-            hideProgressDialog();
-            if (productModelResponse != null && productModelResponse.getProductList() != null &&
-                    productModelResponse.getProductList().size() > 0) {
-                viewModel.getProductList().setValue(productModelResponse.getProductList());
-            } else {
-                ToastUtils.getInstance(this).showLongToast(getString(R.string.something_went_wrong));
-            }
-        });
+        viewModel.getCategoryBasedProducts(resourProvider.getCountryLang(), catId)
+                .observe(this, productModelResponse -> {
+                    hideProgressDialog();
+                    if (productModelResponse != null && productModelResponse.getProductList() != null &&
+                            productModelResponse.getProductList().size() > 0) {
+                        viewModel.getProductList().setValue(productModelResponse.getProductList());
+                    } else {
+                        ToastUtils.getInstance(this).showLongToast(getString(R.string.something_went_wrong));
+                    }
+                });
     }
 
     private void updateCartCountTxt(int count) {
@@ -527,7 +530,7 @@ public class HomeScreenActivity extends BaseActivity
         showProgressDialog();
         new Handler().postDelayed(() -> {
             hideProgressDialog();
-            PreferenceUtils.setValueInt(this, USER_ID_KEY, 0);
+            PreferenceUtils.setValueString(this, USER_ID_KEY, null);
             PreferenceUtils.setValueString(this, USER_LOGIIN_TOKEN, null);
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
