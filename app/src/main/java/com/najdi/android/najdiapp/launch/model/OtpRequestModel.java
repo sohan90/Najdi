@@ -5,6 +5,11 @@ public class OtpRequestModel {
     private String temp_id;
     private String lang;
     private String token;
+    private String phone;
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public void setToken(String token) {
         this.token = token;

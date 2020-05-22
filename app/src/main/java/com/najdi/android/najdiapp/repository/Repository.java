@@ -229,7 +229,7 @@ public class Repository {
         productId.setId(id);
         productId.setLang(resourceProvider.getCountryLang());
         MutableLiveData<BaseResponse> liveData = new MutableLiveData<>();
-        RetrofitClient.getInstance().getIndividualProduct(productId)
+        RetrofitClient.getInstance().getIndividualProduct(id, resourceProvider.getCountryLang())
                 .enqueue(new RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<BaseResponse>() {
                     @Override
                     public void onSuccesResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
@@ -419,9 +419,35 @@ public class Repository {
         return liveData;
     }
 
+    public LiveData<BaseResponse> resendOtpForChangeMobileNo(OtpRequestModel otpRequestModel) {
+        MutableLiveData<BaseResponse> liveData = new MutableLiveData<>();
+        String token = PreferenceUtils.getValueString(resourceProvider.getActivityContext(),
+                PreferenceUtils.USER_LOGIIN_TOKEN);
+        RetrofitClient.getInstance().resendOtpForChangeMobileNo(token, otpRequestModel).enqueue(new
+                RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<BaseResponse>() {
+            @Override
+            public void onSuccesResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
+                if (baseResponse != null) {
+                    liveData.setValue(baseResponse);
+                }
+            }
+
+            @Override
+            public void onFailurResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
+                if (baseResponse != null) {
+                    baseResponse.handleError(resourceProvider.getAppContext());
+                }
+                liveData.setValue(null);
+            }
+        }));
+        return liveData;
+    }
+
     public LiveData<BaseResponse> forgotresendOtp(OtpRequestModel otpRequestModel) {
         MutableLiveData<BaseResponse> liveData = new MutableLiveData<>();
-        RetrofitClient.getInstance().forgotResendOtp(otpRequestModel).enqueue(new
+        String token = PreferenceUtils.getValueString(resourceProvider.getActivityContext(),
+                PreferenceUtils.USER_LOGIIN_TOKEN);
+        RetrofitClient.getInstance().forgotResendOtp(token, otpRequestModel).enqueue(new
                 RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<BaseResponse>() {
             @Override
             public void onSuccesResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
@@ -675,7 +701,9 @@ public class Repository {
 
     public LiveData<BaseResponse> mobileChange(ForgotPaswwordRequest forgotPaswwordRequest) {
         MutableLiveData<BaseResponse> liveData = new MutableLiveData<>();
-        RetrofitClient.getInstance().mobileChange(forgotPaswwordRequest).enqueue(new
+        String token = PreferenceUtils.getValueString(resourceProvider.getActivityContext(),
+                PreferenceUtils.USER_LOGIIN_TOKEN);
+        RetrofitClient.getInstance().mobileChange(token, forgotPaswwordRequest).enqueue(new
                 RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<BaseResponse>() {
             @Override
             public void onSuccesResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
@@ -697,7 +725,9 @@ public class Repository {
 
     public LiveData<BaseResponse> mobileChangeVerify(ForgotPaswwordRequest forgotPaswwordRequest) {
         MutableLiveData<BaseResponse> liveData = new MutableLiveData<>();
-        RetrofitClient.getInstance().mobileChangeVerify(forgotPaswwordRequest).enqueue(new
+        String token = PreferenceUtils.getValueString(resourceProvider.getActivityContext(),
+                PreferenceUtils.USER_LOGIIN_TOKEN);
+        RetrofitClient.getInstance().mobileChangeVerify(token, forgotPaswwordRequest).enqueue(new
                 RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<BaseResponse>() {
             @Override
             public void onSuccesResponse(Call<BaseResponse> call, BaseResponse baseResponse) {

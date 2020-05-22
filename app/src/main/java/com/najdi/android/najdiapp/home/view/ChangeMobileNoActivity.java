@@ -6,7 +6,6 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.najdi.android.najdiapp.R;
@@ -21,6 +20,7 @@ import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
 import static com.najdi.android.najdiapp.launch.view.OtpActivity.EXTRA_NEW_MOBILE_NO;
 import static com.najdi.android.najdiapp.launch.view.OtpActivity.EXTRA_SCREEN_TYPE;
+import static com.najdi.android.najdiapp.launch.view.OtpActivity.EXTRA_SIGN_UP_TEMP_ID;
 
 public class ChangeMobileNoActivity extends BaseActivity {
 
@@ -41,25 +41,33 @@ public class ChangeMobileNoActivity extends BaseActivity {
         binding.back.setOnClickListener(v -> onBackPressed());
         binding.update.setOnClickListener(v -> {
             showProgressDialog();
-            LiveData<BaseResponse> liveData = viewModel.updateMobileNo(resourProvider.getCountryLang());
+            String userId = PreferenceUtils.getValueString(this, PreferenceUtils.USER_ID_KEY);
+            LiveData<BaseResponse> liveData = viewModel.updateMobileNo(resourProvider
+                    .getCountryLang(), userId);
             liveData.observe(this, baseResponse -> {
                 hideProgressDialog();
-                if (baseResponse != null && baseResponse.isStatus()) {
+                if (baseResponse == null) return;
+                if (baseResponse.isStatus()) {
                     DialogUtil.showAlertDialog(this, baseResponse.getMessage(),
                             (dialog, which) -> {
                                 dialog.dismiss();
                                 finish();
-                                launchOtpActivity(viewModel.getNewMobileNo());
+                                launchOtpActivity(baseResponse.getTempId(),
+                                        viewModel.getNewMobileNo().getValue());
                             });
+                } else {
+                    DialogUtil.showAlertDialog(this, baseResponse.getMessage(),
+                            (d, which) -> d.dismiss());
                 }
             });
         });
     }
 
-    private void launchOtpActivity(MutableLiveData<String> newMobileNo) {
+    private void launchOtpActivity(String tempId, String newMobileNO) {
         Intent intent = new Intent(this, OtpActivity.class);
         intent.putExtra(EXTRA_SCREEN_TYPE, Constants.OtpScreen.CHANGE_MOBILE_VERIFY);
-        intent.putExtra(EXTRA_NEW_MOBILE_NO, newMobileNo.getValue());
+        intent.putExtra(EXTRA_NEW_MOBILE_NO, newMobileNO);
+        intent.putExtra(EXTRA_SIGN_UP_TEMP_ID, tempId);
         startActivity(intent);
     }
 

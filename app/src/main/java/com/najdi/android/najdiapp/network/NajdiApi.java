@@ -7,7 +7,6 @@ import com.najdi.android.najdiapp.home.model.CartRequest;
 import com.najdi.android.najdiapp.home.model.CityListModelResponse;
 import com.najdi.android.najdiapp.home.model.ContactUsRequest;
 import com.najdi.android.najdiapp.home.model.ForgotPaswwordRequest;
-import com.najdi.android.najdiapp.home.model.ProductId;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.home.model.ProductModelResponse;
 import com.najdi.android.najdiapp.home.model.UpdateProfileModelRequest;
@@ -63,9 +62,9 @@ public interface NajdiApi {
     Call<BaseResponse> removeCartItem(@Header("_token")String value,
                                       @Body HashMap<String, String> cartObj);
 
-    @POST("product_details")
+    @GET("product_details")
     @Headers({"Content-Type:application/json"})
-    Call<BaseResponse> getIndividualProduct(@Body ProductId productId);
+    Call<BaseResponse> getIndividualProduct(@Query("id")String id , @Query("lang") String lang);
 
     @POST("place_order")
     @Headers({"Content-Type:application/json"})
@@ -84,13 +83,19 @@ public interface NajdiApi {
     @Headers({"Content-Type:application/json"})
     Call<BaseResponse> verifyOtp(@Body OtpRequestModel requestModel);
 
-    @POST("customapi/resend")
-    @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
+    @POST("app_resend_otp_signup")
+    @Headers({"Content-Type:application/json"})
     Call<BaseResponse> resendOtp(@Body OtpRequestModel requestModel);
 
-    @POST("customapi/forgot/resend")
-    @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
-    Call<BaseResponse> forgotResendOtp(@Body OtpRequestModel requestModel);
+    @POST("app_resend_otp_change_phone")
+    @Headers({"Content-Type:application/json"})
+    Call<BaseResponse> resendOtpForChangeMobileNo(@Header("_token")String value,
+                                                  @Body OtpRequestModel requestModel);
+
+    @POST("app_resend_otp_forgot")
+    @Headers({"Content-Type:application/json"})
+    Call<BaseResponse> forgotResendOtp(@Header("_token")String value,
+                                       @Body OtpRequestModel requestModel);
 
     @POST("app_login")
     @Headers({"Content-Type:application/json"})
@@ -124,13 +129,15 @@ public interface NajdiApi {
     @Headers({"Content-Type:application/json"})
     Call<BaseResponse> forgotUpdate(@Body ForgotPaswwordRequest request);
 
-    @POST("customapi/mobile_change")
-    @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
-    Call<BaseResponse> mobileChange(@Body ForgotPaswwordRequest request);
+    @POST("app_change_phone")
+    @Headers({"Content-Type:application/json"})
+    Call<BaseResponse>  mobileChange(@Header("_token")String value,
+                                     @Body ForgotPaswwordRequest request);
 
-    @POST("customapi/mobile_change_verify")
-    @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
-    Call<BaseResponse> mobileChangeVerify(@Body ForgotPaswwordRequest request);
+    @POST("app_verify_change_phone")
+    @Headers({"Content-Type:application/json"})
+    Call<BaseResponse> mobileChangeVerify(@Header("_token")String value,
+                                          @Body ForgotPaswwordRequest request);
 
     @POST("app_user_change_password")
     @Headers({"Content-Type:application/json"})

@@ -120,20 +120,25 @@ public class OtpActivity extends BaseActivity {
         showProgressDialog();
         LiveData<BaseResponse> liveData;
         if (screenType == CHANGE_MOBILE_VERIFY) {
-            liveData = viewModel.resendOtp(newMobileNo);
+            liveData = viewModel.resendOtpForChangeMobileNo(tempId);
 
         } else if (screenType == FORGOT_PASSWORD_SCREEN) {
             liveData = viewModel.forgotresendOtp();
         } else {
-            liveData = viewModel.resendOtp();
+            liveData = viewModel.resendOtp(tempId);
         }
         liveData.observe(this, baseResponse -> {
             hideProgressDialog();
             if (baseResponse != null) {
-                startTimerFor60s();
-                String phone = PreferenceUtils.getValueString(this, PreferenceUtils.USER_PHONE_NO_KEY);
-                String msg = getString(R.string.verification_password_sent_to, phone);
-                DialogUtil.showAlertDialog(this, msg, (dialog, which) -> dialog.dismiss());
+                if (baseResponse.isStatus()) {
+                    startTimerFor60s();
+                    String phone = PreferenceUtils.getValueString(this, PreferenceUtils.USER_PHONE_NO_KEY);
+                    String msg = getString(R.string.verification_password_sent_to, phone);
+                    DialogUtil.showAlertDialog(this, msg, (dialog, which) -> dialog.dismiss());
+                } else {
+                    DialogUtil.showAlertDialog(this, baseResponse.getMessage(),
+                            (dialog, which) -> dialog.dismiss());
+                }
 
             }
         });
@@ -147,8 +152,7 @@ public class OtpActivity extends BaseActivity {
 
         } else if (screenType == CHANGE_MOBILE_VERIFY) {
 
-            liveData = viewModel.mobileNoverify(PreferenceUtils.getValueString(this,
-                    PreferenceUtils.USER_PHONE_NO_KEY), newMobileNo);// change mobile no verification
+            liveData = viewModel.mobileNoverify(tempId);// change mobile no verification
         } else {
 
             String token = PreferenceUtils.getValueString(this, PreferenceUtils.USER_LOGIIN_TOKEN);
@@ -163,7 +167,12 @@ public class OtpActivity extends BaseActivity {
                 } else if (screenType == CHANGE_MOBILE_VERIFY) {
                     PreferenceUtils.setValueString(this,
                             PreferenceUtils.USER_PHONE_NO_KEY, newMobileNo);
-                    finish();
+                    DialogUtil.showAlertDialog(this, baseResponse.getMessage(), (d, w) -> {
+                        d.dismiss();
+                        finish();
+
+                    });
+
                 } else {
                     launchChangePasswordScreen(baseResponse.getToken(), baseResponse.getUserid());
                     finish();// forgot password flow

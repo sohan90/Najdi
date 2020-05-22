@@ -2,13 +2,13 @@ package com.najdi.android.najdiapp.home.viewmodel;
 
 import android.app.Application;
 
-import com.najdi.android.najdiapp.common.BaseResponse;
-import com.najdi.android.najdiapp.common.BaseViewModel;
-import com.najdi.android.najdiapp.home.model.ForgotPaswwordRequest;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+
+import com.najdi.android.najdiapp.common.BaseResponse;
+import com.najdi.android.najdiapp.common.BaseViewModel;
+import com.najdi.android.najdiapp.home.model.ForgotPaswwordRequest;
 
 public class ChangeMobileNoViewModel extends BaseViewModel {
     MutableLiveData<String> newMobileNo = new MutableLiveData<>();
@@ -27,11 +27,11 @@ public class ChangeMobileNoViewModel extends BaseViewModel {
         super(application);
     }
 
-    public LiveData<BaseResponse> updateMobileNo(String lang) {
+    public LiveData<BaseResponse> updateMobileNo(String lang, String userId) {
         ForgotPaswwordRequest forgotPaswwordRequest = new ForgotPaswwordRequest();
-        forgotPaswwordRequest.setMobile(oldMobileNo.getValue());
-        forgotPaswwordRequest.setNew_mobile(newMobileNo.getValue());
+        forgotPaswwordRequest.setMobile(newMobileNo.getValue());
         forgotPaswwordRequest.setLang(lang);
+        forgotPaswwordRequest.setUserId(userId);
         return repository.mobileChange(forgotPaswwordRequest);
     }
 

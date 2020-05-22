@@ -66,16 +66,15 @@ public class OtpViewModel extends BaseViewModel {
         OtpRequestModel otpRequestModel = new OtpRequestModel();
         otpRequestModel.setTempId(tempId);
         otpRequestModel.setOtp(otp);
-        otpRequestModel.setToken(token);
-        otpRequestModel.setLang(resourceProvider.getCountryLang());
+        // otpRequestModel.setToken(token);
+        // otpRequestModel.setLang(resourceProvider.getCountryLang());
         return repository.verifyForgotOtp(otpRequestModel);
     }
 
-    public LiveData<BaseResponse> mobileNoverify(String mobile, String newMobileNo) {
+    public LiveData<BaseResponse> mobileNoverify(String tempId) {
         String otp = one.getValue() + two.getValue() + three.getValue() + four.getValue();
         ForgotPaswwordRequest forgotPaswwordRequest = new ForgotPaswwordRequest();
-        forgotPaswwordRequest.setMobile(mobile);
-        forgotPaswwordRequest.setNew_mobile(newMobileNo);
+        forgotPaswwordRequest.setTempId(tempId);
         forgotPaswwordRequest.setOtp(otp);
         forgotPaswwordRequest.setLang(resourceProvider.getCountryLang());
         return repository.mobileChangeVerify(forgotPaswwordRequest);
@@ -92,30 +91,27 @@ public class OtpViewModel extends BaseViewModel {
         return repository.loginToken(loginRequestModel);
     }
 
-    public LiveData<BaseResponse> resendOtp() {
-        String phoneNo = PreferenceUtils.getValueString(resourceProvider.getAppContext(),
-                PreferenceUtils.USER_PHONE_NO_KEY);
+    public LiveData<BaseResponse> resendOtp(String temp_id) {
         OtpRequestModel otpRequestModel = new OtpRequestModel();
-        //otpRequestModel.setMobile(phoneNo);
-        //otpRequestModel.setLang(resourceProvider.getCountryLang());
+        otpRequestModel.setTempId(temp_id);
+        otpRequestModel.setLang(resourceProvider.getCountryLang());
         return repository.resendOtp(otpRequestModel);
+    }
+
+    public LiveData<BaseResponse> resendOtpForChangeMobileNo(String temp_id) {
+        OtpRequestModel otpRequestModel = new OtpRequestModel();
+        otpRequestModel.setTempId(temp_id);
+        otpRequestModel.setLang(resourceProvider.getCountryLang());
+        return repository.resendOtpForChangeMobileNo(otpRequestModel);
     }
 
     public LiveData<BaseResponse> forgotresendOtp() {
         String phoneNo = PreferenceUtils.getValueString(resourceProvider.getAppContext(),
                 PreferenceUtils.USER_PHONE_NO_KEY);
         OtpRequestModel otpRequestModel = new OtpRequestModel();
-        //otpRequestModel.setMobile(phoneNo);
-        //otpRequestModel.setLang(resourceProvider.getCountryLang());
+        otpRequestModel.setPhone(phoneNo);
+        otpRequestModel.setLang(resourceProvider.getCountryLang());
         return repository.forgotresendOtp(otpRequestModel);
-    }
-
-
-    public LiveData<BaseResponse> resendOtp(String newMobileNo) {
-        OtpRequestModel otpRequestModel = new OtpRequestModel();
-        //otpRequestModel.setMobile(newMobileNo);
-        //otpRequestModel.setLang(resourceProvider.getCountryLang());
-        return repository.resendOtp(otpRequestModel);
     }
 
     public void setNewMobile(String newMobileNo) {

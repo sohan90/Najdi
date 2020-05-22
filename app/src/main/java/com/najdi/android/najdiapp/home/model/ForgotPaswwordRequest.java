@@ -15,6 +15,11 @@ public class ForgotPaswwordRequest {
     String np;
     String cnp;
     String user_id;
+    String temp_id;
+
+    public void setTempId(String tempId) {
+        this.temp_id = tempId;
+    }
 
     public void setUserId(String user_id) {
         this.user_id = user_id;
