@@ -2,6 +2,7 @@ package com.najdi.android.najdiapp.home.view;
 
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseFragment;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.databinding.ContactUsBinding;
+import com.najdi.android.najdiapp.home.model.User;
 import com.najdi.android.najdiapp.home.viewmodel.ContactUsViewModel;
 import com.najdi.android.najdiapp.home.viewmodel.HomeScreenViewModel;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
@@ -41,7 +43,24 @@ public class ContactUsFragment extends BaseFragment implements TextWatcher {
         initializeViewModel();
         bindViewModel();
         initClickListner();
+        fetchUserDetail();
         return binding.getRoot();
+    }
+
+    private void fetchUserDetail() {
+        if (getActivity() == null) return;
+        String userId = PreferenceUtils.getValueString(getActivity(), PreferenceUtils.USER_ID_KEY);
+        if (!TextUtils.isEmpty(userId)) {//Logged in user flow
+            showProgressDialog();
+            viewModel.getUserDetail(userId).observe(getViewLifecycleOwner(), baseResponse -> {
+                hideProgressDialog();
+                if (baseResponse.isStatus()) {
+                    User user = baseResponse.getUser();
+                    viewModel.setDetail(user);
+
+                }
+            });
+        }
     }
 
     private void initiazeActivityViewModel() {
@@ -66,25 +85,32 @@ public class ContactUsFragment extends BaseFragment implements TextWatcher {
         binding.message.addTextChangedListener(this);
 
         binding.send.setOnClickListener(v -> {
-
-            if (getActivity() == null) return;
-
-            String userId = PreferenceUtils.getValueString(getActivity(), PreferenceUtils.USER_ID_KEY);
-            String phoneNo = PreferenceUtils.getValueString(getActivity(), PreferenceUtils.USER_PHONE_NO_KEY);
-            LiveData<BaseResponse> liveData = viewModel.contactUs(phoneNo, userId);
-            if (liveData != null) {
-                showProgressDialog();
-                liveData.observe(getViewLifecycleOwner(), baseResponse -> {
-                    hideProgressDialog();
-                    if (baseResponse != null && baseResponse.isStatus()) {
-                        viewModel.getMessage().setValue("");
-                        DialogUtil.showAlertDialog(getActivity(),
-                                getString(R.string.message_success), (dialog, which) ->
-                                        dialog.dismiss());
-                    }
-                });
+            if (viewModel.validateFields()) {
+                sendContactDetail();
+            } else {
+                DialogUtil.showAlertDialog(getActivity(), getString(R.string.please_fill),
+                        (d, w) -> d.dismiss());
             }
         });
+    }
+
+    private void sendContactDetail() {
+        if (getActivity() == null) return;
+
+        String userId = PreferenceUtils.getValueString(getActivity(), PreferenceUtils.USER_ID_KEY);
+        LiveData<BaseResponse> liveData = viewModel.contactUs(userId);
+        if (liveData != null) {
+            showProgressDialog();
+            liveData.observe(getViewLifecycleOwner(), baseResponse -> {
+                hideProgressDialog();
+                if (baseResponse != null && baseResponse.isStatus()) {
+                    viewModel.getMessage().setValue("");
+                    DialogUtil.showAlertDialog(getActivity(),
+                            getString(R.string.message_success), (dialog, which) ->
+                                    dialog.dismiss());
+                }
+            });
+        }
     }
 
     @Override

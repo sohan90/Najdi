@@ -35,10 +35,6 @@ public interface NajdiApi {
     @Headers({"Content-Type:application/json"})
     Call<BaseResponse> registerUser(@Body SignupRequestModel signupRequestModel);
 
-    @POST("https://najdisheep.com/temp/livetest/wp-json/jwt-auth/v1/token")
-    @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
-    Call<BaseResponse> loginUser(@Query("lang") String lang, @Body LoginRequestModel loginRequestModel);
-
     @POST("list_products_cities")
     @Headers({"Content-Type:application/json"})
     Call<ProductModelResponse> getCityBasedProducts(@Header("_token")String value,
@@ -179,4 +175,8 @@ public interface NajdiApi {
     @POST("app_add_to_cart")
     @Headers({"Content-Type:application/json"})
     Call<BaseResponse> addToCart(@Header("_token") String value, @Body CartRequest cartRequest);
+
+    @POST("app_get_user_details")
+    @Headers({"Content-Type:application/json"})
+    Call<BaseResponse> getUserDetail(@Header("_token") String value, @Body UserId userId);
 }

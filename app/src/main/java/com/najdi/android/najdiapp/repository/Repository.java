@@ -58,24 +58,6 @@ public class Repository {
         return liveData;
     }
 
-    public LiveData<BaseResponse> loginUser(LoginRequestModel loginRequestModel) {
-        MutableLiveData<BaseResponse> liveData = new MutableLiveData<>();
-        RetrofitClient.getInstance().loginUser(resourceProvider.getCountryLang(),
-                loginRequestModel).enqueue(new RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<BaseResponse>() {
-            @Override
-            public void onSuccesResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
-                liveData.setValue(baseResponse);
-            }
-
-            @Override
-            public void onFailurResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
-                baseResponse.handleError(resourceProvider.getAppContext());
-                liveData.setValue(null);
-            }
-        }));
-        return liveData;
-    }
-
     public LiveData<ProductModelResponse> getProducts() {
         MutableLiveData<ProductModelResponse> liveData = new MutableLiveData<>();
         RetrofitClient.getInstance().getProducts(resourceProvider.getCountryLang()).enqueue(
@@ -838,6 +820,31 @@ public class Repository {
                         liveData.setValue(null);
                     }
                 }));
+        return liveData;
+    }
+
+    public LiveData<BaseResponse> getUserDetail(String userId) {
+        UserId userId1 = new UserId();
+        userId1.setUserId(userId);
+        userId1.setLang(resourceProvider.getCountryLang());
+        MutableLiveData<BaseResponse> liveData = new MutableLiveData<>();
+        String token = PreferenceUtils.getValueString(resourceProvider.getActivityContext(),
+                PreferenceUtils.USER_LOGIIN_TOKEN);
+        RetrofitClient.getInstance().getUserDetail(token, userId1).enqueue(new
+                RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<BaseResponse>() {
+            @Override
+            public void onSuccesResponse(Call<BaseResponse> call, BaseResponse orderResponses) {
+                if (orderResponses != null) {
+                    liveData.setValue(orderResponses);
+                }
+            }
+
+            @Override
+            public void onFailurResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
+                baseResponse.handleError(resourceProvider.getAppContext());
+                liveData.setValue(null);
+            }
+        }));
         return liveData;
     }
 }

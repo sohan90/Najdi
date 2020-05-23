@@ -145,6 +145,7 @@
                     android:textColor="@color/white"
                     android:textStyle="bold" />
 
+
                 <Button
                     android:id="@+id/guest_login"
                     android:layout_width="match_parent"
@@ -155,7 +156,7 @@
                     android:textAllCaps="false"
                     android:textColor="@color/green_default"
                     android:textStyle="bold"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"

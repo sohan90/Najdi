@@ -3,6 +3,7 @@ package com.najdi.android.najdiapp.home.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -63,6 +64,7 @@ import static com.najdi.android.najdiapp.common.Constants.ScreeNames.SHOPPING_CA
 import static com.najdi.android.najdiapp.utitility.PreferenceUtils.USER_ID_KEY;
 import static com.najdi.android.najdiapp.utitility.PreferenceUtils.USER_LOGIIN_TOKEN;
 import static com.najdi.android.najdiapp.utitility.PreferenceUtils.USER_NAME_KEY;
+import static com.najdi.android.najdiapp.utitility.PreferenceUtils.USER_SELECTED_CITY;
 
 public class HomeScreenActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, Observer {
@@ -99,13 +101,18 @@ public class HomeScreenActivity extends BaseActivity
     }
 
     private void fetchCityList() {
-        viewModel.getCityList(resourProvider.getCountryLang())
-                .observe(this, cityListModelResponse -> {
-                    if (cityListModelResponse != null && cityListModelResponse.isStatus()) {
-                        List<CityListModelResponse.City> cityList = cityListModelResponse.getCities();
-                        getCityNameList(cityList);
-                    }
-                });
+        String selectedCityId = PreferenceUtils.getValueString(this, USER_SELECTED_CITY);
+        if (TextUtils.isEmpty(selectedCityId)) {
+            viewModel.getCityList(resourProvider.getCountryLang())
+                    .observe(this, cityListModelResponse -> {
+                        if (cityListModelResponse != null && cityListModelResponse.isStatus()) {
+                            List<CityListModelResponse.City> cityList = cityListModelResponse.getCities();
+                            getCityNameList(cityList);
+                        }
+                    });
+        } else {
+            fetchCityBasedProducts(selectedCityId);
+        }
     }
 
     private void fetchCategoryList() {
@@ -143,9 +150,14 @@ public class HomeScreenActivity extends BaseActivity
                 binding.include.containerLyt.container, strings, pos -> {
                     binding.include.blurLyt.setAlpha(0f);
                     CityListModelResponse.City city = cityList.get(pos);
+                    saveCityId(city.getId());
                     fetchCityBasedProducts(city.getId());
                 });
 
+    }
+
+    private void saveCityId(String name) {
+        PreferenceUtils.setValueString(this, USER_SELECTED_CITY, name);
     }
 
     private void subscribeForCartCount() {

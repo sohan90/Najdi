@@ -5,6 +5,7 @@ import android.content.Context;
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.checkout.model.OrderStatus;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
+import com.najdi.android.najdiapp.home.model.User;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.LocaleUtitlity;
 import com.najdi.android.najdiapp.utitility.ToastUtils;
@@ -14,19 +15,24 @@ import java.util.List;
 import static com.najdi.android.najdiapp.common.Constants.ARABIC_LAN;
 
 public class BaseResponse {
-    String code;
-    String message;
-    int total_items;
-    List<BankResponse> data;
+    private String code;
+    private String message;
+    private int total_items;
+    private List<BankResponse> data;
 
     //new changes
-    String temp_id;
-    boolean status;
-    String user_id;
-    String _token;//user token
-    String token;
-    ProductListResponse product;
-    List<OrderStatus> orders;
+    private String temp_id;
+    private boolean status;
+    private String user_id;
+    private String _token;//user token
+    private String token;
+    private ProductListResponse product;
+    private List<OrderStatus> orders;
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
 
     public List<OrderStatus> getOrders() {
         return orders;
@@ -72,67 +78,7 @@ public class BaseResponse {
         return data;
     }
 
-    public class Data {
-        int error;
-        int status;
-        String token;
-        String user_id;
-        String user_email;
-        String user_nicename;
-        String user_status;
-        String user_url;
-        List<BankResponse> data;
-        int count;
-        String message;
-
-
-        public int getCount() {
-            return count;
-        }
-
-        public List<BankResponse> getData() {
-            return data;
-        }
-
-        public int getError() {
-            return error;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public String getToken() {
-            return token;
-        }
-
-        public String getUserId() {
-            return user_id;
-        }
-
-        public String getUserEmail() {
-            return user_email;
-        }
-
-        public String getUserNicename() {
-            return user_nicename;
-        }
-
-        public String getUserStatus() {
-            return user_status;
-        }
-
-        public String getUserUrl() {
-            return user_url;
-        }
-
-        public int getStatus() {
-            return status;
-        }
-    }
-
-
-    public class BankResponse {
+    public static class BankResponse {
         String account_holder_name;
         String account_number;
         String bank_name;

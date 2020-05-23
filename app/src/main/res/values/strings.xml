@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name"> نجدي
        للذبائح</string>
     <string name="welcome_msg">WELCOME TO \n NAJDI</string>
@@ -161,5 +161,5 @@
     <string name="password_upd_msg">Password updated successfully</string>
     <string name="iban">IBAN</string>
     <string name="password_does_not_matched">Password does not matched</string>
-    <string name="enter_your_location">Enter your location</string>
+    <string name="enter_your_location" tools:ignore="MissingTranslation">Enter your location</string>
 </resources>
