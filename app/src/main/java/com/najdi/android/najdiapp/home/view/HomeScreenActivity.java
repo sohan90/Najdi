@@ -79,6 +79,7 @@ public class HomeScreenActivity extends BaseActivity
     private ProductDetailBundleModel productDetailBundleModel;
     private List<String> categoryStrNameList;
     private List<CityListModelResponse.Category> categoryList;
+    private View filterView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -237,11 +238,13 @@ public class HomeScreenActivity extends BaseActivity
         int containerId = binding.include.containerLyt.container.getId();
         Fragment fragment;
         String fragmentTag = null;
+        hideFitlerView();
         switch (screenName) {
             case PRODUCTS:
                 FragmentHelper.popBackStack(this, PRODUCT_LIST_FRAG);
                 fragment = ProductListFragment.createInstance();
                 fragmentTag = Constants.FragmentTags.PRODUCT_LIST_FRAG;
+                showFilterView();
                 unlockDrawer();
                 break;
 
@@ -295,6 +298,20 @@ public class HomeScreenActivity extends BaseActivity
         }
         FragmentHelper.replaceFragment(this, fragment, fragmentTag,
                 true, containerId);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        unlockDrawer();
+    }
+
+    private void showFilterView() {
+        filterView.setVisibility(View.VISIBLE);
+    }
+
+    private void hideFitlerView() {
+        filterView.setVisibility(View.GONE);
     }
 
     private void subscribeForLaunchProductDetail() {
@@ -368,7 +385,7 @@ public class HomeScreenActivity extends BaseActivity
         toolBarTitle = viewActionBar.findViewById(R.id.title);
         cartImageLyt = viewActionBar.findViewById(R.id.cartImageLyt);
         cartImageLyt.setOnClickListener(v -> launchCartScreen());
-        View filterView = viewActionBar.findViewById(R.id.filter);
+        filterView = viewActionBar.findViewById(R.id.filter);
         filterView.setOnClickListener(v -> {
             if (categoryStrNameList == null) return;
             binding.include.blurLyt.setAlpha(0.5f);

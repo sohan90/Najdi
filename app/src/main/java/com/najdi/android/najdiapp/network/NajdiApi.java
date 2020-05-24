@@ -1,6 +1,8 @@
 package com.najdi.android.najdiapp.network;
 
 import com.najdi.android.najdiapp.BuildConfig;
+import com.najdi.android.najdiapp.checkout.model.CouponRequest;
+import com.najdi.android.najdiapp.checkout.model.CouponResponse;
 import com.najdi.android.najdiapp.checkout.model.OrderResponse;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.home.model.CartRequest;
@@ -179,4 +181,13 @@ public interface NajdiApi {
     @POST("app_get_user_details")
     @Headers({"Content-Type:application/json"})
     Call<BaseResponse> getUserDetail(@Header("_token") String value, @Body UserId userId);
+
+    @POST("app_apply_coupon")
+    @Headers({"Content-Type:application/json"})
+    Call<CouponResponse> applyCoupon(@Header("_token") String value, @Body CouponRequest couponRequest);
+
+    @POST("app_remove_coupon")
+    @Headers({"Content-Type:application/json"})
+    Call<BaseResponse> removeCoupon(@Header("_token") String value, @Body CouponRequest couponRequest);
+
 }

@@ -29,7 +29,9 @@ import com.najdi.android.najdiapp.launch.model.BillingAddress;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
-public class ShippingDetailFragment extends BaseFragment implements OnMapReadyCallback {
+public class ShippingDetailFragment extends BaseFragment implements OnMapReadyCallback
+        , GoogleMap.OnCameraIdleListener {
+
     private static final int DEFAULT_ZOOM_LEVEL = 14;
     private FragmentCheckoutStep1Binding binding;
     private CheckoutViewModel activityViewModel;
@@ -104,13 +106,17 @@ public class ShippingDetailFragment extends BaseFragment implements OnMapReadyCa
                 draggedMarker = marker;
                 map.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(),
                         DEFAULT_ZOOM_LEVEL));
-                isDragging = true;
-                Location location = new Location("");
-                location.setLatitude(marker.getPosition().latitude);
-                location.setLongitude(marker.getPosition().longitude);
-                activity.handleLocation(location);
+                getAddressFrmLatLng(marker.getPosition());
             }
         });
+    }
+
+    private void getAddressFrmLatLng(LatLng latLng) {
+        isDragging = true;
+        Location location = new Location("");
+        location.setLatitude(latLng.latitude);
+        location.setLongitude(latLng.longitude);
+        activity.handleLocation(location);
     }
 
     private void initMapSettings() {
@@ -150,10 +156,10 @@ public class ShippingDetailFragment extends BaseFragment implements OnMapReadyCa
                 LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(latLng);
-                map.addMarker(markerOptions).setDraggable(true);
+                //map.addMarker(markerOptions).setDraggable(true);
                 map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                 map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM_LEVEL));
-
+                map.setOnCameraIdleListener(this);
             }
             isDragging = false;
             viewModel.updateAddress(address);
@@ -193,5 +199,11 @@ public class ShippingDetailFragment extends BaseFragment implements OnMapReadyCa
         String phoneNo = PreferenceUtils.getValueString(getActivity(), PreferenceUtils.USER_PHONE_NO_KEY);
         String email = PreferenceUtils.getValueString(getActivity(), PreferenceUtils.USER_EMAIL_KEY);
         viewModel.updatePersonalInfo(name, email, phoneNo);
+    }
+
+    @Override
+    public void onCameraIdle() {
+        LatLng latLng = map.getCameraPosition().target;
+        getAddressFrmLatLng(latLng);
     }
 }

@@ -47,57 +47,81 @@
             android:layout_marginEnd="15dp"
             android:background="@color/grey_text" />
 
-        <TextView
-            android:id="@+id/coupon"
-            android:layout_width="wrap_content"
+
+        <RelativeLayout
+            android:id="@+id/coupon_lyt"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/sub_total_Txt"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginBottom="20dp"
-            android:text="Coupon"
-            android:visibility="gone" />
+            android:visibility="gone">
 
-        <TextView
-            android:id="@+id/Coupon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/close"
-            android:layout_alignBottom="@id/close"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
-            android:layout_toStartOf="@id/close"
-            android:text="---"
-            android:visibility="gone" />
+            <TextView
+                android:id="@+id/coupon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="20dp"
+                android:text="@string/coupon"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:visibility="visible" />
 
-        <ImageView
-            android:id="@+id/close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/divider2"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
+            <TextView
+                android:id="@+id/coupon_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/coupon"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/coupon"
+                android:text="@{viewModel.couponCode}"
+                android:textColor="@color/black" />
 
-            android:src="@drawable/ic_close_black_24dp"
-            android:visibility="gone" />
 
-        <View
-            android:id="@+id/divider_3"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/coupon"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
-            android:background="@color/grey_text"
-            android:visibility="gone" />
+            <TextView
+                android:id="@+id/coupon_amt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/close"
+                android:layout_alignBottom="@id/close"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="10dp"
+                android:layout_toStartOf="@id/close"
+                android:gravity="center"
+                android:text="@{viewModel.couponAmt}"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_close_black_24dp"
+                android:visibility="visible" />
+
+            <View
+                android:id="@+id/divider_3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/coupon"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:background="@color/grey_text"
+                android:visibility="visible" />
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/coupon"
+            android:layout_below="@id/coupon_lyt"
             android:layout_marginStart="15dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="15dp"
@@ -110,7 +134,7 @@
             android:id="@+id/total_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/coupon"
+            android:layout_below="@id/coupon_lyt"
             android:layout_alignBaseline="@id/total"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="15dp"
@@ -132,8 +156,8 @@
             android:id="@+id/radi_grp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_below="@id/divider_4">
+            android:layout_below="@id/divider_4"
+            android:orientation="vertical">
 
             <RadioButton
                 android:id="@+id/direct_bank_transfer"
@@ -152,11 +176,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
-                android:text="@string/direct_bank_transer_msg"/>
+                android:text="@string/direct_bank_transer_msg" />
 
             <RadioButton
                 android:id="@+id/cash_delivery"
@@ -167,8 +191,8 @@
                 android:layout_marginEnd="15dp"
                 android:buttonTint="@color/black"
                 android:checked="true"
-                android:tag="cod"
                 android:padding="10dp"
+                android:tag="cod"
                 android:text="@string/cash_on_delivery"
                 android:textColor="@color/black" />
         </RadioGroup>

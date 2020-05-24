@@ -3,6 +3,8 @@ package com.najdi.android.najdiapp.repository;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.najdi.android.najdiapp.checkout.model.CouponRequest;
+import com.najdi.android.najdiapp.checkout.model.CouponResponse;
 import com.najdi.android.najdiapp.checkout.model.OrderResponse;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.home.model.CartRequest;
@@ -842,6 +844,50 @@ public class Repository {
             @Override
             public void onFailurResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
                 baseResponse.handleError(resourceProvider.getAppContext());
+                liveData.setValue(null);
+            }
+        }));
+        return liveData;
+    }
+
+    public LiveData<CouponResponse> applyCoupon(CouponRequest couponRequest) {
+        MutableLiveData<CouponResponse> liveData = new MutableLiveData<>();
+        String token = PreferenceUtils.getValueString(resourceProvider.getActivityContext(),
+                PreferenceUtils.USER_LOGIIN_TOKEN);
+        RetrofitClient.getInstance().applyCoupon(token, couponRequest).enqueue(new
+                RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<CouponResponse>() {
+            @Override
+            public void onSuccesResponse(Call<CouponResponse> call, CouponResponse orderResponses) {
+                if (orderResponses != null) {
+                    liveData.setValue(orderResponses);
+                }
+            }
+
+            @Override
+            public void onFailurResponse(Call<CouponResponse> call, BaseResponse baseResponse) {
+                baseResponse.handleError(resourceProvider.getActivityContext());
+                liveData.setValue(null);
+            }
+        }));
+        return liveData;
+    }
+
+    public LiveData<BaseResponse> removeCoupon(CouponRequest couponRequest) {
+        MutableLiveData<BaseResponse> liveData = new MutableLiveData<>();
+        String token = PreferenceUtils.getValueString(resourceProvider.getActivityContext(),
+                PreferenceUtils.USER_LOGIIN_TOKEN);
+        RetrofitClient.getInstance().removeCoupon(token, couponRequest).enqueue(new
+                RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<BaseResponse>() {
+            @Override
+            public void onSuccesResponse(Call<BaseResponse> call, BaseResponse orderResponses) {
+                if (orderResponses != null) {
+                    liveData.setValue(orderResponses);
+                }
+            }
+
+            @Override
+            public void onFailurResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
+                baseResponse.handleError(resourceProvider.getActivityContext());
                 liveData.setValue(null);
             }
         }));

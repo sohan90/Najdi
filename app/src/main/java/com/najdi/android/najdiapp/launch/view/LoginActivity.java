@@ -122,12 +122,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 if (baseResponse.isStatus()) {
                     saveCredential(baseResponse.getUserid(), baseResponse.getUserToken());
                     launchHomeScreen();
-                    finish();
 
                 } else {
                     String message;
                     if (baseResponse.getMessage() == null) {
-                         message = getString(R.string.incorrect_password);
+                        message = getString(R.string.incorrect_password);
                         if (LocaleUtitlity.getCountryLang().equalsIgnoreCase(ARABIC_LAN)) {
                             message = getString(R.string.incorrect_password_arabic);
                         }
@@ -149,6 +148,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private void launchHomeScreen() {
         Intent intent = new Intent(this, HomeScreenActivity.class);
         startActivity(intent);
+        finish();
     }
 
     @Override

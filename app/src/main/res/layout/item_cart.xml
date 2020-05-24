@@ -72,7 +72,7 @@
                     android:layout_toStartOf="@id/total_price"
                     android:layout_toEndOf="@id/img"
                     android:maxLines="1"
-                    android:text="@{cartModel.price.concat(` `).concat(@string/currency)}"
+                    android:text="@{String.valueOf(cartModel.priceWithVariation()).concat(` `).concat(@string/currency)}"
                     android:textColor="@color/black"
                     android:textDirection="locale" />
 
@@ -141,7 +141,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@id/img"
                     android:layout_alignParentEnd="true"
-                    android:text="@{String.valueOf(cartModel.subtotal).concat(` `).concat(@string/currency)}"
+                    android:text="@{cartModel.subtotalWithQtyPrc.concat(` `).concat(@string/currency)}"
                     android:textColor="@color/black"
                     android:textDirection="locale" />
 

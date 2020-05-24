@@ -1,6 +1,7 @@
 package com.najdi.android.najdiapp.home.view;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,9 +27,9 @@ import com.najdi.android.najdiapp.home.viewmodel.ProductDetailViewModel;
 import com.najdi.android.najdiapp.home.viewmodel.ProductListItemModel;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
+import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class ProductDetailFragment extends BaseFragment {
@@ -40,7 +41,6 @@ public class ProductDetailFragment extends BaseFragment {
     private CartResponse.CartData cartData;
     private ProductListResponse productListResponse;
     private boolean isFromCartScreen;
-    private HashMap<String, String> variationMap = new HashMap<>();
 
     public static ProductDetailFragment createInstance(ProductDetailBundleModel model) {
         Bundle bundle = new Bundle();
@@ -78,8 +78,8 @@ public class ProductDetailFragment extends BaseFragment {
 
     private void getVariationFromServer() {
         showProgressDialog();
-        LiveData<ProductListResponse> liveData = viewModel.getVariationQuantity(productListResponse.getId(),
-                viewModel.getVariationId());
+        LiveData<ProductListResponse> liveData = viewModel.
+                getVariationQuantity(productListResponse.getId(), viewModel.getVariationId());
 
         liveData.observe(getViewLifecycleOwner(), productListResponse1 -> {
             hideProgressDialog();
@@ -88,7 +88,6 @@ public class ProductDetailFragment extends BaseFragment {
             }
         });
     }
-
 
     private void updateNotificationCartCount() {
         homeScreeViewModel.getCartCountNotification().setValue(true);
@@ -163,11 +162,20 @@ public class ProductDetailFragment extends BaseFragment {
         binding.proceed.setOnClickListener(v -> moveToAddCartScreen());
 
         binding.addToCart.setOnClickListener(v -> {
-            showProgressDialog();
-            if (!isFromCartScreen) {
-                addCart(); // add cart
+            if (getActivity() == null) return;
+
+            String userId = PreferenceUtils.getValueString(getActivity(),
+                    PreferenceUtils.USER_ID_KEY);
+
+            if (!TextUtils.isEmpty(userId)) {
+                showProgressDialog();
+                if (!isFromCartScreen) {
+                    addCart(); // add cart
+                } else {
+                    updateCart();
+                }
             } else {
-                updateCart();
+                launchGuestUserDialog();//gues user flow
             }
         });
     }

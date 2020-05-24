@@ -13,8 +13,6 @@ import com.najdi.android.najdiapp.common.BaseViewModel;
 import com.najdi.android.najdiapp.launch.model.BillingAddress;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 
-import java.util.List;
-
 public class CheckoutViewModel extends BaseViewModel {
 
     private MutableLiveData<Boolean> getCurrentLocationUpdateLiveData;
@@ -82,34 +80,7 @@ public class CheckoutViewModel extends BaseViewModel {
         return checkoutLiveData;
     }
 
-    public LiveData<OrderResponse> createOrder(String userId, List<CartResponse.CartData> cartData,
-                                               String paymentMode, BillingAddress billingAddress) {
-        /*OrderRequest orderRequest = new OrderRequest();
-        orderRequest.setCustomer_id(String.valueOf(userId));
-        orderRequest.setBilling(billingAddress);
-        orderRequest.setShipping(billingAddress);
-        orderRequest.setPayment_method(paymentMode);
-        if (paymentMode.equalsIgnoreCase("cod")) {
-            orderRequest.setPayment_method_title("Cash On Delivery");
-            orderRequest.setSet_paid(false);
-        } else {
-            orderRequest.setPayment_method_title("Direct Bank Transfer");
-            orderRequest.setSet_paid(false);
-        }
-
-        List<LineItemModelRequest> list = new ArrayList<>();
-        for (CartResponse.CartData cartData1 : cartData) {
-
-            LineItemModelRequest lineItemModelRequest = new LineItemModelRequest();
-            lineItemModelRequest.setVariation_id(cartData1.getVariationId());
-            lineItemModelRequest.setProduct_id(Integer.parseInt(cartData1.getProductId()));
-            lineItemModelRequest.setQuantity(cartData1.getQuantity());
-            List<HashMap<String, String>> slugValueMap = getSlugValueFromMap(cartData1.getVariation());
-            lineItemModelRequest.setVariations(slugValueMap);
-            list.add(lineItemModelRequest);
-        }
-
-        orderRequest.setLine_items(list);*/
+    public LiveData<OrderResponse> createOrder(String userId, BillingAddress billingAddress) {
         return repository.createOrder(userId, billingAddress);
     }
 
@@ -135,4 +106,5 @@ public class CheckoutViewModel extends BaseViewModel {
     public MutableLiveData<Boolean> getHideCart() {
         return hideCart;
     }
+
 }

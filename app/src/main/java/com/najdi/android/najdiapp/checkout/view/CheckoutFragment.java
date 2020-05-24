@@ -3,6 +3,7 @@ package com.najdi.android.najdiapp.checkout.view;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.najdi.android.najdiapp.R;
+import com.najdi.android.najdiapp.checkout.model.CouponRequest;
 import com.najdi.android.najdiapp.checkout.viewmodel.CheckoutFragmentViewModel;
 import com.najdi.android.najdiapp.checkout.viewmodel.CheckoutViewModel;
 import com.najdi.android.najdiapp.common.BaseFragment;
@@ -29,6 +31,7 @@ import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 import com.najdi.android.najdiapp.shoppingcart.model.UpdateCartRequest;
 import com.najdi.android.najdiapp.shoppingcart.view.CartAdapter;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
+import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 import com.najdi.android.najdiapp.utitility.ToastUtils;
 
 import java.util.ArrayList;
@@ -40,6 +43,7 @@ public class CheckoutFragment extends BaseFragment {
     private CheckoutAdapter checkoutAdapter;
     private CheckoutFragmentViewModel viewModel;
     private List<CartResponse.CartData> adapterList;
+    private String couponToken;
 
     public static CheckoutFragment createInstance() {
         return new CheckoutFragment();
@@ -68,10 +72,65 @@ public class CheckoutFragment extends BaseFragment {
     }
 
     private void initializeClickListener() {
+        binding.applyCoupon.setOnClickListener(v ->
+                applyCoupon(binding.couponCode.getText().toString()));
+
+        binding.includeLyt.close.setOnClickListener(v -> {
+            removeCoupon();
+        });
         binding.includeLyt.placeOrder.setOnClickListener(v -> {
             int checkedId = binding.includeLyt.radiGrp.getCheckedRadioButtonId();
             RadioButton radioButton = binding.includeLyt.radiGrp.findViewById(checkedId);
             activityViewModel.getCheckoutLiveData().setValue((String) radioButton.getTag());
+        });
+    }
+
+    private void removeCoupon() {
+        if (getActivity() != null && !TextUtils.isEmpty(couponToken)) {
+
+            showProgressDialog();
+            String userId = PreferenceUtils.getValueString(getActivity(), PreferenceUtils.USER_ID_KEY);
+            CouponRequest couponRequest = new CouponRequest();
+            couponRequest.setUserId(userId);
+            couponRequest.setCouponToken(couponToken);
+            couponRequest.setLang(resourceProvider.getCountryLang());
+
+            viewModel.removeCoupon(couponRequest).observe(getViewLifecycleOwner(), baseResponse -> {
+                hideProgressDialog();
+                if (baseResponse.isStatus()) {
+                    binding.couponCode.setText("");// reset
+                    binding.includeLyt.couponLyt.setVisibility(View.GONE);
+                    DialogUtil.showAlertDialog(getActivity(), baseResponse.getMessage(),
+                            (d, w) -> d.dismiss());
+                } else {
+                    DialogUtil.showAlertDialog(getActivity(), baseResponse.getMessage(),
+                            (d, w) -> d.dismiss());
+                }
+            });
+        }
+    }
+
+    private void applyCoupon(String couponCode) {
+        if (getActivity() == null) return;
+
+        showProgressDialog();
+        String userId = PreferenceUtils.getValueString(getActivity(), PreferenceUtils.USER_ID_KEY);
+        CouponRequest couponRequest = new CouponRequest();
+        couponRequest.setCouponCode(couponCode);
+        couponRequest.setLang(resourceProvider.getCountryLang());
+        couponRequest.setUserId(userId);
+
+        viewModel.applyCoupon(couponRequest).observe(getViewLifecycleOwner(), baseResponse -> {
+            hideProgressDialog();
+            if (baseResponse.isStatus()) {
+                couponToken = baseResponse.getCouponToken();
+                binding.includeLyt.couponLyt.setVisibility(View.VISIBLE);
+                viewModel.updateCoupon(baseResponse.getCouponCode(),
+                        baseResponse.getDiscountAmount());
+                DialogUtil.showAlertDialog(getActivity(), baseResponse.getMessage(),
+                        (d, wh) -> d.dismiss());
+
+            }
         });
     }
 
@@ -127,17 +186,25 @@ public class CheckoutFragment extends BaseFragment {
     }
 
     private void removeItem(int position, String s) {
+        if (getActivity() == null) return;
         showProgressDialog();
-        LiveData<BaseResponse> baseResponseLiveData = viewModel.removeCart(s);
+        String userId = PreferenceUtils.getValueString(getActivity(), PreferenceUtils.USER_ID_KEY);
+        LiveData<BaseResponse> baseResponseLiveData = viewModel.removeCart(userId, s);
         baseResponseLiveData.observe(this, baseResponse -> {
             hideProgressDialog();
             if (baseResponse != null) {
-
-                updateAdapterForRemoveItem(position);
-                activityViewModel.getCartCountNotification().setValue(true);
-                //String message = baseResponse.getData().getMessage();
-                DialogUtil.showAlertDialog(getActivity(), getString(R.string.item_removed), (dialog, which) ->
-                        dialog.dismiss());
+                if (baseResponse.isStatus()) {
+                    updateAdapterForRemoveItem(position);
+                    DialogUtil.showAlertDialog(getActivity(), getString(R.string.item_removed), (dialog, which) -> {
+                                dialog.dismiss();
+                                activityViewModel.getCartCountNotification().setValue(true);
+                            }
+                    );
+                } else {
+                    DialogUtil.showAlertDialog(getActivity(), baseResponse.getMessage(),
+                            (dialog, which) ->
+                                    dialog.dismiss());
+                }
             }
         });
     }
@@ -166,10 +233,10 @@ public class CheckoutFragment extends BaseFragment {
                         showShortToast(baseResponse.getMessage());
             } else {
                 // failure case
-                CartResponse.CartData cartData = adapterList.get(adapterPosition);
+                /*CartResponse.CartData cartData = adapterList.get(adapterPosition);
                 cartData.setQuantity(cartData.getPreviousQuantity());
-                cartData.setLine_subtotal(cartData.getPreviousTotal());
-                checkoutAdapter.setDataList(adapterList);
+                cartData.setSubtotal(String.valueOf(cartData.getPreviousTotal()));
+                checkoutAdapter.setDataList(adapterList);*/
             }
             updateTotal();
         });
@@ -193,9 +260,9 @@ public class CheckoutFragment extends BaseFragment {
                         viewModel.udpateTotal(cartResponse.getCart());
                         viewModel.getVariationDetails(cartResponse.getCart())
                                 .observe(getViewLifecycleOwner(), cartData -> {
-                            adapterList = cartData;
-                            updateAdapter(adapterList);
-                        });
+                                    adapterList = cartData;
+                                    updateAdapter(adapterList);
+                                });
                     }
                 });
     }

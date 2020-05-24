@@ -2,6 +2,7 @@ package com.najdi.android.najdiapp.home.viewmodel;
 
 import android.os.Build;
 import android.text.Html;
+import android.view.View;
 import android.widget.ImageView;
 
 import androidx.databinding.BaseObservable;
@@ -61,8 +62,12 @@ public class ProductListItemModel extends BaseObservable {
     }
 
     @Bindable
-    public String getShortDesc(){
-        return product.getShortDescription();
+    public String getShortDesc() {
+        if (showDetailButton == View.VISIBLE) {
+            return product.getShortDescription();
+        } else {
+            return getDesc();
+        }
     }
 
     @Bindable

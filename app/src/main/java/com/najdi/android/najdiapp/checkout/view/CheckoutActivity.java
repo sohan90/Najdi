@@ -45,7 +45,13 @@ import com.najdi.android.najdiapp.utitility.PermissionUtils;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 import com.najdi.android.najdiapp.utitility.ToastUtils;
 
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
+
 import static com.najdi.android.najdiapp.common.Constants.LAUNCH_CART;
+import static com.najdi.android.najdiapp.common.Constants.LAUNCH_PRODUCT;
 import static com.najdi.android.najdiapp.utitility.GpsUtils.GPS_REQUEST;
 import static com.najdi.android.najdiapp.utitility.PermissionUtils.LOCATION_PERMISSION_REQUEST_CODE;
 
@@ -95,6 +101,7 @@ public class CheckoutActivity extends BaseActivity {
     private void subscribeForCartCountNotification() {
         viewModel.getCartCountNotification().observe(this, aBoolean -> {
             if (aBoolean) {
+                fetchCartCount();
                 fetchCart();
             }
         });
@@ -103,9 +110,22 @@ public class CheckoutActivity extends BaseActivity {
     private void fetchCartCount() {
         viewModel.getCartCount().observe(this, baseResponse -> {
             if (baseResponse != null && baseResponse.isStatus()) {
-                updateCartValueTxt(baseResponse.getTotalItems());
+                if (baseResponse.getTotalItems() == 0) {
+                    finish();
+                    addDisposable(Observable.timer(100, TimeUnit.MILLISECONDS)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(l -> launchHomeScreen()));
+                } else {
+                    updateCartValueTxt(baseResponse.getTotalItems());
+                }
             }
         });
+    }
+
+    private void launchHomeScreen() {
+        Intent intent = new Intent();
+        intent.putExtra(LAUNCH_PRODUCT, true);
+        ObservableManager.getInstance().notifyData(intent);
     }
 
     private void subscribeupdateCartFromCheckoutScreen() {
@@ -129,8 +149,7 @@ public class CheckoutActivity extends BaseActivity {
     }
 
     private void createOrder(String userId, String paymentMode) {
-        LiveData<OrderResponse> orderResponseLiveData =
-                viewModel.createOrder(userId, cartResponse.getCart(), paymentMode, billing);
+        LiveData<OrderResponse> orderResponseLiveData = viewModel.createOrder(userId, billing);
 
         orderResponseLiveData.observe(this, orderResponse -> {
             hideProgressDialog();
@@ -315,6 +334,7 @@ public class CheckoutActivity extends BaseActivity {
 
     private void initToolBar() {
         binding.toolbar.backArrow.setVisibility(View.VISIBLE);
+        binding.toolbar.filter.setVisibility(View.GONE);
         binding.toolbar.title.setText(getString(R.string.shipping_details));
         binding.toolbar.cartImageLyt.setVisibility(View.VISIBLE);
         binding.toolbar.backArrow.setOnClickListener(v -> onBackPressed());

@@ -1,24 +1,24 @@
 package com.najdi.android.najdiapp.launch.model;
 
 public class BillingAddress {
-    String first_name;
-    String last_name;
-    String company;
-    String address_1;
-    String address_2;
-    String city;
-    String state;
-    String postcode;
-    String country;
-    String email;
-    String phone;
-    String lat;
-    String lng;
-    String user_id;
-    String full_name;
-    String address;
-    String map_address;
-    String lang;
+    private String first_name;
+    private String last_name;
+    private String company;
+    private String address_1;
+    private String address_2;
+    private String city;
+    private String state;
+    private String postcode;
+    private String country;
+    private String email;
+    private String phone;
+    private String lat;
+    private String lng;
+    private String user_id;
+    private String full_name;
+    private String address;
+    private String map_address;
+    private String lang;
 
     public void setLang(String lang) {
         this.lang = lang;

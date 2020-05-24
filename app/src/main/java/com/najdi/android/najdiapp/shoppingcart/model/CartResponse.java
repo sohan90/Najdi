@@ -7,11 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 
 public class CartResponse {
-    int code;
-    String message;
-    Data data;
-    boolean status;
-    List<CartData> cart;
+    private int code;
+    private String message;
+    private boolean status;
+    private List<CartData> cart;
 
     public List<CartData> getCart() {
         return cart;
@@ -28,18 +27,6 @@ public class CartResponse {
 
     public String getMessage() {
         return message;
-    }
-
-    public Data getData() {
-        return data;
-    }
-
-    public class Data {
-        List<CartData> cartdata;
-
-        public List<CartData> getCartdata() {
-            return cartdata;
-        }
     }
 
     public static class CartData implements Parcelable {
@@ -139,18 +126,6 @@ public class CartResponse {
             return product_id;
         }
 
-        public int getVariationId() {
-            return variation_id;
-        }
-
-        public String getPostName() {
-            return post_name;
-        }
-
-        public String getPostImageUrl() {
-            return post_image_url;
-        }
-
         public int getQuantity() {
             return quantity;
         }
@@ -164,48 +139,12 @@ public class CartResponse {
             return previousQuantity;
         }
 
-        public String getTm_epo_product_original_price() {
-            return tm_epo_product_original_price;
-        }
-
-        public String getTm_epo_options_prices() {
-            return tm_epo_options_prices;
-        }
-
-        public String seletedOptionPrice() {
-            return tm_epo_product_price_with_options;
-        }
-
-        public String getTm_cart_item_key() {
-            return tm_cart_item_key;
-        }
-
-        public int getLineTotal() {
-            return line_total;
-        }
-
-        public void setLineTotal(int line_total) {
-            this.line_total = line_total;
-        }
-
         public void setQuantity(int quantity) {
             this.quantity = quantity;
         }
 
         public void setLine_subtotal(int line_subtotal) {
             this.line_subtotal = line_subtotal;
-        }
-
-        public int getLine_subtotal() {
-            return line_subtotal;
-        }
-
-        public int getLine_tax() {
-            return line_tax;
-        }
-
-        public int getLine_subtotal_tax() {
-            return line_subtotal_tax;
         }
 
         @Override
@@ -276,6 +215,16 @@ public class CartResponse {
 
         public String getSubtotal() {
             return subtotal;
+        }
+
+        public float priceWithVariation() {
+            float price = Float.parseFloat(subtotal) / Float.parseFloat(qty);
+            return price;
+        }
+
+        public String getSubtotalWithQtyPrc() {
+            float subTotal = Float.parseFloat(subtotal);
+            return String.valueOf(subTotal);
         }
 
         public String getImage() {

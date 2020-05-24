@@ -67,7 +67,7 @@
                 android:background="@color/card_stack_default"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="@{viewModel.price}"
+                android:text="@{viewModel.price.concat(@string/space).concat(@string/currency)}"
                 android:textColor="@color/white"
                 android:textDirection="locale"
                 android:textStyle="bold" />

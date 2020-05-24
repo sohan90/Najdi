@@ -41,9 +41,9 @@ public class CartViewModel extends BaseViewModel {
     }
 
     public void setTotal(List<CartResponse.CartData> cartDataList) {
-        int subTotal = 0;
+        float subTotal = 0;
         for (CartResponse.CartData cartData : cartDataList) {
-            int total = Integer.parseInt(cartData.getSubtotal());
+            float total = Float.parseFloat(cartData.getSubtotalWithQtyPrc());
             subTotal = total + subTotal;
         }
         String total = String.valueOf(subTotal).concat(" ").

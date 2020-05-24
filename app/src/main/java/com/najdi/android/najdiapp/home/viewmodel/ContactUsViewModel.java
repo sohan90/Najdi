@@ -13,10 +13,10 @@ import com.najdi.android.najdiapp.home.model.ContactUsRequest;
 import com.najdi.android.najdiapp.home.model.User;
 
 public class ContactUsViewModel extends BaseViewModel {
-    MutableLiveData<String> message = new MutableLiveData<>();
-    MutableLiveData<String> name = new MutableLiveData<>();
-    MutableLiveData<String> phone = new MutableLiveData<>();
-    MutableLiveData<String> email = new MutableLiveData<>();
+    private MutableLiveData<String> message = new MutableLiveData<>();
+    private MutableLiveData<String> name = new MutableLiveData<>();
+    private MutableLiveData<String> phone = new MutableLiveData<>();
+    private MutableLiveData<String> email = new MutableLiveData<>();
 
 
     public MutableLiveData<String> getMessage() {

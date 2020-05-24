@@ -19,7 +19,6 @@
             android:layout_height="match_parent"
             android:layout_above="@id/continue_txt"
             android:fillViewport="true"
-            android:fitsSystemWindows="true"
             android:scrollbars="none">
 
             <LinearLayout
@@ -27,9 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingLeft="10dp"
-                android:paddingTop="10dp"
-                android:paddingRight="10dp">
+                android:paddingTop="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/name"
@@ -37,9 +34,9 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/name"
                     android:imeOptions="actionNext"
-                    android:text="@={viewModel.name}"
                     android:inputType="textAutoComplete"
                     android:padding="10dp"
+                    android:text="@={viewModel.name}"
                     android:textDirection="locale" />
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -148,6 +145,15 @@
                         android:textDirection="locale" />
                 </LinearLayout>
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/color_transparent"
+                    android:gravity="center"
+                    android:padding="20dp"
+                    android:text="@string/select_shipping_address_from_map"
+                    android:textColor="@color/black" />
+
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
@@ -157,6 +163,12 @@
                         android:name="com.google.android.gms.maps.SupportMapFragment"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_location_on_black_24dp"/>
 
 
                     <RelativeLayout
@@ -191,9 +203,9 @@
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:visibility="gone"
                             android:layout_below="@id/enter_location"
-                            android:background="@color/green_default" />
+                            android:background="@color/green_default"
+                            android:visibility="gone" />
 
 
                         <Button

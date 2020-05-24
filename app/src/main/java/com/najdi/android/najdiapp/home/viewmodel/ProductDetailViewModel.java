@@ -27,12 +27,12 @@ public class ProductDetailViewModel extends BaseViewModel {
     public MutableLiveData<Boolean> enableProceed = new MutableLiveData<>();
 
     private MutableLiveData<Boolean> getVariaitionQuantity;
-    private int basePrice;
+    private float basePrice;
     private HashMap<String, String> attributHashMap;
     private int setMaxvariationQuantity;
     private int totalAttribute;
-    private int totalPrice;
-    private HashMap<String, Integer> attrOptPriceMap = new HashMap<>();
+    private float totalPrice;
+    private HashMap<String, Float> attrOptPriceMap = new HashMap<>();
 
     public ProductDetailViewModel(@NonNull Application application) {
         super(application);
@@ -40,7 +40,7 @@ public class ProductDetailViewModel extends BaseViewModel {
     }
 
     public void setDefaultPrice(String defaultPrice) {
-        basePrice = Integer.parseInt(defaultPrice);
+        basePrice = Float.parseFloat(defaultPrice);
     }
 
     public void setDefaultQuantity() {
@@ -92,7 +92,7 @@ public class ProductDetailViewModel extends BaseViewModel {
         if (attributeOptionModel == null) return;
 
         this.totalAttribute = totalAttribute;
-        int attrOptPrice = Integer.parseInt(attributeOptionModel.getOptionPrice());
+        float attrOptPrice = Float.parseFloat(attributeOptionModel.getOptionPrice());
         attrOptPriceMap.put(selectedAttrId, attrOptPrice);
         updateTotalPrice();
         createAttributeForSelectedValue(selectedAttrId, attributeOptionModel.getId());
@@ -130,15 +130,15 @@ public class ProductDetailViewModel extends BaseViewModel {
 
     private void updateTotalPrice() {
         if (quantityCount.getValue() != null) {
-            int totalSelectionPrice = getPriceFromMap();
+            float totalSelectionPrice = getPriceFromMap();
             totalPrice = (this.basePrice + totalSelectionPrice) * quantityCount.getValue();
             totalPriceLivdData.setValue(getCurrencyConcatenatedString(String.valueOf(totalPrice)));
         }
     }
 
-    private int getPriceFromMap() {
-        int totalPrice = 0;
-        for (Map.Entry<String, Integer> map : attrOptPriceMap.entrySet()) {
+    private float getPriceFromMap() {
+        float totalPrice = 0;
+        for (Map.Entry<String, Float> map : attrOptPriceMap.entrySet()) {
             totalPrice = totalPrice + map.getValue();
         }
         return totalPrice;

@@ -29,13 +29,14 @@
                     android:id="@+id/progress_id"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
+                    android:layout_height="2.5dp"
                     android:layout_gravity="center"
                     android:background="@color/gray_press"
                     android:indeterminate="false"
                     android:indeterminateOnly="false"
                     android:max="100"
-                    android:progressBackgroundTint="@color/green_default" />
+                    android:progressBackgroundTintMode="src_atop"
+                    android:progressBackgroundTint="@color/green_press" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
