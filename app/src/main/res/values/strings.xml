@@ -167,4 +167,6 @@
     <string name="select_shipping_address_from_map" translatable="false">Select shipping address from Map</string>
     <string name="guest_user_title" translatable="false">Guest User</string>
     <string name="login_to_continue" translatable="false">Please login to continue</string>
+    <string name="shortcut_label" translatable="false">Orders</string>
+    <string name="shortcut_bank" translatable="false">Bank Accounts</string>
 </resources>

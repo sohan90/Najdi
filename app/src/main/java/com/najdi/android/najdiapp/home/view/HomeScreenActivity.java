@@ -69,6 +69,9 @@ import static com.najdi.android.najdiapp.utitility.PreferenceUtils.USER_SELECTED
 public class HomeScreenActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, Observer {
 
+    public static final String SHORT_CUT_ORDERS = "com.najdi.android.najdiapp.orderscreen";
+    public static final String SHORT_CUT_BANK_DETAIL = "com.najdi.android.najdiapp.bank";
+
     private ActivityHomeScreenBinding binding;
     private DrawerLayout drawerLayout;
     private HomeScreenViewModel viewModel;
@@ -99,6 +102,18 @@ public class HomeScreenActivity extends BaseActivity
         fetchProduct();
         fetchCityList();
         fetchCategoryList();
+        getShortCutIntentAction();
+
+    }
+
+    private void getShortCutIntentAction() {
+        if (getIntent() != null && getIntent().getAction() != null) {
+            if (getIntent().getAction().equals(SHORT_CUT_ORDERS)) {
+                replaceFragment(ORDER_STATUS);
+            } else if (getIntent().getAction().equals(SHORT_CUT_BANK_DETAIL)){
+                replaceFragment(BANK_ACCOUNTS);
+            }
+        }
     }
 
     private void fetchCityList() {
