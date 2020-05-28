@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseActivity;
@@ -40,10 +40,16 @@ public class SignUpActivity extends BaseActivity {
         initClickListener();
         subscribeValidationStatus();
         subscribeForToolBarTitle();
+        hideToolBarFilterCart();
+    }
+
+    private void hideToolBarFilterCart() {
+        binding.toolBarLyt.filter.setVisibility(View.INVISIBLE);
+        binding.toolBarLyt.cartImageLyt.setVisibility(View.INVISIBLE);
     }
 
     private void initViewModel() {
-        viewModel = ViewModelProviders.of(this).get(SignUpViewModel.class);
+        viewModel = new ViewModelProvider(this).get(SignUpViewModel.class);
     }
 
     private void setupBinding() {

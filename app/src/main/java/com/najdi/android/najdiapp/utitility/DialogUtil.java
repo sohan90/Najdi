@@ -116,7 +116,7 @@ public class DialogUtil {
     }
 
     public static void showPopupWindowSpinner(Context context, View anchorView, List<String> list,
-                                      GenericClickListener<Integer> clickListener) {
+                                              GenericClickListener<Integer> clickListener) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
         View customView = inflater.inflate(R.layout.item_pop_window, null);
         ArrayAdapter<String> itemsAdapter = new ArrayAdapter<>(context,
@@ -136,6 +136,7 @@ public class DialogUtil {
         });
 
     }
+
     public static void showPopupWindow(Context context, View anchorView, List<String> list,
                                        GenericClickListener<Integer> clickListener) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -152,8 +153,8 @@ public class DialogUtil {
         popupWindow.setElevation(20);
         popupWindow.setFocusable(true);
         popupWindow.update();
-        popupWindow.setHeight(1000);
-        popupWindow.setWidth(700);
+        popupWindow.setHeight((int) context.getResources().getDimension(R.dimen.height));
+        popupWindow.setWidth((int) context.getResources().getDimension(R.dimen.width));
         popupWindow.setTouchInterceptor((v, motionEvent) -> {
             v.performClick();
             if (motionEvent.getX() < 0 || motionEvent.getX() > popupWindow.getWidth()) return true;
@@ -177,8 +178,8 @@ public class DialogUtil {
         listPopupWindow.setAdapter(new ArrayAdapter<>(context,
                 android.R.layout.simple_list_item_1, list));
         listPopupWindow.setAnchorView(anchorView);
-        listPopupWindow.setWidth(400);
-        listPopupWindow.setHorizontalOffset(-(listPopupWindow.getWidth()/ 2 + anchorView.getWidth()));
+        listPopupWindow.setWidth((int) context.getResources().getDimension(R.dimen.category_width));
+        listPopupWindow.setHorizontalOffset(-(listPopupWindow.getWidth() / 2 + anchorView.getWidth()));
         listPopupWindow.setModal(true);
         listPopupWindow.setOnDismissListener(dismissListener);
         listPopupWindow.setOnItemClickListener((parent, view, position, id) -> {

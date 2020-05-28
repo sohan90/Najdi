@@ -253,13 +253,11 @@ public class HomeScreenActivity extends BaseActivity
         int containerId = binding.include.containerLyt.container.getId();
         Fragment fragment;
         String fragmentTag = null;
-        hideFitlerView();
         switch (screenName) {
             case PRODUCTS:
                 FragmentHelper.popBackStack(this, PRODUCT_LIST_FRAG);
                 fragment = ProductListFragment.createInstance();
                 fragmentTag = Constants.FragmentTags.PRODUCT_LIST_FRAG;
-                showFilterView();
                 unlockDrawer();
                 break;
 
@@ -610,10 +608,12 @@ public class HomeScreenActivity extends BaseActivity
     }
 
     private void lockDrawer() {
+        hideFitlerView();
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
     private void unlockDrawer() {
+        showFilterView();
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 }

@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.checkout.viewmodel.CheckoutViewModel;
@@ -23,7 +23,7 @@ import static com.najdi.android.najdiapp.common.Constants.LAUNC_BANK_ACCOUNT;
 
 public class OrderCompleteFragment extends BaseFragment {
 
-    FragmentCheckoutStep3Binding binding;
+    private FragmentCheckoutStep3Binding binding;
     private CheckoutViewModel activityViewModel;
 
     public static OrderCompleteFragment createInstance() {
@@ -78,13 +78,13 @@ public class OrderCompleteFragment extends BaseFragment {
         activityViewModel.orderResponseMutableLiveData().observe(getViewLifecycleOwner(), orderResponse -> {
             if (orderResponse.getTotal() == null) return;
             binding.setViewModel(orderResponse);
-            String total = orderResponse.getTotal().concat(" "+getString(R.string.currency));
+            String total = orderResponse.getTotal().concat(" " + getString(R.string.currency));
             binding.totalValue.setText(total);
         });
     }
 
     private void initializeActivityViewModel() {
-        if(getActivity() == null) return;
-        activityViewModel = ViewModelProviders.of(getActivity()).get(CheckoutViewModel.class);
+        if (getActivity() == null) return;
+        activityViewModel = new ViewModelProvider(getActivity()).get(CheckoutViewModel.class);
     }
 }

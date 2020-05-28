@@ -54,6 +54,8 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.ViewHo
         holder.binding.variationContainer.removeAllViews();
         LayoutInflater inflater = LayoutInflater.from(holder.binding.getRoot().getContext());
 
+        if(cartData.getVariation() == null) return;
+
         for (Map.Entry<String, String> entry : cartData.getVariation().entrySet()) {
 
             View view = inflater.inflate(R.layout.inflate_variation_item,

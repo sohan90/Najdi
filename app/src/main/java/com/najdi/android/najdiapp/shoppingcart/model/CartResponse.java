@@ -3,6 +3,7 @@ package com.najdi.android.najdiapp.shoppingcart.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -59,7 +60,12 @@ public class CartResponse {
         String price;
         String subtotal;
         String image;
+        String total_cart_amount;
+        List<AttributeCartOptionData> attribute_data;
 
+        public List<AttributeCartOptionData> getAttributeData() {
+            return attribute_data;
+        }
 
         protected CartData(Parcel in) {
             product_id = in.readString();
@@ -87,7 +93,8 @@ public class CartResponse {
             price = in.readString();
             subtotal = in.readString();
             image = in.readString();
-
+            attribute_data = new ArrayList<>();
+            in.readTypedList(attribute_data, AttributeCartOptionData.CREATOR);
         }
 
         public static final Creator<CartData> CREATOR = new Creator<CartData>() {
@@ -179,6 +186,7 @@ public class CartResponse {
             dest.writeString(price);
             dest.writeString(subtotal);
             dest.writeString(image);
+            dest.writeTypedList(attribute_data);
         }
 
         public String getId() {

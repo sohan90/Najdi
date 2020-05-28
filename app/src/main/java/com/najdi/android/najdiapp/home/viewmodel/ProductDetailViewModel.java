@@ -43,6 +43,12 @@ public class ProductDetailViewModel extends BaseViewModel {
         basePrice = Float.parseFloat(defaultPrice);
     }
 
+    public void setTotalAttributOptSize(int attributOptSize) {
+        this.totalAttribute = attributOptSize;
+        createHashMap();
+        enableAddCartButton();
+    }
+
     public void setDefaultQuantity() {
         quantityCount.setValue(0);
         incrementQuantity();
@@ -71,7 +77,7 @@ public class ProductDetailViewModel extends BaseViewModel {
     }
 
     public void decrementQuantity() {
-        if (quantityCount.getValue() != null) {//&& quantityCount.getValue() > 1) {
+        if (quantityCount.getValue() != null && quantityCount.getValue() > 1) {
             quantityCount.setValue(quantityCount.getValue() - 1);
         }
         updateTotalPrice();
@@ -86,12 +92,11 @@ public class ProductDetailViewModel extends BaseViewModel {
         return setMaxvariationQuantity;
     }
 
-    public void updatePrice(int totalAttribute, String selectedAttrId, AttributeOptionModel
+    public void updatePrice(String selectedAttrId, AttributeOptionModel
             attributeOptionModel) {
 
         if (attributeOptionModel == null) return;
 
-        this.totalAttribute = totalAttribute;
         float attrOptPrice = Float.parseFloat(attributeOptionModel.getOptionPrice());
         attrOptPriceMap.put(selectedAttrId, attrOptPrice);
         updateTotalPrice();
@@ -108,7 +113,7 @@ public class ProductDetailViewModel extends BaseViewModel {
 
     private void createAttributeForSelectedValue(String selectedValue,
                                                  String optAttrId) {
-        createHashMap();
+
         attributHashMap.put(selectedValue, optAttrId);
         enableAddCartButton();
     }

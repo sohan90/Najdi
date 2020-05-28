@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.najdi.android.najdiapp.R;
@@ -53,7 +54,7 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void observeEmailField() {
-    viewModel.email.observe(this, s -> {
+    viewModel.email.observe(getViewLifecycleOwner(), s -> {
         if (!TextUtils.isEmpty(s)){
             PreferenceUtils.setValueString(getActivity(), PreferenceUtils.USER_EMAIL_KEY,
                     viewModel.email.getValue());
@@ -62,7 +63,7 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void observeNameField() {
-        viewModel.name.observe(this, s -> {
+        viewModel.name.observe(getViewLifecycleOwner(), s -> {
             if (!TextUtils.isEmpty(s)){
                 PreferenceUtils.setValueString(getActivity(), PreferenceUtils.USER_NAME_KEY,
                         viewModel.name.getValue());
@@ -91,7 +92,7 @@ public class ProfileFragment extends BaseFragment {
         if(getActivity() == null) return;
         if (viewModel.validate()) {
             String userId = PreferenceUtils.getValueString(getActivity(), PreferenceUtils.USER_ID_KEY);
-            viewModel.updateProfile(userId).observe(this, baseResponse -> {
+            viewModel.updateProfile(userId).observe(getViewLifecycleOwner(), baseResponse -> {
                 if (baseResponse != null){
                     DialogUtil.showAlertDialog(getActivity(), getString(R.string.profile_succes_msg),
                             (dialog, which) -> dialog.dismiss());
@@ -126,6 +127,6 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void initViewModel() {
-        viewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
+        viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
     }
 }

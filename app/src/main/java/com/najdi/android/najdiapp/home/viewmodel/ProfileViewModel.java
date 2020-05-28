@@ -22,7 +22,7 @@ public class ProfileViewModel extends BaseViewModel {
 
     public boolean validate(){
         boolean isValid = false;
-        if (!TextUtils.isEmpty(name.getValue()) &&  !TextUtils.isEmpty(email.getValue())){
+        if (!TextUtils.isEmpty(name.getValue())){
             isValid = true;
         }
         return isValid;

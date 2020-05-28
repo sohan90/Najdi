@@ -60,7 +60,8 @@ public class ContactUsViewModel extends BaseViewModel {
         boolean isValid = true;
         if (TextUtils.isEmpty(name.getValue())) {
             isValid = false;
-        } else if (TextUtils.isEmpty(phone.getValue())) {
+        } else if (TextUtils.isEmpty(phone.getValue()) && phone.getValue().startsWith("5") &&
+                phone.getValue().length() >= 8) {
             isValid = false;
         } else if (TextUtils.isEmpty(email.getValue())) {
             isValid = false;

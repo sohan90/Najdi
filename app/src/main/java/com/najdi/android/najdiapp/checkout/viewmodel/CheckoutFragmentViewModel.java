@@ -48,6 +48,7 @@ public class CheckoutFragmentViewModel extends BaseViewModel {
     public LiveData<List<CartResponse.CartData>> getVariationDetails(List<CartResponse.CartData> cartDataList) {
         for (CartResponse.CartData cartData : cartDataList) {
             HashMap<String, String> map = new HashMap<>();
+            if (cartData.getDetails() == null) continue;
             String[] subDetail = cartData.getDetails().split(",");
             for (String s : subDetail) {
                 String[] variation = s.split(":");//"Size:Full
@@ -95,5 +96,12 @@ public class CheckoutFragmentViewModel extends BaseViewModel {
         String disAmt = discountAmount.concat(" ")
                 .concat(resourceProvider.getString(R.string.currency));
         getCouponAmt().setValue(disAmt);
+
+        if (totalLiveData.getValue() == null) return;
+        String price = totalLiveData.getValue().split(" ")[0];//total price is concatenated with currency
+        float updatedPrice = Float.parseFloat(price) - Float.parseFloat(discountAmount);
+        String value = String.valueOf(updatedPrice);
+        totalLiveData.setValue(value.concat(" ")
+                .concat(resourceProvider.getString(R.string.currency)));
     }
 }

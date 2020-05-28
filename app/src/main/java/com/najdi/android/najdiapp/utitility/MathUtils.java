@@ -1,5 +1,9 @@
 package com.najdi.android.najdiapp.utitility;
 
+import android.content.Context;
+import android.content.res.Resources;
+import android.util.TypedValue;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -33,5 +37,12 @@ public class MathUtils {
 
     public static String getCurrencySymbol() {
         return currencySymbol;
+    }
+
+    public static int convertDpToPx(Context context, int value) {
+        Resources r = context.getResources();
+        int px = Math.round(TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, value, r.getDisplayMetrics()));
+        return px;
     }
 }
