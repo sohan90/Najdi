@@ -10,6 +10,7 @@ public class CartRequest {
     private String price;
     private String subtotal;
     private String lang;
+    private String notes;
 
     public void setLang(String lang) {
         this.lang = lang;
@@ -21,6 +22,10 @@ public class CartRequest {
 
     public void setAttributes(String attributes) {
         this.attributes = attributes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
     public void setProductAttributeOptions(String product_attribute_options) {

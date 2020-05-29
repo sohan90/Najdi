@@ -5,8 +5,9 @@
 
         <variable
             name="viewModel"
-            type="com.najdi.android.najdiapp.home.viewmodel.ProductDetailViewModel"/>
+            type="com.najdi.android.najdiapp.home.viewmodel.ProductDetailViewModel" />
     </data>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,7 +21,7 @@
 
             <include
                 android:id="@+id/top_lyt"
-                layout="@layout/item_product"/>
+                layout="@layout/item_product" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -56,6 +57,28 @@
                 android:padding="15dp">
 
             </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:text="@string/notes"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/notes"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/round_corner_stroke_trans_selector"
+                android:padding="10dp"
+                android:hint="@string/add_your_notes"
+                android:gravity="top"
+                android:inputType="text"
+                android:text="@={viewModel.notes}" />
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -143,10 +166,10 @@
                     android:id="@+id/quantity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:enabled="false"
                     android:imeOptions="actionNext"
                     android:inputType="none"
                     android:paddingTop="5dp"
-                    android:enabled="false"
                     android:textColorHint="@color/grey_text"
                     android:translationY="5dp" />
 
@@ -180,8 +203,8 @@
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="none"
                     android:enabled="false"
+                    android:inputType="none"
                     android:textColorHint="@color/grey_text" />
             </LinearLayout>
 
@@ -191,10 +214,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
                 android:background="@color/green_default"
+                android:enabled="@{viewModel.enableAddCartButton, default=false}"
                 android:paddingTop="20dp"
                 android:paddingBottom="20dp"
                 android:text="@string/add_to_cart"
-                android:enabled="@{viewModel.enableAddCartButton, default=false}"
                 android:textColor="@color/but_selector"
                 android:textStyle="bold" />
 
@@ -203,9 +226,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
+                android:enabled="@{viewModel.enableProceed, default=false}"
                 android:paddingTop="20dp"
                 android:paddingBottom="20dp"
-                android:enabled="@{viewModel.enableProceed, default=false}"
                 android:text="@string/proceed_to_checkout"
                 android:textColor="@color/but_back_selector"
                 android:textStyle="bold" />

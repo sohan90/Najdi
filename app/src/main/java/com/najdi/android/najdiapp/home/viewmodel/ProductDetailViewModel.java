@@ -25,6 +25,7 @@ public class ProductDetailViewModel extends BaseViewModel {
     public MutableLiveData<Integer> quantityCount = new MutableLiveData<>();
     public MutableLiveData<Boolean> enableAddCartButton = new MutableLiveData<>();
     public MutableLiveData<Boolean> enableProceed = new MutableLiveData<>();
+    public MutableLiveData<String> notes = new MutableLiveData<>();
 
     private MutableLiveData<Boolean> getVariaitionQuantity;
     private float basePrice;
@@ -174,6 +175,7 @@ public class ProductDetailViewModel extends BaseViewModel {
             cartRequest.setPrice(String.valueOf(basePrice));
             cartRequest.setSubtotal(String.valueOf(totalPrice));
             cartRequest.setQuantity(quantityCount.getValue());
+            cartRequest.setNotes(notes.getValue());
 
         }
         return repository.addToCart(cartRequest);
