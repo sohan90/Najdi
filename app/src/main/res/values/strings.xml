@@ -172,4 +172,7 @@
     <string name="notes" translatable="false">Notes</string>
     <string name="add_your_notes" translatable="false">Add your notes</string>
     <string name="select_city" translatable="false">Select City</string>
+    <string name="enter_valid_phone_no" translatable="false">Enter the valid mobile no</string>
+    <string name="save_to_fav" translatable="false">Save to Favourite Locations</string>
+    <string name="location_saved_msg" translatable="false">Location saved successfully</string>
 </resources>

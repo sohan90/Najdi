@@ -18,6 +18,7 @@ public class PreferenceUtils {
     public static final String LOCALE_LANG = "locale";
     public static final String FCM_TOKEN_KEY = "fcm_token_key";
     public static final String USER_SELECTED_CITY = "user_selected_city";
+    public static final String USER_LAT_LONG = "user_lat_long";
 
     public static String getValueString(Context context, String key) {
         SharedPreferences preferences = context.getSharedPreferences(SHARED_PREF, Activity.MODE_PRIVATE);
@@ -49,5 +50,18 @@ public class PreferenceUtils {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt(key, value);
         editor.apply();
+    }
+
+    public static void setValueLong(Context context, String key, long value) {
+        if (context == null) return;
+        SharedPreferences preferences = context.getSharedPreferences(SHARED_PREF, Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putLong(key, value);
+        editor.apply();
+    }
+
+    public static long getValueLong(Context context, String key) {
+        SharedPreferences preferences = context.getSharedPreferences(SHARED_PREF, Activity.MODE_PRIVATE);
+        return preferences.getLong(key, -1);
     }
 }

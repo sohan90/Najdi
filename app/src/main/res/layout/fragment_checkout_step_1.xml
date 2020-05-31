@@ -166,7 +166,7 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_location_on_black_24dp"/>
+                        android:src="@drawable/ic_location_on_black_24dp" />
 
 
                     <RelativeLayout
@@ -175,13 +175,15 @@
                         android:layout_gravity="bottom"
                         android:layout_margin="10dp"
                         android:background="@color/white"
-                        android:padding="10dp">
+                        android:paddingLeft="10dp"
+                        android:paddingTop="5dp"
+                        android:paddingRight="10dp">
 
                         <TextView
                             android:id="@+id/map_address"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="20dp"
+                            android:layout_margin="5dp"
                             android:maxLines="2"
                             android:text="@{viewModel.fullAddress}"
                             android:textDirection="locale"
@@ -207,18 +209,27 @@
 
 
                         <Button
+                            android:id="@+id/save_fav"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_above="@id/location_btn"
+                            android:layout_marginBottom="5dp"
+                            android:background="@drawable/round_corner_solid_green_selector"
+                            android:text="@string/save_to_fav"
+                            android:textAllCaps="false"
+                            android:textColor="@color/white" />
+
+
+                        <Button
                             android:id="@+id/location_btn"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_alignParentBottom="true"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginBottom="15dp"
                             android:background="@drawable/round_corner_solid_green_selector"
-                            android:padding="10dp"
                             android:text="@string/use_current_location"
                             android:textAllCaps="false"
-                            android:textColor="@color/white"
-                            android:textStyle="bold" />
+                            android:textColor="@color/white" />
                     </RelativeLayout>
 
                 </FrameLayout>
@@ -229,13 +240,11 @@
                     android:layout_height="wrap_content"
                     android:background="@color/green_default"
                     android:text="@string/continue_txt"
-                    android:textColor="@color/white"
-                    android:textStyle="bold" />
+                    android:textAllCaps="false"
+                    android:textColor="@color/white" />
             </LinearLayout>
 
         </ScrollView>
-
-
 
 
     </LinearLayout>

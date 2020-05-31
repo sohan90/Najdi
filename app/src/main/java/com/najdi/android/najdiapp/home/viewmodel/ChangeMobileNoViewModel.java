@@ -27,6 +27,21 @@ public class ChangeMobileNoViewModel extends BaseViewModel {
         super(application);
     }
 
+    public boolean validate() {
+        boolean isValid = false;
+        if (oldMobileNo.getValue() != null && oldMobileNo.getValue().startsWith("5")
+                && oldMobileNo.getValue().length() >= 8) {
+
+            if (newMobileNo.getValue() != null && newMobileNo.getValue().startsWith("5")
+                    && newMobileNo.getValue().length() >= 8) {
+
+                isValid = true;
+            }
+        }
+
+        return isValid;
+    }
+
     public LiveData<BaseResponse> updateMobileNo(String lang, String userId) {
         ForgotPaswwordRequest forgotPaswwordRequest = new ForgotPaswwordRequest();
         forgotPaswwordRequest.setMobile(newMobileNo.getValue());

@@ -40,26 +40,38 @@ public class ChangeMobileNoActivity extends BaseActivity {
     private void initClickListener() {
         binding.back.setOnClickListener(v -> onBackPressed());
         binding.update.setOnClickListener(v -> {
-            showProgressDialog();
-            String userId = PreferenceUtils.getValueString(this, PreferenceUtils.USER_ID_KEY);
-            LiveData<BaseResponse> liveData = viewModel.updateMobileNo(resourProvider
-                    .getCountryLang(), userId);
-            liveData.observe(this, baseResponse -> {
-                hideProgressDialog();
-                if (baseResponse == null) return;
-                if (baseResponse.isStatus()) {
-                    DialogUtil.showAlertDialog(this, baseResponse.getMessage(),
-                            (dialog, which) -> {
-                                dialog.dismiss();
-                                finish();
-                                launchOtpActivity(baseResponse.getTempId(),
-                                        viewModel.getNewMobileNo().getValue());
-                            });
-                } else {
-                    DialogUtil.showAlertDialog(this, baseResponse.getMessage(),
-                            (d, which) -> d.dismiss());
-                }
-            });
+            boolean isValid = viewModel.validate();
+            if (isValid) {
+                updateMobileNo();
+            } else {
+                DialogUtil.showAlertDialog(this,
+                        getString(R.string.enter_valid_phone_no),
+                        (d, h) -> d.dismiss());
+            }
+        });
+
+    }
+
+    private void updateMobileNo() {
+        showProgressDialog();
+        String userId = PreferenceUtils.getValueString(this, PreferenceUtils.USER_ID_KEY);
+        LiveData<BaseResponse> liveData = viewModel.updateMobileNo(resourProvider
+                .getCountryLang(), userId);
+        liveData.observe(this, baseResponse -> {
+            hideProgressDialog();
+            if (baseResponse == null) return;
+            if (baseResponse.isStatus()) {
+                DialogUtil.showAlertDialog(this, baseResponse.getMessage(),
+                        (dialog, which) -> {
+                            dialog.dismiss();
+                            finish();
+                            launchOtpActivity(baseResponse.getTempId(),
+                                    viewModel.getNewMobileNo().getValue());
+                        });
+            } else {
+                DialogUtil.showAlertDialog(this, baseResponse.getMessage(),
+                        (d, which) -> d.dismiss());
+            }
         });
     }
 

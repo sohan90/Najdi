@@ -4,6 +4,7 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Location;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,8 +31,8 @@ import com.najdi.android.najdiapp.launch.model.BillingAddress;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
-public class ShippingDetailFragment extends BaseFragment implements OnMapReadyCallback
-        , GoogleMap.OnCameraIdleListener {
+public class ShippingDetailFragment extends BaseFragment implements OnMapReadyCallback,
+        GoogleMap.OnCameraIdleListener {
 
     private static final int DEFAULT_ZOOM_LEVEL = 14;
     private FragmentCheckoutStep1Binding binding;
@@ -41,6 +42,7 @@ public class ShippingDetailFragment extends BaseFragment implements OnMapReadyCa
     private CheckoutActivity activity;
     private boolean isDragging;
     private Marker draggedMarker;
+    private int initCheck;
 
     public static ShippingDetailFragment createInstance() {
         return new ShippingDetailFragment();
@@ -68,8 +70,21 @@ public class ShippingDetailFragment extends BaseFragment implements OnMapReadyCa
         initClickListeners();
         updateDetails();
         subscribeForAddress();
+        navMaptoUserFavPlace();
         fetchUserDetail();
         return binding.getRoot();
+    }
+
+    private void navMaptoUserFavPlace() {
+        if (getActivity() == null) return;
+        String latlng = PreferenceUtils.getValueString(getActivity(), PreferenceUtils.USER_LAT_LONG);
+        if (!TextUtils.isEmpty(latlng)) {
+            String lat = latlng.split(" ")[0];
+            String lng = latlng.split(" ")[1];
+            LatLng latLng = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
+            isDragging = false;
+            getAddressFrmLatLng(latLng);
+        }
     }
 
     private void fetchUserDetail() {
@@ -125,7 +140,6 @@ public class ShippingDetailFragment extends BaseFragment implements OnMapReadyCa
     }
 
     private void getAddressFrmLatLng(LatLng latLng) {
-        isDragging = true;
         Location location = new Location("");
         location.setLatitude(latLng.latitude);
         location.setLongitude(latLng.longitude);
@@ -180,6 +194,17 @@ public class ShippingDetailFragment extends BaseFragment implements OnMapReadyCa
     }
 
     private void initClickListeners() {
+        binding.saveFav.setOnClickListener(v -> {
+            if (map.getCameraPosition() != null && map.getCameraPosition().target != null) {
+                String lat = String.valueOf(map.getCameraPosition().target.latitude);
+                String lng = String.valueOf(map.getCameraPosition().target.longitude);
+                String latLng = lat.concat(" ").concat(lng);
+                PreferenceUtils.setValueString(getActivity(), PreferenceUtils.USER_LAT_LONG, latLng);
+                DialogUtil.showAlertDialog(getActivity(), getString(R.string.location_saved_msg),
+                        (d, w) -> d.dismiss());
+            }
+        });
+
         binding.locationBtn.setOnClickListener(v ->
                 activityViewModel.getGetCurrentLocationUpdateLiveData().setValue(true));
 
@@ -216,7 +241,10 @@ public class ShippingDetailFragment extends BaseFragment implements OnMapReadyCa
 
     @Override
     public void onCameraIdle() {
-        LatLng latLng = map.getCameraPosition().target;
-        getAddressFrmLatLng(latLng);
+        if (++initCheck > 1) {
+            LatLng latLng = map.getCameraPosition().target;
+            isDragging = true;
+            getAddressFrmLatLng(latLng);
+        }
     }
 }

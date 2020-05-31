@@ -45,7 +45,6 @@
                     android:inputType="textPersonName"
                     android:maxLength="20"
                     android:maxLines="1"
-
                     android:text="@={viewModel.name}"
                     android:textColorHint="@color/grey_text"
                     android:textDirection="locale" />

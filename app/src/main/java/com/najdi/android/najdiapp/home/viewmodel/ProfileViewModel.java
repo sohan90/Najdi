@@ -20,6 +20,14 @@ public class ProfileViewModel extends BaseViewModel {
         super(application);
     }
 
+    public void setName(String name){
+        this.name.setValue(name);
+    }
+
+    public void setEmail(String email){
+        this.email.setValue(email);
+    }
+
     public boolean validate(){
         boolean isValid = false;
         if (!TextUtils.isEmpty(name.getValue())){
