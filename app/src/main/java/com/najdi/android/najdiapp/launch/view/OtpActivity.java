@@ -43,6 +43,7 @@ public class OtpActivity extends BaseActivity {
     public static final String EXTRA_SCREEN_TYPE = "extra_screen_type_otp";
     public static final String EXTRA_NEW_MOBILE_NO = "extra_mobile_no";
     public static final String EXTRA_SIGN_UP_TEMP_ID = "extra_temp_id";
+    public static final String EXTRA_SIGN_UP_SUCCESS_MSG = "extra_sign_up_succss_msg";
     private int screenType;
     private String newMobileNo;
     private String tempId;
@@ -72,6 +73,11 @@ public class OtpActivity extends BaseActivity {
             }
             if (getIntent().hasExtra(EXTRA_SIGN_UP_TEMP_ID)) {
                 tempId = getIntent().getStringExtra(EXTRA_SIGN_UP_TEMP_ID);
+                if (getIntent().hasExtra(EXTRA_SIGN_UP_SUCCESS_MSG)) {
+                    String successMsg = getIntent().getStringExtra(EXTRA_SIGN_UP_SUCCESS_MSG);
+                    DialogUtil.showAlertDialog(this, successMsg,
+                            (dialog, which) -> dialog.dismiss());
+                }
             }
         }
     }

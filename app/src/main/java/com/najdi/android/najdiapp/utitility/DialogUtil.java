@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListPopupWindow;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.GenericClickListener;
@@ -130,6 +131,7 @@ public class DialogUtil {
         popupWindow.setElevation(20);
         popupWindow.setFocusable(true);
         popupWindow.showAsDropDown(anchorView, 0, 0);
+
         listView.setOnItemClickListener((parent, view, position, id) -> {
             clickListener.onClicked(position);
             popupWindow.dismiss();
@@ -137,11 +139,13 @@ public class DialogUtil {
 
     }
 
-    public static void showPopupWindow(Context context, View anchorView, List<String> list,
+    public static void showPopupWindow(Context context, View anchorView, String title, List<String> list,
                                        GenericClickListener<Integer> clickListener) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
         View customView = inflater.inflate(R.layout.item_pop_window, null);
         customView.findViewById(R.id.include_lyt).setVisibility(View.VISIBLE);
+        TextView titleView = customView.findViewById(R.id.title);
+        titleView.setText(title);
         ArrayAdapter<String> itemsAdapter = new ArrayAdapter<>(context,
                 android.R.layout.simple_list_item_1, list);
         ListView listView = customView.findViewById(R.id.list);

@@ -110,7 +110,7 @@ public class HomeScreenActivity extends BaseActivity
         if (getIntent() != null && getIntent().getAction() != null) {
             if (getIntent().getAction().equals(SHORT_CUT_ORDERS)) {
                 replaceFragment(ORDER_STATUS);
-            } else if (getIntent().getAction().equals(SHORT_CUT_BANK_DETAIL)){
+            } else if (getIntent().getAction().equals(SHORT_CUT_BANK_DETAIL)) {
                 replaceFragment(BANK_ACCOUNTS);
             }
         }
@@ -147,7 +147,7 @@ public class HomeScreenActivity extends BaseActivity
                 .flatMap(io.reactivex.rxjava3.core.Observable::fromIterable)
                 .map(CityListModelResponse.City::getName)
                 .toList()
-                .subscribe(strings -> showPopupwindow(strings, cityList)));
+                .subscribe(strings -> showPopupwindow(strings, cityList, null)));
     }
 
     private void getCategoryNameList(List<CityListModelResponse.Category> categoryList) {
@@ -160,14 +160,25 @@ public class HomeScreenActivity extends BaseActivity
                 ));
     }
 
-    private void showPopupwindow(List<String> strings, List<CityListModelResponse.City> cityList) {
+    private void showPopupwindow(List<String> strings, List<CityListModelResponse.City> cityList,
+                                 List<CityListModelResponse.Category> categoryList) {
+
+        String title = getString(R.string.category);
+        if (cityList != null) {
+            title = getString(R.string.select_city);
+        }
         binding.include.blurLyt.setAlpha(0.5f);
         DialogUtil.showPopupWindow(this,
-                binding.include.containerLyt.container, strings, pos -> {
+                binding.include.containerLyt.container, title, strings, pos -> {
                     binding.include.blurLyt.setAlpha(0f);
-                    CityListModelResponse.City city = cityList.get(pos);
-                    saveCityId(city.getId());
-                    fetchCityBasedProducts(city.getId());
+                    if (cityList != null) {
+                        CityListModelResponse.City city = cityList.get(pos);
+                        saveCityId(city.getId());
+                        fetchCityBasedProducts(city.getId());
+                    } else {
+                        CityListModelResponse.Category category = categoryList.get(pos);
+                        fetchCategoryBasedProducts(category.getId());
+                    }
                 });
 
     }
@@ -538,6 +549,15 @@ public class HomeScreenActivity extends BaseActivity
                 replaceFragment(PRODUCTS);
                 break;
 
+            case R.id.category:
+                showPopupwindow(categoryStrNameList, null, categoryList);
+                break;
+
+            case R.id.city:
+                PreferenceUtils.setValueString(this, USER_SELECTED_CITY, null);
+                fetchCityList();
+                break;
+
             case R.id.about_us:
                 replaceFragment(ABOUT_US);
                 break;
@@ -613,7 +633,7 @@ public class HomeScreenActivity extends BaseActivity
     }
 
     private void unlockDrawer() {
-        showFilterView();
+        hideFitlerView();// as per the req we are showing the filter option in the menu so we are hiding here
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 }

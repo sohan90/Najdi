@@ -312,7 +312,18 @@ public class ProductDetailFragment extends BaseFragment {
     private List<String> getListFromMap(List<AttributeOptionModel> productAttributeOptions) {
         List<String> attributesOption = new ArrayList<>();
         for (AttributeOptionModel productAttributeOption : productAttributeOptions) {
-            attributesOption.add(productAttributeOption.getOptionName());
+            String optionName = productAttributeOption.getOptionName();// concat option value with the price if it is visible
+            if (productAttributeOption.getPriceVisibility().equals("1")) {
+                optionName = optionName
+                        .concat(" ")
+                        .concat("(")
+                        .concat(productAttributeOption.getOptionPrice())
+                        .concat(")")
+                        .concat("+")
+                        .concat(" ")
+                        .concat(getString(R.string.currency));
+            }
+            attributesOption.add(optionName);
         }
         return attributesOption;
     }

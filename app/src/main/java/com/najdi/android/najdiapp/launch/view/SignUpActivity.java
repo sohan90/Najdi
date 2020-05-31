@@ -23,6 +23,7 @@ import com.najdi.android.najdiapp.utitility.FragmentHelper;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
 import static com.najdi.android.najdiapp.launch.view.OtpActivity.EXTRA_SCREEN_TYPE;
+import static com.najdi.android.najdiapp.launch.view.OtpActivity.EXTRA_SIGN_UP_SUCCESS_MSG;
 import static com.najdi.android.najdiapp.launch.view.OtpActivity.EXTRA_SIGN_UP_TEMP_ID;
 import static com.najdi.android.najdiapp.utitility.PreferenceUtils.FCM_TOKEN_KEY;
 
@@ -103,11 +104,8 @@ public class SignUpActivity extends BaseActivity {
                     hideProgressDialog();
                     if (signupResponseModel != null) {
                         if (signupResponseModel.isStatus()) {
-                            DialogUtil.showAlertDialog(this, signupResponseModel.getMessage(),
-                                    (dialog, which) -> {
-                                        launchOTPScreen(signupResponseModel.getTempId());
-                                        finish();
-                                    });
+                            launchOTPScreen(signupResponseModel.getTempId(), signupResponseModel.getMessage());
+                            finish();
 
                         } else {
                             DialogUtil.showAlertDialog(this, signupResponseModel.
@@ -122,10 +120,11 @@ public class SignUpActivity extends BaseActivity {
         });
     }
 
-    private void launchOTPScreen(String tempId) {
+    private void launchOTPScreen( String tempId, String successMsg) {
         Intent intent = new Intent(this, OtpActivity.class);
         intent.putExtra(EXTRA_SCREEN_TYPE, Constants.OtpScreen.SIGN_UP_SCREEN);
         intent.putExtra(EXTRA_SIGN_UP_TEMP_ID, tempId);
+        intent.putExtra(EXTRA_SIGN_UP_SUCCESS_MSG, successMsg);
         startActivity(intent);
     }
 

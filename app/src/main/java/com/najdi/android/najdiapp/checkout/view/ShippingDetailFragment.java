@@ -25,6 +25,7 @@ import com.najdi.android.najdiapp.checkout.viewmodel.CheckoutViewModel;
 import com.najdi.android.najdiapp.checkout.viewmodel.ShippingDetailViewModel;
 import com.najdi.android.najdiapp.common.BaseFragment;
 import com.najdi.android.najdiapp.databinding.FragmentCheckoutStep1Binding;
+import com.najdi.android.najdiapp.home.model.User;
 import com.najdi.android.najdiapp.launch.model.BillingAddress;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
@@ -67,7 +68,19 @@ public class ShippingDetailFragment extends BaseFragment implements OnMapReadyCa
         initClickListeners();
         updateDetails();
         subscribeForAddress();
+        fetchUserDetail();
         return binding.getRoot();
+    }
+
+    private void fetchUserDetail() {
+        if (getActivity() == null) return;
+        String userId = PreferenceUtils.getValueString(getActivity(), PreferenceUtils.USER_ID_KEY);
+        viewModel.getUserDetail(userId).observe(getViewLifecycleOwner(), baseResponse -> {
+            if (baseResponse.isStatus()) {
+                User user = baseResponse.getUser();
+                viewModel.setUser(user);
+            }
+        });
     }
 
     private void initializeMap() {

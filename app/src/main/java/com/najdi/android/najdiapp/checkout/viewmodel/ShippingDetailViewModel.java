@@ -7,7 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.BaseViewModel;
+import com.najdi.android.najdiapp.home.model.User;
 import com.najdi.android.najdiapp.launch.model.BillingAddress;
 
 import java.util.Objects;
@@ -23,7 +25,11 @@ public class ShippingDetailViewModel extends BaseViewModel {
     private MutableLiveData<String> postalCode = new MutableLiveData<>();
     private MutableLiveData<String> fullAddress = new MutableLiveData<>();
     private Address googleAddress;
+    private User user;
 
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public ShippingDetailViewModel(@NonNull Application application) {
         super(application);
@@ -99,15 +105,20 @@ public class ShippingDetailViewModel extends BaseViewModel {
         billing.setEmail(email.getValue());
         billing.setPhone(Objects.requireNonNull(phoneNo.getValue())
                 .replace("966", ""));
-        billing.setAddress(buildingNO.getValue());
-        billing.setMap_address(street.getValue());
-        billing.setCity(city.getValue());
-        billing.setState(province.getValue());
-        billing.setPostcode(postalCode.getValue());
-        billing.setCountry(province.getValue());
+        billing.setAddress(user != null ? user.getAddress() : "");
+        billing.setMap_address(fullAddress.getValue());
+        billing.setCity(user != null ? user.getCity() : googleAddress.getLocality());
         billing.setLat(String.valueOf(googleAddress.getLatitude()));
         billing.setLng(String.valueOf(googleAddress.getLongitude()));
+        // billing.setState(province.getValue() == null ? googleAddress.getAdminArea() : province.getValue());
+        //billing.setPostcode(postalCode.getValue() == null ? googleAddress.getPostalCode() : postalCode.getValue());
+        // billing.setCountry(province.getValue() == null ? googleAddress.getCountryName() : province.getValue());
+
         return billing;
+    }
+
+    public LiveData<BaseResponse> getUserDetail(String userId) {
+        return repository.getUserDetail(userId);
     }
 }
 
