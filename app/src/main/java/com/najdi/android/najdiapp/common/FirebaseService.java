@@ -53,7 +53,7 @@ public class FirebaseService extends FirebaseMessagingService {
 
     private void sendPushNotification(Map<String, String> data) {
         String title = data.get("title");
-        String message = data.get("message");
+        String message = data.get("body");
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
