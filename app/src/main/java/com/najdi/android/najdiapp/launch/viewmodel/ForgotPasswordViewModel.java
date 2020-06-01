@@ -65,6 +65,16 @@ public class ForgotPasswordViewModel extends BaseViewModel {
         return repository.forgotUpdate(forgotPaswwordRequest);
     }
 
+    public boolean validate() {
+        boolean isValid = false;
+        if (phoneno.getValue() != null && phoneno.getValue().startsWith("5")
+                && phoneno.getValue().length() >= 8) {
+
+            isValid = true;
+        }
+        return isValid;
+    }
+
     public LiveData<BaseResponse> changePassword(String id) {
         ForgotPaswwordRequest forgotPaswwordRequest = new ForgotPaswwordRequest();
         forgotPaswwordRequest.setCp(oldPassword.getValue());
@@ -78,10 +88,18 @@ public class ForgotPasswordViewModel extends BaseViewModel {
         boolean isValid = false;
         if (password.getValue() != null && confirmPassword.getValue() != null &&
                 oldPassword.getValue() != null) {
-            if (password.getValue().equals(confirmPassword.getValue())) {
-                isValid = true;
+
+            if (password.getValue().length() >= 8 && confirmPassword.getValue().length() >= 8) {
+
+                if (password.getValue().equals(confirmPassword.getValue())) {
+                    isValid = true;
+                } else {
+                    passwordErrorField.setValue(resourceProvider.getString(R.string.password_mismatched));
+                }
             } else {
-                passwordErrorField.setValue(resourceProvider.getString(R.string.password_mismatched));
+                DialogUtil.showAlertDialog(resourceProvider.getActivityContext(),
+                        resourceProvider.getString(R.string.invalid_pass),
+                        (d, w) -> d.dismiss());
             }
         } else {
             DialogUtil.showAlertDialog(resourceProvider.getActivityContext(),

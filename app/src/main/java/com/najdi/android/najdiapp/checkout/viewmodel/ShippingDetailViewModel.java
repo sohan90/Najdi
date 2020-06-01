@@ -90,8 +90,6 @@ public class ShippingDetailViewModel extends BaseViewModel {
         boolean canProceed = true;
         if (name.getValue() == null) {
             canProceed = false;
-        } else if (email.getValue() == null) {
-            canProceed = false;
         } else if (fullAddress.getValue() == null) {
             canProceed = false;
         }

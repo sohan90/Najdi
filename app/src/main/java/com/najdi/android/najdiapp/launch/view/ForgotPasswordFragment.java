@@ -66,19 +66,12 @@ public class ForgotPasswordFragment extends BaseFragment {
 
     private void initClickListener() {
         binding.submit.setOnClickListener(v -> {
-            showProgressDialog();
-            String lang = resourceProvider.getCountryLang();
-            LiveData<BaseResponse> liveData = viewModel.forgotPasswordRequest(lang);
-            liveData.observe(getViewLifecycleOwner(), baseResponse -> {
-                hideProgressDialog();
-                if (baseResponse != null && baseResponse.isStatus()) {
-                    DialogUtil.showAlertDialog(getActivity(), baseResponse.getMessage(),
-                            (dialog, which) -> {
-                                dialog.dismiss();
-                                launchOtpScreen(baseResponse.getTempId());
-                            });
-                }
-            });
+            if (viewModel.validate()) {
+                forgotPasswordRequest();
+            } else {
+                DialogUtil.showAlertDialog(getActivity(), getString(R.string.enter_valid_phone_no),
+                        (d, w) -> d.dismiss());
+            }
         });
         binding.numberTxt.addTextChangedListener(new TextWatcher() {
             @Override
@@ -97,6 +90,27 @@ public class ForgotPasswordFragment extends BaseFragment {
                     binding.submit.setEnabled(true);
                 } else {
                     binding.submit.setEnabled(false);
+                }
+            }
+        });
+    }
+
+    private void forgotPasswordRequest() {
+        showProgressDialog();
+        String lang = resourceProvider.getCountryLang();
+        LiveData<BaseResponse> liveData = viewModel.forgotPasswordRequest(lang);
+        liveData.observe(getViewLifecycleOwner(), baseResponse -> {
+            hideProgressDialog();
+            if (baseResponse != null) {
+                if (baseResponse.isStatus()) {
+                    DialogUtil.showAlertDialog(getActivity(), baseResponse.getMessage(),
+                            (dialog, which) -> {
+                                dialog.dismiss();
+                                launchOtpScreen(baseResponse.getTempId());
+                            });
+                } else {
+                    DialogUtil.showAlertDialog(getActivity(), baseResponse.getMessage(),
+                            (d, w) -> d.dismiss());
                 }
             }
         });
