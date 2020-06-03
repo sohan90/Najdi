@@ -12,6 +12,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.BaseViewModel;
+import com.najdi.android.najdiapp.home.model.CityListModelResponse;
 import com.najdi.android.najdiapp.launch.model.LoginRequestModel;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
@@ -76,5 +77,9 @@ public class LoginViewModel extends BaseViewModel {
 
     public MutableLiveData<String> getToolbarTitle() {
         return toolbarTitle;
+    }
+
+    public LiveData<CityListModelResponse> getCityList(String lang) {
+        return repository.getCityList(lang);
     }
 }

@@ -98,6 +98,9 @@ public class ProfileFragment extends BaseFragment {
                     saveUserDetails();
                     DialogUtil.showAlertDialog(getActivity(), getString(R.string.profile_succes_msg),
                             (dialog, which) -> dialog.dismiss());
+                } else {
+                    DialogUtil.showAlertDialog(getActivity(), getString(R.string.something_went_wrong),
+                            (dialog, which) -> dialog.dismiss());
                 }
             });
         } else {

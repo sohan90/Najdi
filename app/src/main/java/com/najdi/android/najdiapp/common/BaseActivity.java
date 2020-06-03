@@ -7,16 +7,21 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.najdi.android.najdiapp.home.model.CityListModelResponse;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.LocaleUtitlity;
 import com.najdi.android.najdiapp.utitility.MathUtils;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 import com.najdi.android.najdiapp.utitility.ResourceProvider;
 
+import java.util.List;
 import java.util.Locale;
 
+import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
+
+import static com.najdi.android.najdiapp.utitility.PreferenceUtils.USER_SELECTED_CITY;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -86,6 +91,17 @@ public class BaseActivity extends AppCompatActivity {
             compositeDisposable = new CompositeDisposable();
         }
         return compositeDisposable;
+    }
+
+    protected Single<List<String>> getCityNameList(List<CityListModelResponse.City> cityList) {
+        return io.reactivex.rxjava3.core.Observable.just(cityList)
+                .flatMap(io.reactivex.rxjava3.core.Observable::fromIterable)
+                .map(CityListModelResponse.City::getName)
+                .toList();
+    }
+
+    protected void saveCityId(String name) {
+        PreferenceUtils.setValueString(this, USER_SELECTED_CITY, name);
     }
 
     @Override

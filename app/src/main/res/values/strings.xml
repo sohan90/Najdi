@@ -175,4 +175,5 @@
     <string name="enter_valid_phone_no" translatable="false">Enter the valid mobile no</string>
     <string name="save_to_fav" translatable="false">Save to Favourite Locations</string>
     <string name="location_saved_msg" translatable="false">Location saved successfully</string>
+    <string name="plz_valid_fields" translatable="false">Please enter the valid fields</string>
 </resources>

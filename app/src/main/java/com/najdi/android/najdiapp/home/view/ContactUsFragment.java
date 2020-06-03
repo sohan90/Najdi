@@ -88,7 +88,7 @@ public class ContactUsFragment extends BaseFragment implements TextWatcher {
             if (viewModel.validateFields()) {
                 sendContactDetail();
             } else {
-                DialogUtil.showAlertDialog(getActivity(), getString(R.string.please_fill),
+                DialogUtil.showAlertDialog(getActivity(), getString(R.string.plz_valid_fields),
                         (d, w) -> d.dismiss());
             }
         });

@@ -12,12 +12,15 @@ import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseActivity;
 import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.databinding.ActivityLoginBinding;
+import com.najdi.android.najdiapp.home.model.CityListModelResponse;
 import com.najdi.android.najdiapp.home.view.HomeScreenActivity;
 import com.najdi.android.najdiapp.launch.viewmodel.LoginViewModel;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.FragmentHelper;
 import com.najdi.android.najdiapp.utitility.LocaleUtitlity;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
+
+import java.util.List;
 
 import static com.najdi.android.najdiapp.common.Constants.ARABIC_LAN;
 import static com.najdi.android.najdiapp.utitility.PreferenceUtils.FCM_TOKEN_KEY;
@@ -121,7 +124,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             if (baseResponse != null) {
                 if (baseResponse.isStatus()) {
                     saveCredential(baseResponse.getUserid(), baseResponse.getUserToken());
-                    launchHomeScreen();
+                    fetchCityForProducts();
+                    //launchHomeScreen();
 
                 } else {
                     String message;
@@ -139,6 +143,36 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             }
         });
     }
+
+    private void fetchCityForProducts() {
+        viewModel.getCityList(resourProvider.getCountryLang())
+                .observe(this, cityListModelResponse -> {
+                    if (cityListModelResponse != null && cityListModelResponse.isStatus()) {
+                        List<CityListModelResponse.City> cityList = cityListModelResponse.getCities();
+                        addDisposable(getCityNameList(cityList)
+                                .subscribe(strCity ->
+                                        showPopupwindow(strCity, cityList)));
+
+                    } else {
+                        launchHomeScreen();
+                    }
+                });
+    }
+
+    protected void showPopupwindow(List<String> strings,
+                                   List<CityListModelResponse.City> cityList) {
+        String title = getString(R.string.select_city);
+        binding.blurLyt.setAlpha(0.5f);
+        DialogUtil.showPopupWindow(this,
+                binding.container, title, strings, pos -> {
+                    binding.blurLyt.setAlpha(0f);
+                    CityListModelResponse.City city = cityList.get(pos);
+                    saveCityId(city.getId());
+                    launchHomeScreen();
+                });
+
+    }
+
 
     private void saveCredential(String userId, String token) {
         PreferenceUtils.setValueString(this, PreferenceUtils.USER_LOGIIN_TOKEN, token);

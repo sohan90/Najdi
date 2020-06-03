@@ -97,4 +97,5 @@ public class SignUpViewModel extends BaseViewModel {
     public MutableLiveData<String> getToolbarTitle() {
         return toolbarTitle;
     }
+
 }

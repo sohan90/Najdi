@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.BaseViewModel;
+import com.najdi.android.najdiapp.home.model.CityListModelResponse;
 import com.najdi.android.najdiapp.home.model.ForgotPaswwordRequest;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
@@ -123,6 +124,9 @@ public class OtpViewModel extends BaseViewModel {
 
     public void setScreenType(int screenType) {
         this.screenType = screenType;
+    }
 
+    public LiveData<CityListModelResponse> getCityList(String lang) {
+        return repository.getCityList(lang);
     }
 }

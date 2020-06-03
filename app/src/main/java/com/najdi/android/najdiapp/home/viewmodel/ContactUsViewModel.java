@@ -2,6 +2,7 @@ package com.najdi.android.najdiapp.home.viewmodel;
 
 import android.app.Application;
 import android.text.TextUtils;
+import android.util.Patterns;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -60,10 +61,11 @@ public class ContactUsViewModel extends BaseViewModel {
         boolean isValid = true;
         if (TextUtils.isEmpty(name.getValue())) {
             isValid = false;
-        } else if (TextUtils.isEmpty(phone.getValue()) && phone.getValue().startsWith("5") &&
-                phone.getValue().length() >= 8) {
+        } else if (TextUtils.isEmpty(phone.getValue()) || !phone.getValue().startsWith("5") ||
+                phone.getValue().length() < 8) {
             isValid = false;
-        } else if (TextUtils.isEmpty(email.getValue())) {
+        } else if (TextUtils.isEmpty(email.getValue()) || !Patterns.EMAIL_ADDRESS
+                .matcher(email.getValue()).matches()) {
             isValid = false;
         } else if (TextUtils.isEmpty(message.getValue())) {
             isValid = false;

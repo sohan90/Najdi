@@ -123,7 +123,9 @@ public class HomeScreenActivity extends BaseActivity
                     .observe(this, cityListModelResponse -> {
                         if (cityListModelResponse != null && cityListModelResponse.isStatus()) {
                             List<CityListModelResponse.City> cityList = cityListModelResponse.getCities();
-                            getCityNameList(cityList);
+
+                            addDisposable(getCityNameList(cityList).subscribe(strCity ->
+                                    showPopupwindow(strCity, cityList, null)));
                         }
                     });
         } else {
@@ -142,13 +144,6 @@ public class HomeScreenActivity extends BaseActivity
                 });
     }
 
-    private void getCityNameList(List<CityListModelResponse.City> cityList) {
-        addDisposable(io.reactivex.rxjava3.core.Observable.just(cityList)
-                .flatMap(io.reactivex.rxjava3.core.Observable::fromIterable)
-                .map(CityListModelResponse.City::getName)
-                .toList()
-                .subscribe(strings -> showPopupwindow(strings, cityList, null)));
-    }
 
     private void getCategoryNameList(List<CityListModelResponse.Category> categoryList) {
         this.categoryList = categoryList;
@@ -181,10 +176,6 @@ public class HomeScreenActivity extends BaseActivity
                     }
                 });
 
-    }
-
-    private void saveCityId(String name) {
-        PreferenceUtils.setValueString(this, USER_SELECTED_CITY, name);
     }
 
     private void subscribeForCartCount() {
