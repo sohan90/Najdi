@@ -153,7 +153,7 @@ public class CheckoutFragment extends BaseFragment {
         checkoutAdapter = new CheckoutAdapter(new CartAdapter.AdapterClickLisntener() {
             @Override
             public void onRemoveItem(int position, String cartItemKey) {
-                DialogUtil.showAlertWithNegativeButton(getActivity(),
+                DialogUtil.showAlertWithNegativeButton(getActivity(), null,
                         getString(R.string.delete_msg), (dialog, which) -> {
                             dialog.dismiss();
                             if (which == DialogInterface.BUTTON_POSITIVE) {

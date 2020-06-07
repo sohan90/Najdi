@@ -1,13 +1,20 @@
 package com.najdi.android.najdiapp.common;
 
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.home.model.CityListModelResponse;
+import com.najdi.android.najdiapp.launch.model.AppDetailResponse;
+import com.najdi.android.najdiapp.repository.Repository;
+import com.najdi.android.najdiapp.utitility.AppInfoUtil;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.LocaleUtitlity;
 import com.najdi.android.najdiapp.utitility.MathUtils;
@@ -27,6 +34,7 @@ public class BaseActivity extends AppCompatActivity {
 
     protected ResourceProvider resourProvider;
     private CompositeDisposable compositeDisposable;
+    private GenericClickListener<Boolean> listener;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,6 +44,44 @@ public class BaseActivity extends AppCompatActivity {
         updateLocale(lang);
     }
 
+    protected void fetchAppInfo(Repository repository, GenericClickListener<Boolean> dismissListener){
+        this.listener = dismissListener;
+        fetchAppInfo(repository);
+    }
+
+    protected void fetchAppInfo(Repository repository) {
+        repository.getAppInfo().observe(this, baseResponse -> {
+            if (baseResponse != null){
+                if (baseResponse.isStatus()){
+                    AppDetailResponse appDetailResponse = baseResponse.getDetails();
+                    if (!AppInfoUtil.getCurrentVersion(this).
+                            equals(appDetailResponse.getVer_no_android())){
+
+                        showUpgradeDialog();
+                    }
+                }
+            }
+        });
+    }
+
+    private void showUpgradeDialog() {
+        DialogUtil.showAlertWithNegativeButton(this, "Upgrade your App", getString(R.string.app_name)
+                .concat(" recommends that you upgrade to the latest version"), (d, w) -> {
+            if (w == AlertDialog.BUTTON_POSITIVE){
+                openPlayStore();
+            } else {
+                d.dismiss();
+                if (listener != null){
+                    listener.onClicked(true);
+                }
+            }
+        });
+    }
+
+    private void openPlayStore() {
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse
+                ("market://details?id="+AppInfoUtil.getPackageName(this))));
+    }
     private void updateLocale(String lang) {
         setLocaleLanguage(lang);
         resourProvider.setActivityContext(this);

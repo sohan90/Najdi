@@ -13,6 +13,7 @@ import com.najdi.android.najdiapp.home.model.CityListModelResponse;
 import com.najdi.android.najdiapp.home.model.ProductDetailBundleModel;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.home.model.ProductModelResponse;
+import com.najdi.android.najdiapp.repository.Repository;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 
 import java.util.ArrayList;
@@ -184,5 +185,12 @@ public class HomeScreenViewModel extends BaseViewModel {
         };
 
         Collections.sort(list, COMPARATOR);
+    }
+
+    public Repository provideRepo(){
+        return repository;
+    }
+    public LiveData<BaseResponse> getAppInfo(){
+       return repository.getAppInfo();
     }
 }

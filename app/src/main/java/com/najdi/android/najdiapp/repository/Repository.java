@@ -893,4 +893,24 @@ public class Repository {
         }));
         return liveData;
     }
+
+    public LiveData<BaseResponse> getAppInfo(){
+        MutableLiveData<BaseResponse> liveData = new MutableLiveData<>();
+        RetrofitClient.getInstance().getAppInfo().enqueue(new RetrofitCallBack<>
+                (new RetrofitCallBack.CustomCallBack<BaseResponse>() {
+            @Override
+            public void onSuccesResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
+                if (baseResponse != null){
+                    liveData.setValue(baseResponse);
+                }
+            }
+
+            @Override
+            public void onFailurResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
+                baseResponse.handleError(resourceProvider.getActivityContext());
+                liveData.setValue(null);
+            }
+        }));
+        return liveData;
+    }
 }

@@ -13,8 +13,11 @@ import androidx.databinding.DataBindingUtil;
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseActivity;
 import com.najdi.android.najdiapp.common.Constants;
+import com.najdi.android.najdiapp.common.GenericClickListener;
+import com.najdi.android.najdiapp.common.NajdiApplication;
 import com.najdi.android.najdiapp.databinding.ActivitySplashBinding;
 import com.najdi.android.najdiapp.home.view.HomeScreenActivity;
+import com.najdi.android.najdiapp.repository.Repository;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
 import static com.najdi.android.najdiapp.common.Constants.ARABIC_LAN;
@@ -30,6 +33,11 @@ public class SplashScreenActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_splash);
 
+        Repository repository = new Repository(NajdiApplication.get(this).getResourceProvider());
+        fetchAppInfo(repository, aBoolean -> launchHomeScreenForLoggedUser());
+    }
+
+    private void launchHomeScreenForLoggedUser() {
         String loginToken = PreferenceUtils.getValueString(SplashScreenActivity.this,
                 USER_ID_KEY);
         if (!TextUtils.isEmpty(loginToken)) {

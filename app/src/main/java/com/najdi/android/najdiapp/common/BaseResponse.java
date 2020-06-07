@@ -6,6 +6,7 @@ import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.checkout.model.OrderStatus;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.home.model.User;
+import com.najdi.android.najdiapp.launch.model.AppDetailResponse;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.LocaleUtitlity;
 import com.najdi.android.najdiapp.utitility.ToastUtils;
@@ -29,6 +30,12 @@ public class BaseResponse {
     private ProductListResponse product;
     private List<OrderStatus> orders;
     private User user;
+    private AppDetailResponse details;
+
+
+    public AppDetailResponse getDetails() {
+        return details;
+    }
 
     public User getUser() {
         return user;

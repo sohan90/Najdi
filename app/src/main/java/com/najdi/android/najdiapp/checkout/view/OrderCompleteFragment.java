@@ -1,6 +1,9 @@
 package com.najdi.android.najdiapp.checkout.view;
 
 import android.content.Intent;
+import android.graphics.drawable.Animatable2;
+import android.graphics.drawable.AnimatedVectorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -9,6 +12,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -42,8 +46,24 @@ public class OrderCompleteFragment extends BaseFragment {
         initUi();
         initClickListener();
         subscribeForOrderResponse();
+        animateTick();
         return binding.getRoot();
 
+    }
+
+    private void animateTick() {
+        if (getContext() == null) return;
+        final AnimatedVectorDrawable animatedVectorDrawable = (AnimatedVectorDrawable)
+                ContextCompat.getDrawable(getContext(), R.drawable.animated_chechout_check);
+        binding.tick.setImageDrawable(animatedVectorDrawable);
+        animatedVectorDrawable.start();
+        animatedVectorDrawable.registerAnimationCallback(new Animatable2.AnimationCallback() {
+            @Override
+            public void onAnimationEnd(Drawable drawable) {
+                super.onAnimationEnd(drawable);
+                animatedVectorDrawable.start();
+            }
+        });
     }
 
     private void initUi() {

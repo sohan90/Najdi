@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
@@ -32,8 +33,11 @@ import com.najdi.android.najdiapp.databinding.NavHeaderHomeScreenBinding;
 import com.najdi.android.najdiapp.home.model.CityListModelResponse;
 import com.najdi.android.najdiapp.home.model.ProductDetailBundleModel;
 import com.najdi.android.najdiapp.home.viewmodel.HomeScreenViewModel;
+import com.najdi.android.najdiapp.launch.model.AppDetailResponse;
 import com.najdi.android.najdiapp.launch.view.LoginActivity;
+import com.najdi.android.najdiapp.repository.Repository;
 import com.najdi.android.najdiapp.shoppingcart.view.CartFragment;
+import com.najdi.android.najdiapp.utitility.AppInfoUtil;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.FragmentHelper;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
@@ -89,6 +93,7 @@ public class HomeScreenActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home_screen);
         initializeViewModel();
+        fetchAppInfo(viewModel.provideRepo());
         setNavigationBar();
         replaceFragment(PRODUCTS);
         subscribeForLaunchProductDetail();

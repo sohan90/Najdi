@@ -155,7 +155,7 @@ public class CartFragment extends BaseFragment {
             @Override
             public void onRemoveItem(int position, String cartItemKey) {
                 if (!TextUtils.isEmpty(cartItemKey)) {
-                    DialogUtil.showAlertWithNegativeButton(getActivity(),
+                    DialogUtil.showAlertWithNegativeButton(getActivity(), null,
                             getString(R.string.delete_msg), (dialog, which) -> {
                                 dialog.dismiss();
                                 if (which == DialogInterface.BUTTON_POSITIVE) {

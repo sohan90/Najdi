@@ -1,6 +1,7 @@
 package com.najdi.android.najdiapp.home.viewmodel;
 
 import android.app.Application;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -98,7 +99,8 @@ public class ProductDetailViewModel extends BaseViewModel {
 
         if (attributeOptionModel == null) return;
 
-        float attrOptPrice = Float.parseFloat(attributeOptionModel.getOptionPrice());
+        float attrOptPrice = Float.parseFloat(TextUtils.isEmpty(attributeOptionModel.getOptionPrice())
+                ? "0" : attributeOptionModel.getOptionPrice());
         attrOptPriceMap.put(selectedAttrId, attrOptPrice);
         updateTotalPrice();
         createAttributeForSelectedValue(selectedAttrId, attributeOptionModel.getId());

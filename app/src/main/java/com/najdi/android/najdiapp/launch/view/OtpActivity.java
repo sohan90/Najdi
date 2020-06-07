@@ -9,7 +9,7 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseActivity;
@@ -108,7 +108,7 @@ public class OtpActivity extends BaseActivity {
     }
 
     private void initializeViewModel() {
-        viewModel = ViewModelProviders.of(this).get(OtpViewModel.class);
+        viewModel = new ViewModelProvider(this).get(OtpViewModel.class);
         binding.one.requestFocus();
         binding.one.setCursorVisible(true);
     }

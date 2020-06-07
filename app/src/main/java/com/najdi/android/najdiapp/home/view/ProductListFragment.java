@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -54,12 +54,12 @@ public class ProductListFragment extends BaseFragment {
 
     private void initialHomeScreenViewModel() {
         if (getActivity() != null) {
-            homeScreeViewModel = ViewModelProviders.of(getActivity()).get(HomeScreenViewModel.class);
+            homeScreeViewModel = new ViewModelProvider(getActivity()).get(HomeScreenViewModel.class);
         }
     }
 
     private void subscribeForProductList() {
-        homeScreeViewModel.getProductList().observe(this, productListResponses -> {
+        homeScreeViewModel.getProductList().observe(getViewLifecycleOwner(), productListResponses -> {
             List<ProductListResponse> listResponseList = getVisibilityProducts(productListResponses);
             homeScreeViewModel.sortProduct(listResponseList);
             adapter.setData(listResponseList);

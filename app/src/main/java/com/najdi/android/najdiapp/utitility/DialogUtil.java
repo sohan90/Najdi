@@ -5,20 +5,29 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.drawable.Animatable;
+import android.graphics.drawable.Animatable2;
+import android.graphics.drawable.AnimatedVectorDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListPopupWindow;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+import androidx.databinding.DataBindingUtil;
+
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.GenericClickListener;
+import com.najdi.android.najdiapp.databinding.CustomDialogLytBinding;
 
 import java.util.List;
 
@@ -99,17 +108,44 @@ public class DialogUtil {
                                        final DialogInterface.OnClickListener listener) {
         if (context != null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AlertDialogTheme);
-            builder.setTitle(null).setMessage(message).setPositiveButton(R.string.ok, listener);
+
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+            // set the custom layout
+            final View customLayout = inflater.inflate(R.layout.custom_dialog_lyt, null);
+            builder.setView(customLayout);
+
+            TextView messageView = customLayout.findViewById(R.id.message);
+            messageView.setText(message);
+
+            ImageView tickView = customLayout.findViewById(R.id.imageView3);
+            final AnimatedVectorDrawable animatedVectorDrawable = (AnimatedVectorDrawable) ContextCompat.getDrawable(context,
+                    R.drawable.animated_check);
+            tickView.setImageDrawable(animatedVectorDrawable);
+            animatedVectorDrawable.start();
+            animatedVectorDrawable.registerAnimationCallback(new Animatable2.AnimationCallback() {
+                @Override
+                public void onAnimationEnd(Drawable drawable) {
+                    super.onAnimationEnd(drawable);
+                    animatedVectorDrawable.start();
+                }
+            });
+
+
+            builder.setPositiveButton(R.string.ok, listener);
             AlertDialog dialog = builder.create();
             dialog.show();
+
+            CustomDialogLytBinding binding = DataBindingUtil.bind(customLayout);
+            binding.ok.setOnClickListener((v ->
+                    listener.onClick(dialog, AlertDialog.BUTTON_POSITIVE)));
         }
     }
 
-    public static void showAlertWithNegativeButton(Context context, String message,
+    public static void showAlertWithNegativeButton(Context context, String title, String message,
                                                    final DialogInterface.OnClickListener listener) {
         if (context != null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AlertDialogTheme);
-            builder.setTitle(null).setMessage(message).setNegativeButton(R.string.cancel, listener).
+            builder.setTitle(title).setMessage(message).setNegativeButton(R.string.cancel, listener).
                     setPositiveButton(R.string.ok, listener);
             AlertDialog dialog = builder.create();
             dialog.show();

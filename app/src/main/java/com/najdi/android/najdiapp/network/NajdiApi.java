@@ -190,4 +190,9 @@ public interface NajdiApi {
     @Headers({"Content-Type:application/json"})
     Call<BaseResponse> removeCoupon(@Header("_token") String value, @Body CouponRequest couponRequest);
 
+    @GET("app_info")
+    @Headers({"Content-Type:application/json"})
+    Call<BaseResponse> getAppInfo();
+
+
 }
