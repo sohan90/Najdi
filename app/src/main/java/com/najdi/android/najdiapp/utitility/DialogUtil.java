@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Animatable2;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -23,11 +22,9 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
-import androidx.databinding.DataBindingUtil;
 
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.GenericClickListener;
-import com.najdi.android.najdiapp.databinding.CustomDialogLytBinding;
 
 import java.util.List;
 
@@ -40,6 +37,7 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 public class DialogUtil {
 
     private static AlertDialog sProgressAlertDialog;
+    private static int vectorDrawable = R.drawable.animated_check;
 
     /**
      * Shows Progress Dialog with only Spinner in the center
@@ -104,6 +102,15 @@ public class DialogUtil {
         }
     }
 
+    public static void showAlertDialogNegativeVector(Context context,
+                                                        String message,
+                                                        final DialogInterface.OnClickListener listener){
+
+        vectorDrawable = R.drawable.animated_cross;
+        showAlertDialog(context, message, listener);
+        vectorDrawable = R.drawable.animated_check;//resting the animation
+    }
+
     public static void showAlertDialog(Context context, String message,
                                        final DialogInterface.OnClickListener listener) {
         if (context != null) {
@@ -119,7 +126,7 @@ public class DialogUtil {
 
             ImageView tickView = customLayout.findViewById(R.id.imageView3);
             final AnimatedVectorDrawable animatedVectorDrawable = (AnimatedVectorDrawable) ContextCompat.getDrawable(context,
-                    R.drawable.animated_check);
+                    vectorDrawable);
             tickView.setImageDrawable(animatedVectorDrawable);
             animatedVectorDrawable.start();
             animatedVectorDrawable.registerAnimationCallback(new Animatable2.AnimationCallback() {
@@ -135,9 +142,9 @@ public class DialogUtil {
             AlertDialog dialog = builder.create();
             dialog.show();
 
-            CustomDialogLytBinding binding = DataBindingUtil.bind(customLayout);
+           /* CustomDialogLytBinding binding = DataBindingUtil.bind(customLayout);
             binding.ok.setOnClickListener((v ->
-                    listener.onClick(dialog, AlertDialog.BUTTON_POSITIVE)));
+                    listener.onClick(dialog, AlertDialog.BUTTON_POSITIVE)));*/
         }
     }
 

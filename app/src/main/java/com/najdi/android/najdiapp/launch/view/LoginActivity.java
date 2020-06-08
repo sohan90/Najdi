@@ -137,7 +137,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     } else {
                         message = baseResponse.getMessage();
                     }
-                    DialogUtil.showAlertDialog(this, message,
+                    DialogUtil.showAlertDialogNegativeVector(this, message,
                             (dialog, which) -> dialog.dismiss());
                 }
             }

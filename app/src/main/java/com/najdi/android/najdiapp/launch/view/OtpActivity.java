@@ -144,7 +144,7 @@ public class OtpActivity extends BaseActivity {
                     String msg = getString(R.string.verification_password_sent_to, phone);
                     DialogUtil.showAlertDialog(this, msg, (dialog, which) -> dialog.dismiss());
                 } else {
-                    DialogUtil.showAlertDialog(this, baseResponse.getMessage(),
+                    DialogUtil.showAlertDialogNegativeVector(this, baseResponse.getMessage(),
                             (dialog, which) -> dialog.dismiss());
                 }
 
@@ -188,7 +188,7 @@ public class OtpActivity extends BaseActivity {
                 }
             } else {
                 if (baseResponse == null) return;
-                DialogUtil.showAlertDialog(this, baseResponse.getMessage(),
+                DialogUtil.showAlertDialogNegativeVector(this, baseResponse.getMessage(),
                         (dialog, which) -> dialog.dismiss());
             }
         });

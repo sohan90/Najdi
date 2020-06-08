@@ -104,7 +104,7 @@ public class ProfileFragment extends BaseFragment {
                 }
             });
         } else {
-            DialogUtil.showAlertDialog(getActivity(), getString(R.string.please_fill),
+            DialogUtil.showAlertDialogNegativeVector(getActivity(), getString(R.string.please_fill),
                     (dialog, which) -> dialog.dismiss());
         }
 

@@ -156,6 +156,7 @@ public class ProductDetailViewModel extends BaseViewModel {
         if (attributHashMap == null) return;
         attributHashMap.clear();
         quantityCount.setValue(0);
+        notes.setValue("");// reset notes
         incrementQuantity();
     }
 

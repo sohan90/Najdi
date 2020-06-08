@@ -58,6 +58,10 @@ public class BaseActivity extends AppCompatActivity {
                             equals(appDetailResponse.getVer_no_android())){
 
                         showUpgradeDialog();
+                    } else {
+                        if (listener != null){
+                            listener.onClicked(true);
+                        }
                     }
                 }
             }
@@ -65,8 +69,8 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     private void showUpgradeDialog() {
-        DialogUtil.showAlertWithNegativeButton(this, "Upgrade your App", getString(R.string.app_name)
-                .concat(" recommends that you upgrade to the latest version"), (d, w) -> {
+        DialogUtil.showAlertWithNegativeButton(this, getString(R.string.upgrade_title),
+                getString(R.string.app_name).concat(getString(R.string.upgrade_msg)), (d, w) -> {
             if (w == AlertDialog.BUTTON_POSITIVE){
                 openPlayStore();
             } else {

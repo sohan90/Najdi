@@ -103,7 +103,7 @@ public class CheckoutFragment extends BaseFragment {
                     DialogUtil.showAlertDialog(getActivity(), baseResponse.getMessage(),
                             (d, w) -> d.dismiss());
                 } else {
-                    DialogUtil.showAlertDialog(getActivity(), baseResponse.getMessage(),
+                    DialogUtil.showAlertDialogNegativeVector(getActivity(), baseResponse.getMessage(),
                             (d, w) -> d.dismiss());
                 }
             });
@@ -131,7 +131,7 @@ public class CheckoutFragment extends BaseFragment {
                         (d, wh) -> d.dismiss());
 
             } else {
-                DialogUtil.showAlertDialog(getActivity(), baseResponse.getMessage(),
+                DialogUtil.showAlertDialogNegativeVector(getActivity(), baseResponse.getMessage(),
                         (d, w) -> d.dismiss());
             }
         });

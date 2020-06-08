@@ -1,0 +1,20 @@
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@android:anim/accelerate_interpolator"
+    android:ordering="sequentially"
+    android:shareInterpolator="false">
+    <!-- First animation, the first stroke from top left to bottom right \ -->
+    <objectAnimator
+        android:duration="300"
+        android:propertyName="pathData"
+        android:valueFrom="M6,6 l0,0 M16,6 l0,0"
+        android:valueTo="M6,6 l10,10 M16,6 l0,0"
+        android:valueType="pathType" />
+
+    <!-- Second animation, the second stroke from top right to bottom left / -->
+    <objectAnimator
+        android:duration="300"
+        android:propertyName="pathData"
+        android:valueFrom="M6,6 l10,10 M16,6 l0,0"
+        android:valueTo="M6,6 l10,10 M16,6 l-10,10"
+        android:valueType="pathType" />
+</set>

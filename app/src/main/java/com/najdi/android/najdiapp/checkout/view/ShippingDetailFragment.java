@@ -216,7 +216,7 @@ public class ShippingDetailFragment extends BaseFragment implements OnMapReadyCa
                         activityViewModel.getBillingMutableLiveData().setValue(billingAddress);
                         activityViewModel.getProgressPercentage().setValue(50);
                     } else {
-                        DialogUtil.showAlertDialog(getActivity(), getString(R.string.please_fill),
+                        DialogUtil.showAlertDialogNegativeVector(getActivity(), getString(R.string.please_fill),
                                 (dialog, which) -> dialog.dismiss());
                     }
                 }));
