@@ -38,7 +38,7 @@ public class OrderResponse {
     }
 
     public String getId() {
-        return "#" +String.valueOf(order_id);
+        return "#" + order_id;
     }
 
     public int getParent_id() {

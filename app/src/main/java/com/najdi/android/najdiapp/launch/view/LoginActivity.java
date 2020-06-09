@@ -6,7 +6,7 @@ import android.view.View;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseActivity;
@@ -66,7 +66,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void initViewModel() {
-        viewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
+        viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
     }
 
     private void initClickListener() {

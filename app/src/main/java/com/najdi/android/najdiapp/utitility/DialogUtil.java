@@ -205,9 +205,7 @@ public class DialogUtil {
         popupWindow.setTouchInterceptor((v, motionEvent) -> {
             v.performClick();
             if (motionEvent.getX() < 0 || motionEvent.getX() > popupWindow.getWidth()) return true;
-            if (motionEvent.getY() < 0 || motionEvent.getY() > popupWindow.getHeight()) return true;
-
-            return false;
+            return motionEvent.getY() < 0 || motionEvent.getY() > popupWindow.getHeight();
         });
         popupWindow.showAtLocation(anchorView, Gravity.CENTER, 0, 0);
         listView.setOnItemClickListener((parent, view, position, id) -> {

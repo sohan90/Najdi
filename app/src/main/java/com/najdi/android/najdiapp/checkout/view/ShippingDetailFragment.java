@@ -1,5 +1,6 @@
 package com.najdi.android.najdiapp.checkout.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Address;
 import android.location.Location;
@@ -174,6 +175,7 @@ public class ShippingDetailFragment extends BaseFragment implements OnMapReadyCa
                 this::navigateMapToCurrentAddress);
     }
 
+    @SuppressLint("MissingPermission")
     private void navigateMapToCurrentAddress(Address address) {
         map.setMyLocationEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(true);
