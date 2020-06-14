@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -59,11 +59,11 @@ public class BankDetailFragment extends BaseFragment {
 
     private void intializeActivityViewModel() {
         if (getActivity() == null) return;
-        acitivityViewModel = ViewModelProviders.of(getActivity()).get(HomeScreenViewModel.class);
+        acitivityViewModel = new ViewModelProvider(getActivity()).get(HomeScreenViewModel.class);
     }
 
     private void initializeViewModel() {
-        viewModel = ViewModelProviders.of(this).get(BankDetailViewModel.class);
+        viewModel = new ViewModelProvider(this).get(BankDetailViewModel.class);
     }
 
     private void initRecyclerView() {

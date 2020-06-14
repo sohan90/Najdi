@@ -39,7 +39,6 @@ public class ProductListFragment extends BaseFragment {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_product,
                 container, false);
-        initUi();
         initialHomeScreenViewModel();
         subscribeForProductList();
         initializeRecyclerViewAdapter();
@@ -85,7 +84,4 @@ public class ProductListFragment extends BaseFragment {
         binding.recyclView.setAdapter(adapter);
     }
 
-    private void initUi() {
-
-    }
 }

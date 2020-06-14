@@ -59,12 +59,13 @@ public class Constants {
     }
 
     @IntDef(value = {OtpScreen.SIGN_UP_SCREEN, OtpScreen.FORGOT_PASSWORD_SCREEN,
-            OtpScreen.RESET_PASSWORD_OTP_SCREEN, OtpScreen.CHANGE_PASSWORD_PROFILE})
+            OtpScreen.RESET_PASSWORD_OTP_SCREEN, OtpScreen.CHANGE_PASSWORD_PROFILE, OtpScreen.OLD_USER_FLOW})
     public @interface OtpScreen {
         int SIGN_UP_SCREEN = 0;
         int FORGOT_PASSWORD_SCREEN = 1;
         int RESET_PASSWORD_OTP_SCREEN = 2;
         int CHANGE_PASSWORD_PROFILE = 3;
         int CHANGE_MOBILE_VERIFY = 4;
+        int OLD_USER_FLOW = 5;
     }
 }

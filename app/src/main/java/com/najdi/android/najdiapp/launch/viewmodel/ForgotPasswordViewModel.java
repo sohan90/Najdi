@@ -13,6 +13,8 @@ import com.najdi.android.najdiapp.home.model.ForgotPaswwordRequest;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
+import java.util.HashMap;
+
 public class ForgotPasswordViewModel extends BaseViewModel {
 
     private MutableLiveData<String> phoneno = new MutableLiveData<>();
@@ -108,5 +110,13 @@ public class ForgotPasswordViewModel extends BaseViewModel {
         }
         validatePasswordStatus.setValue(isValid);
         return validatePasswordStatus;
+    }
+
+    public LiveData<BaseResponse> appMigrationResetPassword(String userId, String token) {
+        HashMap<String, String> request = new HashMap<>();
+        request.put("user_id", userId);
+        request.put("token", token);
+        request.put("password", confirmPassword.getValue());
+        return repository.resetPasswordForAppMigration(request);
     }
 }

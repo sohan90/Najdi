@@ -26,6 +26,7 @@ import com.najdi.android.najdiapp.shoppingcart.model.UpdateCartRequest;
 import com.najdi.android.najdiapp.shoppingcart.viewmodel.CartViewModel;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.FragmentHelper;
+import com.najdi.android.najdiapp.utitility.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +52,7 @@ public class CartFragment extends BaseFragment {
         initializeViewModel();
         bindLiveData();
         setRecyclAdapter();
-        subscribeForCartResponse();
+        subscribeForCartResponse(false);
         initializeClickListener();
         updateCart();
         return binding.getRoot();
@@ -127,16 +128,22 @@ public class CartFragment extends BaseFragment {
         viewModel = new ViewModelProvider(this).get(CartViewModel.class);
     }
 
-    private void subscribeForCartResponse() {
+    private void subscribeForCartResponse(boolean updateCartForQuantity) {
         showProgressDialog();
         homeScreenViewModel.getCart().observe(getViewLifecycleOwner(), cartResponse -> {
             hideProgressDialog();
             if (cartResponse != null && cartResponse.isStatus()) {
+
                 if (cartResponse.getCart() != null && cartResponse.getCart().size() > 0) {
+                    viewModel.setShowTax(cartResponse.getShowTax(), cartResponse.getTaxAmount());
                     viewModel.setTotal(cartResponse.getCart());
                     adapterList = cartResponse.getCart();
                     adapter.setData(adapterList);
-                    homeScreenViewModel.getCart().removeObservers(this);
+
+                    if (updateCartForQuantity) {
+                        DialogUtil.showAlertDialog(getActivity(), getString(R.string.quantity_updated),
+                                (dialog, which) -> dialog.dismiss());
+                    }
                 } else {
                     showEmptyCartValueTxt();
                 }
@@ -200,16 +207,12 @@ public class CartFragment extends BaseFragment {
 
         LiveData<BaseResponse> liveData = viewModel.updateQuantity(updateCartRequest);
         liveData.observe(this, baseResponse -> {
-
-            hideProgressDialog();
             updateCart();
             if (baseResponse != null && baseResponse.isStatus()) {
-                DialogUtil.showAlertDialog(getActivity(), getString(R.string.quantity_updated),
-                        (dialog, which) -> dialog.dismiss());
+                subscribeForCartResponse(true);
             } else {
-                CartResponse.CartData cartData = adapterList.get(adapterPosition);
-                cartData.setQty(String.valueOf(cartData.getPreviousQuantity()));
-                adapter.setData(adapterList);
+                hideProgressDialog();
+                ToastUtils.getInstance(getActivity()).showLongToast(getString(R.string.something_went_wrong));
             }
         });
     }

@@ -235,13 +235,8 @@ public class CheckoutFragment extends BaseFragment {
                 ToastUtils.getInstance(getActivity()).
                         showShortToast(baseResponse.getMessage());
             } else {
-                // failure case
-                /*CartResponse.CartData cartData = adapterList.get(adapterPosition);
-                cartData.setQuantity(cartData.getPreviousQuantity());
-                cartData.setSubtotal(String.valueOf(cartData.getPreviousTotal()));
-                checkoutAdapter.setDataList(adapterList);*/
+               ToastUtils.getInstance(getActivity()).showLongToast(getString(R.string.something_went_wrong));
             }
-            updateTotal();
         });
     }
 
@@ -260,6 +255,7 @@ public class CheckoutFragment extends BaseFragment {
                 cartResponse -> {
                     hideProgressDialog();
                     if (cartResponse != null && cartResponse.isStatus()) {
+                        viewModel.setShowTax(cartResponse.getShowTax(), cartResponse.getTaxAmount());
                         viewModel.udpateTotal(cartResponse.getCart());
                         viewModel.getVariationDetails(cartResponse.getCart())
                                 .observe(getViewLifecycleOwner(), cartData -> {

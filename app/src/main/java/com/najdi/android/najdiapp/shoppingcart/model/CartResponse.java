@@ -12,6 +12,9 @@ public class CartResponse {
     private String message;
     private boolean status;
     private List<CartData> cart;
+    float total_cart_amount;
+    String show_tax;
+    float tax_amount;
 
     public List<CartData> getCart() {
         return cart;
@@ -60,7 +63,6 @@ public class CartResponse {
         String price;
         String subtotal;
         String image;
-        String total_cart_amount;
         List<AttributeCartOptionData> attribute_data;
 
         public List<AttributeCartOptionData> getAttributeData() {
@@ -225,8 +227,8 @@ public class CartResponse {
             return subtotal;
         }
 
-        public float priceWithVariation() {
-            float price = Float.parseFloat(subtotal) / Float.parseFloat(qty);
+        public float priceWithVariation(float totalAmount) {
+            float price = totalAmount / quantity;
             return price;
         }
 
@@ -238,5 +240,19 @@ public class CartResponse {
         public String getImage() {
             return image;
         }
+
     }
+
+    public float getTotalCartAmount() {
+        return total_cart_amount;
+    }
+
+    public String getShowTax() {
+        return show_tax;
+    }
+
+    public float getTaxAmount() {
+        return tax_amount;
+    }
+
 }

@@ -47,12 +47,57 @@
             android:layout_marginEnd="15dp"
             android:background="@color/grey_text" />
 
+        <RelativeLayout
+            android:id="@+id/tax_lyt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/sub_total_Txt"
+            android:visibility="@{viewModel.showTaxUi}">
+
+            <TextView
+                android:id="@+id/tax_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="20dp"
+                android:text="@string/tax"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:id="@+id/tax_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="10dp"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:text="@{String.valueOf(viewModel.taxAmount).concat(@string/currency)}"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:visibility="visible" />
+
+            <View
+                android:id="@+id/divider_3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/tax_label"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:background="@color/grey_text"
+                android:visibility="visible" />
+
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/coupon_lyt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/sub_total_Txt"
+            android:layout_below="@id/tax_lyt"
             android:visibility="gone">
 
             <TextView
@@ -104,9 +149,7 @@
                 android:layout_marginEnd="10dp"
                 android:src="@drawable/ic_close_black_24dp"
                 android:visibility="visible" />
-
             <View
-                android:id="@+id/divider_3"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_below="@id/coupon"
@@ -144,7 +187,7 @@
             android:textStyle="bold" />
 
         <View
-            android:id="@+id/divider_4"
+            android:id="@+id/div5"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@id/total"
@@ -156,7 +199,7 @@
             android:id="@+id/radi_grp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/divider_4"
+            android:layout_below="@id/div5"
             android:orientation="vertical">
 
             <RadioButton

@@ -24,13 +24,11 @@ android {
         stagging {
             applicationId "com.najdi.android.najdiapp"
             buildConfigField 'String', 'BASE_URL', '"https://najdisheep.com/newnajdisheep/api/"'
-            buildConfigField 'String', 'BASIC_64_AUTH', '"Basic Y2tfMzFmNTIxOTA3ZDJlZTY0ZmE4ZDMzMjAwNjE0ODY4ZTc3ZDlhOGY3Njpjc184NDU5ZjU4NWIwYzM3MjQ0Y2JjZWViZDYzZTE0MTQ4OWRjZDlkMWU4"'
             dimension "default"
         }
         production {
             applicationId "com.najdi.android.najdiapp"
-            buildConfigField 'String', 'BASE_URL', '"https://najdisheep.com/newnajdisheep/api"'
-            buildConfigField 'String', 'BASIC_64_AUTH', '"Basic Y2tfMGJjMTljMWY0ZGUwNTU4YWQ0MmFjYTU2MDFiY2MyNzVlNTVmOTExZDpjc185MzA3MjVlZTBhOTE2ODkxNDEwZGI5MmQzZWI4MjcxYTcwYjVhMzBm"'
+            buildConfigField 'String', 'BASE_URL', '"https://najdisheep.com/newnajdisheep/api/"'
             dimension "default"
         }
     }

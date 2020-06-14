@@ -72,7 +72,7 @@
                     android:layout_toStartOf="@id/total_price"
                     android:layout_toEndOf="@id/img"
                     android:maxLines="1"
-                    android:text="@{String.valueOf(cartModel.priceWithVariation()).concat(` `).concat(@string/currency)}"
+                    android:text="@{String.valueOf(cartModel.price).concat(` `).concat(@string/currency)}"
                     android:textColor="@color/black"
                     android:textDirection="locale" />
 

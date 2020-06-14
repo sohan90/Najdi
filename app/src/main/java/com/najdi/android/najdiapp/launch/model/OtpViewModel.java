@@ -12,6 +12,8 @@ import com.najdi.android.najdiapp.home.model.CityListModelResponse;
 import com.najdi.android.najdiapp.home.model.ForgotPaswwordRequest;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
+import java.util.HashMap;
+
 import static com.najdi.android.najdiapp.common.Constants.OtpScreen.CHANGE_MOBILE_VERIFY;
 
 public class OtpViewModel extends BaseViewModel {
@@ -128,5 +130,14 @@ public class OtpViewModel extends BaseViewModel {
 
     public LiveData<CityListModelResponse> getCityList(String lang) {
         return repository.getCityList(lang);
+    }
+
+    public LiveData<BaseResponse> verifyAppMigration(String tempId, String token){
+        String otp = one.getValue() + two.getValue() + three.getValue() + four.getValue();
+        HashMap<String, String> requestMap = new HashMap<>();
+        requestMap.put("temp_id", tempId);
+        requestMap.put("otp", otp);
+        requestMap.put("token", token);
+        return repository.verifyAppMigration(requestMap);
     }
 }

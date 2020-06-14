@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseActivity;
+import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.databinding.ActivityLoginBinding;
 import com.najdi.android.najdiapp.home.model.CityListModelResponse;
@@ -23,6 +24,8 @@ import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 import java.util.List;
 
 import static com.najdi.android.najdiapp.common.Constants.ARABIC_LAN;
+import static com.najdi.android.najdiapp.launch.view.OtpActivity.EXTRA_SCREEN_TYPE;
+import static com.najdi.android.najdiapp.launch.view.OtpActivity.EXTRA_SIGN_UP_TEMP_ID;
 import static com.najdi.android.najdiapp.utitility.PreferenceUtils.FCM_TOKEN_KEY;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
@@ -123,9 +126,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             hideProgressDialog();
             if (baseResponse != null) {
                 if (baseResponse.isStatus()) {
-                    saveCredential(baseResponse.getUserid(), baseResponse.getUserToken());
-                    fetchCityForProducts();
-                    //launchHomeScreen();
+                    if (baseResponse.getMigrateStatus() == BaseResponse.OLD_USER) { // for migrating the old user to the new system in the backend
+                        saveCredential(null, baseResponse.getUserToken());
+                        launchOTPscreen(baseResponse.getUserid());
+                    } else {
+                        saveCredential(baseResponse.getUserid(), baseResponse.getUserToken());
+                        fetchCityForProducts();// new user as usual flow
+                    }
 
                 } else {
                     String message;
@@ -142,6 +149,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 }
             }
         });
+    }
+
+    private void launchOTPscreen(String userId) {
+        Intent intent = new Intent(this, OtpActivity.class);
+        intent.putExtra(EXTRA_SCREEN_TYPE, Constants.OtpScreen.OLD_USER_FLOW);
+        intent.putExtra(EXTRA_SIGN_UP_TEMP_ID, userId);
+        startActivity(intent);
     }
 
     private void fetchCityForProducts() {

@@ -1,6 +1,5 @@
 package com.najdi.android.najdiapp.network;
 
-import com.najdi.android.najdiapp.BuildConfig;
 import com.najdi.android.najdiapp.checkout.model.CouponRequest;
 import com.najdi.android.najdiapp.checkout.model.CouponResponse;
 import com.najdi.android.najdiapp.checkout.model.OrderResponse;
@@ -156,7 +155,7 @@ public interface NajdiApi {
     Call<BaseResponse> getTermsCondition(@Query("lang")String value);
 
     @GET("wc/v2/products/{product_id}/variations/{variation_id}")
-    @Headers({"Content-Type:application/json", "Authorization" + ": " + BuildConfig.BASIC_64_AUTH})
+    @Headers({"Content-Type:application/json"})
     Call<ProductListResponse> getVartionForSelectedProduct(@Path("product_id") String productId,
                                                            @Path("variation_id") int variationId);
 
@@ -193,6 +192,15 @@ public interface NajdiApi {
     @GET("app_info")
     @Headers({"Content-Type:application/json"})
     Call<BaseResponse> getAppInfo();
+
+    @POST("app_migration_verify")
+    @Headers({"Content-Type:application/json"})
+    Call<BaseResponse> appMigrationVerify(@Body HashMap<String, String> request);
+
+    @POST("app_migration_reset_password")
+    @Headers({"Content-Type:application/json"})
+    Call<BaseResponse> appMigrationResetPassword(@Body HashMap<String, String> request);
+
 
 
 }

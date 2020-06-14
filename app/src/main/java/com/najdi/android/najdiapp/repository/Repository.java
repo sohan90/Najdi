@@ -913,4 +913,44 @@ public class Repository {
         }));
         return liveData;
     }
+
+    public LiveData<BaseResponse> verifyAppMigration(HashMap<String, String> request){
+        MutableLiveData<BaseResponse> liveData = new MutableLiveData<>();
+        RetrofitClient.getInstance().appMigrationVerify(request).enqueue(new RetrofitCallBack<>
+                (new RetrofitCallBack.CustomCallBack<BaseResponse>() {
+                    @Override
+                    public void onSuccesResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
+                        if (baseResponse != null){
+                            liveData.setValue(baseResponse);
+                        }
+                    }
+
+                    @Override
+                    public void onFailurResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
+                        baseResponse.handleError(resourceProvider.getActivityContext());
+                        liveData.setValue(null);
+                    }
+                }));
+        return liveData;
+    }
+
+    public LiveData<BaseResponse> resetPasswordForAppMigration(HashMap<String, String> request){
+        MutableLiveData<BaseResponse> liveData = new MutableLiveData<>();
+        RetrofitClient.getInstance().appMigrationResetPassword(request).enqueue(new RetrofitCallBack<>
+                (new RetrofitCallBack.CustomCallBack<BaseResponse>() {
+                    @Override
+                    public void onSuccesResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
+                        if (baseResponse != null){
+                            liveData.setValue(baseResponse);
+                        }
+                    }
+
+                    @Override
+                    public void onFailurResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
+                        baseResponse.handleError(resourceProvider.getActivityContext());
+                        liveData.setValue(null);
+                    }
+                }));
+        return liveData;
+    }
 }

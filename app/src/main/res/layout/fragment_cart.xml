@@ -52,6 +52,34 @@
                     android:text="@{cartViewModel.subtotalLiveData}"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{cartViewModel.showTaxUi}"
+                android:layout_marginBottom="20dp">
+
+                <TextView
+                    android:id="@+id/tax_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tax"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tax_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="@{String.valueOf(cartViewModel.taxAmount()).concat(@string/currency)}"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+
+
             </RelativeLayout>
 
             <View

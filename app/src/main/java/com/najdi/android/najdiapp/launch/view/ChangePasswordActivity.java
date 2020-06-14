@@ -1,5 +1,6 @@
 package com.najdi.android.najdiapp.launch.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -16,15 +17,15 @@ import com.najdi.android.najdiapp.launch.viewmodel.ForgotPasswordViewModel;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
+import static com.najdi.android.najdiapp.common.Constants.OtpScreen.OLD_USER_FLOW;
 import static com.najdi.android.najdiapp.common.Constants.OtpScreen.RESET_PASSWORD_OTP_SCREEN;
 
 public class ChangePasswordActivity extends BaseActivity {
     public static final String EXTRA_CHANGE_PASSWORD_LAUNCH_TYPE = "change_password_screen_type";
-    public static final String EXTRA_OTP_CODE = "extra_otp_code";
     public static final String EXTRA_USER_ID = "extra_user_id";
     public static final String EXTRA_TOKEN = "extra_token";
     private ForgotPasswordViewModel viewModel;
-    ActivityChangePasswordBinding binding;
+    private ActivityChangePasswordBinding binding;
     private int launchType;
     private String token;
     private String userId;
@@ -46,13 +47,11 @@ public class ChangePasswordActivity extends BaseActivity {
     }
 
     private void initUi() {
-        if (launchType == RESET_PASSWORD_OTP_SCREEN) {
-            viewModel.getOldPassword().setValue("");// setting default value while validating
+        if (launchType == RESET_PASSWORD_OTP_SCREEN || launchType == OLD_USER_FLOW) {
+            viewModel.getOldPassword().setValue("");// setting default value for validating
             binding.oldPasswordLyt.setVisibility(View.GONE);
         } else {
-            binding.oldPasswordLyt.setVisibility(View.VISIBLE);
-            String password = PreferenceUtils.getValueString(this, PreferenceUtils.USER_PASSWORD);
-            //viewModel.getOldPassword().setValue(password);
+            binding.oldPasswordLyt.setVisibility(View.VISIBLE);//change password flow
             binding.oldPassword.requestFocus();
         }
     }
@@ -85,20 +84,42 @@ public class ChangePasswordActivity extends BaseActivity {
         showProgressDialog();
         LiveData<BaseResponse> liveData;
         if (launchType == RESET_PASSWORD_OTP_SCREEN) {
+
             liveData = viewModel.forgotUpdate(token, this.userId);
+
+        } else if (launchType == OLD_USER_FLOW) {
+            String token = PreferenceUtils.getValueString(this, PreferenceUtils.USER_LOGIIN_TOKEN);
+            liveData = viewModel.appMigrationResetPassword(userId, token);
+
         } else {
+
             String userId = PreferenceUtils.getValueString(this, PreferenceUtils.USER_ID_KEY);
             liveData = viewModel.changePassword(userId);
         }
+
         liveData.observe(this, baseResponse -> {
             hideProgressDialog();
             if (baseResponse != null && baseResponse.isStatus()) {
-                DialogUtil.showAlertDialog(this, getString(R.string.password_upd_msg), (dialog, which) -> {
-                    dialog.dismiss();
-                    finish();
-                });
+                if (launchType == OLD_USER_FLOW) {
+                    saveCredential(baseResponse.getUserid(), baseResponse.getUserToken());
+                    launchLoginScreen();
+                } else {
+                    DialogUtil.showAlertDialog(this, getString(R.string.password_upd_msg), (dialog, which) -> {
+                        dialog.dismiss();
+                        finish();
+                    });
+                }
             }
         });
+    }
+
+    private void launchLoginScreen() {
+        startActivity(new Intent(this, LoginActivity.class));
+    }
+
+    private void saveCredential(String userId, String token) {
+        PreferenceUtils.setValueString(this, PreferenceUtils.USER_LOGIIN_TOKEN, token);
+        PreferenceUtils.setValueString(this, PreferenceUtils.USER_ID_KEY, userId);
     }
 
 }

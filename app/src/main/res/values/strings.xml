@@ -178,4 +178,5 @@
     <string name="plz_valid_fields" translatable="false">Please enter the valid fields</string>
     <string name="upgrade_title" translatable="false">Upgrade your App</string>
     <string name="upgrade_msg" translatable="false">\" recommends that you upgrade to the latest version\"</string>
+    <string name="tax" translatable="false">Tax</string>
 </resources>

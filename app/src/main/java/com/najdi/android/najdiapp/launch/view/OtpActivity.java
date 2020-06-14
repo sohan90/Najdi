@@ -34,6 +34,7 @@ import static com.najdi.android.najdiapp.common.Constants.ARABIC_LAN;
 import static com.najdi.android.najdiapp.common.Constants.OTP_TIME;
 import static com.najdi.android.najdiapp.common.Constants.OtpScreen.CHANGE_MOBILE_VERIFY;
 import static com.najdi.android.najdiapp.common.Constants.OtpScreen.FORGOT_PASSWORD_SCREEN;
+import static com.najdi.android.najdiapp.common.Constants.OtpScreen.OLD_USER_FLOW;
 import static com.najdi.android.najdiapp.common.Constants.OtpScreen.SIGN_UP_SCREEN;
 import static com.najdi.android.najdiapp.launch.view.ChangePasswordActivity.EXTRA_CHANGE_PASSWORD_LAUNCH_TYPE;
 import static com.najdi.android.najdiapp.launch.view.ChangePasswordActivity.EXTRA_TOKEN;
@@ -154,18 +155,29 @@ public class OtpActivity extends BaseActivity {
 
     private void verifyOtp() {
         showProgressDialog();
-        LiveData<BaseResponse> liveData;
-        if (screenType == SIGN_UP_SCREEN) {
-            liveData = viewModel.verifyOtp(String.valueOf(tempId));
+        String token_ = PreferenceUtils.getValueString(this, PreferenceUtils.USER_LOGIIN_TOKEN);
+        LiveData<BaseResponse> liveData = null;
+        switch (screenType) {
+            case SIGN_UP_SCREEN:
+                liveData = viewModel.verifyOtp(String.valueOf(tempId));
+                break;
 
-        } else if (screenType == CHANGE_MOBILE_VERIFY) {
+            case CHANGE_MOBILE_VERIFY:
+                liveData = viewModel.mobileNoverify(tempId);// change mobile no verification
+                break;
 
-            liveData = viewModel.mobileNoverify(tempId);// change mobile no verification
-        } else {
+            case FORGOT_PASSWORD_SCREEN:
+                String token = PreferenceUtils.getValueString(this, PreferenceUtils.USER_LOGIIN_TOKEN);
+                liveData = viewModel.verifyOtpForForgotPassword(tempId, token);// forgot password flow
+                break;
 
-            String token = PreferenceUtils.getValueString(this, PreferenceUtils.USER_LOGIIN_TOKEN);
-            liveData = viewModel.verifyOtpForForgotPassword(tempId, token);// forgot password flow
+            case OLD_USER_FLOW:
+                liveData = viewModel.verifyAppMigration(tempId, token_);
+                break;
+
         }
+
+        if (liveData == null) return;
 
         liveData.observe(this, baseResponse -> {
             hideProgressDialog();
@@ -182,9 +194,13 @@ public class OtpActivity extends BaseActivity {
 
                     });
 
-                } else {
-                    launchChangePasswordScreen(baseResponse.getToken(), baseResponse.getUserid());
+                } else if (screenType == FORGOT_PASSWORD_SCREEN) {
+                    launchChangePasswordScreen(baseResponse.getToken(), baseResponse.getUserid(),
+                            Constants.OtpScreen.RESET_PASSWORD_OTP_SCREEN);
                     finish();// forgot password flow
+                } else {
+                    launchChangePasswordScreen(token_, tempId, OLD_USER_FLOW);
+                    finish();
                 }
             } else {
                 if (baseResponse == null) return;
@@ -223,9 +239,9 @@ public class OtpActivity extends BaseActivity {
 
     }
 
-    private void launchChangePasswordScreen(String token, String userId) {
+    private void launchChangePasswordScreen(String token, String userId, @Constants.OtpScreen int launchType) {
         Intent intent = new Intent(this, ChangePasswordActivity.class);
-        intent.putExtra(EXTRA_CHANGE_PASSWORD_LAUNCH_TYPE, Constants.OtpScreen.RESET_PASSWORD_OTP_SCREEN);
+        intent.putExtra(EXTRA_CHANGE_PASSWORD_LAUNCH_TYPE, launchType);
         intent.putExtra(EXTRA_TOKEN, token);
         intent.putExtra(EXTRA_USER_ID, userId);
         startActivity(intent);

@@ -1,6 +1,7 @@
 package com.najdi.android.najdiapp.checkout.viewmodel;
 
 import android.app.Application;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -17,15 +18,21 @@ import com.najdi.android.najdiapp.shoppingcart.model.UpdateCartRequest;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.najdi.android.najdiapp.shoppingcart.viewmodel.CartViewModel.SHOW_TAX;
+
 public class CheckoutFragmentViewModel extends BaseViewModel {
     private MutableLiveData<String> subTotal = new MutableLiveData<>();
     private MutableLiveData<String> totalLiveData = new MutableLiveData<>();
     private MutableLiveData<String> couponCode = new MutableLiveData<>();
     private MutableLiveData<String> couponAmt = new MutableLiveData<>();
     private MutableLiveData<List<CartResponse.CartData>> adapterList = new MutableLiveData<>();
+    private MutableLiveData<Float> taxAmount = new MutableLiveData<>();
+    private MutableLiveData<Integer> showTaxUi = new MutableLiveData<>();
+    private String showTax;
 
     public CheckoutFragmentViewModel(@NonNull Application application) {
         super(application);
+        showTaxUi.setValue(View.GONE);
     }
 
     public MutableLiveData<String> getSubTotal() {
@@ -60,15 +67,39 @@ public class CheckoutFragmentViewModel extends BaseViewModel {
         return adapterList;
     }
 
+    public MutableLiveData<Float> taxAmount() {
+        return taxAmount;
+    }
+
+    public MutableLiveData<Integer> getShowTaxUi() {
+        return showTaxUi;
+    }
+
+    public void setShowTax(String showTax, float taxAmount) {
+        this.showTax = showTax;
+        if (showTax.equals(SHOW_TAX)){
+            this.showTaxUi.setValue(View.VISIBLE);
+            this.taxAmount.setValue(taxAmount);
+        }
+    }
+
     public void udpateTotal(List<CartResponse.CartData> cartDataList) {
-        float total = 0;
+        float subTotal = 0;
         for (CartResponse.CartData cartData : cartDataList) {
-            total += Float.parseFloat(cartData.getSubtotalWithQtyPrc());
+            subTotal += Float.parseFloat(cartData.getSubtotalWithQtyPrc());
+        }
+        String subTotalStr = String.valueOf(subTotal).concat(" ").
+                concat(resourceProvider.getString(R.string.currency));
+
+        this.subTotal.setValue(subTotalStr);
+
+        float total = subTotal;
+        if (taxAmount.getValue() != null){
+            total = total + taxAmount.getValue();
         }
         String totalStr = String.valueOf(total).concat(" ").
                 concat(resourceProvider.getString(R.string.currency));
 
-        subTotal.setValue(totalStr);
         totalLiveData.setValue(totalStr);
     }
 

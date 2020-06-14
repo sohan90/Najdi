@@ -52,6 +52,21 @@ public class ProfileFragment extends BaseFragment {
         return binding.getRoot();
     }
 
+    private void bindViewModel() {
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(this);
+    }
+
+    private void initActivityViewModel() {
+        if (getActivity() == null) return;
+        homeScreenViewModel = new ViewModelProvider(getActivity()).get(HomeScreenViewModel.class);
+        homeScreenViewModel.getSetToolBarTitle().setValue(getString(R.string.profile));
+    }
+
+    private void initViewModel() {
+        viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+    }
+
     private void observeEmailField() {
         viewModel.email.observe(getViewLifecycleOwner(), s -> {
             if (!TextUtils.isEmpty(s)) {
@@ -128,18 +143,4 @@ public class ProfileFragment extends BaseFragment {
 
     }
 
-    private void bindViewModel() {
-        binding.setViewModel(viewModel);
-        binding.setLifecycleOwner(this);
-    }
-
-    private void initActivityViewModel() {
-        if (getActivity() == null) return;
-        homeScreenViewModel = new ViewModelProvider(getActivity()).get(HomeScreenViewModel.class);
-        homeScreenViewModel.getSetToolBarTitle().setValue(getString(R.string.profile));
-    }
-
-    private void initViewModel() {
-        viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
-    }
 }

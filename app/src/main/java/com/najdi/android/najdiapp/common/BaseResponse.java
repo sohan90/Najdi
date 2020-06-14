@@ -16,6 +16,9 @@ import java.util.List;
 import static com.najdi.android.najdiapp.common.Constants.ARABIC_LAN;
 
 public class BaseResponse {
+    public static final int OLD_USER = 0;
+    public static final int NEW_USER = 1;
+
     private String code;
     private String message;
     private int total_items;
@@ -31,7 +34,12 @@ public class BaseResponse {
     private List<OrderStatus> orders;
     private User user;
     private AppDetailResponse details;
+    private int migrate_status;
 
+
+    public int getMigrateStatus() {
+        return migrate_status;
+    }
 
     public AppDetailResponse getDetails() {
         return details;
