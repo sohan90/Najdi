@@ -169,7 +169,7 @@
     <string name="login_to_continue" translatable="false">Please login to continue</string>
     <string name="shortcut_label" translatable="false">Orders</string>
     <string name="shortcut_bank" translatable="false">Bank Accounts</string>
-    <string name="notes" translatable="false">Notes</string>
+    <string name="notes">Notes</string>
     <string name="add_your_notes" translatable="false">Add your notes</string>
     <string name="select_city" translatable="false">Select City</string>
     <string name="enter_valid_phone_no" translatable="false">Enter the valid mobile no</string>

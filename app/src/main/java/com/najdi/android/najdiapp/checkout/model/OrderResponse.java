@@ -8,7 +8,6 @@ import androidx.databinding.BindingAdapter;
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.utitility.MathUtils;
 
-import static com.najdi.android.najdiapp.utitility.MathUtils.ORDER_COMPLETE_DATE_FORMAT;
 import static com.najdi.android.najdiapp.utitility.MathUtils.ORDER_STATUS_DATE_FORMAT;
 
 public class OrderResponse {
@@ -77,7 +76,7 @@ public class OrderResponse {
     }
 
     public String getDateForOrderCompleted(){
-        return MathUtils.formateStringDate(order_date, ORDER_COMPLETE_DATE_FORMAT);
+        return order_date;
     }
 
     public String getTotal() {

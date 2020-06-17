@@ -171,5 +171,6 @@
     <string name="address_found">Address found</string>
     <string name="english_lang">E</string>
     <string name="password_does_not_matched">كلمة المرور غير متطابقة</string>
+    <string name="notes">ملاحظات</string>
 
 </resources>

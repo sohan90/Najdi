@@ -76,10 +76,20 @@ public class ShippingDetailFragment extends BaseFragment implements OnMapReadyCa
         return binding.getRoot();
     }
 
+    private void bindViewModel() {
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(this);
+    }
+
+    private void initializeViewModel() {
+        viewModel = new ViewModelProvider(this).get(ShippingDetailViewModel.class);
+    }
+
     private void navMaptoUserFavPlace() {
         if (getActivity() == null) return;
         String latlng = PreferenceUtils.getValueString(getActivity(), PreferenceUtils.USER_LAT_LONG);
         if (!TextUtils.isEmpty(latlng)) {
+            binding.saveFav.setVisibility(View.GONE);
             String lat = latlng.split(" ")[0];
             String lng = latlng.split(" ")[1];
             LatLng latLng = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
@@ -161,15 +171,6 @@ public class ShippingDetailFragment extends BaseFragment implements OnMapReadyCa
         });
     }
 
-    private void bindViewModel() {
-        binding.setViewModel(viewModel);
-        binding.setLifecycleOwner(this);
-    }
-
-    private void initializeViewModel() {
-        viewModel = new ViewModelProvider(this).get(ShippingDetailViewModel.class);
-    }
-
     private void subscribeForAddress() {
         activityViewModel.getAddressMutableLiveData().observe(getViewLifecycleOwner(),
                 this::navigateMapToCurrentAddress);
@@ -198,6 +199,7 @@ public class ShippingDetailFragment extends BaseFragment implements OnMapReadyCa
     private void initClickListeners() {
         binding.saveFav.setOnClickListener(v -> {
             if (map.getCameraPosition() != null && map.getCameraPosition().target != null) {
+                binding.saveFav.setVisibility(View.GONE);
                 String lat = String.valueOf(map.getCameraPosition().target.latitude);
                 String lng = String.valueOf(map.getCameraPosition().target.longitude);
                 String latLng = lat.concat(" ").concat(lng);
@@ -207,8 +209,10 @@ public class ShippingDetailFragment extends BaseFragment implements OnMapReadyCa
             }
         });
 
-        binding.locationBtn.setOnClickListener(v ->
-                activityViewModel.getGetCurrentLocationUpdateLiveData().setValue(true));
+        binding.locationBtn.setOnClickListener(v -> {
+                binding.saveFav.setVisibility(View.VISIBLE);
+                activityViewModel.getGetCurrentLocationUpdateLiveData().setValue(true);
+                });
 
         binding.continueTxt.setOnClickListener(v ->
                 viewModel.validate().observe(getViewLifecycleOwner(), proceed -> {
@@ -244,6 +248,7 @@ public class ShippingDetailFragment extends BaseFragment implements OnMapReadyCa
     @Override
     public void onCameraIdle() {
         if (++initCheck > 1) {
+            binding.saveFav.setVisibility(View.VISIBLE);
             LatLng latLng = map.getCameraPosition().target;
             isDragging = true;
             getAddressFrmLatLng(latLng);

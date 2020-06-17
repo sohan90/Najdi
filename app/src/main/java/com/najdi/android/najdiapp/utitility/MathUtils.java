@@ -30,6 +30,7 @@ public class MathUtils {
         return newDate;
     }
 
+
     public static void setCurrencySymbol(Locale locale) {
         java.text.NumberFormat format = java.text.NumberFormat.getInstance(locale);
         currencySymbol = format.getCurrency().getSymbol(locale);

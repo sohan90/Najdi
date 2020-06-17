@@ -265,7 +265,7 @@ public class CheckoutActivity extends BaseActivity {
     }
 
     public void handleLocation(Location location) {
-        showProgressDialog();
+        //showProgressDialog();
         AddressResultReceiver resultReceiver = new AddressResultReceiver(new Handler());
         Intent intent = new Intent(this, FetchAddressIntentService.class);
         intent.putExtra(Constants.RECEIVER, resultReceiver);

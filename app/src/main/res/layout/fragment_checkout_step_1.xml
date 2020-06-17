@@ -182,9 +182,11 @@
                         <TextView
                             android:id="@+id/map_address"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="5dp"
+                            android:layout_height="match_parent"
+                            android:layout_margin="10dp"
                             android:maxLines="2"
+                            android:gravity="center_vertical"
+                            android:layout_above="@id/save_fav"
                             android:text="@{viewModel.fullAddress}"
                             android:textDirection="locale"
                             android:textStyle="bold" />
@@ -217,6 +219,7 @@
                             android:background="@drawable/round_corner_solid_green_selector"
                             android:text="@string/save_to_fav"
                             android:textAllCaps="false"
+                            android:visibility="visible"
                             android:textColor="@color/white" />
 
 
