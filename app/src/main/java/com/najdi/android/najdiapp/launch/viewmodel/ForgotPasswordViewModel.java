@@ -99,12 +99,12 @@ public class ForgotPasswordViewModel extends BaseViewModel {
                     passwordErrorField.setValue(resourceProvider.getString(R.string.password_mismatched));
                 }
             } else {
-                DialogUtil.showAlertDialog(resourceProvider.getActivityContext(),
+                DialogUtil.showAlertDialogNegativeVector(resourceProvider.getActivityContext(),
                         resourceProvider.getString(R.string.invalid_pass),
                         (d, w) -> d.dismiss());
             }
         } else {
-            DialogUtil.showAlertDialog(resourceProvider.getActivityContext(),
+            DialogUtil.showAlertDialogNegativeVector(resourceProvider.getActivityContext(),
                     resourceProvider.getString(R.string.please_fill), (dialog, which) ->
                             dialog.dismiss());
         }

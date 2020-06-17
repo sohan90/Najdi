@@ -204,7 +204,7 @@ public class CheckoutFragment extends BaseFragment {
                             }
                     );
                 } else {
-                    DialogUtil.showAlertDialog(getActivity(), baseResponse.getMessage(),
+                    DialogUtil.showAlertDialogNegativeVector(getActivity(), baseResponse.getMessage(),
                             (dialog, which) ->
                                     dialog.dismiss());
                 }

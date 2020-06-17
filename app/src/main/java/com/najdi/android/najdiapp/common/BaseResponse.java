@@ -149,7 +149,7 @@ public class BaseResponse {
     public void handleErrorForDialog(Context context) {
         switch (getCode()) {
             case 401:
-                DialogUtil.showAlertDialog(context, context.getString(R.string.enter_correct_code),
+                DialogUtil.showAlertDialogNegativeVector(context, context.getString(R.string.enter_correct_code),
                         (dialog, which) -> dialog.dismiss());
                 break;
 
@@ -159,7 +159,7 @@ public class BaseResponse {
                     if (LocaleUtitlity.getCountryLang().equals(ARABIC_LAN)) {
                         message = context.getString(R.string.incorrect_password_arabic);
                     }
-                    DialogUtil.showAlertDialog(context, message,
+                    DialogUtil.showAlertDialogNegativeVector(context, message,
                             (dialog, which) -> dialog.dismiss());
                 }
         }

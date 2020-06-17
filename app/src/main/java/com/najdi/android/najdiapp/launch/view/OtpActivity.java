@@ -271,7 +271,7 @@ public class OtpActivity extends BaseActivity {
                     if (LocaleUtitlity.getCountryLang().equalsIgnoreCase(ARABIC_LAN)) {
                         message = getString(R.string.incorrect_password_arabic);
                     }
-                    DialogUtil.showAlertDialog(this, message,
+                    DialogUtil.showAlertDialogNegativeVector(this, message,
                             (dialog, which) -> dialog.dismiss());
                 }
             }

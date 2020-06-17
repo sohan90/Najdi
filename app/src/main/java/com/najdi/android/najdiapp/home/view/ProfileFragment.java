@@ -114,7 +114,7 @@ public class ProfileFragment extends BaseFragment {
                     DialogUtil.showAlertDialog(getActivity(), getString(R.string.profile_succes_msg),
                             (dialog, which) -> dialog.dismiss());
                 } else {
-                    DialogUtil.showAlertDialog(getActivity(), getString(R.string.something_went_wrong),
+                    DialogUtil.showAlertDialogNegativeVector(getActivity(), getString(R.string.something_went_wrong),
                             (dialog, which) -> dialog.dismiss());
                 }
             });

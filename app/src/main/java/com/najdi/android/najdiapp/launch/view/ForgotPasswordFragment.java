@@ -69,7 +69,7 @@ public class ForgotPasswordFragment extends BaseFragment {
             if (viewModel.validate()) {
                 forgotPasswordRequest();
             } else {
-                DialogUtil.showAlertDialog(getActivity(), getString(R.string.enter_valid_phone_no),
+                DialogUtil.showAlertDialogNegativeVector(getActivity(), getString(R.string.enter_valid_phone_no),
                         (d, w) -> d.dismiss());
             }
         });
@@ -109,7 +109,7 @@ public class ForgotPasswordFragment extends BaseFragment {
                                 launchOtpScreen(baseResponse.getTempId());
                             });
                 } else {
-                    DialogUtil.showAlertDialog(getActivity(), baseResponse.getMessage(),
+                    DialogUtil.showAlertDialogNegativeVector(getActivity(), baseResponse.getMessage(),
                             (d, w) -> d.dismiss());
                 }
             }
