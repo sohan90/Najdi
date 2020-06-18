@@ -184,6 +184,7 @@ public class DialogUtil {
 
     public static void showPopupWindow(Context context, View anchorView, String title, List<String> list,
                                        GenericClickListener<Integer> clickListener) {
+
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
         View customView = inflater.inflate(R.layout.item_pop_window, null);
         customView.findViewById(R.id.include_lyt).setVisibility(View.VISIBLE);

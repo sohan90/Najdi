@@ -173,8 +173,8 @@
     <string name="add_your_notes" translatable="false">Add your notes</string>
     <string name="select_city" translatable="false">Select City</string>
     <string name="enter_valid_phone_no" translatable="false">Enter the valid mobile no</string>
-    <string name="save_to_fav" translatable="false">Save to Favourite Locations</string>
-    <string name="location_saved_msg" translatable="false">Location saved successfully</string>
+    <string name="save_to_fav" translatable="false">Save as Favourite Location</string>
+    <string name="location_saved_msg" translatable="false">Your Location saved successfully</string>
     <string name="plz_valid_fields" translatable="false">Please enter the valid fields</string>
     <string name="upgrade_title" translatable="false">Upgrade your App</string>
     <string name="upgrade_msg" translatable="false">\" recommends that you upgrade to the latest version\"</string>

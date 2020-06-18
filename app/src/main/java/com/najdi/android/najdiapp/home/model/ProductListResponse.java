@@ -34,6 +34,7 @@ public class ProductListResponse implements Parcelable {
     String cut_price;
     int isproductattribute;
     List<Attributes> product_attributes;
+    String stock;
 
 
     public int getTotalAttributeSize() {
@@ -95,6 +96,7 @@ public class ProductListResponse implements Parcelable {
         category = in.readString();
         image = in.readString();
         cut_price = in.readString();
+        stock = in.readString();
     }
 
     public static final Creator<ProductListResponse> CREATOR = new Creator<ProductListResponse>() {
@@ -144,6 +146,10 @@ public class ProductListResponse implements Parcelable {
 
     public String getType() {
         return type;
+    }
+
+    public String getStock() {
+        return stock == null ? "0" : stock;
     }
 
     public String getStatus() {
@@ -207,6 +213,7 @@ public class ProductListResponse implements Parcelable {
         dest.writeString(category);
         dest.writeString(image);
         dest.writeString(cut_price);
+        dest.writeString(stock);
     }
 
     public static class Image implements Parcelable {

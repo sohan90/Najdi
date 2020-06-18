@@ -75,9 +75,7 @@ public class CheckoutFragment extends BaseFragment {
         binding.applyCoupon.setOnClickListener(v ->
                 applyCoupon(binding.couponCode.getText().toString()));
 
-        binding.includeLyt.close.setOnClickListener(v -> {
-            removeCoupon();
-        });
+        binding.includeLyt.close.setOnClickListener(v -> removeCoupon());
         binding.includeLyt.placeOrder.setOnClickListener(v -> {
             int checkedId = binding.includeLyt.radiGrp.getCheckedRadioButtonId();
             RadioButton radioButton = binding.includeLyt.radiGrp.findViewById(checkedId);

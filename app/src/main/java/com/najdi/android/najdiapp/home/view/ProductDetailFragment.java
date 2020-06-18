@@ -52,6 +52,12 @@ public class ProductDetailFragment extends BaseFragment {
         return productDetailFragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        showProgressDialog();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -78,6 +84,7 @@ public class ProductDetailFragment extends BaseFragment {
         });
     }
 
+    @Deprecated
     private void getVariationFromServer() {
         showProgressDialog();
         LiveData<ProductListResponse> liveData = viewModel.
@@ -102,15 +109,15 @@ public class ProductDetailFragment extends BaseFragment {
     }
 
     private void fetchProductDetail() {
-        showProgressDialog();
         homeScreeViewModel.getIndividualProduct(productId).observe(getViewLifecycleOwner(), baseResponse -> {
             hideProgressDialog();
             if (baseResponse != null && baseResponse.isStatus()) {
                 this.productListResponse = baseResponse.getProduct();
                 setViewDataForIncludeLyt();
                 viewModel.setDefaultPrice(productListResponse.getPrice());
+                viewModel.setMaxVariationQuantity(Integer.parseInt(productListResponse.getStock()));
                 viewModel.setTotalAttributOptSize(productListResponse.getTotalAttributeSize());
-                //enableOrDisableAddCartButton();
+                enableOrDisableAddCartButton();
                 updateQuantity();
                 inflateViewForProductVariation();
             }
@@ -126,7 +133,7 @@ public class ProductDetailFragment extends BaseFragment {
     }
 
     private void enableOrDisableAddCartButton() {
-        if (!productListResponse.isIn_stock()) {
+        if (productListResponse.getStock().equals("0")) {
             binding.dec.setEnabled(false);
             binding.inc.setEnabled(false);
             changeSmileIcon();
@@ -336,5 +343,11 @@ public class ProductDetailFragment extends BaseFragment {
             cartData = (CartResponse.CartData) model.getT();
             isFromCartScreen = model.isFromCartScreen();
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        hideProgressDialog();
     }
 }

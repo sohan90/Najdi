@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
@@ -33,11 +32,8 @@ import com.najdi.android.najdiapp.databinding.NavHeaderHomeScreenBinding;
 import com.najdi.android.najdiapp.home.model.CityListModelResponse;
 import com.najdi.android.najdiapp.home.model.ProductDetailBundleModel;
 import com.najdi.android.najdiapp.home.viewmodel.HomeScreenViewModel;
-import com.najdi.android.najdiapp.launch.model.AppDetailResponse;
 import com.najdi.android.najdiapp.launch.view.LoginActivity;
-import com.najdi.android.najdiapp.repository.Repository;
 import com.najdi.android.najdiapp.shoppingcart.view.CartFragment;
-import com.najdi.android.najdiapp.utitility.AppInfoUtil;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.FragmentHelper;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
@@ -521,8 +517,8 @@ public class HomeScreenActivity extends BaseActivity
                     toggle.syncState();
 
                 } else if (fragment instanceof ProductDetailFragment) {
-                    setToolBarTitle(getString(R.string.product_details));
-                    cartImageLyt.setVisibility(View.VISIBLE);
+                    getSupportFragmentManager().popBackStackImmediate();
+                    unlockDrawer();
                 }
             }
         }
@@ -550,7 +546,6 @@ public class HomeScreenActivity extends BaseActivity
                 break;
 
             case R.id.city:
-                PreferenceUtils.setValueString(this, USER_SELECTED_CITY, null);
                 fetchCityList();
                 break;
 
@@ -632,4 +627,5 @@ public class HomeScreenActivity extends BaseActivity
         hideFitlerView();// as per the req we are showing the filter option in the menu so we are hiding here
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
+
 }

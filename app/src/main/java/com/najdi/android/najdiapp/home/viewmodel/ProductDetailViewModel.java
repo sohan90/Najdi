@@ -70,8 +70,7 @@ public class ProductDetailViewModel extends BaseViewModel {
     }
 
     public void incrementQuantity() {
-        if (quantityCount.getValue() != null) {//&& quantityCount.getValue() <= setMaxvariationQuantity) {
-
+        if (quantityCount.getValue() != null && quantityCount.getValue() <= setMaxvariationQuantity) {
             quantityCount.setValue(quantityCount.getValue() + 1);
             updateTotalPrice();
             enableAddCartButton();
@@ -158,6 +157,8 @@ public class ProductDetailViewModel extends BaseViewModel {
         quantityCount.setValue(0);
         notes.setValue("");// reset notes
         incrementQuantity();
+        attrOptPriceMap.clear();// clear attribute price
+        updateTotalPrice();
     }
 
     public LiveData<BaseResponse> addToCart(String productId) {
@@ -194,6 +195,7 @@ public class ProductDetailViewModel extends BaseViewModel {
     }
 
 
+    @Deprecated
     public MutableLiveData<Boolean> getGetVariaitionQuantity() {
         getVariaitionQuantity = new MutableLiveData<>();
         return getVariaitionQuantity;

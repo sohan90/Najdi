@@ -157,7 +157,7 @@
     <string name="one">1</string>
     <string name="two">2</string>
     <string name="three">3</string>
-    <string name="login_as_a_guest">Login as a Guest</string>
+    <string name="login_as_a_guest">الدخول كزائر</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>

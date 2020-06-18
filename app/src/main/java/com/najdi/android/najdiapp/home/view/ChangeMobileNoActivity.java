@@ -37,6 +37,11 @@ public class ChangeMobileNoActivity extends BaseActivity {
         setData();
     }
 
+
+    private void initViewModel() {
+        viewModel = new ViewModelProvider(this).get(ChangeMobileNoViewModel.class);
+    }
+
     private void initClickListener() {
         binding.back.setOnClickListener(v -> onBackPressed());
         binding.update.setOnClickListener(v -> {
@@ -44,7 +49,7 @@ public class ChangeMobileNoActivity extends BaseActivity {
             if (isValid) {
                 updateMobileNo();
             } else {
-                DialogUtil.showAlertDialog(this,
+                DialogUtil.showAlertDialogNegativeVector(this,
                         getString(R.string.enter_valid_phone_no),
                         (d, h) -> d.dismiss());
             }
@@ -91,9 +96,5 @@ public class ChangeMobileNoActivity extends BaseActivity {
     private void bindViewModel() {
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(this);
-    }
-
-    private void initViewModel() {
-        viewModel = new ViewModelProvider(this).get(ChangeMobileNoViewModel.class);
     }
 }
