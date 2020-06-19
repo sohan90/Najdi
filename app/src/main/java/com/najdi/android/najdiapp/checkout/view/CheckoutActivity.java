@@ -143,12 +143,13 @@ public class CheckoutActivity extends BaseActivity {
             if (paymentMode != null) {
                 showProgressDialog();
                 String userId = PreferenceUtils.getValueString(this, PreferenceUtils.USER_ID_KEY);
-                createOrder(userId, paymentMode);
+                createOrder(userId, paymentMode.equalsIgnoreCase("cod") ?  0 : 1);
             }
         });
     }
 
-    private void createOrder(String userId, String paymentMode) {
+    private void createOrder(String userId, int paymentMode) {
+        billing.setPayment_method(paymentMode);
         LiveData<OrderResponse> orderResponseLiveData = viewModel.createOrder(userId, billing);
 
         orderResponseLiveData.observe(this, orderResponse -> {

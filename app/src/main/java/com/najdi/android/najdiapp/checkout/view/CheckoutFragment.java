@@ -255,6 +255,7 @@ public class CheckoutFragment extends BaseFragment {
                     if (cartResponse != null && cartResponse.isStatus()) {
                         viewModel.setShowTax(cartResponse.getShowTax(), cartResponse.getTaxAmount());
                         viewModel.udpateTotal(cartResponse.getCart());
+                        viewModel.updateCoupon(cartResponse.getCouponApplied(), cartResponse.getDiscount());
                         viewModel.getVariationDetails(cartResponse.getCart())
                                 .observe(getViewLifecycleOwner(), cartData -> {
                                     adapterList = cartData;

@@ -15,9 +15,19 @@ public class CartResponse {
     float total_cart_amount;
     String show_tax;
     float tax_amount;
+    String coupon_applied;
+    String discount;
 
     public List<CartData> getCart() {
         return cart;
+    }
+
+    public String getCouponApplied() {
+        return coupon_applied;
+    }
+
+    public String getDiscount() {
+        return discount;
     }
 
     public boolean isStatus() {

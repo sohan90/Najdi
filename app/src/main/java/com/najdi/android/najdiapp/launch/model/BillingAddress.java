@@ -19,6 +19,11 @@ public class BillingAddress {
     private String address;
     private String map_address;
     private String lang;
+    private int payment_method;
+
+    public void setPayment_method(int payment_method) {
+        this.payment_method = payment_method;
+    }
 
     public void setLang(String lang) {
         this.lang = lang;
