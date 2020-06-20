@@ -28,7 +28,6 @@ public class CheckoutFragmentViewModel extends BaseViewModel {
     private MutableLiveData<List<CartResponse.CartData>> adapterList = new MutableLiveData<>();
     private MutableLiveData<Float> taxAmount = new MutableLiveData<>();
     private MutableLiveData<Integer> showTaxUi = new MutableLiveData<>();
-    private String showTax;
 
     public CheckoutFragmentViewModel(@NonNull Application application) {
         super(application);
@@ -76,7 +75,6 @@ public class CheckoutFragmentViewModel extends BaseViewModel {
     }
 
     public void setShowTax(String showTax, float taxAmount) {
-        this.showTax = showTax;
         if (showTax.equals(SHOW_TAX)){
             this.showTaxUi.setValue(View.VISIBLE);
             this.taxAmount.setValue(taxAmount);
@@ -138,12 +136,5 @@ public class CheckoutFragmentViewModel extends BaseViewModel {
        String disAmt = discountAmount.concat(" ")
                 .concat(resourceProvider.getString(R.string.currency));
         getCouponAmt().setValue(disAmt);
-
-        /*if (totalLiveData.getValue() == null) return;
-        String price = totalLiveData.getValue().split(" ")[0];//total price is concatenated with currency
-        float updatedPrice = Float.parseFloat(price) - Float.parseFloat(discountAmount);
-        String value = String.valueOf(updatedPrice);
-        totalLiveData.setValue(value.concat(" ")
-                .concat(resourceProvider.getString(R.string.currency)));*/
     }
 }
