@@ -77,7 +77,12 @@ public class ProductListItemModel extends BaseObservable {
 
     @Bindable
     public int getShowDetailButton() {
-        return showDetailButton;
+        return showDetailButton;// home screen differentiator
+    }
+
+    @Bindable
+    public int getDividerVisibility(){
+        return showDetailButton == View.VISIBLE ? View.VISIBLE : View.GONE;
     }
 
     public void bind(ProductListResponse productListResponse) {

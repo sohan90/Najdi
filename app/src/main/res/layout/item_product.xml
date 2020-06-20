@@ -115,12 +115,14 @@
         </LinearLayout>
 
         <View
+            android:id="@+id/divider_line"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@id/img"
             android:layout_margin="10dp"
             android:layout_marginBottom="10dp"
             android:alpha="0.5"
+            android:visibility="@{viewModel.dividerVisibility, default=gone}"
             android:background="@color/green_default"/>
     </RelativeLayout>
 </layout>
