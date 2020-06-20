@@ -2,12 +2,9 @@ package com.najdi.android.najdiapp.common;
 
 import android.app.Activity;
 import android.app.Application;
-import android.content.res.Configuration;
 
-import com.najdi.android.najdiapp.utitility.MathUtils;
+import com.najdi.android.najdiapp.utitility.LocaleUtitlity;
 import com.najdi.android.najdiapp.utitility.ResourceProvider;
-
-import java.util.Locale;
 
 public class NajdiApplication extends Application {
     private ResourceProvider mResourceProvider;
@@ -15,6 +12,7 @@ public class NajdiApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        LocaleUtitlity.setLocaleLanguage(this, Constants.ARABIC_LAN);
     }
 
     public ResourceProvider getResourceProvider() {
