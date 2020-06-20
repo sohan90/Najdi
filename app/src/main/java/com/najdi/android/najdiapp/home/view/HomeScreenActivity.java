@@ -552,6 +552,7 @@ public class HomeScreenActivity extends BaseActivity
                 break;
 
             case R.id.city:
+                PreferenceUtils.setValueString(this, USER_SELECTED_CITY, null);
                 fetchCityList();
                 break;
 
