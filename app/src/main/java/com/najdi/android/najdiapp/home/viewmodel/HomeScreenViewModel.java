@@ -19,7 +19,6 @@ import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 
 public class HomeScreenViewModel extends BaseViewModel {
@@ -28,11 +27,9 @@ public class HomeScreenViewModel extends BaseViewModel {
     private MutableLiveData<ProductDetailBundleModel> launchProductDetailLiveData;
     private MutableLiveData<Integer> showCartImageLiveData;
     private MutableLiveData<Integer> replaceFragmentLiveData;
-    private MutableLiveData<HashMap<String, String>> selectedVariationLiveData;
     private MutableLiveData<Boolean> setHomeScreenToolBarLiveData;
     private MutableLiveData<String> setToolBarTitle;
     private MutableLiveData<Boolean> launchCheckoutActivity;
-    private MutableLiveData<CartResponse.CartData> selectedProductCartLiveData;
     private MutableLiveData<Boolean> cartCountNotification = new MutableLiveData<>();
     int cartSize;
 
@@ -75,13 +72,6 @@ public class HomeScreenViewModel extends BaseViewModel {
         return launchProductDetailLiveData;
     }
 
-    public MutableLiveData<HashMap<String, String>> getSelecteVariationOptionLiveData() {
-        if (selectedVariationLiveData == null) {
-            selectedVariationLiveData = new MutableLiveData<>();
-        }
-        return selectedVariationLiveData;
-    }
-
     public MutableLiveData<Integer> updateNotificationCartCount() {
         if (showCartImageLiveData == null) {
             showCartImageLiveData = new MutableLiveData<>();
@@ -117,23 +107,12 @@ public class HomeScreenViewModel extends BaseViewModel {
         return launchCheckoutActivity;
     }
 
-    public LiveData<CartResponse.CartData> getSelectedCartDataLiveData() {
-        if (selectedProductCartLiveData == null) {
-            selectedProductCartLiveData = new MutableLiveData<>();
-        }
-        return selectedProductCartLiveData;
-    }
-
     public LiveData<CartResponse> getCart() {
         return repository.getCart();
     }
 
     public void setCartSize(int cartSize) {
         this.cartSize = cartSize;
-    }
-
-    public int getCartSize() {
-        return cartSize;
     }
 
     public LiveData<BaseResponse> getOrderStatus(String userId) {
@@ -190,7 +169,5 @@ public class HomeScreenViewModel extends BaseViewModel {
     public Repository provideRepo(){
         return repository;
     }
-    public LiveData<BaseResponse> getAppInfo(){
-       return repository.getAppInfo();
-    }
+
 }
