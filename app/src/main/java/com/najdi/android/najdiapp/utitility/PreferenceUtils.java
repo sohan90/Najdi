@@ -9,7 +9,7 @@ import static com.najdi.android.najdiapp.common.Constants.ARABIC_LAN;
 public class PreferenceUtils {
 
     private static final String SHARED_PREF = "pref_auth_token";
-    public static final String USER_ID_KEY = "user_id";
+    public static final String USER_ID_KEY = "user_new_id";
     public static final String USER_EMAIL_KEY = "user_email";
     public static final String USER_NAME_KEY = "user_name";
     public static final String USER_PHONE_NO_KEY = "phone_no";
