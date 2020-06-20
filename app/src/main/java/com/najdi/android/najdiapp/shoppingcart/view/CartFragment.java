@@ -54,7 +54,7 @@ public class CartFragment extends BaseFragment {
         setRecyclAdapter();
         subscribeForCartResponse(false);
         initializeClickListener();
-        updateCart();
+        updateCartCount();
         return binding.getRoot();
     }
 
@@ -88,7 +88,7 @@ public class CartFragment extends BaseFragment {
         baseResponseLiveData.observe(getViewLifecycleOwner(), baseResponse -> {
             hideProgressDialog();
             if (baseResponse != null && baseResponse.isStatus()) {
-                updateCartSizeForRemoveItem(Integer.parseInt(adapterList.get(position).getQty()));
+                updateCartCount();
                 updateAdapterForRemoveItem(position);
                 DialogUtil.showAlertDialog(getActivity(), getString(R.string.item_removed),
                         (dialog, which) -> dialog.dismiss());
@@ -112,15 +112,7 @@ public class CartFragment extends BaseFragment {
         binding.placHolderTxt.setVisibility(View.VISIBLE);
     }
 
-    private void updateCartSizeForRemoveItem(int quantity) {
-        int cartSize = homeScreenViewModel.getCartSize() - quantity;
-        updateCart();
-        if (cartSize == 0) {
-            showEmptyCartValueTxt();
-        }
-    }
-
-    private void updateCart() {
+    private void updateCartCount() {
         homeScreenViewModel.getCartCountNotification().setValue(true);
     }
 
@@ -207,7 +199,7 @@ public class CartFragment extends BaseFragment {
 
         LiveData<BaseResponse> liveData = viewModel.updateQuantity(updateCartRequest);
         liveData.observe(this, baseResponse -> {
-            updateCart();
+            updateCartCount();
             if (baseResponse != null && baseResponse.isStatus()) {
                 subscribeForCartResponse(true);
             } else {

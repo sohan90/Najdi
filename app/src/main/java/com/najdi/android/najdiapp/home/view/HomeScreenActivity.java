@@ -118,19 +118,22 @@ public class HomeScreenActivity extends BaseActivity
     }
 
     private void fetchCityList() {
-        String selectedCityId = PreferenceUtils.getValueString(this, USER_SELECTED_CITY);
-        if (TextUtils.isEmpty(selectedCityId)) {
-            viewModel.getCityList(resourProvider.getCountryLang())
-                    .observe(this, cityListModelResponse -> {
-                        if (cityListModelResponse != null && cityListModelResponse.isStatus()) {
-                            List<CityListModelResponse.City> cityList = cityListModelResponse.getCities();
+        String token = PreferenceUtils.getValueString(this, USER_LOGIIN_TOKEN);
+        if (!TextUtils.isEmpty(token)) {
+            String selectedCityId = PreferenceUtils.getValueString(this, USER_SELECTED_CITY);
+            if (TextUtils.isEmpty(selectedCityId)) {
+                viewModel.getCityList(resourProvider.getCountryLang())
+                        .observe(this, cityListModelResponse -> {
+                            if (cityListModelResponse != null && cityListModelResponse.isStatus()) {
+                                List<CityListModelResponse.City> cityList = cityListModelResponse.getCities();
 
-                            addDisposable(getCityNameList(cityList).subscribe(strCity ->
-                                    showPopupwindow(strCity, cityList, null)));
-                        }
-                    });
-        } else {
-            fetchCityBasedProducts(selectedCityId);
+                                addDisposable(getCityNameList(cityList).subscribe(strCity ->
+                                        showPopupwindow(strCity, cityList, null)));
+                            }
+                        });
+            } else {
+                fetchCityBasedProducts(selectedCityId);
+            }
         }
     }
 
@@ -188,15 +191,18 @@ public class HomeScreenActivity extends BaseActivity
     }
 
     private void getCartCount() {
-        viewModel.getCartCount().observe(this, baseResponse -> {
-            if (baseResponse != null) {
-                if (baseResponse.isStatus()) {
-                    int count = baseResponse.getTotalItems();
-                    updateCartCountTxt(count);
-                    viewModel.setCartSize(count);
+        String token = PreferenceUtils.getValueString(this, USER_LOGIIN_TOKEN);
+        if (!TextUtils.isEmpty(token)) {
+            viewModel.getCartCount().observe(this, baseResponse -> {
+                if (baseResponse != null) {
+                    if (baseResponse.isStatus()) {
+                        int count = baseResponse.getTotalItems();
+                        updateCartCountTxt(count);
+                        viewModel.setCartSize(count);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     private void observeForProductDetailScreenFromCheckout() {

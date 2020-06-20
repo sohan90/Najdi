@@ -210,6 +210,7 @@ public class ProductDetailFragment extends BaseFragment {
         liveData.observe(getViewLifecycleOwner(), baseResponse -> {
             hideProgressDialog();
             if (baseResponse != null && baseResponse.isStatus()) {
+                binding.addToCart.setVisibility(View.GONE);
                 viewModel.enableProceed.setValue(true);
                 updateNotificationCartCount();
                 String message = getString(R.string.product_added_success);

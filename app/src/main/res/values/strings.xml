@@ -162,21 +162,21 @@
     <string name="iban">IBAN</string>
     <string name="password_does_not_matched">Password does not matched</string>
     <string name="enter_your_location" tools:ignore="MissingTranslation">Enter your location</string>
-    <string name="coupon" translatable="false">Coupon</string>
+    <string name="coupon">Coupon</string>
     <string name="space" translatable="false">\u0020</string>
-    <string name="select_shipping_address_from_map" translatable="false">Select shipping address from Map</string>
-    <string name="guest_user_title" translatable="false">Guest User</string>
-    <string name="login_to_continue" translatable="false">Please login to continue</string>
-    <string name="shortcut_label" translatable="false">Orders</string>
-    <string name="shortcut_bank" translatable="false">Bank Accounts</string>
+    <string name="select_shipping_address_from_map" >Select shipping address from Map</string>
+    <string name="guest_user_title">Guest User</string>
+    <string name="login_to_continue" >Please login to continue</string>
+    <string name="shortcut_label" >Orders</string>
+    <string name="shortcut_bank" >Bank Accounts</string>
     <string name="notes">Notes</string>
-    <string name="add_your_notes" translatable="false">Add your notes</string>
-    <string name="select_city" translatable="false">Select City</string>
-    <string name="enter_valid_phone_no" translatable="false">Enter the valid mobile no</string>
-    <string name="save_to_fav" translatable="false">Save as Favourite Location</string>
-    <string name="location_saved_msg" translatable="false">Your Location saved successfully</string>
-    <string name="plz_valid_fields" translatable="false">Please enter the valid fields</string>
-    <string name="upgrade_title" translatable="false">Upgrade your App</string>
-    <string name="upgrade_msg" translatable="false">\" recommends that you upgrade to the latest version\"</string>
-    <string name="tax" translatable="false">Tax</string>
+    <string name="add_your_notes">Add your notes</string>
+    <string name="select_city" >Select City</string>
+    <string name="enter_valid_phone_no" >Enter the valid mobile no</string>
+    <string name="save_to_fav" >Save as Favourite Location</string>
+    <string name="location_saved_msg" >Your Location saved successfully</string>
+    <string name="plz_valid_fields" >Please enter the valid fields</string>
+    <string name="upgrade_title" >Upgrade your App</string>
+    <string name="upgrade_msg" >\" recommends that you upgrade to the latest version\"</string>
+    <string name="tax" >Tax</string>
 </resources>

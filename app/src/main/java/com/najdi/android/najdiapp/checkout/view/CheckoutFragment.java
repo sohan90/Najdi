@@ -44,6 +44,7 @@ public class CheckoutFragment extends BaseFragment {
     private CheckoutFragmentViewModel viewModel;
     private List<CartResponse.CartData> adapterList;
     private String couponToken;
+    private String couponMessage;
 
     public static CheckoutFragment createInstance() {
         return new CheckoutFragment();
@@ -94,13 +95,12 @@ public class CheckoutFragment extends BaseFragment {
             couponRequest.setLang(resourceProvider.getCountryLang());
 
             viewModel.removeCoupon(couponRequest).observe(getViewLifecycleOwner(), baseResponse -> {
-                hideProgressDialog();
                 if (baseResponse.isStatus()) {
                     binding.couponCode.setText("");// reset
                     binding.includeLyt.couponLyt.setVisibility(View.GONE);
-                    DialogUtil.showAlertDialog(getActivity(), baseResponse.getMessage(),
-                            (d, w) -> d.dismiss());
+                    activityViewModel.updateCart().setValue(true);// api call to cart listing
                 } else {
+                    hideProgressDialog();
                     DialogUtil.showAlertDialogNegativeVector(getActivity(), baseResponse.getMessage(),
                             (d, w) -> d.dismiss());
                 }
@@ -119,16 +119,14 @@ public class CheckoutFragment extends BaseFragment {
         couponRequest.setUserId(userId);
 
         viewModel.applyCoupon(couponRequest).observe(getViewLifecycleOwner(), baseResponse -> {
-            hideProgressDialog();
             if (baseResponse.isStatus()) {
+                activityViewModel.updateCart().setValue(true);
                 couponToken = baseResponse.getCouponToken();
+                couponMessage = baseResponse.getMessage();
                 binding.includeLyt.couponLyt.setVisibility(View.VISIBLE);
-                viewModel.updateCoupon(baseResponse.getCouponCode(),
-                        baseResponse.getDiscountAmount());
-                DialogUtil.showAlertDialog(getActivity(), baseResponse.getMessage(),
-                        (d, wh) -> d.dismiss());
 
             } else {
+                hideProgressDialog();
                 DialogUtil.showAlertDialogNegativeVector(getActivity(), baseResponse.getMessage(),
                         (d, w) -> d.dismiss());
             }
@@ -253,8 +251,13 @@ public class CheckoutFragment extends BaseFragment {
                 cartResponse -> {
                     hideProgressDialog();
                     if (cartResponse != null && cartResponse.isStatus()) {
+                        if (!TextUtils.isEmpty(cartResponse.getCouponApplied())){
+                            couponToken = cartResponse.getCoupon_token();
+                            binding.includeLyt.couponLyt.setVisibility(View.VISIBLE);
+                        }
+                        showMessageIfCouponApplied();
                         viewModel.setShowTax(cartResponse.getShowTax(), cartResponse.getTaxAmount());
-                        viewModel.udpateTotal(cartResponse.getCart());
+                        viewModel.updateTotal(cartResponse.getSubTotal(), cartResponse.getTotalAmnt());
                         viewModel.updateCoupon(cartResponse.getCouponApplied(), cartResponse.getDiscount());
                         viewModel.getVariationDetails(cartResponse.getCart())
                                 .observe(getViewLifecycleOwner(), cartData -> {
@@ -263,6 +266,14 @@ public class CheckoutFragment extends BaseFragment {
                                 });
                     }
                 });
+    }
+
+    private void showMessageIfCouponApplied() {
+        if (!TextUtils.isEmpty(couponMessage)) {
+            DialogUtil.showAlertDialog(getActivity(), couponMessage,
+                    (d, wh) -> d.dismiss());
+            couponMessage = null;
+        }
     }
 
     private void updateAdapter(List<CartResponse.CartData> cartDataList) {

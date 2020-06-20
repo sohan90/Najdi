@@ -103,6 +103,17 @@ public class CheckoutFragmentViewModel extends BaseViewModel {
         totalLiveData.setValue(totalStr);
     }
 
+    public void updateTotal(String subTotal, String totalAmnt){
+        String subTotalStr = String.valueOf(subTotal).concat(" ").
+                concat(resourceProvider.getString(R.string.currency));
+
+        this.subTotal.setValue(subTotalStr);
+
+        String totalStr = String.valueOf(totalAmnt).concat(" ").
+                concat(resourceProvider.getString(R.string.currency));
+
+        totalLiveData.setValue(totalStr);
+    }
     public LiveData<BaseResponse> removeCart(String userId, String cartItemKey) {
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("id", cartItemKey);
@@ -124,15 +135,15 @@ public class CheckoutFragmentViewModel extends BaseViewModel {
 
     public void updateCoupon(String couponCode, String discountAmount) {
         getCouponCode().setValue(couponCode);
-        String disAmt = discountAmount.concat(" ")
+       String disAmt = discountAmount.concat(" ")
                 .concat(resourceProvider.getString(R.string.currency));
         getCouponAmt().setValue(disAmt);
 
-        if (totalLiveData.getValue() == null) return;
+        /*if (totalLiveData.getValue() == null) return;
         String price = totalLiveData.getValue().split(" ")[0];//total price is concatenated with currency
         float updatedPrice = Float.parseFloat(price) - Float.parseFloat(discountAmount);
         String value = String.valueOf(updatedPrice);
         totalLiveData.setValue(value.concat(" ")
-                .concat(resourceProvider.getString(R.string.currency)));
+                .concat(resourceProvider.getString(R.string.currency)));*/
     }
 }

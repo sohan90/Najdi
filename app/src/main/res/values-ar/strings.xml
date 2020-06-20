@@ -172,5 +172,20 @@
     <string name="english_lang">E</string>
     <string name="password_does_not_matched">كلمة المرور غير متطابقة</string>
     <string name="notes">ملاحظات</string>
+    <string name="coupon" >الكوبون</string>
+    <string name="select_shipping_address_from_map" >اختر عنوان التوصيل من الخريطة</string>
+    <string name="login_to_continue" >للأستمرار، الرجاء تسجيل الدخول</string>
+    <string name="shortcut_label" >الطلبات</string>
+    <string name="shortcut_bank" >الحسابات البنكية</string>
+    <string name="add_your_notes" >اضف ملاحظاتك</string>
+    <string name="select_city" >اختر المدينة</string>
+    <string name="enter_valid_phone_no" >ادخل رقم الجوال الصحيح</string>
+    <string name="save_to_fav" >حفظ إلى المفضلة</string>
+    <string name="location_saved_msg" >تم حفظ الموقع بنجاح</string>
+    <string name="plz_valid_fields" >الرجاء إكمال الحقول بشكل صحيح</string>
+    <string name="upgrade_title" >تحديث التطبيق</string>
+    <string name="upgrade_msg" >الرجاء تحديث التطبيق إلى أحدث اصدار</string>
+    <string name="tax" >الضريبة</string>
+    <string name="guest_user_title">زائر</string>
 
 </resources>

@@ -12,11 +12,18 @@ public class CartResponse {
     private String message;
     private boolean status;
     private List<CartData> cart;
-    float total_cart_amount;
+    String total_cart_amount;
+    String total_payable_amount;
     String show_tax;
     float tax_amount;
     String coupon_applied;
     String discount;
+    String coupon_token;
+
+
+    public String getCoupon_token() {
+        return coupon_token;
+    }
 
     public List<CartData> getCart() {
         return cart;
@@ -253,8 +260,12 @@ public class CartResponse {
 
     }
 
-    public float getTotalCartAmount() {
+    public String getSubTotal() {
         return total_cart_amount;
+    }
+
+    public String getTotalAmnt(){
+        return total_payable_amount;
     }
 
     public String getShowTax() {
