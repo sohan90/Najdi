@@ -109,7 +109,9 @@ public class Repository {
     }
 
     public LiveData<ProductModelResponse> getCategoryBasedProducts(String lang, String catId) {
+        String cityId = PreferenceUtils.getValueString(resourceProvider.getActivityContext(), PreferenceUtils.USER_SELECTED_CITY);
         HashMap<String, String> map = new HashMap<>();
+        map.put("city_id", cityId);
         map.put("cat_id", catId);
         map.put("lang", lang);
         String token = PreferenceUtils.getValueString(resourceProvider.getActivityContext(),

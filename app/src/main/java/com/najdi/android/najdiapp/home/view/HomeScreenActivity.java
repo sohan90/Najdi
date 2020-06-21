@@ -382,11 +382,16 @@ public class HomeScreenActivity extends BaseActivity
         viewModel.getCategoryBasedProducts(resourProvider.getCountryLang(), catId)
                 .observe(this, productModelResponse -> {
                     hideProgressDialog();
-                    if (productModelResponse != null && productModelResponse.getProductList() != null &&
-                            productModelResponse.getProductList().size() > 0) {
-                        viewModel.getProductList().setValue(productModelResponse.getProductList());
+                    if (productModelResponse.isStatus()) {
+                        if (productModelResponse.getProductList() != null &&
+                                productModelResponse.getProductList().size() > 0) {
+                            viewModel.getProductList().setValue(productModelResponse.getProductList());
+                        } else {
+                            ToastUtils.getInstance(this).showLongToast(getString(R.string.something_went_wrong));
+                        }
                     } else {
-                        ToastUtils.getInstance(this).showLongToast(getString(R.string.something_went_wrong));
+                        DialogUtil.showAlertDialogNegativeVector(this,
+                                productModelResponse.getMessage(), (dialog, which) -> dialog.dismiss());
                     }
                 });
     }
