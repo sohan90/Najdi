@@ -94,7 +94,7 @@
     <string name="order_received">"تم استلام الطلب "</string>
     <string name="invalid_phone_no">الرجاء إدخال رقم الجوال بالصيغة (5xxxxxxxx)</string>
     <string name="product_added_success">تم إضافة المنتج إلى سلة التسوق</string>
-    <string name="add_to_cart">تحديث السلة</string>
+    <string name="add_to_cart">إضافة إلى السلة</string>
     <string name="andStr">و</string>
     <string name="please_fill">يرجى ملء جميع الحقول المطلوبة</string>
     <string name="something_went_wrong">هناك خطأ ما</string>

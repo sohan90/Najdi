@@ -14,6 +14,7 @@ public class CartResponse {
     private List<CartData> cart;
     String total_cart_amount;
     String total_payable_amount;
+    String total_attributes_amount;
     String show_tax;
     float tax_amount;
     String coupon_applied;
@@ -23,6 +24,10 @@ public class CartResponse {
 
     public String getCoupon_token() {
         return coupon_token;
+    }
+
+    public String getTotal_attributes_amount() {
+        return total_attributes_amount;
     }
 
     public List<CartData> getCart() {

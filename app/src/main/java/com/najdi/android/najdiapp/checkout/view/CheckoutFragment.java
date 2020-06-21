@@ -27,6 +27,7 @@ import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.common.ObservableManager;
 import com.najdi.android.najdiapp.databinding.FragmentCheckoutBinding;
 import com.najdi.android.najdiapp.home.model.ProductDetailBundleModel;
+import com.najdi.android.najdiapp.launch.model.BillingAddress;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 import com.najdi.android.najdiapp.shoppingcart.model.UpdateCartRequest;
 import com.najdi.android.najdiapp.shoppingcart.view.CartAdapter;
@@ -77,6 +78,7 @@ public class CheckoutFragment extends BaseFragment {
                 applyCoupon(binding.couponCode.getText().toString()));
 
         binding.includeLyt.close.setOnClickListener(v -> removeCoupon());
+
         binding.includeLyt.placeOrder.setOnClickListener(v -> {
             int checkedId = binding.includeLyt.radiGrp.getCheckedRadioButtonId();
             RadioButton radioButton = binding.includeLyt.radiGrp.findViewById(checkedId);
@@ -251,6 +253,9 @@ public class CheckoutFragment extends BaseFragment {
                 cartResponse -> {
                     hideProgressDialog();
                     if (cartResponse != null && cartResponse.isStatus()) {
+
+                        updateOrderRequest(cartResponse);
+
                         if (!TextUtils.isEmpty(cartResponse.getCouponApplied())){
                             couponToken = cartResponse.getCoupon_token();
                             binding.includeLyt.couponLyt.setVisibility(View.VISIBLE);
@@ -266,6 +271,21 @@ public class CheckoutFragment extends BaseFragment {
                                 });
                     }
                 });
+    }
+
+    private void updateOrderRequest(CartResponse cartResponse) {
+        BillingAddress billingAddress = activityViewModel.
+                getBillingMutableLiveData().getValue();
+
+        if (billingAddress == null) return;
+        billingAddress.setTotal_cart_amount(cartResponse.getSubTotal());
+        billingAddress.setTotal_attributes_amount(cartResponse.getTotal_attributes_amount());
+        billingAddress.setTax_amount(String.valueOf(cartResponse.getTaxAmount()));
+        billingAddress.setCoupon_applied(cartResponse.getCouponApplied());
+        billingAddress.setDiscount(cartResponse.getDiscount());
+        billingAddress.setTotal_payable_amount(cartResponse.getTotalAmnt());
+
+        activityViewModel.getBillingMutableLiveData().setValue(billingAddress);
     }
 
     private void showMessageIfCouponApplied() {

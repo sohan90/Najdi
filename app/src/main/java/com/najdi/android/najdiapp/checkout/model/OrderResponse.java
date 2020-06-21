@@ -23,6 +23,11 @@ public class OrderResponse {
     private String message;
     private String order_status_label;
     private String order_status;
+    private String total_payable_amount;
+
+    public String getTotal_payable_amount() {
+        return total_payable_amount;
+    }
 
     public String getOrderStatus() {
         return order_status;

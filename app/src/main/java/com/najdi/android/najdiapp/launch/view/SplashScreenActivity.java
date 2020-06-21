@@ -52,7 +52,7 @@ public class SplashScreenActivity extends BaseActivity {
     }
 
     private void showLanguageSelection() {
-        String[] country = {"Select Language", "English", "عربى"};
+        String[] country = {getString(R.string.select_options), "English", "عربى"};
         ArrayAdapter<String> aa = new ArrayAdapter<>(this,
                 R.layout.spinner_text, country);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

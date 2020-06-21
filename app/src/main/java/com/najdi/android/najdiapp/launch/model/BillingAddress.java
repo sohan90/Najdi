@@ -21,6 +21,43 @@ public class BillingAddress {
     private String lang;
     private int payment_method;
 
+    private String total_cart_amount;
+    private String total_attributes_amount;
+    private String tax_amount;
+    private String coupon_applied;
+    private String coupon_token;
+    private String discount;
+    private String total_payable_amount;
+
+
+    public void setTax_amount(String tax_amount) {
+        this.tax_amount = tax_amount;
+    }
+
+    public void setCoupon_applied(String coupon_applied) {
+        this.coupon_applied = coupon_applied;
+    }
+
+    public void setCoupon_token(String coupon_token) {
+        this.coupon_token = coupon_token;
+    }
+
+    public void setDiscount(String discount) {
+        this.discount = discount;
+    }
+
+    public void setTotal_attributes_amount(String total_attributes_amount) {
+        this.total_attributes_amount = total_attributes_amount;
+    }
+
+    public void setTotal_cart_amount(String total_cart_amount) {
+        this.total_cart_amount = total_cart_amount;
+    }
+
+    public void setTotal_payable_amount(String total_payable_amount) {
+        this.total_payable_amount = total_payable_amount;
+    }
+
     public void setPayment_method(int payment_method) {
         this.payment_method = payment_method;
     }
