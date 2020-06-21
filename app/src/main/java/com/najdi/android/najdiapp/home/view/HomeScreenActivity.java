@@ -178,6 +178,7 @@ public class HomeScreenActivity extends BaseActivity
                         CityListModelResponse.Category category = categoryList.get(pos);
                         fetchCategoryBasedProducts(category.getId());
                     }
+                    updateNavigationMenuHighlight(0);
                 });
 
     }
