@@ -2,8 +2,13 @@ package com.najdi.android.najdiapp.home.viewmodel;
 
 import android.os.Build;
 import android.text.Html;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.TextUtils;
+import android.text.style.StrikethroughSpan;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
@@ -28,6 +33,16 @@ public class ProductListItemModel extends BaseObservable {
     }
 
     @Bindable
+    public String getCutPrice(){
+        return product.getCut_price();
+    }
+
+    @Bindable
+    public String getPrice(){
+        return product.getPrice();
+    }
+
+    @Bindable
     public String getProductImg() {
         return product.getImage();
     }
@@ -38,15 +53,23 @@ public class ProductListItemModel extends BaseObservable {
                 into(imageView);
     }
 
-    @Bindable
-    public String getPrice() {
-        String price;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            price = Html.fromHtml(product.getPrice(), Html.FROM_HTML_MODE_COMPACT).toString();
-        } else {
-            price = Html.fromHtml(product.getPrice()).toString();
+    @BindingAdapter({"isOnSale", "cutPrice", "price"})
+    public static void strikeText(TextView textView, boolean isOnSale, String cutPrice, String price) {
+        if (!TextUtils.isEmpty(cutPrice) && !TextUtils.isEmpty(price)) {
+            SpannableStringBuilder spanBuilder = new SpannableStringBuilder();
+            if (isOnSale) {
+                spanBuilder.append(cutPrice);
+                StrikethroughSpan strikethroughSpan = new StrikethroughSpan();
+                spanBuilder.setSpan(strikethroughSpan, 0, cutPrice.length(),
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spanBuilder.append("-").append(price);
+            } else {
+                spanBuilder.append(price);
+            }
+            spanBuilder = spanBuilder.append(" ").append(textView.getContext().
+                    getString(R.string.currency));
+            textView.setText(spanBuilder);
         }
-        return price;
     }
 
     @Bindable

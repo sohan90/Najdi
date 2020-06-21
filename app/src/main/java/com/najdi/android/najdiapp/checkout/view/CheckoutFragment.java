@@ -39,13 +39,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CheckoutFragment extends BaseFragment {
+
     private FragmentCheckoutBinding binding;
+
     private CheckoutViewModel activityViewModel;
+
     private CheckoutAdapter checkoutAdapter;
+
     private CheckoutFragmentViewModel viewModel;
+
     private List<CartResponse.CartData> adapterList;
+
     private String couponToken;
+
     private String couponMessage;
+
 
     public static CheckoutFragment createInstance() {
         return new CheckoutFragment();
@@ -98,6 +106,7 @@ public class CheckoutFragment extends BaseFragment {
 
             viewModel.removeCoupon(couponRequest).observe(getViewLifecycleOwner(), baseResponse -> {
                 if (baseResponse.isStatus()) {
+                    couponMessage = baseResponse.getMessage();
                     binding.couponCode.setText("");// reset
                     binding.includeLyt.couponLyt.setVisibility(View.GONE);
                     activityViewModel.updateCart().setValue(true);// api call to cart listing
@@ -173,7 +182,7 @@ public class CheckoutFragment extends BaseFragment {
 
             @Override
             public void onUpdateQuantity(int adapterPosition, String cartItemKey, int quantity) {
-                updateItemQuantity(adapterPosition, cartItemKey, quantity);
+                updateItemQuantity(cartItemKey, quantity);
             }
 
 
@@ -217,7 +226,7 @@ public class CheckoutFragment extends BaseFragment {
         updateTotal();
     }
 
-    private void updateItemQuantity(int adapterPosition, String cartItemKey, int quantity) {
+    private void updateItemQuantity(String cartItemKey, int quantity) {
         showProgressDialog();
 
         UpdateCartRequest updateCartRequest = new UpdateCartRequest();
@@ -260,7 +269,7 @@ public class CheckoutFragment extends BaseFragment {
                             couponToken = cartResponse.getCoupon_token();
                             binding.includeLyt.couponLyt.setVisibility(View.VISIBLE);
                         }
-                        showMessageIfCouponApplied();
+                        showMessageIfCouponAppliedOrRemoved();
                         viewModel.setShowTax(cartResponse.getShowTax(), cartResponse.getTaxAmount());
                         viewModel.updateTotal(cartResponse.getSubTotal(), cartResponse.getTotalAmnt());
                         viewModel.updateCoupon(cartResponse.getCouponApplied(), cartResponse.getDiscount());
@@ -288,11 +297,11 @@ public class CheckoutFragment extends BaseFragment {
         activityViewModel.getBillingMutableLiveData().setValue(billingAddress);
     }
 
-    private void showMessageIfCouponApplied() {
+    private void showMessageIfCouponAppliedOrRemoved() {
         if (!TextUtils.isEmpty(couponMessage)) {
             DialogUtil.showAlertDialog(getActivity(), couponMessage,
                     (d, wh) -> d.dismiss());
-            couponMessage = null;
+            couponMessage = null;//reseting the coupon msg
         }
     }
 

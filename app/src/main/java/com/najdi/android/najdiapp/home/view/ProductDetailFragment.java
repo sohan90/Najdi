@@ -230,7 +230,9 @@ public class ProductDetailFragment extends BaseFragment {
 
     private void setViewDataForIncludeLyt() {
         binding.topLyt.desc.setMaxLines(Integer.MAX_VALUE);
+        binding.topLyt.executePendingBindings();
         binding.topLyt.setViewModel(new ProductListItemModel(productListResponse, View.GONE));
+
     }
 
     private void inflateViewForProductVariation() {

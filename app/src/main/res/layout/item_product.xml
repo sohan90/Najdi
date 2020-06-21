@@ -74,7 +74,9 @@
                     android:gravity="center"
                     android:minWidth="150dp"
                     android:padding="10dp"
-                    android:text="@{viewModel.price.concat(@string/space).concat(@string/currency)}"
+                    bind:isOnSale="@{viewModel.onSale}"
+                    bind:cutPrice="@{viewModel.cutPrice}"
+                    bind:price="@{viewModel.price}"
                     android:textColor="@color/white"
                     android:textDirection="locale"
                     android:textStyle="bold" />
