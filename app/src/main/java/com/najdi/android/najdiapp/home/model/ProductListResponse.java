@@ -22,7 +22,7 @@ public class ProductListResponse implements Parcelable {
     String description;
     String short_desc;
     boolean in_stock;
-    boolean on_sale;
+    boolean offer;
     Integer stock_quantity;
     String total_sales;
     List<Image> images;
@@ -58,7 +58,7 @@ public class ProductListResponse implements Parcelable {
     }
 
     public boolean isOn_sale() {
-        return on_sale;
+        return offer;
     }
 
     public String getTotal_sales() {
@@ -90,7 +90,7 @@ public class ProductListResponse implements Parcelable {
         variations_data = in.createTypedArrayList(VariationData.CREATOR);
         price_html = in.readString();
         in_stock = in.readByte() != 0;
-        on_sale = in.readByte() != 0;
+        offer = in.readByte() != 0;
         total_sales = in.readString();
         stock_quantity = in.readInt();
         category = in.readString();
@@ -207,7 +207,7 @@ public class ProductListResponse implements Parcelable {
         dest.writeTypedList(variations_data);
         dest.writeString(price_html);
         dest.writeByte((byte) (in_stock ? 1 : 0));
-        dest.writeByte((byte) (on_sale ? 1 : 0));
+        dest.writeByte((byte) (offer ? 1 : 0));
         dest.writeString(total_sales);
         dest.writeInt(stock_quantity);
         dest.writeString(category);
