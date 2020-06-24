@@ -43,6 +43,7 @@ public class ProductDetailFragment extends BaseFragment {
     private CartResponse.CartData cartData;
     private ProductListResponse productListResponse;
     private boolean isFromCartScreen;
+    private boolean offer;
 
     public static ProductDetailFragment createInstance(ProductDetailBundleModel model) {
         Bundle bundle = new Bundle();
@@ -113,6 +114,7 @@ public class ProductDetailFragment extends BaseFragment {
             hideProgressDialog();
             if (baseResponse != null && baseResponse.isStatus()) {
                 this.productListResponse = baseResponse.getProduct();
+                productListResponse.setOffer(offer);
                 setViewDataForIncludeLyt();
                 viewModel.setDefaultPrice(productListResponse.getPrice());
                 viewModel.setMaxVariationQuantity(Integer.parseInt(productListResponse.getStock()));
@@ -282,12 +284,12 @@ public class ProductDetailFragment extends BaseFragment {
                 if (attributeData == null) continue;
 
                 if (attributeData.getAttr_id().trim().equals(attribute.getId().trim())) {
-                    editText.setText(attributeData.getAttr_selected_option());
 
                     AttributeOptionModel attributeOptionModel = getAttriOptModel(
                             attribute.getProductAttributeOptions(),
                             attributeData.getAttr_selected_option_id());
 
+                    editText.setText(attributeOptionModel.getOptionName());
                     viewModel.updatePrice(attribute.getId(), attributeOptionModel);
 
                     break;
@@ -303,6 +305,7 @@ public class ProductDetailFragment extends BaseFragment {
         for (AttributeOptionModel productAttributeOption : productAttributeOptions) {
             if (productAttributeOption.getId().trim().equals(attrSelectedOptionId.trim())) {
                 attributeOptionModel = productAttributeOption;
+
                 break;
             }
         }
@@ -325,11 +328,11 @@ public class ProductDetailFragment extends BaseFragment {
             String optionName = productAttributeOption.getOptionName();// concat option value with the price if it is visible
             if (productAttributeOption.getPriceVisibility().equals("1")) {
                 optionName = optionName
-                        .concat(" ")
+                        /*.concat(" ")
                         .concat("(")
                         .concat(productAttributeOption.getOptionPrice())
                         .concat(")")
-                        .concat("+")
+                        .concat("+")*/
                         .concat(" ")
                         .concat(getString(R.string.currency));
             }
@@ -343,6 +346,7 @@ public class ProductDetailFragment extends BaseFragment {
             ProductDetailBundleModel model = getArguments().getParcelable(EXTRA_PRODUCT_DETAIL_KEY);
             if (model == null) return;
             productId = model.getProductId();
+            offer = model.isOffer();
             cartData = (CartResponse.CartData) model.getT();
             isFromCartScreen = model.isFromCartScreen();
         }

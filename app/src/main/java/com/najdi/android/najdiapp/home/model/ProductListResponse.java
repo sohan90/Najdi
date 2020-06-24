@@ -37,6 +37,7 @@ public class ProductListResponse implements Parcelable {
     String stock;
 
 
+
     public int getTotalAttributeSize() {
         return isproductattribute;
     }
@@ -59,6 +60,10 @@ public class ProductListResponse implements Parcelable {
 
     public boolean isOn_sale() {
         return offer;
+    }
+
+    public void setOffer(boolean offer) {
+        this.offer = offer;
     }
 
     public String getTotal_sales() {

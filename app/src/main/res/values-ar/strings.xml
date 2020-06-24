@@ -18,7 +18,7 @@
     <string name="log_in">تسجيل الدخول</string>
     <string name="checkout">اتمام الطلب</string>
     <string name="order_complete">طلب مكتمل</string>
-    <string name="select_options">حدد الخيارات المناسبة</string>
+    <string name="select_options">اللغة</string>
 
     <string name="choose_an_option">حدد الخيار المناسب</string>
 
@@ -108,7 +108,7 @@
     <string name="direct_transfer_title">تحويل بنكي</string>
     <string name="send">إرسال</string>
     <string name="not_available">غير متوفر</string>
-    <string name="sale">تخفيض السعر</string>
+    <string name="sale">عرض خاص</string>
     <string name="change_password">تغيير كلمة المرور</string>
     <string name="change_mobile_number">تغيير رقم الجوال</string>
     <string name="save">حفظ</string>

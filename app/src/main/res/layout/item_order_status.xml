@@ -49,7 +49,7 @@
                 android:layout_toEndOf="@id/img"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="@{@string/order_no(viewModel.id)}"
+                android:text="@{@string/order_no(viewModel.order_id)}"
                 android:textColor="@color/black" />
 
             <TextView

@@ -144,7 +144,7 @@
     <string name="building_number">Building number</string>
     <string name="direct_transfer_title">Direct Bank Transfer</string>
     <string name="not_available">Not Available</string>
-    <string name="sale">Sale</string>
+    <string name="sale">special offer</string>
     <string name="profile_succes_msg">profile has been updated successfully</string>
     <string name="verification_matched">The code is correct</string>
     <string name="message_success">Your message has been sent. We will contact you soon</string>

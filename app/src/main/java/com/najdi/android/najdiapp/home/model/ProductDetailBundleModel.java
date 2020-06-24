@@ -7,9 +7,18 @@ public class ProductDetailBundleModel implements Parcelable {
     Parcelable t;
     String productId;
     boolean isFromCartScreen;
+    boolean offer;
 
     public ProductDetailBundleModel() {
 
+    }
+
+    public void setOffer(boolean offer) {
+        this.offer = offer;
+    }
+
+    public boolean isOffer() {
+        return offer;
     }
 
     public boolean isFromCartScreen() {
@@ -24,6 +33,7 @@ public class ProductDetailBundleModel implements Parcelable {
         productId = in.readString();
         t = in.readParcelable(t.getClass().getClassLoader());
         isFromCartScreen = in.readByte() != 0;
+        offer = in.readByte() != 0;
     }
 
     public static final Creator<ProductDetailBundleModel> CREATOR = new Creator<ProductDetailBundleModel>() {
@@ -64,5 +74,6 @@ public class ProductDetailBundleModel implements Parcelable {
         dest.writeString(productId);
         dest.writeParcelable(t, flags);
         dest.writeInt((byte) (isFromCartScreen ? 1 : 0));
+        dest.writeInt((byte) (offer ? 1 : 0));
     }
 }
