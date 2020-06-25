@@ -69,4 +69,12 @@ public class BaseFragment extends Fragment {
         Intent intent = new Intent(getActivity(), LoginActivity.class);
         startActivity(intent);
     }
+
+    protected String getRtlSupportedHtml(String html){
+        String rtlHtml = html;
+        if (resourceProvider.getCountryLang().equals(Constants.ARABIC_LAN)){
+            rtlHtml =  "<html dir=\"rtl\" lang=\"\"><body>" + html + "</body></html>";
+        }
+      return  rtlHtml;
+    }
 }

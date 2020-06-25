@@ -179,4 +179,5 @@
     <string name="upgrade_title" >Upgrade your App</string>
     <string name="upgrade_msg" >\" recommends that you upgrade to the latest version\"</string>
     <string name="tax" >Tax</string>
+    <string name="select_appr_option" >Select option</string>
 </resources>

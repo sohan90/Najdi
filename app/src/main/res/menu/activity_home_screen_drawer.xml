@@ -25,6 +25,11 @@
             android:title="@string/city" />
 
         <item
+            android:id="@+id/sign_in"
+            android:icon="@drawable/ic_baseline_vpn_key_24"
+            android:title="@string/sign_in" />
+
+        <item
             android:id="@+id/shopping_cart"
             android:icon="@drawable/ic_shopping_cart_black_24dp"
             android:title="@string/shopping_cart" />

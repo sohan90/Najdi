@@ -16,6 +16,7 @@ import com.najdi.android.najdiapp.databinding.ActivityChangePasswordBinding;
 import com.najdi.android.najdiapp.launch.viewmodel.ForgotPasswordViewModel;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
+import com.najdi.android.najdiapp.utitility.ToastUtils;
 
 import static com.najdi.android.najdiapp.common.Constants.OtpScreen.OLD_USER_FLOW;
 import static com.najdi.android.najdiapp.common.Constants.OtpScreen.RESET_PASSWORD_OTP_SCREEN;
@@ -92,23 +93,30 @@ public class ChangePasswordActivity extends BaseActivity {
             liveData = viewModel.appMigrationResetPassword(userId, token);
 
         } else {
-
+            //change password flow
             String userId = PreferenceUtils.getValueString(this, PreferenceUtils.USER_ID_KEY);
             liveData = viewModel.changePassword(userId);
         }
 
         liveData.observe(this, baseResponse -> {
             hideProgressDialog();
-            if (baseResponse != null && baseResponse.isStatus()) {
-                if (launchType == OLD_USER_FLOW) {
-                    saveCredential(baseResponse.getUserid(), baseResponse.getUserToken());
-                    launchLoginScreen();
+            if (baseResponse != null) {
+                if (baseResponse.isStatus()) {
+                    if (launchType == OLD_USER_FLOW) {
+                        launchLoginScreen();
+                    } else {
+                        DialogUtil.showAlertDialog(this, getString(R.string.password_upd_msg),
+                                (dialog, which) -> {
+                            dialog.dismiss();
+                            finish();
+                        });
+                    }
                 } else {
-                    DialogUtil.showAlertDialog(this, getString(R.string.password_upd_msg), (dialog, which) -> {
-                        dialog.dismiss();
-                        finish();
-                    });
+                    DialogUtil.showAlertDialogNegativeVector(this, baseResponse.getMessage()
+                            , (d, w) -> d.dismiss());
                 }
+            } else {
+                ToastUtils.getInstance(this).showLongToast(getString(R.string.something_went_wrong));
             }
         });
     }
@@ -116,6 +124,7 @@ public class ChangePasswordActivity extends BaseActivity {
     private void launchLoginScreen() {
         startActivity(new Intent(this, LoginActivity.class));
     }
+
 
     private void saveCredential(String userId, String token) {
         PreferenceUtils.setValueString(this, PreferenceUtils.USER_LOGIIN_TOKEN, token);

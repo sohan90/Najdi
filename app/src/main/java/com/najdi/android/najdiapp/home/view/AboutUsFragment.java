@@ -88,7 +88,7 @@ public class AboutUsFragment extends BaseFragment {
             if (baseResponse != null && baseResponse.isStatus()) {
                 String htmlcontent = baseResponse.getMessage();
                 String imgageTrimmedHtml = htmlcontent.replaceAll("<img.+?>", "");
-                binding.webview.loadDataWithBaseURL("", imgageTrimmedHtml,
+                binding.webview.loadDataWithBaseURL("", getRtlSupportedHtml(imgageTrimmedHtml),
                         "text/html", "UTF-8", "");
             }
         });
@@ -100,7 +100,7 @@ public class AboutUsFragment extends BaseFragment {
             hideProgressDialog();
             if (baseResponse != null && baseResponse.isStatus()) {
                 String htmlcontent = baseResponse.getMessage();
-                binding.webview.loadDataWithBaseURL("", htmlcontent,
+                binding.webview.loadDataWithBaseURL("", getRtlSupportedHtml(htmlcontent),
                         "text/html", "UTF-8", "");
             }
         });
@@ -112,7 +112,7 @@ public class AboutUsFragment extends BaseFragment {
             hideProgressDialog();
             if (baseResponse != null && baseResponse.isStatus()) {
                 String htmlcontent = baseResponse.getMessage();
-                binding.webview.loadDataWithBaseURL("", htmlcontent,
+                binding.webview.loadDataWithBaseURL("", getRtlSupportedHtml(htmlcontent),
                         "text/html", "UTF-8", "");
             }
         });

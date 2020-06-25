@@ -198,7 +198,7 @@ public class OtpActivity extends BaseActivity {
                     launchChangePasswordScreen(baseResponse.getToken(), baseResponse.getUserid(),
                             Constants.OtpScreen.RESET_PASSWORD_OTP_SCREEN);
                     finish();// forgot password flow
-                } else {
+                } else { //old user migration flow
                     launchChangePasswordScreen(token_, tempId, OLD_USER_FLOW);
                     finish();
                 }

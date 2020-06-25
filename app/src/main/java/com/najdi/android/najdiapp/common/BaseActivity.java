@@ -63,6 +63,14 @@ public class BaseActivity extends AppCompatActivity {
                             listener.onClicked(true);
                         }
                     }
+                } else {
+                    if (listener != null){
+                        listener.onClicked(true);
+                    }
+                }
+            } else {
+                if (listener != null) {
+                    listener.onClicked(true);
                 }
             }
         });

@@ -104,6 +104,20 @@ public class HomeScreenActivity extends BaseActivity
         fetchCityList();
         fetchCategoryList();
         getShortCutIntentAction();
+        hideMenuItemForGuestUser();
+
+    }
+
+    private void hideMenuItemForGuestUser() {
+        String loginToken = PreferenceUtils.getValueString(this, USER_LOGIIN_TOKEN);
+        if (TextUtils.isEmpty(loginToken)) { // guest user
+            binding.navView.getMenu().findItem(R.id.log_out).setVisible(false);
+            binding.navView.getMenu().findItem(R.id.history).setVisible(false);
+            binding.navView.getMenu().findItem(R.id.profile).setVisible(false);
+            binding.navView.getMenu().findItem(R.id.shopping_cart).setVisible(false);
+        } else {
+            binding.navView.getMenu().findItem(R.id.sign_in).setVisible(false);
+        }
 
     }
 
@@ -118,22 +132,19 @@ public class HomeScreenActivity extends BaseActivity
     }
 
     private void fetchCityList() {
-        String token = PreferenceUtils.getValueString(this, USER_LOGIIN_TOKEN);
-        if (!TextUtils.isEmpty(token)) {
-            String selectedCityId = PreferenceUtils.getValueString(this, USER_SELECTED_CITY);
-            if (TextUtils.isEmpty(selectedCityId)) {
-                viewModel.getCityList(resourProvider.getCountryLang())
-                        .observe(this, cityListModelResponse -> {
-                            if (cityListModelResponse != null && cityListModelResponse.isStatus()) {
-                                List<CityListModelResponse.City> cityList = cityListModelResponse.getCities();
+        String selectedCityId = PreferenceUtils.getValueString(this, USER_SELECTED_CITY);
+        if (TextUtils.isEmpty(selectedCityId)) {
+            viewModel.getCityList(resourProvider.getCountryLang())
+                    .observe(this, cityListModelResponse -> {
+                        if (cityListModelResponse != null && cityListModelResponse.isStatus()) {
+                            List<CityListModelResponse.City> cityList = cityListModelResponse.getCities();
 
-                                addDisposable(getCityNameList(cityList).subscribe(strCity ->
-                                        showPopupwindow(strCity, cityList, null)));
-                            }
-                        });
-            } else {
-                fetchCityBasedProducts(selectedCityId);
-            }
+                            addDisposable(getCityNameList(cityList).subscribe(strCity ->
+                                    showPopupwindow(strCity, cityList, null)));
+                        }
+                    });
+        } else {
+            fetchCityBasedProducts(selectedCityId);
         }
     }
 
@@ -557,6 +568,10 @@ public class HomeScreenActivity extends BaseActivity
                 showPopupwindow(categoryStrNameList, null, categoryList);
                 break;
 
+            case R.id.sign_in:
+                launchLogin();
+                break;
+
             case R.id.city:
                 PreferenceUtils.setValueString(this, USER_SELECTED_CITY, null);
                 fetchCityList();
@@ -590,6 +605,12 @@ public class HomeScreenActivity extends BaseActivity
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void launchLogin() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void clearCredentialandFinish() {
