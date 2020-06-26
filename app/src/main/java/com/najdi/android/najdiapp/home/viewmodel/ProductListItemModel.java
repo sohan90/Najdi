@@ -33,12 +33,12 @@ public class ProductListItemModel extends BaseObservable {
     }
 
     @Bindable
-    public String getCutPrice(){
+    public String getCutPrice() {
         return product.getCut_price();
     }
 
     @Bindable
-    public String getPrice(){
+    public String getPrice() {
         return product.getPrice();
     }
 
@@ -55,21 +55,26 @@ public class ProductListItemModel extends BaseObservable {
 
     @BindingAdapter({"isOnSale", "cutPrice", "price"})
     public static void strikeText(TextView textView, boolean isOnSale, String cutPrice, String price) {
-        if (!TextUtils.isEmpty(cutPrice) && !TextUtils.isEmpty(price)) {
-            SpannableStringBuilder spanBuilder = new SpannableStringBuilder();
-            if (isOnSale) {
+        SpannableStringBuilder spanBuilder = new SpannableStringBuilder();
+        if (isOnSale) {
+            if (!TextUtils.isEmpty(cutPrice)) {
                 spanBuilder.append(cutPrice);
                 StrikethroughSpan strikethroughSpan = new StrikethroughSpan();
                 spanBuilder.setSpan(strikethroughSpan, 0, cutPrice.length(),
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 spanBuilder.append("-").append(price);
-            } else {
+
+            } else if (!TextUtils.isEmpty(price)) {
                 spanBuilder.append(price);
             }
-            spanBuilder = spanBuilder.append(" ").append(textView.getContext().
-                    getString(R.string.currency));
-            textView.setText(spanBuilder);
+
+        } else if (!TextUtils.isEmpty(price)) {
+            spanBuilder.append(price);
         }
+
+        spanBuilder = spanBuilder.append(" ").append(textView.getContext().
+                getString(R.string.currency));
+        textView.setText(spanBuilder);
     }
 
     @Bindable
@@ -104,7 +109,7 @@ public class ProductListItemModel extends BaseObservable {
     }
 
     @Bindable
-    public int getDividerVisibility(){
+    public int getDividerVisibility() {
         return showDetailButton == View.VISIBLE ? View.VISIBLE : View.GONE;
     }
 
