@@ -23,6 +23,9 @@ import java.util.Objects;
 import static com.najdi.android.najdiapp.common.Constants.HtmlScreen.ABOUT_US;
 import static com.najdi.android.najdiapp.common.Constants.HtmlScreen.TERMS_CONDITION;
 
+/**
+ * Class is the entry point for About us, Terms and condition and privacy policy.
+ */
 public class AboutUsFragment extends BaseFragment {
 
     private FragAboutUsBinding binding;
@@ -56,9 +59,31 @@ public class AboutUsFragment extends BaseFragment {
         return binding.getRoot();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    private void initViewModel() {
+        if (getActivity() == null) return;
+        viewModel = new ViewModelProvider(this).get(AboutViewModel.class);
+    }
+
+    private void initActivityViewModel() {
+        if (getActivity() == null) return;
+
+        if (screenType == ABOUT_US) {
+            activityViewModel = new ViewModelProvider(getActivity()).get(HomeScreenViewModel.class);
+        } else {
+            signUpViewModel = new ViewModelProvider(getActivity()).get(SignUpViewModel.class);
+        }
+    }
+
+    private void initToolBar() {
+        if (screenType == ABOUT_US) {
+            activityViewModel.getSetToolBarTitle().setValue(getString(R.string.about_us));
+        } else {
+            if (screenType == TERMS_CONDITION) {
+                signUpViewModel.getToolbarTitle().setValue(getString(R.string.terms_and_conditions));
+            } else {
+                signUpViewModel.getToolbarTitle().setValue(getString(R.string.and_privacy_policy));
+            }
+        }
     }
 
     private void fetchHtmlContentForScreenType() {
@@ -118,30 +143,4 @@ public class AboutUsFragment extends BaseFragment {
         });
     }
 
-    private void initViewModel() {
-        if (getActivity() == null) return;
-        viewModel = new ViewModelProvider(this).get(AboutViewModel.class);
-    }
-
-    private void initActivityViewModel() {
-        if (getActivity() == null) return;
-
-        if (screenType == ABOUT_US) {
-            activityViewModel = new ViewModelProvider(getActivity()).get(HomeScreenViewModel.class);
-        } else {
-            signUpViewModel = new ViewModelProvider(getActivity()).get(SignUpViewModel.class);
-        }
-    }
-
-    private void initToolBar() {
-        if (screenType == ABOUT_US) {
-            activityViewModel.getSetToolBarTitle().setValue(getString(R.string.about_us));
-        } else {
-           if (screenType == TERMS_CONDITION) {
-                signUpViewModel.getToolbarTitle().setValue(getString(R.string.terms_and_conditions));
-            } else {
-                signUpViewModel.getToolbarTitle().setValue(getString(R.string.and_privacy_policy));
-            }
-        }
-    }
 }

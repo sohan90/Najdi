@@ -134,8 +134,10 @@ public class HomeScreenActivity extends BaseActivity
     private void fetchCityList() {
         String selectedCityId = PreferenceUtils.getValueString(this, USER_SELECTED_CITY);
         if (TextUtils.isEmpty(selectedCityId)) {
+            showProgressDialog();
             viewModel.getCityList(resourProvider.getCountryLang())
                     .observe(this, cityListModelResponse -> {
+                        hideProgressDialog();
                         if (cityListModelResponse != null && cityListModelResponse.isStatus()) {
                             List<CityListModelResponse.City> cityList = cityListModelResponse.getCities();
 
@@ -149,8 +151,10 @@ public class HomeScreenActivity extends BaseActivity
     }
 
     private void fetchCategoryList() {
+        showProgressDialog();
         viewModel.getCategoryList(resourProvider.getCountryLang())
                 .observe(this, cityListModelResponse -> {
+                    hideProgressDialog();
                     if (cityListModelResponse != null && cityListModelResponse.isStatus()) {
                         List<CityListModelResponse.Category> categoryList = cityListModelResponse
                                 .getCategories();

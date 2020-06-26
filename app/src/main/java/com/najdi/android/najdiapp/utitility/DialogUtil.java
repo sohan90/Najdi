@@ -89,7 +89,7 @@ public class DialogUtil {
                                             String posButtonName, String negButtonName,
                                             boolean isCancelable) {
         if (context != null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AlertDialogTheme);
+            AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AlertDialogGuest);
             if (!TextUtils.isEmpty(posButtonName)) {
                 builder.setTitle(tittle).setMessage(message).setPositiveButton(posButtonName, listener);
             }
@@ -99,6 +99,7 @@ public class DialogUtil {
             AlertDialog dialog = builder.create();
             dialog.setCancelable(isCancelable);
             dialog.show();
+
         }
     }
 
