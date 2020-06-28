@@ -37,6 +37,11 @@ public class BaseResponse {
     private int migrate_status;
 
 
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+
     public int getMigrateStatus() {
         return migrate_status;
     }
@@ -133,16 +138,16 @@ public class BaseResponse {
     }
 
     public void handleError(Context context) {
-        if (data != null) {
-            switch (Integer.parseInt(code)) {
-                case 400:
-                case 500:
-                case 404:
-                    ToastUtils.getInstance(context).showLongToast(message);
-                    break;
+        switch (Integer.parseInt(code)) {
+            case 400:
+            case 500:
+                handleErrorForDialog(context);
+                break;
+            case 404:
+                ToastUtils.getInstance(context).showLongToast(message);
+                break;
 
 
-            }
         }
     }
 
@@ -162,6 +167,11 @@ public class BaseResponse {
                     DialogUtil.showAlertDialogNegativeVector(context, message,
                             (dialog, which) -> dialog.dismiss());
                 }
+                break;
+
+
+            case 500:
+                ToastUtils.getInstance(context).showLongToast(context.getString(R.string.no_network_msg));
         }
     }
 

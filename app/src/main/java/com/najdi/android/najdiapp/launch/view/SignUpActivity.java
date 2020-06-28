@@ -20,6 +20,7 @@ import com.najdi.android.najdiapp.launch.model.SignupResponseModel;
 import com.najdi.android.najdiapp.launch.viewmodel.SignUpViewModel;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.FragmentHelper;
+import com.najdi.android.najdiapp.utitility.NetworkUtility;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
 import static com.najdi.android.najdiapp.launch.view.OtpActivity.EXTRA_SCREEN_TYPE;
@@ -98,22 +99,27 @@ public class SignUpActivity extends BaseActivity {
     private void subscribeValidationStatus() {
         viewModel.getValidationStatus().observe(this, valid -> {
             if (valid) {
-                String fcmToken = PreferenceUtils.getValueString(this, FCM_TOKEN_KEY);
-                LiveData<BaseResponse> liveData = viewModel.registerUser(fcmToken);
-                liveData.observe(this, signupResponseModel -> {
-                    hideProgressDialog();
-                    if (signupResponseModel != null) {
-                        if (signupResponseModel.isStatus()) {
-                            launchOTPScreen(signupResponseModel.getTempId(), signupResponseModel.getMessage());
-                            finish();
+                if (NetworkUtility.isNetworkConnected(this)) {
+                    String fcmToken = PreferenceUtils.getValueString(this, FCM_TOKEN_KEY);
+                    LiveData<BaseResponse> liveData = viewModel.registerUser(fcmToken);
+                    liveData.observe(this, signupResponseModel -> {
+                        hideProgressDialog();
+                        if (signupResponseModel != null) {
+                            if (signupResponseModel.isStatus()) {
+                                launchOTPScreen(signupResponseModel.getTempId(), signupResponseModel.getMessage());
+                                finish();
 
-                        } else {
-                            DialogUtil.showAlertDialog(this, signupResponseModel.
-                                            getMessage(),
-                                    (dialog, which) -> dialog.dismiss());
+                            } else {
+                                DialogUtil.showAlertDialog(this, signupResponseModel.
+                                                getMessage(),
+                                        (dialog, which) -> dialog.dismiss());
+                            }
                         }
-                    }
-                });
+                    });
+                } else {
+                    DialogUtil.showAlertDialogNegativeVector(this, getString(R.string.no_network_msg)
+                    , (d, w) -> d.dismiss());
+                }
             } else {
                 hideProgressDialog();
             }

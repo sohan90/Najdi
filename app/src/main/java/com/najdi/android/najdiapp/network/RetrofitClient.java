@@ -46,7 +46,6 @@ public class RetrofitClient {
             .addInterceptor(chain -> {
                 Request originalRequest = chain.request();
                 Request.Builder requestBuilder = originalRequest.newBuilder();
-
                 Request additionalRequest = requestBuilder.build();
                 return chain.proceed(additionalRequest);
             })
@@ -89,9 +88,6 @@ public class RetrofitClient {
             if (BuildConfig.DEBUG) {
                 client.interceptors().add(httpLoggingInterceptor);
             }
-            client.readTimeout(180, TimeUnit.SECONDS);
-            client.connectTimeout(180, TimeUnit.SECONDS);
-
             KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
             keyStore.load(null, null);
 

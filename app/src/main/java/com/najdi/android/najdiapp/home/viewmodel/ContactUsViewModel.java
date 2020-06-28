@@ -8,8 +8,10 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.BaseViewModel;
+import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.home.model.ContactUsRequest;
 import com.najdi.android.najdiapp.home.model.User;
 
@@ -18,6 +20,8 @@ public class ContactUsViewModel extends BaseViewModel {
     private MutableLiveData<String> name = new MutableLiveData<>();
     private MutableLiveData<String> phone = new MutableLiveData<>();
     private MutableLiveData<String> email = new MutableLiveData<>();
+    private MutableLiveData<String> phoneError = new MutableLiveData<>();
+    private MutableLiveData<String> emailError = new MutableLiveData<>();
 
 
     public MutableLiveData<String> getMessage() {
@@ -34,6 +38,14 @@ public class ContactUsViewModel extends BaseViewModel {
 
     public MutableLiveData<String> getEmail() {
         return email;
+    }
+
+    public MutableLiveData<String> getEmailError() {
+        return emailError;
+    }
+
+    public MutableLiveData<String> getPhoneError() {
+        return phoneError;
     }
 
     public ContactUsViewModel(@NonNull Application application) {
@@ -59,14 +71,18 @@ public class ContactUsViewModel extends BaseViewModel {
 
     public boolean validateFields() {
         boolean isValid = true;
+        phoneError.setValue("");
+        emailError.setValue("");
         if (TextUtils.isEmpty(name.getValue())) {
             isValid = false;
         } else if (TextUtils.isEmpty(phone.getValue()) || !phone.getValue().startsWith("5") ||
-                phone.getValue().length() < 8) {
+                phone.getValue().length() < Constants.MOBILE_NO_LENGTH) {
             isValid = false;
-        } else if (TextUtils.isEmpty(email.getValue()) || !Patterns.EMAIL_ADDRESS
+            phoneError.setValue(resourceProvider.getString(R.string.mobile_no_error));
+        } else if (!TextUtils.isEmpty(email.getValue()) && !Patterns.EMAIL_ADDRESS
                 .matcher(email.getValue()).matches()) {
             isValid = false;
+            emailError.setValue(resourceProvider.getString(R.string.invalid_email));
         } else if (TextUtils.isEmpty(message.getValue())) {
             isValid = false;
         }

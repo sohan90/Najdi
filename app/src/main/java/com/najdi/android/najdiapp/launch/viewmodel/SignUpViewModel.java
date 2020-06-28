@@ -12,6 +12,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.BaseViewModel;
+import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.launch.model.SignupRequestModel;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
@@ -44,17 +45,18 @@ public class SignUpViewModel extends BaseViewModel {
     public void validate() {
         boolean valid = false;
         if (phoneNo.getValue() != null &&
-                phoneNo.getValue().startsWith("5") && phoneNo.getValue().length() == 9) {
+                phoneNo.getValue().startsWith("5") && phoneNo.getValue().length() ==
+                                                      Constants.MOBILE_NO_LENGTH) {
             phoneNoError.setValue(null);
         } else {
             phoneNoError.setValue(resourceProvider.getString(R.string.invalid_phone_no));
         }
 
-        if (password.getValue() != null && password.getValue().length() <= 8) {
+        if (password.getValue() != null && password.getValue().length() <= Constants.PASSWORD_LENGTH) {
             passwordError.setValue(null);
 
         } else {
-            passwordError.setValue(resourceProvider.getString(R.string.invalid_pass));
+            passwordError.setValue(resourceProvider.getString(R.string.password_error));
         }
 
         if (password.getValue() != null && confirmPass.getValue() != null && confirmPass.getValue()

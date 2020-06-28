@@ -29,6 +29,19 @@
             app:layout_constraintTop_toTopOf="@id/bckgrd" />
 
         <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/bckgrd"
+            app:layout_constraintEnd_toEndOf="@id/bckgrd"
+            app:layout_constraintStart_toStartOf="@id/bckgrd"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toTopOf="@id/bckgrd"/>
+
+        <TextView
             android:id="@+id/message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

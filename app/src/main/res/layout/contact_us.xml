@@ -10,7 +10,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,15 +44,62 @@
                 android:text="@={viewModel.name}"
                 android:hint="@string/name"/>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/phone"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_marginTop="20dp"
+                android:layoutDirection="ltr"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="+966"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="1.2dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:background="@color/black" />
+
+                <EditText
+                    android:id="@+id/phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:background="@null"
+                    android:gravity="center|start"
+                    android:hint="@string/mobile_number_5x"
+                    android:imeOptions="actionNext"
+                    android:inputType="phone"
+                    android:maxLength="9"
+                    android:text="@={viewModel.phone}"
+                    android:textColor="@color/grey_text"
+                    android:textDirection="ltr"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1.2dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:background="@color/grey_text"
+                android:padding="5dp" />
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:maxLength="8"
-                android:inputType="phone"
-                android:text="@={viewModel.phone}"
-                android:hint="@string/phone"/>
+                android:layout_gravity="start"
+                android:text="@{viewModel.phoneError}"
+                android:gravity="left"
+                android:layout_marginBottom="10dp"
+                android:textColor="@color/error_red"/>
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/email"
@@ -60,6 +108,16 @@
                 android:layout_marginTop="10dp"
                 android:text="@={viewModel.email}"
                 android:hint="@string/email"/>
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="@{viewModel.emailError}"
+                android:gravity="left"
+                android:layout_marginBottom="10dp"
+                android:textColor="@color/error_red"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

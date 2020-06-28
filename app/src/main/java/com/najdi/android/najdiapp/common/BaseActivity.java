@@ -18,6 +18,7 @@ import com.najdi.android.najdiapp.utitility.AppInfoUtil;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.LocaleUtitlity;
 import com.najdi.android.najdiapp.utitility.MathUtils;
+import com.najdi.android.najdiapp.utitility.NetworkUtility;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 import com.najdi.android.najdiapp.utitility.ResourceProvider;
 
@@ -44,27 +45,35 @@ public class BaseActivity extends AppCompatActivity {
         updateLocale(lang);
     }
 
-    protected void fetchAppInfo(Repository repository, GenericClickListener<Boolean> dismissListener){
+    protected void fetchAppInfo(Repository repository, GenericClickListener<Boolean> dismissListener) {
         this.listener = dismissListener;
-        fetchAppInfo(repository);
+        if (NetworkUtility.isNetworkConnected(this)) {
+            fetchAppInfo(repository);
+        } else {
+            DialogUtil.showAlertDialogNegativeVector(this, getString(R.string.no_network_msg)
+                    , (d, w) -> {
+                        listener.onClicked(true);
+                        d.dismiss();
+                    });
+        }
     }
 
     protected void fetchAppInfo(Repository repository) {
         repository.getAppInfo().observe(this, baseResponse -> {
-            if (baseResponse != null){
-                if (baseResponse.isStatus()){
+            if (baseResponse != null) {
+                if (baseResponse.isStatus()) {
                     AppDetailResponse appDetailResponse = baseResponse.getDetails();
                     if (!AppInfoUtil.getCurrentVersion(this).
-                            equals(appDetailResponse.getVer_no_android())){
+                            equals(appDetailResponse.getVer_no_android())) {
 
                         showUpgradeDialog();
                     } else {
-                        if (listener != null){
+                        if (listener != null) {
                             listener.onClicked(true);
                         }
                     }
                 } else {
-                    if (listener != null){
+                    if (listener != null) {
                         listener.onClicked(true);
                     }
                 }
@@ -79,21 +88,22 @@ public class BaseActivity extends AppCompatActivity {
     private void showUpgradeDialog() {
         DialogUtil.showAlertWithNegativeButton(this, getString(R.string.upgrade_title),
                 getString(R.string.app_name).concat(getString(R.string.upgrade_msg)), (d, w) -> {
-            if (w == AlertDialog.BUTTON_POSITIVE){
-                openPlayStore();
-            } else {
-                d.dismiss();
-                if (listener != null){
-                    listener.onClicked(true);
-                }
-            }
-        });
+                    if (w == AlertDialog.BUTTON_POSITIVE) {
+                        openPlayStore();
+                    } else {
+                        d.dismiss();
+                        if (listener != null) {
+                            listener.onClicked(true);
+                        }
+                    }
+                });
     }
 
     private void openPlayStore() {
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse
-                ("market://details?id="+AppInfoUtil.getPackageName(this))));
+                ("market://details?id=" + AppInfoUtil.getPackageName(this))));
     }
+
     private void updateLocale(String lang) {
         setLocaleLanguage(lang);
         resourProvider.setActivityContext(this);

@@ -89,7 +89,7 @@ public class HomeScreenActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home_screen);
         initializeViewModel();
-        fetchAppInfo(viewModel.provideRepo());
+        //fetchAppInfo(viewModel.provideRepo());
         setNavigationBar();
         replaceFragment(PRODUCTS);
         subscribeForLaunchProductDetail();

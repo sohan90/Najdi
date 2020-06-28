@@ -15,6 +15,9 @@ import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
 import java.util.HashMap;
 
+import static com.najdi.android.najdiapp.common.Constants.MOBILE_NO_LENGTH;
+import static com.najdi.android.najdiapp.common.Constants.PASSWORD_LENGTH;
+
 public class ForgotPasswordViewModel extends BaseViewModel {
 
     private MutableLiveData<String> phoneno = new MutableLiveData<>();
@@ -70,7 +73,7 @@ public class ForgotPasswordViewModel extends BaseViewModel {
     public boolean validate() {
         boolean isValid = false;
         if (phoneno.getValue() != null && phoneno.getValue().startsWith("5")
-                && phoneno.getValue().length() >= 8) {
+                && phoneno.getValue().length() >= MOBILE_NO_LENGTH) {
 
             isValid = true;
         }
@@ -91,7 +94,7 @@ public class ForgotPasswordViewModel extends BaseViewModel {
         if (password.getValue() != null && confirmPassword.getValue() != null &&
                 oldPassword.getValue() != null) {
 
-            if (password.getValue().length() >= 8 && confirmPassword.getValue().length() >= 8) {
+            if (password.getValue().length() >= PASSWORD_LENGTH && confirmPassword.getValue().length() >= PASSWORD_LENGTH) {
 
                 if (password.getValue().equals(confirmPassword.getValue())) {
                     isValid = true;
@@ -99,7 +102,7 @@ public class ForgotPasswordViewModel extends BaseViewModel {
                     passwordErrorField.setValue(resourceProvider.getString(R.string.password_mismatched));
                 }
             } else {
-                passwordErrorField.setValue(resourceProvider.getString(R.string.invalid_pass));
+                passwordErrorField.setValue(resourceProvider.getString(R.string.password_error));
             }
         } else {
             DialogUtil.showAlertDialogNegativeVector(resourceProvider.getActivityContext(),

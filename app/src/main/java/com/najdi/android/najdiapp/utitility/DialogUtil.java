@@ -9,7 +9,6 @@ import android.graphics.drawable.Animatable2;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,15 +88,25 @@ public class DialogUtil {
                                             String posButtonName, String negButtonName,
                                             boolean isCancelable) {
         if (context != null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AlertDialogGuest);
-            if (!TextUtils.isEmpty(posButtonName)) {
-                builder.setTitle(tittle).setMessage(message).setPositiveButton(posButtonName, listener);
-            }
-            if (!TextUtils.isEmpty(negButtonName)) {
-                builder.setTitle(tittle).setMessage(message).setNegativeButton(negButtonName, listener);
-            }
+            AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AlertDialogTheme);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+            // set the custom layout
+            final View customLayout = inflater.inflate(R.layout.custom_dialog_lyt, null);
+            builder.setView(customLayout);
+
+            customLayout.findViewById(R.id.imageView3).setVisibility(View.GONE);
+            TextView titleView = customLayout.findViewById(R.id.title);
+            titleView.setVisibility(View.VISIBLE);
+            titleView.setText(tittle);
+
+            TextView messageView = customLayout.findViewById(R.id.message);
+            messageView.setText(message);
+
+            builder.setPositiveButton(posButtonName, listener);
+            builder.setNegativeButton(negButtonName, listener);
             AlertDialog dialog = builder.create();
             dialog.setCancelable(isCancelable);
+
             dialog.show();
 
         }
@@ -128,6 +137,7 @@ public class DialogUtil {
             ImageView tickView = customLayout.findViewById(R.id.imageView3);
             final AnimatedVectorDrawable animatedVectorDrawable = (AnimatedVectorDrawable) ContextCompat.getDrawable(context,
                     vectorDrawable);
+
             tickView.setImageDrawable(animatedVectorDrawable);
             animatedVectorDrawable.start();
             animatedVectorDrawable.registerAnimationCallback(new Animatable2.AnimationCallback() {

@@ -2,6 +2,7 @@ package com.najdi.android.najdiapp.checkout.viewmodel;
 
 import android.app.Application;
 import android.location.Address;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -101,13 +102,21 @@ public class ShippingDetailViewModel extends BaseViewModel {
         BillingAddress billing = new BillingAddress();
         billing.setFull_name(name.getValue());
         billing.setEmail(email.getValue());
+
         billing.setPhone(Objects.requireNonNull(phoneNo.getValue())
                 .replace("966", ""));
-        billing.setAddress(user != null ? user.getAddress() : "");
+
+        billing.setAddress((user != null && !TextUtils.isEmpty(user.getAddress())) ?
+                user.getAddress() : fullAddress.getValue());
+
         billing.setMap_address(fullAddress.getValue());
-        billing.setCity(user != null ? user.getCity() : googleAddress.getLocality());
+
+        billing.setCity((user != null && !TextUtils.isEmpty(user.getCity())) ?
+                user.getCity() : googleAddress.getLocality());
+
         billing.setLat(String.valueOf(googleAddress.getLatitude()));
         billing.setLng(String.valueOf(googleAddress.getLongitude()));
+
         // billing.setState(province.getValue() == null ? googleAddress.getAdminArea() : province.getValue());
         //billing.setPostcode(postalCode.getValue() == null ? googleAddress.getPostalCode() : postalCode.getValue());
         // billing.setCountry(province.getValue() == null ? googleAddress.getCountryName() : province.getValue());

@@ -73,7 +73,7 @@ public class Repository {
                     @Override
                     public void onFailurResponse(Call<ProductModelResponse> call, BaseResponse baseResponse) {
                         if (baseResponse != null) {
-                            baseResponse.handleError(resourceProvider.getAppContext());
+                            baseResponse.handleError(resourceProvider.getActivityContext());
                         }
                         liveData.setValue(null);
                     }

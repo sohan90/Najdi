@@ -19,6 +19,7 @@ import com.najdi.android.najdiapp.launch.viewmodel.LoginViewModel;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.FragmentHelper;
 import com.najdi.android.najdiapp.utitility.LocaleUtitlity;
+import com.najdi.android.najdiapp.utitility.NetworkUtility;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
 import java.util.List;
@@ -114,7 +115,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private void subscribeForInputValidation() {
         viewModel.getValidationStatus().observe(this, isValid -> {
             if (isValid) {
-                showProgressDialog();
                 login();
             }
         });
@@ -122,33 +122,39 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     private void login() {
         String fcmToken = PreferenceUtils.getValueString(this, FCM_TOKEN_KEY);
-        viewModel.login(fcmToken).observe(this, baseResponse -> {
-            hideProgressDialog();
-            if (baseResponse != null) {
-                if (baseResponse.isStatus()) {
-                    if (baseResponse.getMigrateStatus() == BaseResponse.OLD_USER) { // for migrating the old user to the new system in the backend
-                        saveCredential(null, baseResponse.getUserToken());
-                        launchOTPscreen(baseResponse.getUserid());
-                    } else {
-                        saveCredential(baseResponse.getUserid(), baseResponse.getUserToken());
-                        fetchCityForProducts();// new user as usual flow
-                    }
-
-                } else {
-                    String message;
-                    if (baseResponse.getMessage() == null) {
-                        message = getString(R.string.incorrect_password);
-                        if (LocaleUtitlity.getCountryLang().equalsIgnoreCase(ARABIC_LAN)) {
-                            message = getString(R.string.incorrect_password_arabic);
+        if (NetworkUtility.isNetworkConnected(this)) {
+            showProgressDialog();
+            viewModel.login(fcmToken).observe(this, baseResponse -> {
+                hideProgressDialog();
+                if (baseResponse != null) {
+                    if (baseResponse.isStatus()) {
+                        if (baseResponse.getMigrateStatus() == BaseResponse.OLD_USER) { // for migrating the old user to the new system in the backend
+                            saveCredential(null, baseResponse.getUserToken());
+                            launchOTPscreen(baseResponse.getUserid());
+                        } else {
+                            saveCredential(baseResponse.getUserid(), baseResponse.getUserToken());
+                            fetchCityForProducts();// new user as usual flow
                         }
+
                     } else {
-                        message = baseResponse.getMessage();
+                        String message;
+                        if (baseResponse.getMessage() == null) {
+                            message = getString(R.string.incorrect_password);
+                            if (LocaleUtitlity.getCountryLang().equalsIgnoreCase(ARABIC_LAN)) {
+                                message = getString(R.string.incorrect_password_arabic);
+                            }
+                        } else {
+                            message = baseResponse.getMessage();
+                        }
+                        DialogUtil.showAlertDialogNegativeVector(this, message,
+                                (dialog, which) -> dialog.dismiss());
                     }
-                    DialogUtil.showAlertDialogNegativeVector(this, message,
-                            (dialog, which) -> dialog.dismiss());
                 }
-            }
-        });
+            });
+        } else {
+            DialogUtil.showAlertDialogNegativeVector(this, getString(R.string.no_network_msg),
+                    (d, w)-> d.dismiss());
+        }
     }
 
     private void launchOTPscreen(String userId) {

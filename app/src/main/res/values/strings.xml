@@ -44,6 +44,7 @@
     <string name="our_bank_accounts_drawer">Our Bank Accounts</string>
     <string name="invalid_phone_no">phone no is invalid!</string>
     <string name="invalid_pass">invalid password</string>
+    <string name="password_error">Password must be at least 6 characters long</string>
     <string name="login_as_a_guest">Login as a Guest</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -160,7 +161,7 @@
     <string name="verification_password_sent_to">Verification password sent to %s</string>
     <string name="password_upd_msg">Password updated successfully</string>
     <string name="iban">IBAN</string>
-    <string name="password_does_not_matched">Password does not matched</string>
+    <string name="password_does_not_matched">Password does not match</string>
     <string name="enter_your_location" tools:ignore="MissingTranslation">Enter your location</string>
     <string name="coupon">Coupon</string>
     <string name="space" translatable="false">\u0020</string>
@@ -180,4 +181,7 @@
     <string name="upgrade_msg" >\" recommends that you upgrade to the latest version\"</string>
     <string name="tax" >Tax</string>
     <string name="select_appr_option" >Select option</string>
+    <string name="mobile_no_error">Mobile no must contains 9 digits (5xxxxxxxx)</string>
+    <string name="invalid_email">invalid email address</string>
+    <string name="no_network_msg">No internet connection!</string>
 </resources>
