@@ -91,8 +91,7 @@ public interface NajdiApi {
 
     @POST("app_resend_otp_forgot")
     @Headers({"Content-Type:application/json"})
-    Call<BaseResponse> forgotResendOtp(@Header("_token")String value,
-                                       @Body OtpRequestModel requestModel);
+    Call<BaseResponse> forgotResendOtp(@Body OtpRequestModel requestModel);
 
     @POST("app_login")
     @Headers({"Content-Type:application/json"})

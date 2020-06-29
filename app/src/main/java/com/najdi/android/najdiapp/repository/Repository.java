@@ -433,7 +433,7 @@ public class Repository {
         MutableLiveData<BaseResponse> liveData = new MutableLiveData<>();
         String token = PreferenceUtils.getValueString(resourceProvider.getActivityContext(),
                 PreferenceUtils.USER_LOGIIN_TOKEN);
-        RetrofitClient.getInstance().forgotResendOtp(token, otpRequestModel).enqueue(new
+        RetrofitClient.getInstance().forgotResendOtp(otpRequestModel).enqueue(new
                 RetrofitCallBack<>(new RetrofitCallBack.CustomCallBack<BaseResponse>() {
             @Override
             public void onSuccesResponse(Call<BaseResponse> call, BaseResponse baseResponse) {
