@@ -31,6 +31,7 @@ public class HomeScreenViewModel extends BaseViewModel {
     private MutableLiveData<String> setToolBarTitle;
     private MutableLiveData<Boolean> launchCheckoutActivity;
     private MutableLiveData<Boolean> cartCountNotification = new MutableLiveData<>();
+    private MutableLiveData<String>  name = new MutableLiveData<>();
     int cartSize;
 
     public HomeScreenViewModel(@NonNull Application application) {
@@ -57,6 +58,10 @@ public class HomeScreenViewModel extends BaseViewModel {
         return repository.getCategory(lang);
     }
 
+
+    public MutableLiveData<String> getName() {
+        return name;
+    }
 
     public MutableLiveData<List<ProductListResponse>> getProductList() {
         if (productListLivedata == null) {

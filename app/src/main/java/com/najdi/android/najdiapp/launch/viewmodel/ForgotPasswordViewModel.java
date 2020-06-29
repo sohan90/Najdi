@@ -94,7 +94,8 @@ public class ForgotPasswordViewModel extends BaseViewModel {
         if (password.getValue() != null && confirmPassword.getValue() != null &&
                 oldPassword.getValue() != null) {
 
-            if (password.getValue().length() >= PASSWORD_LENGTH && confirmPassword.getValue().length() >= PASSWORD_LENGTH) {
+            if (password.getValue().length() >= PASSWORD_LENGTH ||
+                    confirmPassword.getValue().length() >= PASSWORD_LENGTH) {
 
                 if (password.getValue().equals(confirmPassword.getValue())) {
                     isValid = true;

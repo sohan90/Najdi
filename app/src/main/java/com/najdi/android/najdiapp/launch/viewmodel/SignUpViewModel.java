@@ -43,16 +43,15 @@ public class SignUpViewModel extends BaseViewModel {
     }
 
     public void validate() {
-        boolean valid = false;
         if (phoneNo.getValue() != null &&
                 phoneNo.getValue().startsWith("5") && phoneNo.getValue().length() ==
-                                                      Constants.MOBILE_NO_LENGTH) {
+                Constants.MOBILE_NO_LENGTH) {
             phoneNoError.setValue(null);
         } else {
             phoneNoError.setValue(resourceProvider.getString(R.string.invalid_phone_no));
         }
 
-        if (password.getValue() != null && password.getValue().length() <= Constants.PASSWORD_LENGTH) {
+        if (password.getValue() != null && password.getValue().length() >= Constants.PASSWORD_LENGTH) {
             passwordError.setValue(null);
 
         } else {
@@ -63,13 +62,18 @@ public class SignUpViewModel extends BaseViewModel {
                 .equals(password.getValue())) {
 
             confirmPassError.setValue(null);
-            valid = true;
 
         } else {
             confirmPassError.setValue(resourceProvider.getString(R.string.password_does_not_matched));
         }
 
-        validateSuccess.setValue(valid);
+        if (phoneNoError.getValue() == null && passwordError.getValue() == null &&
+                confirmPassError.getValue() == null) {
+
+            validateSuccess.setValue(true);
+        } else {
+            validateSuccess.setValue(false);
+        }
     }
 
     public LiveData<BaseResponse> registerUser(String fcmToken) {

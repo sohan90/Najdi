@@ -83,6 +83,7 @@ public class HomeScreenActivity extends BaseActivity
     private List<String> categoryStrNameList;
     private List<CityListModelResponse.Category> categoryList;
     private View filterView;
+    private NavHeaderHomeScreenBinding navHeaderView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +100,7 @@ public class HomeScreenActivity extends BaseActivity
         subscribeForHomeScreenToolBar();
         subscribeForLaunchCheckoutScreen();
         subscribeForCartCount();
+        subcribeForProfile();
         observeForProductDetailScreenFromCheckout();
         fetchProduct();
         fetchCityList();
@@ -106,6 +108,10 @@ public class HomeScreenActivity extends BaseActivity
         getShortCutIntentAction();
         hideMenuItemForGuestUser();
 
+    }
+
+    private void subcribeForProfile() {
+        viewModel.getName().observe(this, name -> navHeaderView.name.setText(name));
     }
 
     private void hideMenuItemForGuestUser() {
@@ -450,7 +456,7 @@ public class HomeScreenActivity extends BaseActivity
         toggle.syncState();
 
         binding.navView.setNavigationItemSelectedListener(this);
-        setNavHeader();
+        setNavHeader(PreferenceUtils.getValueString(this, USER_NAME_KEY));
         setNavSubItemClicklistener();
     }
 
@@ -493,10 +499,11 @@ public class HomeScreenActivity extends BaseActivity
                 ActionBar.LayoutParams.MATCH_PARENT, Gravity.CENTER);
     }
 
-    private void setNavHeader() {
-        View view = binding.navView.getHeaderView(0);
-        NavHeaderHomeScreenBinding binding = NavHeaderHomeScreenBinding.bind(view);
-        binding.name.setText(PreferenceUtils.getValueString(this, USER_NAME_KEY));
+    private void setNavHeader(String name) {
+        navHeaderView = DataBindingUtil.inflate(getLayoutInflater(),
+                R.layout.nav_header_home_screen, binding.navView, false);
+        binding.navView.addHeaderView(navHeaderView.getRoot());
+        navHeaderView.name.setText(name);
     }
 
     private void setToolBarTitle(String title) {

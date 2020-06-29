@@ -130,6 +130,7 @@ public class ProfileFragment extends BaseFragment {
                 viewModel.name.getValue());
         PreferenceUtils.setValueString(getActivity(), PreferenceUtils.USER_EMAIL_KEY,
                 viewModel.email.getValue());
+        homeScreenViewModel.getName().setValue(viewModel.name.getValue());
     }
 
     private void setData() {
