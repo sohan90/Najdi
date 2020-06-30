@@ -89,7 +89,6 @@ public class ChangePasswordActivity extends BaseActivity {
             liveData = viewModel.forgotUpdate(token, this.userId);
 
         } else if (launchType == OLD_USER_FLOW) {
-            String token = PreferenceUtils.getValueString(this, PreferenceUtils.USER_LOGIIN_TOKEN);
             liveData = viewModel.appMigrationResetPassword(userId, token);
 
         } else {

@@ -234,9 +234,9 @@ public class HomeScreenActivity extends BaseActivity
     private void subscribeForLaunchCheckoutScreen() {
         viewModel.getLaunchCheckoutActivity().observe(this, aBoolean -> {
             if (aBoolean) {
-                addDisposable(io.reactivex.rxjava3.core.Observable.timer(500, TimeUnit.MILLISECONDS)
+               addDisposable(io.reactivex.rxjava3.core.Observable.timer(500, TimeUnit.MILLISECONDS)
                         .observeOn(AndroidSchedulers.mainThread())
-                        .doOnNext(i -> FragmentHelper.popBackStackImmediate(this))
+                        .doOnNext(i -> FragmentHelper.popBackStack(this, Constants.FragmentTags.PRODUCT_DETAIL))
                         .subscribe());
                 launchCheckOutActivity();
 

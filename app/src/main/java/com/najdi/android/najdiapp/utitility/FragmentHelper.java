@@ -107,7 +107,7 @@ public class FragmentHelper {
      */
     public static void popBackStack(FragmentActivity context, String tag) {
         FragmentManager manager = context.getSupportFragmentManager();
-        manager.popBackStack(tag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        manager.popBackStackImmediate(tag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
     public static void popBackStackExclusive(FragmentActivity context, String tag) {
