@@ -32,6 +32,7 @@ public class ProductDetailViewModel extends BaseViewModel {
     private float basePrice;
     private HashMap<String, String> attributHashMap;
     private int setMaxvariationQuantity;
+    private int inStock;
     private int totalAttribute;
     private float totalPrice;
     private HashMap<String, Float> attrOptPriceMap = new HashMap<>();
@@ -89,9 +90,10 @@ public class ProductDetailViewModel extends BaseViewModel {
         this.setMaxvariationQuantity = quantity;
     }
 
-    public int getSetMaxvariationQuantity() {
-        return setMaxvariationQuantity;
+    public  void inStock(int stock){
+        inStock = stock;
     }
+
 
     public void updatePrice(String selectedAttrId, AttributeOptionModel
             attributeOptionModel) {
@@ -103,10 +105,6 @@ public class ProductDetailViewModel extends BaseViewModel {
         attrOptPriceMap.put(selectedAttrId, attrOptPrice);
         updateTotalPrice();
         createAttributeForSelectedValue(selectedAttrId, attributeOptionModel.getId());
-    }
-
-    private void getQuantityLimitForSelectedVariation() {
-        getVariaitionQuantity.setValue(true);
     }
 
     public int getVariationId() {
@@ -122,9 +120,13 @@ public class ProductDetailViewModel extends BaseViewModel {
 
     private void enableAddCartButton() {
         if (quantityCount.getValue() != null && quantityCount.getValue() > 0 &&
-                attributHashMap != null && attributHashMap.size() == totalAttribute) {
+                attributHashMap != null && attributHashMap.size() == totalAttribute
+                && inStock > 0) {
+
             enableAddCartButton.setValue(true);
+
         } else {
+
             enableAddCartButton.setValue(false);
         }
     }

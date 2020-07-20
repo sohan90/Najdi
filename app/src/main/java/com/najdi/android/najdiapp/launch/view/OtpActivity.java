@@ -235,7 +235,7 @@ public class OtpActivity extends BaseActivity {
                     CityListModelResponse.City city = cityList.get(pos);
                     saveCityId(city.getId());
                     login();
-                });
+                }, () -> binding.blurLyt.setAlpha(0f));
 
     }
 

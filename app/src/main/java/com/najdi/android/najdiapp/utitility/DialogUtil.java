@@ -194,7 +194,7 @@ public class DialogUtil {
     }
 
     public static void showPopupWindow(Context context, View anchorView, String title, List<String> list,
-                                       GenericClickListener<Integer> clickListener) {
+                                       GenericClickListener<Integer> clickListener, PopupWindow.OnDismissListener dismissListener) {
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
         View customView = inflater.inflate(R.layout.item_pop_window, null);
@@ -225,6 +225,7 @@ public class DialogUtil {
             popupWindow.dismiss();
         });
 
+        popupWindow.setOnDismissListener(dismissListener);
     }
 
     public static void showListPopupWindow(Context context, View anchorView, List<String> list,

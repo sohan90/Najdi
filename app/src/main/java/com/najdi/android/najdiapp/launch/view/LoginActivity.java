@@ -189,7 +189,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     CityListModelResponse.City city = cityList.get(pos);
                     saveCityId(city.getId());
                     launchHomeScreen();
-                });
+                }, () -> binding.blurLyt.setAlpha(0f));
 
     }
 

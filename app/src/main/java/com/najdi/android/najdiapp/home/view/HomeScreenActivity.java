@@ -200,6 +200,8 @@ public class HomeScreenActivity extends BaseActivity
                         fetchCategoryBasedProducts(category.getId());
                     }
                     updateNavigationMenuHighlight(0);
+                }, () -> {
+                    binding.include.blurLyt.setAlpha(0f);
                 });
 
     }

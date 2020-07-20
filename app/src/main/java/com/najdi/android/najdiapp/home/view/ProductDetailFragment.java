@@ -118,6 +118,7 @@ public class ProductDetailFragment extends BaseFragment {
                 setViewDataForIncludeLyt();
                 viewModel.setDefaultPrice(productListResponse.getPrice());
                 viewModel.setMaxVariationQuantity(Integer.parseInt(productListResponse.getStock()));
+                viewModel.inStock(Integer.parseInt(productListResponse.getStock()));
                 viewModel.setTotalAttributOptSize(productListResponse.getTotalAttributeSize());
                 enableOrDisableAddCartButton();
                 updateQuantity();
@@ -139,7 +140,7 @@ public class ProductDetailFragment extends BaseFragment {
             binding.dec.setEnabled(false);
             binding.inc.setEnabled(false);
             changeSmileIcon();
-            binding.addToCart.setEnabled(true);
+            binding.addToCart.setEnabled(false);
         }
     }
 
