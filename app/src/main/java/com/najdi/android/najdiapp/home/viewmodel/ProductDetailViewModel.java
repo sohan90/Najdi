@@ -15,9 +15,7 @@ import com.najdi.android.najdiapp.home.model.CartRequest;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ProductDetailViewModel extends BaseViewModel {
@@ -107,6 +105,7 @@ public class ProductDetailViewModel extends BaseViewModel {
         createAttributeForSelectedValue(selectedAttrId, attributeOptionModel.getId());
     }
 
+    @Deprecated
     public int getVariationId() {
         return 0;
     }
@@ -165,18 +164,12 @@ public class ProductDetailViewModel extends BaseViewModel {
 
     public LiveData<BaseResponse> addToCart(String productId) {
         if (attributHashMap == null) return null;
-        List<String> attributeIdList = new ArrayList<>();
-        List<String> attributeOptIdList = new ArrayList<>();
-        for (Map.Entry<String, String> map : attributHashMap.entrySet()) {
-            attributeIdList.add(map.getKey());
-            attributeOptIdList.add(map.getValue());
-        }
         CartRequest cartRequest = new CartRequest();
         if (quantityCount.getValue() != null) {
             cartRequest.setProductId(productId);
-            cartRequest.setAttributes(attributeIdList.toString().replace("[", "")
+            cartRequest.setAttributes(attributHashMap.keySet().toString().replace("[", "")
                     .replace("]", ""));
-            cartRequest.setProductAttributeOptions(attributeOptIdList.toString()
+            cartRequest.setProductAttributeOptions(attributHashMap.values().toString()
                     .replace("[", "").replace("]", ""));
             cartRequest.setPrice(String.valueOf(basePrice));
             cartRequest.setSubtotal(String.valueOf(totalPrice));

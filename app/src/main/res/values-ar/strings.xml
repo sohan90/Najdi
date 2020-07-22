@@ -108,7 +108,7 @@
     <string name="building_number">رقم المبنى</string>
     <string name="direct_transfer_title">تحويل بنكي</string>
     <string name="send">إرسال</string>
-    <string name="not_available">غير متوفر</string>
+    <string name="not_available">نفذت</string>
     <string name="sale">عرض خاص</string>
     <string name="change_password">تغيير كلمة المرور</string>
     <string name="change_mobile_number">تغيير رقم الجوال</string>
@@ -117,7 +117,7 @@
     <string name="change_no_msg">يرجى إدخال رقم الجوال الجديد أدناه</string>
     <string name="mobile_number">رقم الجوال الحالي</string>
     <string name="update">تحديث</string>
-    <string name="old_password">كلمة المرور القديمة</string>
+    <string name="old_password">كلمة المرور الحالية</string>
     <string name="new_password">كلمة المرور الجديدة</string>
     <string name="confirm_new_password">تأكيد كلمة المرور الجديدة</string>
     <string name="new_mobile_number">رقم الجوال الجديد</string>

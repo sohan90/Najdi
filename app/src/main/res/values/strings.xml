@@ -133,7 +133,7 @@
     <string name="change_no_msg">To change your mobile number, Please enter the  new one below.</string>
     <string name="mobile_number">Mobile Number</string>
     <string name="update">Update</string>
-    <string name="old_password">Old Password</string>
+    <string name="old_password">Current password</string>
     <string name="new_password">New Password</string>
     <string name="confirm_new_password">Confirm New Password</string>
     <string name="new_mobile_number">New Mobile Number</string>
