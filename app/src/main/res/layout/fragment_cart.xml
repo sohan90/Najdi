@@ -34,7 +34,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp">
+                android:layout_marginBottom="20dp"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/sub_total_txt"
@@ -59,7 +60,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="@{cartViewModel.showTaxUi}"
+                android:visibility="@{cartViewModel.showTaxUi, default = gone}"
                 android:layout_marginBottom="20dp">
 
                 <TextView
@@ -85,6 +86,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:visibility="gone"
                 android:background="@color/grey_text" />
 
             <RelativeLayout

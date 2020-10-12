@@ -50,7 +50,7 @@ public class CartViewModel extends BaseViewModel {
     public void setShowTax(String showTax, float taxAmount) {
         this.showTax = showTax;
         if (showTax.equals(SHOW_TAX)){
-            this.showTaxUi.setValue(View.VISIBLE);
+            this.showTaxUi.setValue(View.GONE);// hide the tax section as per requ for now
             this.taxAmount.setValue(taxAmount);
         }
     }
@@ -73,9 +73,9 @@ public class CartViewModel extends BaseViewModel {
         subtotalLiveData.setValue(subTotlStr);
 
         float total = subTotal;
-        if (taxAmount.getValue() != null){
-            total = subTotal + taxAmount.getValue();
-        }
+        /*if (taxAmount.getValue() != null){
+            total = subTotal + taxAmount.getValue(); // removed as per the req we are not showing total amount with tax anymore
+        }*/
         String totalStr = String.valueOf(total).concat(" ").
                 concat(resourceProvider.getString(R.string.currency));
 
