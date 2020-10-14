@@ -23,6 +23,7 @@
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
             android:text="@string/subtotal"
+            android:visibility="gone"
             android:textColor="@color/black"
             android:textStyle="bold" />
 
@@ -34,6 +35,7 @@
             android:layout_alignParentEnd="true"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
+            android:visibility="gone"
             android:text="@{viewModel.subTotal}"
             android:textColor="@color/black"
             android:textStyle="bold" />
@@ -45,6 +47,7 @@
             android:layout_below="@id/sub_total_Txt"
             android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp"
+            android:visibility="gone"
             android:background="@color/grey_text" />
 
 
