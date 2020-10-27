@@ -92,7 +92,13 @@ public class ProductListItemModel extends BaseObservable {
     @Bindable
     public String getShortDesc() {
         if (showDetailButton == View.VISIBLE) {
-            return product.getShortDescription();
+            String desc;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                desc = Html.fromHtml(product.getShortDescription(), Html.FROM_HTML_MODE_COMPACT).toString();
+            } else {
+                desc = Html.fromHtml(product.getShortDescription()).toString();
+            }
+            return desc;
         } else {
             return getDesc();
         }
