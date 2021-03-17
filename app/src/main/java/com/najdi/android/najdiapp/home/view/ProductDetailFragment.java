@@ -74,7 +74,16 @@ public class ProductDetailFragment extends BaseFragment {
         updateNotificationCartCount();
         subscribeForVariationQuantity();
         fetchProductDetail();
+        observePriceChange();
         return binding.getRoot();
+    }
+
+    private void observePriceChange() {
+        viewModel.totalPriceLivdData.observe(getViewLifecycleOwner(), s -> {
+            if (binding.topLyt.getViewModel() != null){
+                binding.topLyt.getViewModel().setPrice(s.replace(getString(R.string.currency), ""));
+            }
+        });
     }
 
     private void subscribeForVariationQuantity() {

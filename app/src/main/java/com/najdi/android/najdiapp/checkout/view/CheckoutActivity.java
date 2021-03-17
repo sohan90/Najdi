@@ -310,6 +310,7 @@ public class CheckoutActivity extends BaseActivity {
     private void getLastLocation() {
         if (!PermissionUtils.hasPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                 && !PermissionUtils.hasPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+
             PermissionUtils.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
                             Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);

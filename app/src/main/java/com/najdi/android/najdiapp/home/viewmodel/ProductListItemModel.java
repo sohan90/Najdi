@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.databinding.BindingAdapter;
+import androidx.databinding.library.baseAdapters.BR;
 
 import com.bumptech.glide.Glide;
 import com.najdi.android.najdiapp.R;
@@ -40,6 +41,11 @@ public class ProductListItemModel extends BaseObservable {
     @Bindable
     public String getPrice() {
         return product.getPrice();
+    }
+
+    public void setPrice(String price){
+        this.product.setPrice(price);
+        notifyPropertyChanged(BR.price);
     }
 
     @Bindable

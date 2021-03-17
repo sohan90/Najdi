@@ -34,7 +34,9 @@ public class ToastUtils {
     }
 
     public void showShortToast(String message) {
+        if (sContext ==  null) return;
         Toast toast = Toast.makeText(sContext, message, Toast.LENGTH_SHORT);
+        if(toast.getView() == null) return;
         TextView messageV = toast.getView().findViewById(android.R.id.message);
         if (messageV != null) messageV.setGravity(Gravity.CENTER);
         toast.show();

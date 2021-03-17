@@ -173,6 +173,10 @@ public class ProductListResponse implements Parcelable {
         return price;
     }
 
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
     public String getRegular_price() {
         return regular_price;
     }
