@@ -1,26 +1,41 @@
 package com.najdi.android.najdiapp.common;
 
-import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.najdi.android.najdiapp.R;
+import com.najdi.android.najdiapp.home.model.CityListModelResponse;
+import com.najdi.android.najdiapp.launch.model.AppDetailResponse;
+import com.najdi.android.najdiapp.repository.Repository;
+import com.najdi.android.najdiapp.utitility.AppInfoUtil;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.LocaleUtitlity;
 import com.najdi.android.najdiapp.utitility.MathUtils;
+import com.najdi.android.najdiapp.utitility.NetworkUtility;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 import com.najdi.android.najdiapp.utitility.ResourceProvider;
 
+import java.util.List;
 import java.util.Locale;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.disposables.Disposable;
 
-import static com.najdi.android.najdiapp.common.Constants.ARABIC_LAN;
+import static com.najdi.android.najdiapp.utitility.PreferenceUtils.USER_SELECTED_CITY;
 
 public class BaseActivity extends AppCompatActivity {
 
     protected ResourceProvider resourProvider;
+    private CompositeDisposable compositeDisposable;
+    private GenericClickListener<Boolean> listener;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,6 +43,65 @@ public class BaseActivity extends AppCompatActivity {
         resourProvider = NajdiApplication.get(this).getResourceProvider();
         String lang = PreferenceUtils.getLangFromPref(this);
         updateLocale(lang);
+    }
+
+    protected void fetchAppInfo(Repository repository, GenericClickListener<Boolean> dismissListener) {
+        this.listener = dismissListener;
+        if (NetworkUtility.isNetworkConnected(this)) {
+            fetchAppInfo(repository);
+        } else {
+            DialogUtil.showAlertDialogNegativeVector(this, getString(R.string.no_network_msg)
+                    , (d, w) -> {
+                        listener.onClicked(true);
+                        d.dismiss();
+                    });
+        }
+    }
+
+    protected void fetchAppInfo(Repository repository) {
+        repository.getAppInfo().observe(this, baseResponse -> {
+            if (baseResponse != null) {
+                if (baseResponse.isStatus()) {
+                    AppDetailResponse appDetailResponse = baseResponse.getDetails();
+                    if (!AppInfoUtil.getCurrentVersion(this).
+                            equals(appDetailResponse.getVer_no_android())) {
+
+                        showUpgradeDialog();
+                    } else {
+                        if (listener != null) {
+                            listener.onClicked(true);
+                        }
+                    }
+                } else {
+                    if (listener != null) {
+                        listener.onClicked(true);
+                    }
+                }
+            } else {
+                if (listener != null) {
+                    listener.onClicked(true);
+                }
+            }
+        });
+    }
+
+    private void showUpgradeDialog() {
+        DialogUtil.showAlertWithNegativeButton(this, getString(R.string.upgrade_title),
+                getString(R.string.app_name).concat(getString(R.string.upgrade_msg)), (d, w) -> {
+                    if (w == AlertDialog.BUTTON_POSITIVE) {
+                        openPlayStore();
+                    } else {
+                        d.dismiss();
+                        if (listener != null) {
+                            listener.onClicked(true);
+                        }
+                    }
+                });
+    }
+
+    private void openPlayStore() {
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse
+                ("market://details?id=" + AppInfoUtil.getPackageName(this))));
     }
 
     private void updateLocale(String lang) {
@@ -72,14 +146,35 @@ public class BaseActivity extends AppCompatActivity {
         return locale;
     }
 
+    protected void addDisposable(Disposable disposable) {
+        getCompositeDisposable().add(disposable);
+    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+    protected void dispose() {
+        getCompositeDisposable().dispose();
+    }
+
+    private CompositeDisposable getCompositeDisposable() {
+        if (compositeDisposable == null || compositeDisposable.isDisposed()) {
+            compositeDisposable = new CompositeDisposable();
+        }
+        return compositeDisposable;
+    }
+
+    protected Single<List<String>> getCityNameList(List<CityListModelResponse.City> cityList) {
+        return io.reactivex.rxjava3.core.Observable.just(cityList)
+                .flatMap(io.reactivex.rxjava3.core.Observable::fromIterable)
+                .map(CityListModelResponse.City::getName)
+                .toList();
+    }
+
+    protected void saveCityId(String name) {
+        PreferenceUtils.setValueString(this, USER_SELECTED_CITY, name);
     }
 
     @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(newBase);
+    protected void onDestroy() {
+        super.onDestroy();
+        dispose();
     }
 }

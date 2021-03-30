@@ -1,5 +1,9 @@
 package com.najdi.android.najdiapp.utitility;
 
+import android.content.Context;
+import android.content.res.Resources;
+import android.util.TypedValue;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,7 +17,7 @@ public class MathUtils {
 
     public static String formateStringDate(String date, String dateFormatWanted) {
         String newDate = null;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss",
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
                 Locale.getDefault());
         try {
             Date dateParse = simpleDateFormat.parse(date);
@@ -26,6 +30,7 @@ public class MathUtils {
         return newDate;
     }
 
+
     public static void setCurrencySymbol(Locale locale) {
         java.text.NumberFormat format = java.text.NumberFormat.getInstance(locale);
         currencySymbol = format.getCurrency().getSymbol(locale);
@@ -33,5 +38,12 @@ public class MathUtils {
 
     public static String getCurrencySymbol() {
         return currencySymbol;
+    }
+
+    public static int convertDpToPx(Context context, int value) {
+        Resources r = context.getResources();
+        int px = Math.round(TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, value, r.getDisplayMetrics()));
+        return px;
     }
 }

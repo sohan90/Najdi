@@ -3,25 +3,25 @@ package com.najdi.android.najdiapp.checkout.view;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.najdi.android.najdiapp.R;
-import com.najdi.android.najdiapp.checkout.model.OrderResponse;
-import com.najdi.android.najdiapp.databinding.ItemOrderStatusBinding;
-
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.najdi.android.najdiapp.R;
+import com.najdi.android.najdiapp.checkout.model.OrderStatus;
+import com.najdi.android.najdiapp.databinding.ItemOrderStatusBinding;
+
+import java.util.List;
+
 public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.ViewHolder> {
 
-    private List<OrderResponse> list;
+    private List<OrderStatus.Detail> list;
 
-    public OrderStatusAdapter(List<OrderResponse> list) {
+    OrderStatusAdapter(List<OrderStatus.Detail> list) {
         this.list = list;
     }
 
-    public void setData(List<OrderResponse> list) {
+    public void setData(List<OrderStatus.Detail> list) {
         this.list = list;
         notifyDataSetChanged();
     }
@@ -38,16 +38,9 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        OrderResponse orderResponse = list.get(position);
-        holder.binding.setViewModel(orderResponse);
-        String status = orderResponse.getStatus();
-        if (orderResponse.getStatus().equals("pending")) {
-            status = holder.binding.getRoot().getContext().getString(R.string.pending);
-        } else if (orderResponse.getStatus().equals("completed")) {
-            status = holder.binding.getRoot().getContext().getString(R.string.completed);
-        }
-        holder.binding.status.setText(status);
-        holder.binding.price.setText(orderResponse.getTotal().concat(" "+holder.binding.getRoot().
+        OrderStatus.Detail orderStatus = list.get(position);
+        holder.binding.setViewModel(orderStatus);
+        holder.binding.price.setText(orderStatus.getSub_total().concat(" " + holder.binding.getRoot().
                 getContext().getString(R.string.currency)));
     }
 
@@ -56,11 +49,11 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
         return list == null ? 0 : list.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
         ItemOrderStatusBinding binding;
 
-        public ViewHolder(@NonNull ItemOrderStatusBinding itemView) {
+        ViewHolder(@NonNull ItemOrderStatusBinding itemView) {
             super(itemView.getRoot());
             binding = itemView;
         }

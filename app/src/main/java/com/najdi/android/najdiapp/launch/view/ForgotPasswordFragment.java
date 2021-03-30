@@ -8,6 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseFragment;
 import com.najdi.android.najdiapp.common.BaseResponse;
@@ -17,21 +23,14 @@ import com.najdi.android.najdiapp.launch.viewmodel.ForgotPasswordViewModel;
 import com.najdi.android.najdiapp.launch.viewmodel.LoginViewModel;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
-import com.najdi.android.najdiapp.utitility.ToastUtils;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProviders;
 
 import static com.najdi.android.najdiapp.launch.view.OtpActivity.EXTRA_SCREEN_TYPE;
+import static com.najdi.android.najdiapp.launch.view.OtpActivity.EXTRA_SIGN_UP_TEMP_ID;
 
 public class ForgotPasswordFragment extends BaseFragment {
 
-    FragmentForgotPasswordBinding binding;
+    private FragmentForgotPasswordBinding binding;
     private ForgotPasswordViewModel viewModel;
-    private LoginViewModel loginActivityViewModel;
 
     public static ForgotPasswordFragment createInstance() {
         return new ForgotPasswordFragment();
@@ -67,19 +66,12 @@ public class ForgotPasswordFragment extends BaseFragment {
 
     private void initClickListener() {
         binding.submit.setOnClickListener(v -> {
-            showProgressDialog();
-            String lang = resourceProvider.getCountryLang();
-            LiveData<BaseResponse> liveData = viewModel.forgotPasswordRequest(lang);
-            liveData.observe(this, baseResponse -> {
-                hideProgressDialog();
-                if (baseResponse != null) {
-                    DialogUtil.showAlertDialog(getActivity(), baseResponse.getData().getMessage(),
-                            (dialog, which) -> {
-                                dialog.dismiss();
-                                launchOtpScreen();
-                            });
-                }
-            });
+            if (viewModel.validate()) {
+                forgotPasswordRequest();
+            } else {
+                DialogUtil.showAlertDialogNegativeVector(getActivity(), getString(R.string.enter_valid_phone_no),
+                        (d, w) -> d.dismiss());
+            }
         });
         binding.numberTxt.addTextChangedListener(new TextWatcher() {
             @Override
@@ -103,19 +95,41 @@ public class ForgotPasswordFragment extends BaseFragment {
         });
     }
 
-    private void launchOtpScreen() {
+    private void forgotPasswordRequest() {
+        showProgressDialog();
+        String lang = resourceProvider.getCountryLang();
+        LiveData<BaseResponse> liveData = viewModel.forgotPasswordRequest(lang);
+        liveData.observe(getViewLifecycleOwner(), baseResponse -> {
+            hideProgressDialog();
+            if (baseResponse != null) {
+                if (baseResponse.isStatus()) {
+                    DialogUtil.showAlertDialog(getActivity(), baseResponse.getMessage(),
+                            (dialog, which) -> {
+                                dialog.dismiss();
+                                launchOtpScreen(baseResponse.getTempId());
+                            });
+                } else {
+                    DialogUtil.showAlertDialogNegativeVector(getActivity(), baseResponse.getMessage(),
+                            (d, w) -> d.dismiss());
+                }
+            }
+        });
+    }
+
+    private void launchOtpScreen(String tempId) {
         Intent intent = new Intent(getActivity(), OtpActivity.class);
+        intent.putExtra(EXTRA_SIGN_UP_TEMP_ID, tempId);
         intent.putExtra(EXTRA_SCREEN_TYPE, Constants.OtpScreen.FORGOT_PASSWORD_SCREEN);
         startActivity(intent);
     }
 
     private void initActivityViewModel() {
         if (getActivity() == null) return;
-        loginActivityViewModel = ViewModelProviders.of(getActivity()).get(LoginViewModel.class);
+        LoginViewModel loginActivityViewModel = new ViewModelProvider(getActivity()).get(LoginViewModel.class);
         loginActivityViewModel.getToolbarTitle().setValue(getString(R.string.forgot_password));
     }
 
     private void initViewModel() {
-        viewModel = ViewModelProviders.of(this).get(ForgotPasswordViewModel.class);
+        viewModel = new ViewModelProvider(this).get(ForgotPasswordViewModel.class);
     }
 }

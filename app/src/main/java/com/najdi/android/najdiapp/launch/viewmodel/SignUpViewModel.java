@@ -3,19 +3,18 @@ package com.najdi.android.najdiapp.launch.viewmodel;
 import android.app.Application;
 import android.text.TextUtils;
 
-import com.google.android.material.textfield.TextInputLayout;
-import com.najdi.android.najdiapp.common.BaseResponse;
-import com.najdi.android.najdiapp.common.BaseViewModel;
-import com.najdi.android.najdiapp.R;
-import com.najdi.android.najdiapp.launch.model.BillingAddress;
-import com.najdi.android.najdiapp.launch.model.SignupRequestModel;
-import com.najdi.android.najdiapp.launch.model.SignupResponseModel;
-import com.najdi.android.najdiapp.utitility.PreferenceUtils;
-
 import androidx.annotation.NonNull;
 import androidx.databinding.BindingAdapter;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+
+import com.google.android.material.textfield.TextInputLayout;
+import com.najdi.android.najdiapp.R;
+import com.najdi.android.najdiapp.common.BaseResponse;
+import com.najdi.android.najdiapp.common.BaseViewModel;
+import com.najdi.android.najdiapp.common.Constants;
+import com.najdi.android.najdiapp.launch.model.SignupRequestModel;
+import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
 public class SignUpViewModel extends BaseViewModel {
     public MutableLiveData<String> phoneNo = new MutableLiveData<>();
@@ -44,40 +43,47 @@ public class SignUpViewModel extends BaseViewModel {
     }
 
     public void validate() {
-        boolean valid = false;
         if (phoneNo.getValue() != null &&
-                phoneNo.getValue().startsWith("5") && phoneNo.getValue().length() == 9) {
+                phoneNo.getValue().startsWith("5") && phoneNo.getValue().length() ==
+                Constants.MOBILE_NO_LENGTH) {
             phoneNoError.setValue(null);
         } else {
             phoneNoError.setValue(resourceProvider.getString(R.string.invalid_phone_no));
         }
 
-        if (password.getValue() != null && password.getValue().length() <= 8) {
+        if (password.getValue() != null && password.getValue().length() >= Constants.PASSWORD_LENGTH) {
             passwordError.setValue(null);
 
         } else {
-            passwordError.setValue(resourceProvider.getString(R.string.invalid_pass));
+            passwordError.setValue(resourceProvider.getString(R.string.password_error));
         }
 
         if (password.getValue() != null && confirmPass.getValue() != null && confirmPass.getValue()
                 .equals(password.getValue())) {
 
             confirmPassError.setValue(null);
-            valid = true;
 
         } else {
             confirmPassError.setValue(resourceProvider.getString(R.string.password_does_not_matched));
         }
-        validateSuccess.setValue(valid);
+
+        if (phoneNoError.getValue() == null && passwordError.getValue() == null &&
+                confirmPassError.getValue() == null) {
+
+            validateSuccess.setValue(true);
+        } else {
+            validateSuccess.setValue(false);
+        }
     }
 
-    public LiveData<BaseResponse> registerUser() {
+    public LiveData<BaseResponse> registerUser(String fcmToken) {
         SignupRequestModel signupRequestModel = new SignupRequestModel();
         signupRequestModel.setPassword(password.getValue());
         signupRequestModel.setMobile(phoneNo.getValue());
+        signupRequestModel.setFcmToken(fcmToken);
         signupRequestModel.setLang(resourceProvider.getCountryLang());
         if (!TextUtils.isEmpty(name.getValue())) {
-            signupRequestModel.setUsername(name.getValue());
+            signupRequestModel.setFullName(name.getValue());
             PreferenceUtils.setValueString(resourceProvider.getAppContext(), PreferenceUtils.USER_NAME_KEY,
                     name.getValue());
         }
@@ -97,4 +103,5 @@ public class SignUpViewModel extends BaseViewModel {
     public MutableLiveData<String> getToolbarTitle() {
         return toolbarTitle;
     }
+
 }

@@ -2,31 +2,47 @@ package com.najdi.android.najdiapp.checkout.model;
 
 import android.widget.TextView;
 
-import com.najdi.android.najdiapp.R;
-import com.najdi.android.najdiapp.utitility.LocaleUtitlity;
-import com.najdi.android.najdiapp.utitility.MathUtils;
-
 import androidx.core.content.ContextCompat;
 import androidx.databinding.BindingAdapter;
 
-import static com.najdi.android.najdiapp.utitility.MathUtils.ORDER_COMPLETE_DATE_FORMAT;
+import com.najdi.android.najdiapp.R;
+import com.najdi.android.najdiapp.utitility.MathUtils;
+
 import static com.najdi.android.najdiapp.utitility.MathUtils.ORDER_STATUS_DATE_FORMAT;
 
 public class OrderResponse {
-    String id;
-    int parent_id;
-    String number;
-    String order_key;
-    String status;
-    String currency;
-    String date_created;
-    String total;
-    String payment_method;
-    String payment_method_title;
+    private String order_id;
+    private int parent_id;
+    private String number;
+    private String order_key;
+    private boolean status;
+    private String currency;
+    private String order_date;
+    private String total_amount;
+    private String payment_method;
+    private String message;
+    private String order_status_label;
+    private String order_status;
+    private String total_payable_amount;
 
+    public String getTotal_payable_amount() {
+        return total_payable_amount;
+    }
+
+    public String getOrderStatus() {
+        return order_status;
+    }
+
+    public String getOrderStatusLabel() {
+        return order_status_label;
+    }
+
+    public String getMessage() {
+        return message;
+    }
 
     public String getId() {
-        return "#" +String.valueOf(id);
+        return "#" + order_id;
     }
 
     public int getParent_id() {
@@ -41,12 +57,8 @@ public class OrderResponse {
         return order_key;
     }
 
-    public String getStatus() {
+    public boolean isStatus() {
         return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     @BindingAdapter("textColor")
@@ -65,15 +77,15 @@ public class OrderResponse {
     }
 
     public String getDate_created() {
-        return date_created;
+        return order_date;
     }
 
     public String getDateForOrderCompleted(){
-        return MathUtils.formateStringDate(date_created, ORDER_COMPLETE_DATE_FORMAT);
+        return order_date;
     }
 
     public String getTotal() {
-        return total;
+        return total_amount;
     }
 
     public String getPayment_method() {
@@ -81,10 +93,10 @@ public class OrderResponse {
     }
 
     public String getPayment_method_title() {
-        return payment_method_title;
+        return payment_method;
     }
 
     public String getFormatedData() {
-        return MathUtils.formateStringDate(date_created, ORDER_STATUS_DATE_FORMAT);
+        return MathUtils.formateStringDate(order_date, ORDER_STATUS_DATE_FORMAT);
     }
 }

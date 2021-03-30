@@ -1,6 +1,7 @@
 package com.najdi.android.najdiapp.checkout.view;
 
 import android.Manifest;
+import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -14,6 +15,13 @@ import android.os.ResultReceiver;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationAvailability;
 import com.google.android.gms.location.LocationCallback;
@@ -24,6 +32,7 @@ import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.checkout.FetchAddressIntentService;
 import com.najdi.android.najdiapp.checkout.model.OrderResponse;
 import com.najdi.android.najdiapp.checkout.viewmodel.CheckoutViewModel;
+import com.najdi.android.najdiapp.common.AnimationEndListener;
 import com.najdi.android.najdiapp.common.BaseActivity;
 import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.common.ObservableManager;
@@ -36,12 +45,10 @@ import com.najdi.android.najdiapp.utitility.PermissionUtils;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 import com.najdi.android.najdiapp.utitility.ToastUtils;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProviders;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
 
 import static com.najdi.android.najdiapp.common.Constants.LAUNCH_CART;
 import static com.najdi.android.najdiapp.common.Constants.LAUNCH_PRODUCT;
@@ -94,6 +101,7 @@ public class CheckoutActivity extends BaseActivity {
     private void subscribeForCartCountNotification() {
         viewModel.getCartCountNotification().observe(this, aBoolean -> {
             if (aBoolean) {
+                fetchCartCount();
                 fetchCart();
             }
         });
@@ -101,10 +109,23 @@ public class CheckoutActivity extends BaseActivity {
 
     private void fetchCartCount() {
         viewModel.getCartCount().observe(this, baseResponse -> {
-            if (baseResponse != null && baseResponse.getData() != null) {
-                updateCartValueTxt(baseResponse.getData().getCount());
+            if (baseResponse != null && baseResponse.isStatus()) {
+                if (baseResponse.getTotalItems() == 0) {
+                    finish();
+                    addDisposable(Observable.timer(100, TimeUnit.MILLISECONDS)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(l -> launchHomeScreen()));
+                } else {
+                    updateCartValueTxt(baseResponse.getTotalItems());
+                }
             }
         });
+    }
+
+    private void launchHomeScreen() {
+        Intent intent = new Intent();
+        intent.putExtra(LAUNCH_PRODUCT, true);
+        ObservableManager.getInstance().notifyData(intent);
     }
 
     private void subscribeupdateCartFromCheckoutScreen() {
@@ -121,22 +142,26 @@ public class CheckoutActivity extends BaseActivity {
         viewModel.getCheckoutLiveData().observe(this, paymentMode -> {
             if (paymentMode != null) {
                 showProgressDialog();
-                int userId = PreferenceUtils.getValueInt(this, PreferenceUtils.USER_ID_KEY);
-                createOrder(userId, paymentMode);
+                String userId = PreferenceUtils.getValueString(this, PreferenceUtils.USER_ID_KEY);
+                createOrder(userId, paymentMode.equalsIgnoreCase("cod") ?  0 : 1);
             }
         });
     }
 
-    private void createOrder(int userId, String paymentMode) {
-        LiveData<OrderResponse> orderResponseLiveData =
-                viewModel.createOrder(userId, cartResponse.getData().getCartdata(), paymentMode, billing);
+    private void createOrder(String userId, int paymentMode) {
+        billing.setPayment_method(paymentMode);
+        LiveData<OrderResponse> orderResponseLiveData = viewModel.createOrder(userId, billing);
 
         orderResponseLiveData.observe(this, orderResponse -> {
             hideProgressDialog();
             if (orderResponse != null) {
-                clearCart();
-                viewModel.orderResponseMutableLiveData().setValue(orderResponse);
-                handleProgress(100);
+                if (orderResponse.isStatus()) {
+                    viewModel.orderResponseMutableLiveData().setValue(orderResponse);
+                    handleProgress(100);
+                    clearCart();
+                } else {
+                    ToastUtils.getInstance(this).showLongToast(orderResponse.getMessage());
+                }
             }
         });
     }
@@ -144,7 +169,7 @@ public class CheckoutActivity extends BaseActivity {
     private void clearCart() {
         viewModel.clearCart().observe(this, baseResponse -> {
             hideProgressDialog();
-            if (baseResponse != null) {
+            if (baseResponse != null && baseResponse.isStatus()) {
                 binding.toolbar.notificationText.setText("0");
             }
         });
@@ -160,7 +185,7 @@ public class CheckoutActivity extends BaseActivity {
 
     private void fetchCart() {
         viewModel.fetchCart().observe(this, cartResponse -> {
-            if (cartResponse != null) {
+            if (cartResponse != null && cartResponse.isStatus()) {
                 this.cartResponse = cartResponse;
                 viewModel.getCartResponseMutableLiveData().setValue(cartResponse);
             }
@@ -178,7 +203,15 @@ public class CheckoutActivity extends BaseActivity {
     }
 
     private void handleProgress(Integer progress) {
+        if (progress == 50) {
+            replaceFragment(STEP_TWO);
+        } else if (progress == 100) {
+            replaceFragment(STEP_THREE);
+        }
         animateProgress(progress);
+    }
+
+    private void enableButton(Integer progress) {
         switch (progress) {
             case 0:
                 binding.one.setEnabled(true);
@@ -189,12 +222,10 @@ public class CheckoutActivity extends BaseActivity {
             case 50:
                 binding.two.setEnabled(true);
                 binding.three.setEnabled(false);
-                replaceFragment(STEP_TWO);
                 break;
 
             case 100:
                 binding.three.setEnabled(true);
-                replaceFragment(STEP_THREE);
                 break;
         }
     }
@@ -203,6 +234,13 @@ public class CheckoutActivity extends BaseActivity {
         ObjectAnimator animation = ObjectAnimator.ofInt(binding.progressId,
                 "progress", progress);
         animation.setDuration(600);
+        animation.setInterpolator(new LinearInterpolator());
+        animation.addListener(new AnimationEndListener() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                enableButton(progress);
+            }
+        });
         animation.setInterpolator(new LinearInterpolator());
         animation.start();
     }
@@ -227,13 +265,13 @@ public class CheckoutActivity extends BaseActivity {
         };
     }
 
-    private void handleLocation(Location location) {
-        showProgressDialog();
+    public void handleLocation(Location location) {
+        //showProgressDialog();
         AddressResultReceiver resultReceiver = new AddressResultReceiver(new Handler());
         Intent intent = new Intent(this, FetchAddressIntentService.class);
         intent.putExtra(Constants.RECEIVER, resultReceiver);
         intent.putExtra(Constants.LOCATION_DATA_EXTRA, location);
-        startService(intent);
+        FetchAddressIntentService.enqueueWork(this, intent);
     }
 
     private void intializeLocationReq() {
@@ -248,7 +286,7 @@ public class CheckoutActivity extends BaseActivity {
     }
 
     private void initializeViewModel() {
-        viewModel = ViewModelProviders.of(this).get(CheckoutViewModel.class);
+        viewModel = new ViewModelProvider(this).get(CheckoutViewModel.class);
     }
 
     private void subscribeGetCurrentLocation() {
@@ -272,6 +310,7 @@ public class CheckoutActivity extends BaseActivity {
     private void getLastLocation() {
         if (!PermissionUtils.hasPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                 && !PermissionUtils.hasPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+
             PermissionUtils.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
                             Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
@@ -287,7 +326,6 @@ public class CheckoutActivity extends BaseActivity {
                 .addOnSuccessListener(this, location -> {
                     if (location != null) {
                         handleLocation(location);
-                        ToastUtils.getInstance(CheckoutActivity.this).showShortToast("" + location.getLongitude());
                     } else {
                         fusedLocationClient.requestLocationUpdates(locationRequest,
                                 locationCallback, null);
@@ -298,6 +336,7 @@ public class CheckoutActivity extends BaseActivity {
 
     private void initToolBar() {
         binding.toolbar.backArrow.setVisibility(View.VISIBLE);
+        binding.toolbar.filter.setVisibility(View.GONE);
         binding.toolbar.title.setText(getString(R.string.shipping_details));
         binding.toolbar.cartImageLyt.setVisibility(View.VISIBLE);
         binding.toolbar.backArrow.setOnClickListener(v -> onBackPressed());
@@ -312,9 +351,10 @@ public class CheckoutActivity extends BaseActivity {
         });
     }
 
-    private void setTitle(String title){
+    private void setTitle(String title) {
         binding.toolbar.title.setText(title);
     }
+
     private void replaceFragment(int step) {
         Fragment fragment = null;
         String fragmentTag = null;
@@ -345,7 +385,6 @@ public class CheckoutActivity extends BaseActivity {
         int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
         if (backStackCount == 1 || backStackCount == 3) {
             finish();
-            launchHomeScreen();
         } else if (backStackCount == 2) {
             setTitle(getString(R.string.shipping_details));
             getSupportFragmentManager().popBackStackImmediate();
@@ -354,26 +393,16 @@ public class CheckoutActivity extends BaseActivity {
         }
     }
 
-    private void launchHomeScreen() {
-        new Handler().postDelayed(() -> {
-            Intent intent = new Intent();
-            intent.putExtra(LAUNCH_PRODUCT, true);
-            ObservableManager.getInstance().notifyData(intent);
-        }, 100);
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case LOCATION_PERMISSION_REQUEST_CODE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    accessLastLocation();
-                } else {
-                    ToastUtils.getInstance(this).showShortToast(getString(R.string.permission_denied));
-                }
-                break;
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                accessLastLocation();
+            } else {
+                ToastUtils.getInstance(this).showShortToast(getString(R.string.permission_denied));
+            }
         }
     }
 
@@ -395,9 +424,7 @@ public class CheckoutActivity extends BaseActivity {
 
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
-            if (resultData == null) {
-                return;
-            }
+            if (resultData == null) return;
             handleAddress(resultData);
         }
     }

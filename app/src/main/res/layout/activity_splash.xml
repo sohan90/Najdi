@@ -41,6 +41,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="20dp"
                 android:layout_centerHorizontal="true"
+                android:visibility="gone"
                 android:background="@drawable/round_corner_solid_green_selector"
                 android:layout_below="@id/logo">
 

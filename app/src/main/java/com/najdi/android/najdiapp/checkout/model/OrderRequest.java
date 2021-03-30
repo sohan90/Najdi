@@ -2,8 +2,6 @@ package com.najdi.android.najdiapp.checkout.model;
 
 import com.najdi.android.najdiapp.launch.model.BillingAddress;
 
-import java.util.List;
-
 public class OrderRequest {
     String payment_method;
     String payment_method_title;
@@ -11,7 +9,6 @@ public class OrderRequest {
     BillingAddress billing;
     BillingAddress shipping;
     boolean set_paid;
-    List<LineItemModelRequest>  line_items;
 
 
     public void setSet_paid(boolean set_paid) {
@@ -38,7 +35,4 @@ public class OrderRequest {
         this.shipping = shipping;
     }
 
-    public void setLine_items(List<LineItemModelRequest> line_items) {
-        this.line_items = line_items;
-    }
 }

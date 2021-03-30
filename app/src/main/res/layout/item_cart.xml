@@ -34,7 +34,7 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:src="@color/black"
-                    bind:setImageUrl="@{cartModel.postImageUrl}" />
+                    bind:setImageUrl="@{cartModel.image}" />
 
                 <TextView
                     android:id="@+id/product_name"
@@ -48,7 +48,7 @@
                     android:gravity="start"
                     android:textDirection="locale"
                     android:maxLines="1"
-                    android:text="@{cartModel.post_title, default=`---------`}"
+                    android:text="@{cartModel.product_name, default=`---------`}"
                     android:textColor="@color/black" />
 
                 <TextView
@@ -72,7 +72,7 @@
                     android:layout_toStartOf="@id/total_price"
                     android:layout_toEndOf="@id/img"
                     android:maxLines="1"
-                    android:text="@{cartModel.seletedOptionPrice().concat(` `).concat(@string/currency)}"
+                    android:text="@{String.valueOf(cartModel.price).concat(` `).concat(@string/currency)}"
                     android:textColor="@color/black"
                     android:textDirection="locale" />
 
@@ -102,7 +102,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:layout_marginEnd="5dp"
-                        android:text="@{String.valueOf(cartModel.quantity)}"
+                        android:text="@{String.valueOf(cartModel.qty)}"
                         android:textColor="@color/black" />
 
                     <TextView
@@ -141,7 +141,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@id/img"
                     android:layout_alignParentEnd="true"
-                    android:text="@{String.valueOf(cartModel.line_subtotal).concat(` `).concat(@string/currency)}"
+                    android:text="@{cartModel.subtotalWithQtyPrc.concat(` `).concat(@string/currency)}"
                     android:textColor="@color/black"
                     android:textDirection="locale" />
 

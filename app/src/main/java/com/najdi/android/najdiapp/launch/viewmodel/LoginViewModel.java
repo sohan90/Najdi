@@ -3,17 +3,18 @@ package com.najdi.android.najdiapp.launch.viewmodel;
 import android.app.Application;
 import android.text.TextUtils;
 
-import com.google.android.material.textfield.TextInputLayout;
-import com.najdi.android.najdiapp.common.BaseViewModel;
-import com.najdi.android.najdiapp.R;
-import com.najdi.android.najdiapp.common.BaseResponse;
-import com.najdi.android.najdiapp.launch.model.LoginRequestModel;
-import com.najdi.android.najdiapp.utitility.PreferenceUtils;
-
 import androidx.annotation.NonNull;
 import androidx.databinding.BindingAdapter;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+
+import com.google.android.material.textfield.TextInputLayout;
+import com.najdi.android.najdiapp.R;
+import com.najdi.android.najdiapp.common.BaseResponse;
+import com.najdi.android.najdiapp.common.BaseViewModel;
+import com.najdi.android.najdiapp.home.model.CityListModelResponse;
+import com.najdi.android.najdiapp.launch.model.LoginRequestModel;
+import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
 public class LoginViewModel extends BaseViewModel {
 
@@ -61,11 +62,12 @@ public class LoginViewModel extends BaseViewModel {
         validationStatus.setValue(isValid);
     }
 
-    public LiveData<BaseResponse> login() {
+    public LiveData<BaseResponse> login(String fcmToken) {
         LoginRequestModel requestModel = new LoginRequestModel();
-        String phoneNo = "966" + this.phoneNo.getValue();
-        requestModel.setUserName(phoneNo);
+       // String phoneNo = "966" + this.phoneNo.getValue();
+        requestModel.setPhone(phoneNo.getValue());
         requestModel.setPassword(password.getValue());
+        requestModel.setFcmToken(fcmToken);
         PreferenceUtils.setValueString(resourceProvider.getAppContext(),
                 PreferenceUtils.USER_PHONE_NO_KEY, this.phoneNo.getValue());
         PreferenceUtils.setValueString(resourceProvider.getAppContext(),
@@ -75,5 +77,9 @@ public class LoginViewModel extends BaseViewModel {
 
     public MutableLiveData<String> getToolbarTitle() {
         return toolbarTitle;
+    }
+
+    public LiveData<CityListModelResponse> getCityList(String lang) {
+        return repository.getCityList(lang);
     }
 }

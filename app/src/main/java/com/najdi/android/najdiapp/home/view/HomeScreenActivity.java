@@ -3,10 +3,20 @@ package com.najdi.android.najdiapp.home.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.core.view.GravityCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.navigation.NavigationView;
 import com.najdi.android.najdiapp.R;
@@ -19,26 +29,22 @@ import com.najdi.android.najdiapp.common.ObservableManager;
 import com.najdi.android.najdiapp.databinding.ActivityHomeScreenBinding;
 import com.najdi.android.najdiapp.databinding.MenuLanSelcBinding;
 import com.najdi.android.najdiapp.databinding.NavHeaderHomeScreenBinding;
+import com.najdi.android.najdiapp.home.model.CityListModelResponse;
 import com.najdi.android.najdiapp.home.model.ProductDetailBundleModel;
 import com.najdi.android.najdiapp.home.viewmodel.HomeScreenViewModel;
 import com.najdi.android.najdiapp.launch.view.LoginActivity;
-import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 import com.najdi.android.najdiapp.shoppingcart.view.CartFragment;
+import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.FragmentHelper;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 import com.najdi.android.najdiapp.utitility.ToastUtils;
 
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.TimeUnit;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.widget.SwitchCompat;
-import androidx.core.view.GravityCompat;
-import androidx.databinding.DataBindingUtil;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 
 import static com.najdi.android.najdiapp.common.Constants.ARABIC_LAN;
 import static com.najdi.android.najdiapp.common.Constants.ENGLISH_LAN;
@@ -58,9 +64,13 @@ import static com.najdi.android.najdiapp.common.Constants.ScreeNames.SHOPPING_CA
 import static com.najdi.android.najdiapp.utitility.PreferenceUtils.USER_ID_KEY;
 import static com.najdi.android.najdiapp.utitility.PreferenceUtils.USER_LOGIIN_TOKEN;
 import static com.najdi.android.najdiapp.utitility.PreferenceUtils.USER_NAME_KEY;
+import static com.najdi.android.najdiapp.utitility.PreferenceUtils.USER_SELECTED_CITY;
 
 public class HomeScreenActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, Observer {
+
+    public static final String SHORT_CUT_ORDERS = "com.najdi.android.najdiapp.orderscreen";
+    public static final String SHORT_CUT_BANK_DETAIL = "com.najdi.android.najdiapp.bank";
 
     private ActivityHomeScreenBinding binding;
     private DrawerLayout drawerLayout;
@@ -70,12 +80,17 @@ public class HomeScreenActivity extends BaseActivity
     private TextView notificationText;
     private ActionBarDrawerToggle toggle;
     private ProductDetailBundleModel productDetailBundleModel;
+    private List<String> categoryStrNameList;
+    private List<CityListModelResponse.Category> categoryList;
+    private View filterView;
+    private NavHeaderHomeScreenBinding navHeaderView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home_screen);
         initializeViewModel();
+        //fetchAppInfo(viewModel.provideRepo());
         setNavigationBar();
         replaceFragment(PRODUCTS);
         subscribeForLaunchProductDetail();
@@ -85,9 +100,109 @@ public class HomeScreenActivity extends BaseActivity
         subscribeForHomeScreenToolBar();
         subscribeForLaunchCheckoutScreen();
         subscribeForCartCount();
+        subcribeForProfile();
         observeForProductDetailScreenFromCheckout();
         fetchProduct();
-        //fetchCart();
+        fetchCityList();
+        fetchCategoryList();
+        getShortCutIntentAction();
+        hideMenuItemForGuestUser();
+
+    }
+
+    private void subcribeForProfile() {
+        viewModel.getName().observe(this, name -> navHeaderView.name.setText(name));
+    }
+
+    private void hideMenuItemForGuestUser() {
+        String loginToken = PreferenceUtils.getValueString(this, USER_LOGIIN_TOKEN);
+        if (TextUtils.isEmpty(loginToken)) { // guest user
+            binding.navView.getMenu().findItem(R.id.log_out).setVisible(false);
+            binding.navView.getMenu().findItem(R.id.history).setVisible(false);
+            binding.navView.getMenu().findItem(R.id.profile).setVisible(false);
+            binding.navView.getMenu().findItem(R.id.shopping_cart).setVisible(false);
+        } else {
+            binding.navView.getMenu().findItem(R.id.sign_in).setVisible(false);
+        }
+
+    }
+
+    private void getShortCutIntentAction() {
+        if (getIntent() != null && getIntent().getAction() != null) {
+            if (getIntent().getAction().equals(SHORT_CUT_ORDERS)) {
+                replaceFragment(ORDER_STATUS);
+            } else if (getIntent().getAction().equals(SHORT_CUT_BANK_DETAIL)) {
+                replaceFragment(BANK_ACCOUNTS);
+            }
+        }
+    }
+
+    private void fetchCityList() {
+        String selectedCityId = PreferenceUtils.getValueString(this, USER_SELECTED_CITY);
+        if (TextUtils.isEmpty(selectedCityId)) {
+            showProgressDialog();
+            viewModel.getCityList(resourProvider.getCountryLang())
+                    .observe(this, cityListModelResponse -> {
+                        hideProgressDialog();
+                        if (cityListModelResponse != null && cityListModelResponse.isStatus()) {
+                            List<CityListModelResponse.City> cityList = cityListModelResponse.getCities();
+
+                            addDisposable(getCityNameList(cityList).subscribe(strCity ->
+                                    showPopupwindow(strCity, cityList, null)));
+                        }
+                    });
+        } else {
+            fetchCityBasedProducts(selectedCityId);
+        }
+    }
+
+    private void fetchCategoryList() {
+        showProgressDialog();
+        viewModel.getCategoryList(resourProvider.getCountryLang())
+                .observe(this, cityListModelResponse -> {
+                    hideProgressDialog();
+                    if (cityListModelResponse != null && cityListModelResponse.isStatus()) {
+                        List<CityListModelResponse.Category> categoryList = cityListModelResponse
+                                .getCategories();
+                        getCategoryNameList(categoryList);
+                    }
+                });
+    }
+
+
+    private void getCategoryNameList(List<CityListModelResponse.Category> categoryList) {
+        this.categoryList = categoryList;
+        addDisposable(io.reactivex.rxjava3.core.Observable.just(categoryList)
+                .flatMap(io.reactivex.rxjava3.core.Observable::fromIterable)
+                .map(CityListModelResponse.Category::getName)
+                .toList()
+                .subscribe(list -> this.categoryStrNameList = list
+                ));
+    }
+
+    private void showPopupwindow(List<String> strings, List<CityListModelResponse.City> cityList,
+                                 List<CityListModelResponse.Category> categoryList) {
+
+        String title = getString(R.string.category);
+        if (cityList != null) {
+            title = getString(R.string.select_city);
+        }
+        binding.include.blurLyt.setAlpha(0.5f);
+        DialogUtil.showPopupWindow(this,
+                binding.include.containerLyt.container, title, strings, pos -> {
+                    binding.include.blurLyt.setAlpha(0f);
+                    if (cityList != null) {
+                        CityListModelResponse.City city = cityList.get(pos);
+                        saveCityId(city.getId());
+                        fetchCityBasedProducts(city.getId());
+                    } else {
+                        CityListModelResponse.Category category = categoryList.get(pos);
+                        fetchCategoryBasedProducts(category.getId());
+                    }
+                    updateNavigationMenuHighlight(0);
+                }, () -> {
+                    binding.include.blurLyt.setAlpha(0f);
+                });
 
     }
 
@@ -100,15 +215,18 @@ public class HomeScreenActivity extends BaseActivity
     }
 
     private void getCartCount() {
-        viewModel.getCartCount().observe(this, baseResponse -> {
-            if (baseResponse != null) {
-                if (baseResponse.getData() != null) {
-                    int count = baseResponse.getData().getCount();
-                    updateCartCountTxt(count);
-                    viewModel.setCartSize(count);
+        String token = PreferenceUtils.getValueString(this, USER_LOGIIN_TOKEN);
+        if (!TextUtils.isEmpty(token)) {
+            viewModel.getCartCount().observe(this, baseResponse -> {
+                if (baseResponse != null) {
+                    if (baseResponse.isStatus()) {
+                        int count = baseResponse.getTotalItems();
+                        updateCartCountTxt(count);
+                        viewModel.setCartSize(count);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     private void observeForProductDetailScreenFromCheckout() {
@@ -118,7 +236,12 @@ public class HomeScreenActivity extends BaseActivity
     private void subscribeForLaunchCheckoutScreen() {
         viewModel.getLaunchCheckoutActivity().observe(this, aBoolean -> {
             if (aBoolean) {
+               addDisposable(io.reactivex.rxjava3.core.Observable.timer(500, TimeUnit.MILLISECONDS)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnNext(i -> FragmentHelper.popBackStack(this, Constants.FragmentTags.PRODUCT_DETAIL))
+                        .subscribe());
                 launchCheckOutActivity();
+
             }
         });
     }
@@ -156,7 +279,7 @@ public class HomeScreenActivity extends BaseActivity
     }
 
     private void initializeViewModel() {
-        viewModel = ViewModelProviders.of(this).get(HomeScreenViewModel.class);
+        viewModel = new ViewModelProvider(this).get(HomeScreenViewModel.class);
     }
 
     private void replaceFragment(int screenName) {
@@ -223,12 +346,25 @@ public class HomeScreenActivity extends BaseActivity
                 true, containerId);
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        unlockDrawer();
+    }
+
+    private void showFilterView() {
+        filterView.setVisibility(View.VISIBLE);
+    }
+
+    private void hideFitlerView() {
+        filterView.setVisibility(View.GONE);
+    }
+
     private void subscribeForLaunchProductDetail() {
         viewModel.getLaunchProductDetailLiveData().observe(this, model -> {
             if (model != null) {
                 this.productDetailBundleModel = model;
                 setToolBarTitle(getString(R.string.product_details));
-                //updateCartCountTxt(viewModel.getCartSize());
                 replaceFragment(PRODUCT_DETAIL);
 
             }
@@ -241,23 +377,47 @@ public class HomeScreenActivity extends BaseActivity
 
     private void fetchProduct() {
         showProgressDialog();
-        viewModel.getProducts().observe(this, productListResponses -> {
+        viewModel.getProducts().observe(this, productModelResponse -> {
             hideProgressDialog();
-            if (productListResponses != null && productListResponses.size() > 0) {
-                viewModel.getProductList().setValue(productListResponses);
+            if (productModelResponse != null && productModelResponse.getProductList() != null &&
+                    productModelResponse.getProductList().size() > 0) {
+                viewModel.getProductList().setValue(productModelResponse.getProductList());
             } else {
                 ToastUtils.getInstance(this).showLongToast(getString(R.string.something_went_wrong));
             }
         });
     }
 
-    private void fetchCart() {
-        viewModel.getCart().observe(this, cartResponse -> {
-            if (cartResponse != null) {
-                CartResponse.Data data = cartResponse.getData();
-                int cartSize = data.getCartdata().size();
+    private void fetchCityBasedProducts(String cityId) {
+        showProgressDialog();
+        viewModel.getCityBasedProducts(cityId).observe(this, productModelResponse -> {
+            hideProgressDialog();
+            if (productModelResponse != null && productModelResponse.getProductList() != null &&
+                    productModelResponse.getProductList().size() > 0) {
+                viewModel.getProductList().setValue(productModelResponse.getProductList());
+            } else {
+                ToastUtils.getInstance(this).showLongToast(getString(R.string.something_went_wrong));
             }
         });
+    }
+
+    private void fetchCategoryBasedProducts(String catId) {
+        showProgressDialog();
+        viewModel.getCategoryBasedProducts(resourProvider.getCountryLang(), catId)
+                .observe(this, productModelResponse -> {
+                    hideProgressDialog();
+                    if (productModelResponse.isStatus()) {
+                        if (productModelResponse.getProductList() != null &&
+                                productModelResponse.getProductList().size() > 0) {
+                            viewModel.getProductList().setValue(productModelResponse.getProductList());
+                        } else {
+                            ToastUtils.getInstance(this).showLongToast(getString(R.string.something_went_wrong));
+                        }
+                    } else {
+                        DialogUtil.showAlertDialogNegativeVector(this,
+                                productModelResponse.getMessage(), (dialog, which) -> dialog.dismiss());
+                    }
+                });
     }
 
     private void updateCartCountTxt(int count) {
@@ -267,6 +427,7 @@ public class HomeScreenActivity extends BaseActivity
 
     private void setNavigationBar() {
         setSupportActionBar(binding.include.toolbar);
+        if (getSupportActionBar() == null) return;
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         View viewActionBar = getLayoutInflater().inflate(R.layout.custom_actiob_bar, null);
@@ -275,6 +436,17 @@ public class HomeScreenActivity extends BaseActivity
         toolBarTitle = viewActionBar.findViewById(R.id.title);
         cartImageLyt = viewActionBar.findViewById(R.id.cartImageLyt);
         cartImageLyt.setOnClickListener(v -> launchCartScreen());
+        filterView = viewActionBar.findViewById(R.id.filter);
+        filterView.setOnClickListener(v -> {
+            if (categoryStrNameList == null) return;
+            binding.include.blurLyt.setAlpha(0.5f);
+            DialogUtil.showListPopupWindow(this, filterView, categoryStrNameList,
+                    pos -> {
+                        CityListModelResponse.Category category = categoryList.get(pos);
+                        fetchCategoryBasedProducts(category.getId());
+                    },
+                    () -> binding.include.blurLyt.setAlpha(0f));
+        });
         notificationText = viewActionBar.findViewById(R.id.notification_text);
         toolBarTitle.setText(getString(R.string.products));
         drawerLayout = binding.drawerLayout;
@@ -286,7 +458,7 @@ public class HomeScreenActivity extends BaseActivity
         toggle.syncState();
 
         binding.navView.setNavigationItemSelectedListener(this);
-        setNavHeader();
+        setNavHeader(PreferenceUtils.getValueString(this, USER_NAME_KEY));
         setNavSubItemClicklistener();
     }
 
@@ -329,13 +501,15 @@ public class HomeScreenActivity extends BaseActivity
                 ActionBar.LayoutParams.MATCH_PARENT, Gravity.CENTER);
     }
 
-    private void setNavHeader() {
-        View view = binding.navView.getHeaderView(0);
-        NavHeaderHomeScreenBinding binding = NavHeaderHomeScreenBinding.bind(view);
-        binding.name.setText(PreferenceUtils.getValueString(this, USER_NAME_KEY));
+    private void setNavHeader(String name) {
+        navHeaderView = DataBindingUtil.inflate(getLayoutInflater(),
+                R.layout.nav_header_home_screen, binding.navView, false);
+        binding.navView.addHeaderView(navHeaderView.getRoot());
+        navHeaderView.name.setText(name);
     }
 
     private void setToolBarTitle(String title) {
+        if (getSupportActionBar() == null) return;
         toolBarTitle.setText(title);
         // Show back button
         toggle.setDrawerIndicatorEnabled(false);
@@ -348,6 +522,7 @@ public class HomeScreenActivity extends BaseActivity
 
 
     private void setHomeScreeToolBar() {
+        if (getSupportActionBar() == null) return;
         toolBarTitle.setText(getString(R.string.products));
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         toggle.setDrawerIndicatorEnabled(true);
@@ -364,6 +539,7 @@ public class HomeScreenActivity extends BaseActivity
             if (backStackCount == 1) {
                 finish();
             } else {
+                if (getSupportActionBar() == null) return;
                 getSupportFragmentManager().popBackStackImmediate();
                 Fragment fragment = FragmentHelper.
                         getFragmentById(this, binding.include.containerLyt.container.getId());
@@ -377,8 +553,8 @@ public class HomeScreenActivity extends BaseActivity
                     toggle.syncState();
 
                 } else if (fragment instanceof ProductDetailFragment) {
-                    setToolBarTitle(getString(R.string.product_details));
-                    cartImageLyt.setVisibility(View.VISIBLE);
+                    getSupportFragmentManager().popBackStackImmediate();
+                    unlockDrawer();
                 }
             }
         }
@@ -399,6 +575,19 @@ public class HomeScreenActivity extends BaseActivity
 
             case R.id.products:
                 replaceFragment(PRODUCTS);
+                break;
+
+            case R.id.category:
+                showPopupwindow(categoryStrNameList, null, categoryList);
+                break;
+
+            case R.id.sign_in:
+                launchLogin();
+                break;
+
+            case R.id.city:
+                PreferenceUtils.setValueString(this, USER_SELECTED_CITY, null);
+                fetchCityList();
                 break;
 
             case R.id.about_us:
@@ -431,11 +620,17 @@ public class HomeScreenActivity extends BaseActivity
         return true;
     }
 
+    private void launchLogin() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     private void clearCredentialandFinish() {
         showProgressDialog();
         new Handler().postDelayed(() -> {
             hideProgressDialog();
-            PreferenceUtils.setValueInt(this, USER_ID_KEY, 0);
+            PreferenceUtils.setValueString(this, USER_ID_KEY, null);
             PreferenceUtils.setValueString(this, USER_LOGIIN_TOKEN, null);
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
@@ -471,10 +666,13 @@ public class HomeScreenActivity extends BaseActivity
     }
 
     private void lockDrawer() {
+        hideFitlerView();
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
     private void unlockDrawer() {
+        hideFitlerView();// as per the req we are showing the filter option in the menu so we are hiding here
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
+
 }

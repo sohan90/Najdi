@@ -8,22 +8,20 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
+import androidx.databinding.DataBindingUtil;
+
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseActivity;
 import com.najdi.android.najdiapp.common.Constants;
+import com.najdi.android.najdiapp.common.NajdiApplication;
 import com.najdi.android.najdiapp.databinding.ActivitySplashBinding;
 import com.najdi.android.najdiapp.home.view.HomeScreenActivity;
+import com.najdi.android.najdiapp.repository.Repository;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
-import androidx.databinding.ViewDataBinding;
 
 import static com.najdi.android.najdiapp.common.Constants.ARABIC_LAN;
 import static com.najdi.android.najdiapp.common.Constants.ENGLISH_LAN;
 import static com.najdi.android.najdiapp.utitility.PreferenceUtils.USER_ID_KEY;
-import static com.najdi.android.najdiapp.utitility.PreferenceUtils.USER_LOGIIN_TOKEN;
-import static com.najdi.android.najdiapp.utitility.PreferenceUtils.USER_PHONE_NO_KEY;
 
 public class SplashScreenActivity extends BaseActivity {
     private static final int DELAY = 2000;
@@ -34,21 +32,27 @@ public class SplashScreenActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_splash);
 
-        String loginToken = PreferenceUtils.getValueString(SplashScreenActivity.this, USER_LOGIIN_TOKEN);
+        Repository repository = new Repository(NajdiApplication.get(this).getResourceProvider());
+        fetchAppInfo(repository, aBoolean -> launchHomeScreenForLoggedUser());
+    }
+
+    private void launchHomeScreenForLoggedUser() {
+        String loginToken = PreferenceUtils.getValueString(SplashScreenActivity.this,
+                USER_ID_KEY);
         if (!TextUtils.isEmpty(loginToken)) {
-            binding.spinnerLyt.setVisibility(View.GONE);
             new Handler().postDelayed(() -> {
                 launchHomeScreen();
                 finish();
             }, DELAY);
 
         } else {
+            binding.spinnerLyt.setVisibility(View.VISIBLE);
             showLanguageSelection();
         }
     }
 
     private void showLanguageSelection() {
-        String[] country = {"Select Language", "English", "عربى"};
+        String[] country = {getString(R.string.select_options), "English", "عربى"};
         ArrayAdapter<String> aa = new ArrayAdapter<>(this,
                 R.layout.spinner_text, country);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -59,10 +63,12 @@ public class SplashScreenActivity extends BaseActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position != 0) {
                     if (position == 1) {
-                        PreferenceUtils.setValueString(SplashScreenActivity.this, PreferenceUtils.LOCALE_LANG, ENGLISH_LAN);
+                        PreferenceUtils.setValueString(SplashScreenActivity.this,
+                                PreferenceUtils.LOCALE_LANG, ENGLISH_LAN);
                         setLocaleLanguage(Constants.ENGLISH_LAN);
                     } else {
-                        PreferenceUtils.setValueString(SplashScreenActivity.this, PreferenceUtils.LOCALE_LANG, ARABIC_LAN);
+                        PreferenceUtils.setValueString(SplashScreenActivity.this,
+                                PreferenceUtils.LOCALE_LANG, ARABIC_LAN);
                         setLocaleLanguage(Constants.ARABIC_LAN);
                     }
                 }

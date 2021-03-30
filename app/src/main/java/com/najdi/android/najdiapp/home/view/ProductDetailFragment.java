@@ -1,6 +1,7 @@
 package com.najdi.android.najdiapp.home.view;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.najdi.android.najdiapp.R;
@@ -19,30 +20,30 @@ import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.databinding.FragmentProductDetailBinding;
 import com.najdi.android.najdiapp.databinding.ItemDetailBinding;
+import com.najdi.android.najdiapp.home.model.AttributeOptionModel;
 import com.najdi.android.najdiapp.home.model.ProductDetailBundleModel;
 import com.najdi.android.najdiapp.home.model.ProductListResponse;
 import com.najdi.android.najdiapp.home.viewmodel.HomeScreenViewModel;
 import com.najdi.android.najdiapp.home.viewmodel.ProductDetailViewModel;
 import com.najdi.android.najdiapp.home.viewmodel.ProductListItemModel;
+import com.najdi.android.najdiapp.shoppingcart.model.AttributeCartOptionData;
 import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
+import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-
-import static com.najdi.android.najdiapp.common.Constants.APPEND_ATTRIBUTE_STR;
 
 public class ProductDetailFragment extends BaseFragment {
     private static final String EXTRA_PRODUCT_DETAIL_KEY = "product_detail_key";
     private FragmentProductDetailBinding binding;
     private HomeScreenViewModel homeScreeViewModel;
-    private int productId;
+    private String productId;
     private ProductDetailViewModel viewModel;
     private CartResponse.CartData cartData;
     private ProductListResponse productListResponse;
     private boolean isFromCartScreen;
-    private HashMap<String, String> variationMap = new HashMap<>();
+    private boolean offer;
 
     public static ProductDetailFragment createInstance(ProductDetailBundleModel model) {
         Bundle bundle = new Bundle();
@@ -50,6 +51,12 @@ public class ProductDetailFragment extends BaseFragment {
         ProductDetailFragment productDetailFragment = new ProductDetailFragment();
         productDetailFragment.setArguments(bundle);
         return productDetailFragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        showProgressDialog();
     }
 
     @Nullable
@@ -67,7 +74,16 @@ public class ProductDetailFragment extends BaseFragment {
         updateNotificationCartCount();
         subscribeForVariationQuantity();
         fetchProductDetail();
+        observePriceChange();
         return binding.getRoot();
+    }
+
+    private void observePriceChange() {
+        viewModel.totalPriceLivdData.observe(getViewLifecycleOwner(), s -> {
+            if (binding.topLyt.getViewModel() != null){
+                binding.topLyt.getViewModel().setPrice(s.replace(getString(R.string.currency), ""));
+            }
+        });
     }
 
     private void subscribeForVariationQuantity() {
@@ -78,19 +94,19 @@ public class ProductDetailFragment extends BaseFragment {
         });
     }
 
+    @Deprecated
     private void getVariationFromServer() {
         showProgressDialog();
-        LiveData<ProductListResponse> liveData = viewModel.getVariationQuantity(productListResponse.getId(),
-                viewModel.getVariationId());
+        LiveData<ProductListResponse> liveData = viewModel.
+                getVariationQuantity(productListResponse.getId(), viewModel.getVariationId());
 
-        liveData.observe(this, productListResponse1 -> {
+        liveData.observe(getViewLifecycleOwner(), productListResponse1 -> {
             hideProgressDialog();
             if (productListResponse1 != null) {
                 viewModel.setMaxVariationQuantity(productListResponse1.getStock_quantity());
             }
         });
     }
-
 
     private void updateNotificationCartCount() {
         homeScreeViewModel.getCartCountNotification().setValue(true);
@@ -103,29 +119,37 @@ public class ProductDetailFragment extends BaseFragment {
     }
 
     private void fetchProductDetail() {
-        showProgressDialog();
-        homeScreeViewModel.getIndividualProduct(productId)
-                .observe(this, productListResponse1 -> {
+        homeScreeViewModel.getIndividualProduct(productId).observe(getViewLifecycleOwner(), baseResponse -> {
             hideProgressDialog();
-            if (productListResponse1 != null) {
-                this.productListResponse = productListResponse1;
+            if (baseResponse != null && baseResponse.isStatus()) {
+                this.productListResponse = baseResponse.getProduct();
+                productListResponse.setOffer(offer);
                 setViewDataForIncludeLyt();
                 viewModel.setDefaultPrice(productListResponse.getPrice());
-                inflateViewForProductVariation();
+                viewModel.setMaxVariationQuantity(Integer.parseInt(productListResponse.getStock()));
+                viewModel.inStock(Integer.parseInt(productListResponse.getStock()));
+                viewModel.setTotalAttributOptSize(productListResponse.getTotalAttributeSize());
                 enableOrDisableAddCartButton();
-                if (cartData == null) {
-                    viewModel.setDefaultQuantity();
-                }
+                updateQuantity();
+                inflateViewForProductVariation();
             }
         });
     }
 
+    private void updateQuantity() {
+        if (cartData == null) {
+            viewModel.setDefaultQuantity();
+        } else {
+            viewModel.setQuantityCount(Integer.parseInt(cartData.getQty()));
+        }
+    }
+
     private void enableOrDisableAddCartButton() {
-        if (!productListResponse.isIn_stock()) {
+        if (productListResponse.getStock().equals("0")) {
             binding.dec.setEnabled(false);
             binding.inc.setEnabled(false);
             changeSmileIcon();
-            binding.addToCart.setEnabled(true);
+            binding.addToCart.setEnabled(false);
         }
     }
 
@@ -147,8 +171,14 @@ public class ProductDetailFragment extends BaseFragment {
         binding.setLifecycleOwner(this);
     }
 
+    private void initializeHomeScreenViewModel() {
+        if (getActivity() != null) {
+            homeScreeViewModel = new ViewModelProvider(getActivity()).get(HomeScreenViewModel.class);
+        }
+    }
+
     private void initializeViewModel() {
-        viewModel = ViewModelProviders.of(this).get(ProductDetailViewModel.class);
+        viewModel = new ViewModelProvider(this).get(ProductDetailViewModel.class);
     }
 
     private void initializeClickListener() {
@@ -158,11 +188,20 @@ public class ProductDetailFragment extends BaseFragment {
         binding.proceed.setOnClickListener(v -> moveToAddCartScreen());
 
         binding.addToCart.setOnClickListener(v -> {
-            showProgressDialog();
-            if (!isFromCartScreen) {
-                addCart(); // add cart
+            if (getActivity() == null) return;
+
+            String userId = PreferenceUtils.getValueString(getActivity(),
+                    PreferenceUtils.USER_ID_KEY);
+
+            if (!TextUtils.isEmpty(userId)) {
+                showProgressDialog();
+                if (!isFromCartScreen) {
+                    addCart(); // add cart
+                } else {
+                    updateCart();
+                }
             } else {
-                updateCart();
+                launchGuestUserDialog();//gues user flow
             }
         });
     }
@@ -170,26 +209,30 @@ public class ProductDetailFragment extends BaseFragment {
     private void updateCart() {
         //update cart :Since api wont support update cart directly so
         // to update cart  first delete product and add with updated product item
-        LiveData<BaseResponse> liveData = viewModel.removeCart(cartData.getTm_cart_item_key());
-        liveData.observe(this, baseResponse -> {
-            if (baseResponse != null) {
+        LiveData<BaseResponse> liveData = viewModel.removeCart(cartData.getId());
+        liveData.observe(getViewLifecycleOwner(), baseResponse -> {
+            if (baseResponse != null && baseResponse.isStatus()) {
                 addCart();
             }
         });
     }
 
     private void addCart() {
-        LiveData<BaseResponse> liveData = viewModel.addToCart();
-        liveData.observe(this, baseResponse -> {
+        LiveData<BaseResponse> liveData = viewModel.addToCart(productId);
+        liveData.observe(getViewLifecycleOwner(), baseResponse -> {
             hideProgressDialog();
-            binding.proceed.setEnabled(true);
-            updateNotificationCartCount();
-            String message = getString(R.string.product_added_success);
-            if (isFromCartScreen) {
-                message = getString(R.string.product_updated_success);
+            if (baseResponse != null && baseResponse.isStatus()) {
+                viewModel.enableProceed.setValue(true);
+                updateNotificationCartCount();
+                String message = getString(R.string.product_added_success);
+                if (isFromCartScreen) {
+                    message = getString(R.string.product_updated_success);
+                } else {
+                    binding.addToCart.setVisibility(View.GONE);
+                }
+                DialogUtil.showAlertDialog(getActivity(), message,
+                        (dialog, which) -> dialog.dismiss());
             }
-            DialogUtil.showAlertDialog(getActivity(), message,
-                    (dialog, which) -> dialog.dismiss());
         });
     }
 
@@ -200,16 +243,21 @@ public class ProductDetailFragment extends BaseFragment {
 
     private void setViewDataForIncludeLyt() {
         binding.topLyt.desc.setMaxLines(Integer.MAX_VALUE);
+        binding.topLyt.executePendingBindings();
         binding.topLyt.setViewModel(new ProductListItemModel(productListResponse, View.GONE));
+
     }
 
     private void inflateViewForProductVariation() {
         binding.container.removeAllViews();
         if (productListResponse != null && productListResponse.getAttributesList() != null) {
             List<ProductListResponse.Attributes> attributesList = productListResponse.getAttributesList();
+
             for (ProductListResponse.Attributes attributes : attributesList) {
 
-                List<String> stringList = getListFromMap(attributes.getOptions());
+                List<AttributeOptionModel> attributeOptLst = attributes.getProductAttributeOptions();
+                List<String> stringList = getListFromMap(attributeOptLst);
+
                 View view = LayoutInflater.from(getActivity()).inflate(R.layout.item_detail,
                         binding.container, false);
                 binding.container.addView(view);
@@ -217,67 +265,91 @@ public class ProductDetailFragment extends BaseFragment {
                 ItemDetailBinding detailBinding = ItemDetailBinding.bind(view);
                 detailBinding.name.setText(attributes.getName());
 
-                setDataForSelectedValue(detailBinding.options, attributes.getId(),
-                        attributes.getSlug());
-
+                updateSelectedOptionValue(detailBinding.options, attributes);
                 detailBinding.options.setTag(attributes.getId());
-
                 detailBinding.options.setOnClickListener((v -> {
+
                     if (getActivity() != null) {
-                        int selectedAttributeId = (int) v.getTag();
 
-                        DialogUtil.showPopuwindow(getActivity(), v, stringList, s -> {
+                        String selectedAttributeId = (String) v.getTag();
 
-                            String selectedValue = getSelectedValueFromMap(s);
-                            viewModel.updatePrice(productListResponse, selectedValue, selectedAttributeId);
-                            detailBinding.options.setText(s);
+                        DialogUtil.showPopupWindowSpinner(getActivity(), v, stringList, p -> {
+
+                            AttributeOptionModel attributeOptionModel = attributeOptLst.get(p);
+                            String selectedValue = attributeOptionModel.getOptionName();
+                            detailBinding.options.setText(selectedValue);
+                            viewModel.updatePrice(selectedAttributeId, attributeOptionModel);
 
                         });
                     }
-
                 }));
             }
         }
     }
 
-    private String getSelectedValueFromMap(String selectedNameKey) {
-        String slugValue = "";
-        if (variationMap.size() > 0) {
-            slugValue = variationMap.get(selectedNameKey);
+    private void updateSelectedOptionValue(TextInputEditText editText,
+                                           ProductListResponse.Attributes attribute) {
+
+        if (cartData != null && cartData.getAttributeData() != null) {
+            for (AttributeCartOptionData attributeData : cartData.getAttributeData()) {
+                if (attributeData == null) continue;
+
+                if (attributeData.getAttr_id().trim().equals(attribute.getId().trim())) {
+
+                    AttributeOptionModel attributeOptionModel = getAttriOptModel(
+                            attribute.getProductAttributeOptions(),
+                            attributeData.getAttr_selected_option_id());
+
+                    editText.setText(attributeOptionModel.getOptionName());
+                    viewModel.updatePrice(attribute.getId(), attributeOptionModel);
+
+                    break;
+                }
+            }
         }
-        return slugValue;
+    }
+
+    private AttributeOptionModel getAttriOptModel(List<AttributeOptionModel> productAttributeOptions,
+                                                  String attrSelectedOptionId) {
+
+        AttributeOptionModel attributeOptionModel = null;
+        for (AttributeOptionModel productAttributeOption : productAttributeOptions) {
+            if (productAttributeOption.getId().trim().equals(attrSelectedOptionId.trim())) {
+                attributeOptionModel = productAttributeOption;
+
+                break;
+            }
+        }
+        return attributeOptionModel;
     }
 
     private void reset() {
         for (int i = 0; i < binding.container.getChildCount(); i++) {
             View view = binding.container.getChildAt(i);
             ItemDetailBinding detailBinding = DataBindingUtil.getBinding(view);
+            if (detailBinding == null) return;
             detailBinding.options.setText("");
         }
         viewModel.reset();
     }
 
-    private void setDataForSelectedValue(TextInputEditText optionText, int id, String key) {
-        if (cartData != null && cartData.getVariation().size() > 0) {
-            String attribute = APPEND_ATTRIBUTE_STR.concat(key);
-            String appendedSlugKey = attribute.concat("_slug");
-            String selectedSlugKeyValue = cartData.getVariation().get(appendedSlugKey);
-            viewModel.setTotalPrice(String.valueOf(cartData.getLine_subtotal()));
-            viewModel.setQuantityCount(cartData.getQuantity());
-            optionText.setText(cartData.getVariation().get(attribute));
-            viewModel.updatePrice(productListResponse, selectedSlugKeyValue, id);
+    private List<String> getListFromMap(List<AttributeOptionModel> productAttributeOptions) {
+        List<String> attributesOption = new ArrayList<>();
+        for (AttributeOptionModel productAttributeOption : productAttributeOptions) {
+            String optionName = productAttributeOption.getOptionName();// concat option value with the price if it is visible
+            if (productAttributeOption.getPriceVisibility().equals("1")) {
+                optionName = optionName
+                        /*.concat(" ")
+                        .concat("(")
+                        .concat(productAttributeOption.getOptionPrice())
+                        .concat(")")
+                        .concat("+")*/
+                        .concat(" ")
+                        .concat(getString(R.string.currency));
+            }
+            attributesOption.add(optionName);
         }
-    }
-
-    private List<String> getListFromMap(List<HashMap<String, String>> hashMapList) {
-        List<String> list = new ArrayList<>();
-        for (HashMap<String, String> stringStringHashMap : hashMapList) {
-            String name = stringStringHashMap.get("name");
-            String slug = stringStringHashMap.get("slug");
-            list.add(name);
-            variationMap.put(name, slug);
-        }
-        return list;
+        return attributesOption;
     }
 
     private void getProductDetailFromBundle() {
@@ -285,14 +357,15 @@ public class ProductDetailFragment extends BaseFragment {
             ProductDetailBundleModel model = getArguments().getParcelable(EXTRA_PRODUCT_DETAIL_KEY);
             if (model == null) return;
             productId = model.getProductId();
+            offer = model.isOffer();
             cartData = (CartResponse.CartData) model.getT();
             isFromCartScreen = model.isFromCartScreen();
         }
     }
 
-    private void initializeHomeScreenViewModel() {
-        if (getActivity() != null) {
-            homeScreeViewModel = ViewModelProviders.of(getActivity()).get(HomeScreenViewModel.class);
-        }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        hideProgressDialog();
     }
 }

@@ -10,10 +10,8 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.concurrent.TimeUnit;
 
-import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
@@ -34,7 +32,7 @@ public class RetrofitClient {
             .create();
 
     private static Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
-            .baseUrl(BuildConfig.NAJDI_END_POINTS)
+            .baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create(gson));
 
     private static HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor()
@@ -48,7 +46,6 @@ public class RetrofitClient {
             .addInterceptor(chain -> {
                 Request originalRequest = chain.request();
                 Request.Builder requestBuilder = originalRequest.newBuilder();
-
                 Request additionalRequest = requestBuilder.build();
                 return chain.proceed(additionalRequest);
             })
@@ -91,9 +88,6 @@ public class RetrofitClient {
             if (BuildConfig.DEBUG) {
                 client.interceptors().add(httpLoggingInterceptor);
             }
-            client.readTimeout(180, TimeUnit.SECONDS);
-            client.connectTimeout(180, TimeUnit.SECONDS);
-
             KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
             keyStore.load(null, null);
 

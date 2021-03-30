@@ -1,23 +1,25 @@
 package com.najdi.android.najdiapp.home.viewmodel;
 
 import android.app.Application;
-import android.content.Intent;
-
-import com.najdi.android.najdiapp.checkout.model.OrderResponse;
-import com.najdi.android.najdiapp.common.BaseResponse;
-import com.najdi.android.najdiapp.common.BaseViewModel;
-import com.najdi.android.najdiapp.home.model.ProductDetailBundleModel;
-import com.najdi.android.najdiapp.home.model.ProductListResponse;
-import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
-
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+
+import com.najdi.android.najdiapp.checkout.model.OrderStatus;
+import com.najdi.android.najdiapp.common.BaseResponse;
+import com.najdi.android.najdiapp.common.BaseViewModel;
+import com.najdi.android.najdiapp.home.model.CityListModelResponse;
+import com.najdi.android.najdiapp.home.model.ProductDetailBundleModel;
+import com.najdi.android.najdiapp.home.model.ProductListResponse;
+import com.najdi.android.najdiapp.home.model.ProductModelResponse;
+import com.najdi.android.najdiapp.repository.Repository;
+import com.najdi.android.najdiapp.shoppingcart.model.CartResponse;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class HomeScreenViewModel extends BaseViewModel {
 
@@ -25,20 +27,40 @@ public class HomeScreenViewModel extends BaseViewModel {
     private MutableLiveData<ProductDetailBundleModel> launchProductDetailLiveData;
     private MutableLiveData<Integer> showCartImageLiveData;
     private MutableLiveData<Integer> replaceFragmentLiveData;
-    private MutableLiveData<HashMap<String, String>> selectedVariationLiveData;
     private MutableLiveData<Boolean> setHomeScreenToolBarLiveData;
     private MutableLiveData<String> setToolBarTitle;
     private MutableLiveData<Boolean> launchCheckoutActivity;
-    private MutableLiveData<CartResponse.CartData> selectedProductCartLiveData;
     private MutableLiveData<Boolean> cartCountNotification = new MutableLiveData<>();
+    private MutableLiveData<String>  name = new MutableLiveData<>();
     int cartSize;
 
     public HomeScreenViewModel(@NonNull Application application) {
         super(application);
     }
 
-    public LiveData<List<ProductListResponse>> getProducts() {
+    public LiveData<ProductModelResponse> getProducts() {
         return repository.getProducts();
+    }
+
+    public LiveData<ProductModelResponse> getCityBasedProducts(String cityId) {
+        return repository.getCityBasedProducts(cityId);
+    }
+
+    public LiveData<ProductModelResponse> getCategoryBasedProducts(String lang, String catId) {
+        return repository.getCategoryBasedProducts(lang, catId);
+    }
+
+    public LiveData<CityListModelResponse> getCityList(String lang) {
+        return repository.getCityList(lang);
+    }
+
+    public LiveData<CityListModelResponse> getCategoryList(String lang) {
+        return repository.getCategory(lang);
+    }
+
+
+    public MutableLiveData<String> getName() {
+        return name;
     }
 
     public MutableLiveData<List<ProductListResponse>> getProductList() {
@@ -53,13 +75,6 @@ public class HomeScreenViewModel extends BaseViewModel {
             launchProductDetailLiveData = new MutableLiveData<>();
         }
         return launchProductDetailLiveData;
-    }
-
-    public MutableLiveData<HashMap<String, String>> getSelecteVariationOptionLiveData() {
-        if (selectedVariationLiveData == null) {
-            selectedVariationLiveData = new MutableLiveData<>();
-        }
-        return selectedVariationLiveData;
     }
 
     public MutableLiveData<Integer> updateNotificationCartCount() {
@@ -97,13 +112,6 @@ public class HomeScreenViewModel extends BaseViewModel {
         return launchCheckoutActivity;
     }
 
-    public LiveData<CartResponse.CartData> getSelectedCartDataLiveData() {
-        if (selectedProductCartLiveData == null) {
-            selectedProductCartLiveData = new MutableLiveData<>();
-        }
-        return selectedProductCartLiveData;
-    }
-
     public LiveData<CartResponse> getCart() {
         return repository.getCart();
     }
@@ -112,16 +120,29 @@ public class HomeScreenViewModel extends BaseViewModel {
         this.cartSize = cartSize;
     }
 
-    public int getCartSize() {
-        return cartSize;
-    }
-
-    public LiveData<List<OrderResponse>> getOrderStatus(int userId) {
+    public LiveData<BaseResponse> getOrderStatus(String userId) {
         return repository.getOrderStatus(userId);
     }
 
+    public LiveData<List<OrderStatus.Detail>> getAdapterList(List<OrderStatus> orderStatusList) {
+        MutableLiveData<List<OrderStatus.Detail>> liveData = new MutableLiveData<>();
+        List<OrderStatus.Detail> detailList = new ArrayList<>();
+        for (OrderStatus orderStatus : orderStatusList) {
+            for (OrderStatus.Detail detail : orderStatus.getDetails()) {
+                detail.orderId = orderStatus.getOrder_id();
+                detail.orderStatusLabel = orderStatus.getOrderStatusLabel();
+                detail.orderStatus = orderStatus.getOrder_status();
+                detail.paymentMethod = orderStatus.getPayment_method();
+                detail.totalPrice = orderStatus.getTotal_price();
+                detailList.add(detail);
+            }
+        }
+        liveData.setValue(detailList);
+        return liveData;
+    }
 
-    public LiveData<ProductListResponse> getIndividualProduct(int productId) {
+
+    public LiveData<BaseResponse> getIndividualProduct(String productId) {
         return repository.getIndividualProduct(productId);
     }
 
@@ -149,4 +170,9 @@ public class HomeScreenViewModel extends BaseViewModel {
 
         Collections.sort(list, COMPARATOR);
     }
+
+    public Repository provideRepo(){
+        return repository;
+    }
+
 }

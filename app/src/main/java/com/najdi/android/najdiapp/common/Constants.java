@@ -20,6 +20,8 @@ public class Constants {
     public static final String LAUNC_BANK_ACCOUNT = "launch_bank_account";
     public static final int PASSWORD_MAX_LENGTH = 20;
     public static final int OTP_TIME = 60;
+    public static final int PASSWORD_LENGTH = 6;
+    public static final int MOBILE_NO_LENGTH = 9;
 
     public interface FragmentTags {
         String PRODUCT_DETAIL = "prodcut_detail";
@@ -59,12 +61,13 @@ public class Constants {
     }
 
     @IntDef(value = {OtpScreen.SIGN_UP_SCREEN, OtpScreen.FORGOT_PASSWORD_SCREEN,
-            OtpScreen.CHANGE_PASSWORD_OTP_SCREEN, OtpScreen.CHANGE_PASSWORD_PROFILE})
+            OtpScreen.RESET_PASSWORD_OTP_SCREEN, OtpScreen.CHANGE_PASSWORD_PROFILE, OtpScreen.OLD_USER_FLOW})
     public @interface OtpScreen {
         int SIGN_UP_SCREEN = 0;
         int FORGOT_PASSWORD_SCREEN = 1;
-        int CHANGE_PASSWORD_OTP_SCREEN = 2;
+        int RESET_PASSWORD_OTP_SCREEN = 2;
         int CHANGE_PASSWORD_PROFILE = 3;
         int CHANGE_MOBILE_VERIFY = 4;
+        int OLD_USER_FLOW = 5;
     }
 }

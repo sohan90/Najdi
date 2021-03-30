@@ -2,32 +2,32 @@ package com.najdi.android.najdiapp.home.view;
 
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.najdi.android.najdiapp.R;
-import com.najdi.android.najdiapp.common.BaseFragment;
-import com.najdi.android.najdiapp.common.BaseResponse;
-import com.najdi.android.najdiapp.databinding.ContactUsBinding;
-import com.najdi.android.najdiapp.home.viewmodel.ContactUsViewModel;
-import com.najdi.android.najdiapp.home.viewmodel.HomeScreenViewModel;
-import com.najdi.android.najdiapp.utitility.DialogUtil;
-import com.najdi.android.najdiapp.utitility.PreferenceUtils;
-import com.najdi.android.najdiapp.utitility.ToastUtils;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.najdi.android.najdiapp.R;
+import com.najdi.android.najdiapp.common.BaseFragment;
+import com.najdi.android.najdiapp.common.BaseResponse;
+import com.najdi.android.najdiapp.databinding.ContactUsBinding;
+import com.najdi.android.najdiapp.home.model.User;
+import com.najdi.android.najdiapp.home.viewmodel.ContactUsViewModel;
+import com.najdi.android.najdiapp.home.viewmodel.HomeScreenViewModel;
+import com.najdi.android.najdiapp.utitility.DialogUtil;
+import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
 public class ContactUsFragment extends BaseFragment implements TextWatcher {
 
-    ContactUsBinding binding;
+    private ContactUsBinding binding;
     private ContactUsViewModel viewModel;
-    private HomeScreenViewModel activityViewModel;
 
     public static ContactUsFragment createInstance() {
         return new ContactUsFragment();
@@ -43,12 +43,30 @@ public class ContactUsFragment extends BaseFragment implements TextWatcher {
         initializeViewModel();
         bindViewModel();
         initClickListner();
+        fetchUserDetail();
         return binding.getRoot();
+    }
+
+    private void fetchUserDetail() {
+        if (getActivity() == null) return;
+        String userId = PreferenceUtils.getValueString(getActivity(), PreferenceUtils.USER_ID_KEY);
+        if (!TextUtils.isEmpty(userId)) {//Logged in user flow
+            showProgressDialog();
+            viewModel.getUserDetail(userId).observe(getViewLifecycleOwner(), baseResponse -> {
+                hideProgressDialog();
+                if (baseResponse.isStatus()) {
+                    User user = baseResponse.getUser();
+                    viewModel.setDetail(user);
+
+                }
+            });
+        }
     }
 
     private void initiazeActivityViewModel() {
         if (getActivity() == null) return;
-        activityViewModel = ViewModelProviders.of(getActivity()).get(HomeScreenViewModel.class);
+        HomeScreenViewModel activityViewModel = new ViewModelProvider(getActivity())
+                .get(HomeScreenViewModel.class);
         activityViewModel.getSetToolBarTitle().setValue(getString(R.string.contact_us));
     }
 
@@ -59,29 +77,40 @@ public class ContactUsFragment extends BaseFragment implements TextWatcher {
     }
 
     private void initializeViewModel() {
-        viewModel = ViewModelProviders.of(this).get(ContactUsViewModel.class);
+        viewModel = new ViewModelProvider(this).get(ContactUsViewModel.class);
     }
 
 
     private void initClickListner() {
         binding.message.addTextChangedListener(this);
+
         binding.send.setOnClickListener(v -> {
-            String phoneNo = PreferenceUtils.getValueString(getActivity(), PreferenceUtils.USER_PHONE_NO_KEY);
-            LiveData<BaseResponse> liveData = viewModel.contactUs(phoneNo);
-            if (liveData != null) {
-                showProgressDialog();
-                liveData.observe(this, baseResponse -> {
-                    hideProgressDialog();
-                    if (baseResponse != null && baseResponse.getData() != null) {
-                        viewModel.getMessage().setValue("");
-                        String message = baseResponse.getData().getMessage();
-                        DialogUtil.showAlertDialog(getActivity(), getString(R.string.message_success), (dialog, which) -> {
-                            dialog.dismiss();
-                        });
-                    }
-                });
+            if (viewModel.validateFields()) {
+                sendContactDetail();
+            } else {
+                DialogUtil.showAlertDialogNegativeVector(getActivity(), getString(R.string.plz_valid_fields),
+                        (d, w) -> d.dismiss());
             }
         });
+    }
+
+    private void sendContactDetail() {
+        if (getActivity() == null) return;
+
+        String userId = PreferenceUtils.getValueString(getActivity(), PreferenceUtils.USER_ID_KEY);
+        LiveData<BaseResponse> liveData = viewModel.contactUs(userId);
+        if (liveData != null) {
+            showProgressDialog();
+            liveData.observe(getViewLifecycleOwner(), baseResponse -> {
+                hideProgressDialog();
+                if (baseResponse != null && baseResponse.isStatus()) {
+                    viewModel.getMessage().setValue("");
+                    DialogUtil.showAlertDialog(getActivity(),
+                            getString(R.string.message_success), (dialog, which) ->
+                                    dialog.dismiss());
+                }
+            });
+        }
     }
 
     @Override

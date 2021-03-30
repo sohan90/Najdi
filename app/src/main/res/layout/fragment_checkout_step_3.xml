@@ -27,7 +27,7 @@
                 android:layout_height="80dp"
                 android:layout_centerHorizontal="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_check_circle_black_24dp" />
+                android:src="@drawable/animated_chechout_check" />
 
             <TextView
                 android:id="@+id/order_rec_txt"
@@ -124,6 +124,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
+                            android:text="@{viewModel.total_payable_amount}"
                             android:textColor="@color/grey_text"
                             android:textSize="15sp" />
                     </LinearLayout>

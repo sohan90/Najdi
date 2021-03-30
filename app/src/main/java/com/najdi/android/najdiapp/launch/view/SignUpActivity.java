@@ -4,8 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.najdi.android.najdiapp.common.BaseActivity;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.najdi.android.najdiapp.R;
+import com.najdi.android.najdiapp.common.BaseActivity;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.databinding.ActivitySignUpBinding;
@@ -14,16 +20,13 @@ import com.najdi.android.najdiapp.launch.model.SignupResponseModel;
 import com.najdi.android.najdiapp.launch.viewmodel.SignUpViewModel;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.FragmentHelper;
+import com.najdi.android.najdiapp.utitility.NetworkUtility;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
-import com.najdi.android.najdiapp.utitility.ToastUtils;
-
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProviders;
 
 import static com.najdi.android.najdiapp.launch.view.OtpActivity.EXTRA_SCREEN_TYPE;
+import static com.najdi.android.najdiapp.launch.view.OtpActivity.EXTRA_SIGN_UP_SUCCESS_MSG;
+import static com.najdi.android.najdiapp.launch.view.OtpActivity.EXTRA_SIGN_UP_TEMP_ID;
+import static com.najdi.android.najdiapp.utitility.PreferenceUtils.FCM_TOKEN_KEY;
 
 public class SignUpActivity extends BaseActivity {
 
@@ -39,10 +42,16 @@ public class SignUpActivity extends BaseActivity {
         initClickListener();
         subscribeValidationStatus();
         subscribeForToolBarTitle();
+        hideToolBarFilterCart();
+    }
+
+    private void hideToolBarFilterCart() {
+        binding.toolBarLyt.filter.setVisibility(View.INVISIBLE);
+        binding.toolBarLyt.cartImageLyt.setVisibility(View.INVISIBLE);
     }
 
     private void initViewModel() {
-        viewModel = ViewModelProviders.of(this).get(SignUpViewModel.class);
+        viewModel = new ViewModelProvider(this).get(SignUpViewModel.class);
     }
 
     private void setupBinding() {
@@ -90,34 +99,38 @@ public class SignUpActivity extends BaseActivity {
     private void subscribeValidationStatus() {
         viewModel.getValidationStatus().observe(this, valid -> {
             if (valid) {
-                LiveData<BaseResponse> liveData = viewModel.registerUser();
-                liveData.observe(this, signupResponseModel -> {
-                    hideProgressDialog();
-                    if (signupResponseModel != null) {
-                        if (signupResponseModel.getCode().equals("200") && signupResponseModel.getData() != null) {
-                            DialogUtil.showAlertDialog(this, signupResponseModel.getData().getMessage(),
-                                    (dialog, which) -> {
-                                        launchOTPScreen();
-                                        finish();
-                                    });
+                if (NetworkUtility.isNetworkConnected(this)) {
+                    String fcmToken = PreferenceUtils.getValueString(this, FCM_TOKEN_KEY);
+                    LiveData<BaseResponse> liveData = viewModel.registerUser(fcmToken);
+                    liveData.observe(this, signupResponseModel -> {
+                        hideProgressDialog();
+                        if (signupResponseModel != null) {
+                            if (signupResponseModel.isStatus()) {
+                                launchOTPScreen(signupResponseModel.getTempId(), signupResponseModel.getMessage());
+                                finish();
 
-                        } else {
-                            if (signupResponseModel.getData() == null) return;
-                            DialogUtil.showAlertDialog(this, signupResponseModel.getData().
-                                            getMessage(),
-                                    (dialog, which) -> dialog.dismiss());
+                            } else {
+                                DialogUtil.showAlertDialog(this, signupResponseModel.
+                                                getMessage(),
+                                        (dialog, which) -> dialog.dismiss());
+                            }
                         }
-                    }
-                });
+                    });
+                } else {
+                    DialogUtil.showAlertDialogNegativeVector(this, getString(R.string.no_network_msg)
+                    , (d, w) -> d.dismiss());
+                }
             } else {
                 hideProgressDialog();
             }
         });
     }
 
-    private void launchOTPScreen() {
+    private void launchOTPScreen( String tempId, String successMsg) {
         Intent intent = new Intent(this, OtpActivity.class);
         intent.putExtra(EXTRA_SCREEN_TYPE, Constants.OtpScreen.SIGN_UP_SCREEN);
+        intent.putExtra(EXTRA_SIGN_UP_TEMP_ID, tempId);
+        intent.putExtra(EXTRA_SIGN_UP_SUCCESS_MSG, successMsg);
         startActivity(intent);
     }
 

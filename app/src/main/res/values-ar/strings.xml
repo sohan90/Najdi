@@ -18,7 +18,8 @@
     <string name="log_in">تسجيل الدخول</string>
     <string name="checkout">اتمام الطلب</string>
     <string name="order_complete">طلب مكتمل</string>
-    <string name="select_options">حدد الخيارات المناسبة</string>
+    <string name="select_options">اللغة</string>
+    <string name="select_appr_option">حدد الخيارات المناسبة</string>
 
     <string name="choose_an_option">حدد الخيار المناسب</string>
 
@@ -94,21 +95,21 @@
     <string name="order_received">"تم استلام الطلب "</string>
     <string name="invalid_phone_no">الرجاء إدخال رقم الجوال بالصيغة (5xxxxxxxx)</string>
     <string name="product_added_success">تم إضافة المنتج إلى سلة التسوق</string>
-    <string name="add_to_cart">تحديث السلة</string>
+    <string name="add_to_cart">إضافة إلى السلة</string>
     <string name="andStr">و</string>
     <string name="please_fill">يرجى ملء جميع الحقول المطلوبة</string>
     <string name="something_went_wrong">هناك خطأ ما</string>
     <string name="please_feel">لا تتردد في ارسال لنا أي أسئلة</string>
     <string name="message">أرسل لنا رسالة</string>
     <string name="already_have_an_account">هل لديك حساب</string>
-    <string name="direct_bank_transer_msg">\"اجعلك تدفع مباشرة في حسابنا المصرفي. يرجى استخدام معرف الطلب الخاص بك كمراجع للدفع ، ولن يتم شحن طلبك حتى يتم إضافة الأموال إلى حسابنا</string>
+    <string name="direct_bank_transer_msg">نرجو إرسال المبلغ إلى أحد حساباتنا البنكية</string>
     <string name="update_cart_label">تحديث السلة</string>
     <string name="product_updated_success">تم تحديث السلة</string>
     <string name="building_number">رقم المبنى</string>
     <string name="direct_transfer_title">تحويل بنكي</string>
     <string name="send">إرسال</string>
-    <string name="not_available">غير متوفر</string>
-    <string name="sale">تخفيض السعر</string>
+    <string name="not_available">نفذت</string>
+    <string name="sale">عرض خاص</string>
     <string name="change_password">تغيير كلمة المرور</string>
     <string name="change_mobile_number">تغيير رقم الجوال</string>
     <string name="save">حفظ</string>
@@ -116,7 +117,7 @@
     <string name="change_no_msg">يرجى إدخال رقم الجوال الجديد أدناه</string>
     <string name="mobile_number">رقم الجوال الحالي</string>
     <string name="update">تحديث</string>
-    <string name="old_password">كلمة المرور القديمة</string>
+    <string name="old_password">كلمة المرور الحالية</string>
     <string name="new_password">كلمة المرور الجديدة</string>
     <string name="confirm_new_password">تأكيد كلمة المرور الجديدة</string>
     <string name="new_mobile_number">رقم الجوال الجديد</string>
@@ -127,7 +128,7 @@
     <string name="cancel">إلغاء</string>
     <string name="action_settings">الإعدادات</string>
     <string name="ok">حسنا</string>
-    <string name="resend_code_in_30s">إعادة الإرسال %s</string>
+    <string name="resend_code_in">إعادة الإرسال %s</string>
     <string name="resend_code">إعادة الإرسال</string>
     <string name="profile_succes_msg">تم تحديث الملف الشخصي بنجاح</string>
     <string name="verification_matched">"كلمة المرور صحيحة  "</string>
@@ -157,7 +158,7 @@
     <string name="one">1</string>
     <string name="two">2</string>
     <string name="three">3</string>
-    <string name="login_as_a_guest">Login as a Guest</string>
+    <string name="login_as_a_guest">الدخول كزائر</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -171,5 +172,25 @@
     <string name="address_found">Address found</string>
     <string name="english_lang">E</string>
     <string name="password_does_not_matched">كلمة المرور غير متطابقة</string>
+    <string name="notes">ملاحظات</string>
+    <string name="coupon" >الكوبون</string>
+    <string name="select_shipping_address_from_map" >اختر عنوان التوصيل من الخريطة</string>
+    <string name="login_to_continue" >للأستمرار، الرجاء تسجيل الدخول</string>
+    <string name="shortcut_label" >الطلبات</string>
+    <string name="shortcut_bank" >الحسابات البنكية</string>
+    <string name="add_your_notes" >اضف ملاحظاتك</string>
+    <string name="select_city" >اختر المدينة</string>
+    <string name="enter_valid_phone_no" >ادخل رقم الجوال الصحيح</string>
+    <string name="save_to_fav" >حفظ إلى المفضلة</string>
+    <string name="location_saved_msg" >تم حفظ الموقع بنجاح</string>
+    <string name="plz_valid_fields" >الرجاء إكمال الحقول بشكل صحيح</string>
+    <string name="upgrade_title" >تحديث التطبيق</string>
+    <string name="upgrade_msg" >الرجاء تحديث التطبيق إلى أحدث اصدار</string>
+    <string name="tax" >الضريبة</string>
+    <string name="guest_user_title">زائر</string>
+    <string name="password_error">كلمة المرور يجب أن تتكون من ٦ خانات</string>
+    <string name="mobile_no_error">رقم الجوال يتكون من ٩ خانات (5xxxxxxxx)</string>
+    <string name="invalid_email">البريد الإلكتروني غير صحيح</string>
+    <string name="no_network_msg">لا يوجد اتصال بالإنترنت!</string>
 
 </resources>

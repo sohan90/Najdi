@@ -6,6 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.BindingAdapter;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.checkout.viewmodel.BankDetailViewModel;
@@ -16,14 +24,6 @@ import com.najdi.android.najdiapp.home.viewmodel.HomeScreenViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.BindingAdapter;
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class BankDetailFragment extends BaseFragment {
 
@@ -59,11 +59,11 @@ public class BankDetailFragment extends BaseFragment {
 
     private void intializeActivityViewModel() {
         if (getActivity() == null) return;
-        acitivityViewModel = ViewModelProviders.of(getActivity()).get(HomeScreenViewModel.class);
+        acitivityViewModel = new ViewModelProvider(getActivity()).get(HomeScreenViewModel.class);
     }
 
     private void initializeViewModel() {
-        viewModel = ViewModelProviders.of(this).get(BankDetailViewModel.class);
+        viewModel = new ViewModelProvider(this).get(BankDetailViewModel.class);
     }
 
     private void initRecyclerView() {
@@ -76,12 +76,11 @@ public class BankDetailFragment extends BaseFragment {
 
     private void fetchBankDetails() {
         showProgressDialog();
-        viewModel.getBankDetail().observe(this, baseResponse -> {
+        viewModel.getBankDetail().observe(getViewLifecycleOwner(), baseResponse -> {
             hideProgressDialog();
-            if (baseResponse != null) {
-                if (baseResponse.getData() != null && baseResponse.getData().getData() != null) {
-                    List<BaseResponse.BankResponse> bankResponseList =
-                            baseResponse.getData().getData();
+            if (baseResponse != null && baseResponse.isStatus()) {
+                if (baseResponse.getData() != null && baseResponse.getData().size() > 0) {
+                    List<BaseResponse.BankResponse> bankResponseList = baseResponse.getData();
                     adapter.setData(bankResponseList);
                 }
             }

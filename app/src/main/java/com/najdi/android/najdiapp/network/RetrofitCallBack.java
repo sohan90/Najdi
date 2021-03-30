@@ -40,9 +40,13 @@ public class RetrofitCallBack<T> implements Callback<T> {
     @Override
     public void onFailure(Call<T> call, Throwable t) {
         try {
-            mCallback.onFailurResponse(call, new BaseResponse());
+            BaseResponse baseResponse = new BaseResponse();
+            if (t instanceof IOException){
+                baseResponse.setCode("500");//network error code
+            }
+            mCallback.onFailurResponse(call, baseResponse);
         } catch (IllegalStateException e) {
-            mCallback.onSuccesResponse(call, null);
+           // mCallback.onSuccesResponse(call, null);
         }
 
     }

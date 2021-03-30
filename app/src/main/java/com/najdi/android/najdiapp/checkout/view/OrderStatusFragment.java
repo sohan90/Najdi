@@ -5,6 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseFragment;
 import com.najdi.android.najdiapp.databinding.FragmentOrderStatusBinding;
@@ -12,13 +19,6 @@ import com.najdi.android.najdiapp.home.viewmodel.HomeScreenViewModel;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
 
 import java.util.ArrayList;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class OrderStatusFragment extends BaseFragment {
     FragmentOrderStatusBinding binding;
@@ -51,12 +51,14 @@ public class OrderStatusFragment extends BaseFragment {
     private void subscribeForOrderResponse() {
         if (getActivity() == null) return;
         showProgressDialog();
-        int userId = PreferenceUtils.getValueInt(getActivity(), PreferenceUtils.USER_ID_KEY);
-        activityViewModel.getOrderStatus(userId).observe(this, orderResponses -> {
+        String userId = PreferenceUtils.getValueString(getActivity(), PreferenceUtils.USER_ID_KEY);
+        activityViewModel.getOrderStatus(userId).observe(getViewLifecycleOwner(), orderResponses -> {
             hideProgressDialog();
-            if (orderResponses != null) {
-                if (orderResponses.size() > 0) {
-                    adapter.setData(orderResponses);
+            if (orderResponses != null && orderResponses.isStatus()) {
+                if (orderResponses.getOrders() != null && orderResponses.getOrders().size() > 0) {
+                    activityViewModel.getAdapterList(orderResponses.getOrders())
+                            .observe(getViewLifecycleOwner(), detailList
+                                    -> adapter.setData(detailList));
                 } else {
                     binding.recyclView.setVisibility(View.GONE);
                     binding.placHolderTxt.setVisibility(View.VISIBLE);
@@ -65,10 +67,9 @@ public class OrderStatusFragment extends BaseFragment {
         });
     }
 
-
     private void initializeActivityViewModel() {
         if (getActivity() == null) return;
-        activityViewModel = ViewModelProviders.of(getActivity()).get(HomeScreenViewModel.class);
+        activityViewModel = new ViewModelProvider(getActivity()).get(HomeScreenViewModel.class);
     }
 
     private void initialzeRecyclerView() {

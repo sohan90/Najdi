@@ -2,44 +2,54 @@ package com.najdi.android.najdiapp.launch.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseActivity;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.common.Constants;
 import com.najdi.android.najdiapp.databinding.ActivityOtpBinding;
+import com.najdi.android.najdiapp.home.model.CityListModelResponse;
 import com.najdi.android.najdiapp.home.view.HomeScreenActivity;
 import com.najdi.android.najdiapp.launch.model.OtpViewModel;
 import com.najdi.android.najdiapp.utitility.DialogUtil;
 import com.najdi.android.najdiapp.utitility.LocaleUtitlity;
 import com.najdi.android.najdiapp.utitility.PreferenceUtils;
-import com.najdi.android.najdiapp.utitility.ToastUtils;
 
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProviders;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 import static com.najdi.android.najdiapp.common.Constants.ARABIC_LAN;
 import static com.najdi.android.najdiapp.common.Constants.OTP_TIME;
 import static com.najdi.android.najdiapp.common.Constants.OtpScreen.CHANGE_MOBILE_VERIFY;
 import static com.najdi.android.najdiapp.common.Constants.OtpScreen.FORGOT_PASSWORD_SCREEN;
+import static com.najdi.android.najdiapp.common.Constants.OtpScreen.OLD_USER_FLOW;
 import static com.najdi.android.najdiapp.common.Constants.OtpScreen.SIGN_UP_SCREEN;
 import static com.najdi.android.najdiapp.launch.view.ChangePasswordActivity.EXTRA_CHANGE_PASSWORD_LAUNCH_TYPE;
-import static com.najdi.android.najdiapp.launch.view.ChangePasswordActivity.EXTRA_OTP_CODE;
+import static com.najdi.android.najdiapp.launch.view.ChangePasswordActivity.EXTRA_TOKEN;
+import static com.najdi.android.najdiapp.launch.view.ChangePasswordActivity.EXTRA_USER_ID;
 
 public class OtpActivity extends BaseActivity {
     ActivityOtpBinding binding;
     private OtpViewModel viewModel;
-    int startSec = OTP_TIME;
     public static final String EXTRA_SCREEN_TYPE = "extra_screen_type_otp";
     public static final String EXTRA_NEW_MOBILE_NO = "extra_mobile_no";
+    public static final String EXTRA_SIGN_UP_TEMP_ID = "extra_temp_id";
+    public static final String EXTRA_SIGN_UP_SUCCESS_MSG = "extra_sign_up_succss_msg";
     private int screenType;
     private String newMobileNo;
+    private String tempId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,7 +59,7 @@ public class OtpActivity extends BaseActivity {
         initializeViewModel();
         bindViewModel();
         initClickListener();
-        startHandlerFor30S();
+        startTimerFor60s();
         updateViewModel();
     }
 
@@ -64,30 +74,33 @@ public class OtpActivity extends BaseActivity {
             if (getIntent().hasExtra(EXTRA_NEW_MOBILE_NO)) {
                 newMobileNo = getIntent().getStringExtra(EXTRA_NEW_MOBILE_NO);
             }
+            if (getIntent().hasExtra(EXTRA_SIGN_UP_TEMP_ID)) {
+                tempId = getIntent().getStringExtra(EXTRA_SIGN_UP_TEMP_ID);
+                if (getIntent().hasExtra(EXTRA_SIGN_UP_SUCCESS_MSG)) {
+                    String successMsg = getIntent().getStringExtra(EXTRA_SIGN_UP_SUCCESS_MSG);
+                    DialogUtil.showAlertDialog(this, successMsg,
+                            (dialog, which) -> dialog.dismiss());
+                }
+            }
         }
     }
 
-    private void startHandlerFor30S() {
+    private void startTimerFor60s() {
         binding.resend.setEnabled(false);
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                int sec = --startSec;
-                String appendSec = sec + "s";
-                binding.resend.setText(getString(R.string.resend_code_in_30s, appendSec));
-                if (sec == 0) {
-                    handler.removeCallbacks(this);
-                    binding.resend.setText(getString(R.string.resend_code));
+        addDisposable(Observable
+                .intervalRange(1, OTP_TIME, 0, 1, TimeUnit.SECONDS)
+                .map(l -> OTP_TIME - l)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(sec -> {
+                    String appendSec = sec + "s";
+                    binding.resend.setText(getString(R.string.resend_code_in, appendSec));
+                }).doOnComplete(() -> {
                     binding.resend.setEnabled(true);
-                }
-                if (sec > 0) {
-                    handler.postDelayed(this, 1000);
-                }
+                    binding.resend.setText(getString(R.string.resend_code));
+                })
+                .subscribe());
 
-
-            }
-        }, 1000);
     }
 
     private void bindViewModel() {
@@ -96,7 +109,7 @@ public class OtpActivity extends BaseActivity {
     }
 
     private void initializeViewModel() {
-        viewModel = ViewModelProviders.of(this).get(OtpViewModel.class);
+        viewModel = new ViewModelProvider(this).get(OtpViewModel.class);
         binding.one.requestFocus();
         binding.one.setCursorVisible(true);
     }
@@ -116,67 +129,121 @@ public class OtpActivity extends BaseActivity {
         showProgressDialog();
         LiveData<BaseResponse> liveData;
         if (screenType == CHANGE_MOBILE_VERIFY) {
-            liveData = viewModel.resendOtp(newMobileNo);
+            liveData = viewModel.resendOtpForChangeMobileNo(tempId);
 
         } else if (screenType == FORGOT_PASSWORD_SCREEN) {
             liveData = viewModel.forgotresendOtp();
         } else {
-            liveData = viewModel.resendOtp();
+            liveData = viewModel.resendOtp(tempId);
         }
         liveData.observe(this, baseResponse -> {
             hideProgressDialog();
             if (baseResponse != null) {
-                if (baseResponse.getData() != null) {
-                    startSec = OTP_TIME;
-                    startHandlerFor30S();
+                if (baseResponse.isStatus()) {
+                    startTimerFor60s();
                     String phone = PreferenceUtils.getValueString(this, PreferenceUtils.USER_PHONE_NO_KEY);
                     String msg = getString(R.string.verification_password_sent_to, phone);
                     DialogUtil.showAlertDialog(this, msg, (dialog, which) -> dialog.dismiss());
+                } else {
+                    DialogUtil.showAlertDialogNegativeVector(this, baseResponse.getMessage(),
+                            (dialog, which) -> dialog.dismiss());
                 }
+
             }
         });
     }
 
     private void verifyOtp() {
         showProgressDialog();
-        LiveData<BaseResponse> liveData;
-        if (screenType == SIGN_UP_SCREEN) {
-            liveData = viewModel.verifyOtp(PreferenceUtils.getValueString(this,
-                    PreferenceUtils.USER_PHONE_NO_KEY));
+        String token_ = PreferenceUtils.getValueString(this, PreferenceUtils.USER_LOGIIN_TOKEN);
+        LiveData<BaseResponse> liveData = null;
+        switch (screenType) {
+            case SIGN_UP_SCREEN:
+                liveData = viewModel.verifyOtp(String.valueOf(tempId));
+                break;
 
-        } else if (screenType == CHANGE_MOBILE_VERIFY) {
+            case CHANGE_MOBILE_VERIFY:
+                liveData = viewModel.mobileNoverify(tempId);// change mobile no verification
+                break;
 
-            liveData = viewModel.mobileNoverify(PreferenceUtils.getValueString(this,
-                    PreferenceUtils.USER_PHONE_NO_KEY), newMobileNo);// change mobile no verification
-        } else {
+            case FORGOT_PASSWORD_SCREEN:
+                String token = PreferenceUtils.getValueString(this, PreferenceUtils.USER_LOGIIN_TOKEN);
+                liveData = viewModel.verifyOtpForForgotPassword(tempId, token);// forgot password flow
+                break;
 
-            liveData = viewModel.verifyOtpForForgotPassword(PreferenceUtils.getValueString(this,
-                    PreferenceUtils.USER_PHONE_NO_KEY));// forgot password flow
+            case OLD_USER_FLOW:
+                liveData = viewModel.verifyAppMigration(tempId, token_);
+                break;
+
         }
+
+        if (liveData == null) return;
 
         liveData.observe(this, baseResponse -> {
             hideProgressDialog();
-            if (baseResponse != null) {
+            if (baseResponse != null && baseResponse.isStatus()) {
                 if (screenType == SIGN_UP_SCREEN) {
-                    login();// sign up flow
+                    fetchCityForProducts();
+                    //login();// sign up flow
                 } else if (screenType == CHANGE_MOBILE_VERIFY) {
                     PreferenceUtils.setValueString(this,
                             PreferenceUtils.USER_PHONE_NO_KEY, newMobileNo);
-                    finish();
-                } else {
-                    launchChangePasswordScreen();
+                    DialogUtil.showAlertDialog(this, baseResponse.getMessage(), (d, w) -> {
+                        d.dismiss();
+                        finish();
+
+                    });
+
+                } else if (screenType == FORGOT_PASSWORD_SCREEN) {
+                    launchChangePasswordScreen(baseResponse.getToken(), baseResponse.getUserid(),
+                            Constants.OtpScreen.RESET_PASSWORD_OTP_SCREEN);
                     finish();// forgot password flow
+                } else { //old user migration flow
+                    launchChangePasswordScreen(baseResponse.getUserToken(), tempId, OLD_USER_FLOW);
+                    finish();
                 }
+            } else {
+                if (baseResponse == null) return;
+                DialogUtil.showAlertDialogNegativeVector(this, baseResponse.getMessage(),
+                        (dialog, which) -> dialog.dismiss());
             }
         });
     }
 
-    private void launchChangePasswordScreen() {
-        String otp = viewModel.getOne().getValue() + viewModel.getTwo().getValue() +
-                viewModel.getThree().getValue() + viewModel.getFour().getValue();
+    private void fetchCityForProducts() {
+        viewModel.getCityList(resourProvider.getCountryLang())
+                .observe(this, cityListModelResponse -> {
+                    if (cityListModelResponse != null && cityListModelResponse.isStatus()) {
+                        List<CityListModelResponse.City> cityList = cityListModelResponse.getCities();
+                        addDisposable(getCityNameList(cityList)
+                                .subscribe(strCity ->
+                                        showPopupwindow(strCity, cityList)));
+
+                    } else {
+                        login();
+                    }
+                });
+    }
+
+    protected void showPopupwindow(List<String> strings,
+                                   List<CityListModelResponse.City> cityList) {
+        String title = getString(R.string.select_city);
+        binding.blurLyt.setAlpha(0.5f);
+        DialogUtil.showPopupWindow(this,
+                binding.container, title, strings, pos -> {
+                    binding.blurLyt.setAlpha(0f);
+                    CityListModelResponse.City city = cityList.get(pos);
+                    saveCityId(city.getId());
+                    login();
+                }, () -> binding.blurLyt.setAlpha(0f));
+
+    }
+
+    private void launchChangePasswordScreen(String token, String userId, @Constants.OtpScreen int launchType) {
         Intent intent = new Intent(this, ChangePasswordActivity.class);
-        intent.putExtra(EXTRA_CHANGE_PASSWORD_LAUNCH_TYPE, Constants.OtpScreen.CHANGE_PASSWORD_OTP_SCREEN);
-        intent.putExtra(EXTRA_OTP_CODE, otp);
+        intent.putExtra(EXTRA_CHANGE_PASSWORD_LAUNCH_TYPE, launchType);
+        intent.putExtra(EXTRA_TOKEN, token);
+        intent.putExtra(EXTRA_USER_ID, userId);
         startActivity(intent);
     }
 
@@ -184,28 +251,27 @@ public class OtpActivity extends BaseActivity {
         showProgressDialog();
         String userName = PreferenceUtils.getValueString(this, PreferenceUtils.USER_PHONE_NO_KEY);
         String password = PreferenceUtils.getValueString(this, PreferenceUtils.USER_PASSWORD);
-        LiveData<BaseResponse> liveData = viewModel.login(userName, password);
+        String fcmToken = PreferenceUtils.getValueString(this, PreferenceUtils.FCM_TOKEN_KEY);
+        LiveData<BaseResponse> liveData = viewModel.login(userName, password, fcmToken);
         liveData.observe(this, baseResponse -> {
+
             hideProgressDialog();
-            if (baseResponse != null && Integer.parseInt(baseResponse.getCode()) == 200) {
-                if (baseResponse.getData() != null) {
-                    String loginToken = baseResponse.getData().getToken();
+            if (baseResponse != null && baseResponse.isStatus()) {
+                String loginToken = baseResponse.getUserToken();
+                PreferenceUtils.setValueString(this, PreferenceUtils.USER_LOGIIN_TOKEN,
+                        loginToken);
+                PreferenceUtils.setValueString(this, PreferenceUtils.USER_ID_KEY,
+                        baseResponse.getUserid());
 
-                    PreferenceUtils.setValueInt(this, PreferenceUtils.USER_ID_KEY,
-                            Integer.parseInt(baseResponse.getData().getUserId()));
+                launchHomeScreen();
 
-                    PreferenceUtils.setValueString(this, PreferenceUtils.USER_LOGIIN_TOKEN,
-                            loginToken);
-
-                    launchHomeScreen();
-                }
             } else {
-                if (baseResponse != null && baseResponse.getData().getStatus() == 403) {
+                if (baseResponse != null && !baseResponse.isStatus()) {
                     String message = getString(R.string.incorrect_password);
                     if (LocaleUtitlity.getCountryLang().equalsIgnoreCase(ARABIC_LAN)) {
                         message = getString(R.string.incorrect_password_arabic);
                     }
-                    DialogUtil.showAlertDialog(this, message,
+                    DialogUtil.showAlertDialogNegativeVector(this, message,
                             (dialog, which) -> dialog.dismiss());
                 }
             }
@@ -227,7 +293,6 @@ public class OtpActivity extends BaseActivity {
 
         @Override
         public void afterTextChanged(Editable editable) {
-            // TODO Auto-generated method stub
             String text = editable.toString();
             switch (view.getId()) {
 

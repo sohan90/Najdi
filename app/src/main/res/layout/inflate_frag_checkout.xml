@@ -38,7 +38,7 @@
             android:layout_height="100dp"
             android:layout_below="@id/close"
             android:src="@color/black"
-            bind:setImageUrl="@{cartModel.postImageUrl}" />
+            bind:setImageUrl="@{cartModel.image}" />
 
         <TextView
             android:id="@+id/quantity_no_txt"
@@ -49,7 +49,7 @@
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@id/img"
             android:gravity="center"
-            android:text="@{`X `+cartModel.quantity}"
+            android:text="@{`X `+cartModel.qty}"
             android:textColor="@color/black" />
 
         <TextView
@@ -63,7 +63,7 @@
             android:layout_toEndOf="@id/quantity_no_txt"
             android:ellipsize="end"
             android:gravity="center|start"
-            android:text="@{cartModel.post_title, default=`----`}"
+            android:text="@{cartModel.product_name, default=`----`}"
             android:textColor="@color/black" />
 
         <TextView
@@ -76,7 +76,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginEnd="10dp"
             android:gravity="center"
-            android:text="@{String.valueOf(cartModel.line_subtotal).concat(` `).concat(@string/currency)}"
+            android:text="@{String.valueOf(cartModel.subtotal).concat(` `).concat(@string/currency)}"
             android:textColor="@color/black"
             android:textDirection="locale" />
 
@@ -113,7 +113,7 @@
             android:layout_below="@id/product_name"
             android:layout_toStartOf="@id/increase"
             android:gravity="center"
-            android:text="@{String.valueOf(cartModel.quantity)}"
+            android:text="@{String.valueOf(cartModel.qty)}"
             android:textColor="@color/black"
             android:textStyle="bold" />
 

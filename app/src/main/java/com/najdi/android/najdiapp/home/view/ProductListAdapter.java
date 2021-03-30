@@ -4,6 +4,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.databinding.ItemProductBinding;
 import com.najdi.android.najdiapp.home.model.ProductDetailBundleModel;
@@ -12,10 +16,6 @@ import com.najdi.android.najdiapp.home.viewmodel.HomeScreenViewModel;
 import com.najdi.android.najdiapp.home.viewmodel.ProductListItemModel;
 
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.ViewHolder> {
 
@@ -62,6 +62,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                 ProductListResponse productListResponse = list.get(getAdapterPosition());
                 ProductDetailBundleModel model = new ProductDetailBundleModel();
                 model.setProductId(productListResponse.getId());
+                model.setOffer(productListResponse.isOn_sale());
                 homeScreenViewModel.getLaunchProductDetailLiveData().setValue(model);
             }));
 

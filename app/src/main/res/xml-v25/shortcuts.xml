@@ -1,0 +1,32 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_history_black_24dp"
+        android:shortcutId="compose"
+        android:shortcutShortLabel="@string/shortcut_label">
+        <intent
+            android:action="com.najdi.android.najdiapp.orderscreen"
+            android:targetClass="com.najdi.android.najdiapp.home.view.HomeScreenActivity"
+            android:targetPackage="com.najdi.android.najdiapp" />
+        <!-- If your shortcut is associated with multiple intents, include them
+             here. The last intent in the list determines what the user sees when
+             they launch this shortcut. -->
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_account_balance_black_24dp"
+        android:shortcutId="bank"
+        android:shortcutShortLabel="@string/shortcut_bank">
+        <intent
+            android:action="com.najdi.android.najdiapp.bank"
+            android:targetClass="com.najdi.android.najdiapp.home.view.HomeScreenActivity"
+            android:targetPackage="com.najdi.android.najdiapp" />
+        <!-- If your shortcut is associated with multiple intents, include them
+             here. The last intent in the list determines what the user sees when
+             they launch this shortcut. -->
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+    <!-- Specify more shortcuts here. -->
+</shortcuts>

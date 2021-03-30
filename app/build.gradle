@@ -1,19 +1,28 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'com.google.gms.google-services'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
     defaultConfig {
         applicationId "com.najdi.android.najdiapp"
         minSdkVersion 23
-        targetSdkVersion 28
-        versionCode 5
-        versionName "1.2.2"
+        targetSdkVersion 30
+        versionCode 10
+        versionName "2.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
             debuggable false
             minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug{
+            debuggable true
+            minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -21,17 +30,13 @@ android {
     flavorDimensions "default"
     productFlavors {
         stagging {
-            applicationId "com.najdi.android.najdiapp.stagging"
-            buildConfigField 'String', 'NAJDI_END_POINTS', '"https://najdisheep.com/temp/livetest/wp-json/wc/v2/"'
-            buildConfigField 'String', 'NAJDI_CART_BASE_URL', '"https://najdisheep.com/temp/livetest/wp-json/"'
-            buildConfigField 'String', 'BASIC_64_AUTH', '"Basic Y2tfMzFmNTIxOTA3ZDJlZTY0ZmE4ZDMzMjAwNjE0ODY4ZTc3ZDlhOGY3Njpjc184NDU5ZjU4NWIwYzM3MjQ0Y2JjZWViZDYzZTE0MTQ4OWRjZDlkMWU4"'
+            applicationId "com.najdi.android.najdiapp"
+            buildConfigField 'String', 'BASE_URL', '"https://najdisheep.com/newnajdisheep/api/"'
             dimension "default"
         }
         production {
             applicationId "com.najdi.android.najdiapp"
-            buildConfigField 'String', 'NAJDI_END_POINTS', '"https://najdisheep.com/wp-json/wc/v2/"'
-            buildConfigField 'String', 'NAJDI_CART_BASE_URL', '"https://najdisheep.com/wp-json/"'
-            buildConfigField 'String', 'BASIC_64_AUTH', '"Basic Y2tfMGJjMTljMWY0ZGUwNTU4YWQ0MmFjYTU2MDFiY2MyNzVlNTVmOTExZDpjc185MzA3MjVlZTBhOTE2ODkxNDEwZGI5MmQzZWI4MjcxYTcwYjVhMzBm"'
+            buildConfigField 'String', 'BASE_URL', '"https://najdisheep.com/newnajdisheep/api/"'
             dimension "default"
         }
     }
@@ -53,9 +58,9 @@ android {
     }
     signingConfigs {
         release {
-            storePassword "test@123"
+            storePassword "Test@123"
             keyAlias "najdi"
-            keyPassword "test@123"
+            keyPassword "Test@123"
             storeFile file('najdi.jks')
         }
     }
@@ -63,30 +68,50 @@ android {
         checkReleaseBuilds false
 
     }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha05'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
-    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0-beta01'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta5'
+    implementation 'com.google.android.material:material:1.1.0'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.2.0-beta01'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-beta01'
+    androidTestImplementation 'androidx.test:runner:1.3.0-beta01'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0-beta01'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation 'com.squareup.okhttp:okhttp:2.5.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
-    implementation 'com.github.bumptech.glide:glide:4.9.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
-    def lifecycle_version = "2.0.0"
-    implementation "androidx.lifecycle:lifecycle-extensions:2.0.0"
-    annotationProcessor "androidx.lifecycle:lifecycle-compiler:2.0.0"
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    annotationProcessor "androidx.lifecycle:lifecycle-compiler:2.2.0"
     implementation "com.google.android.gms:play-services-location:17.0.0"
+    implementation "com.google.android.gms:play-services-places:17.0.0"
     implementation ('com.github.bumptech.glide:okhttp3-integration:4.2.0'){
         exclude group: 'glide-parent'
     }
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+    // Because RxAndroid releases are few and far between, it is recommended you also
+    // explicitly depend on RxJava's latest version for bug fixes and new features.
+    // (see https://github.com/ReactiveX/RxJava/releases for latest 3.x.x version)
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.0'
+    implementation 'com.google.android.libraries.places:places:2.2.0'
+    implementation 'com.google.firebase:firebase-core:17.4.1'
+    implementation 'com.google.firebase:firebase-messaging:20.1.7'
+    implementation "androidx.core:core-ktx:+"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.google.android.gms:play-services-vision:20.1.3'
+    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9'
+}
+repositories {
+    mavenCentral()
 }

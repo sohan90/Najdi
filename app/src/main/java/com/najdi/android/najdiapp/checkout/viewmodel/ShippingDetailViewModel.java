@@ -2,13 +2,18 @@ package com.najdi.android.najdiapp.checkout.viewmodel;
 
 import android.app.Application;
 import android.location.Address;
-
-import com.najdi.android.najdiapp.common.BaseViewModel;
-import com.najdi.android.najdiapp.launch.model.BillingAddress;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+
+import com.najdi.android.najdiapp.common.BaseResponse;
+import com.najdi.android.najdiapp.common.BaseViewModel;
+import com.najdi.android.najdiapp.home.model.User;
+import com.najdi.android.najdiapp.launch.model.BillingAddress;
+
+import java.util.Objects;
 
 public class ShippingDetailViewModel extends BaseViewModel {
     private MutableLiveData<String> name = new MutableLiveData<>();
@@ -19,8 +24,13 @@ public class ShippingDetailViewModel extends BaseViewModel {
     private MutableLiveData<String> city = new MutableLiveData<>();
     private MutableLiveData<String> province = new MutableLiveData<>();
     private MutableLiveData<String> postalCode = new MutableLiveData<>();
-    private MutableLiveData<Boolean> proceed = new MutableLiveData<>();
+    private MutableLiveData<String> fullAddress = new MutableLiveData<>();
+    private Address googleAddress;
+    private User user;
 
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public ShippingDetailViewModel(@NonNull Application application) {
         super(application);
@@ -33,11 +43,15 @@ public class ShippingDetailViewModel extends BaseViewModel {
     }
 
     public void updateAddress(Address address) {
-        buildingNO.setValue(address.getFeatureName());
-        street.setValue(address.getSubLocality());
-        city.setValue(address.getLocality());
-        province.setValue(address.getAdminArea());
-        postalCode.setValue(address.getPostalCode());
+        googleAddress = address;
+        String fullAddressStr = address.getFeatureName() + " " + address.getSubLocality()
+                + " " + address.getLocality() + " " + address.getAdminArea() + " "
+                + address.getPostalCode();
+        fullAddress.setValue(fullAddressStr);
+    }
+
+    public MutableLiveData<String> getFullAddress() {
+        return fullAddress;
     }
 
     public MutableLiveData<String> getStreet() {
@@ -73,16 +87,11 @@ public class ShippingDetailViewModel extends BaseViewModel {
     }
 
     public LiveData<Boolean> validate() {
+        MutableLiveData<Boolean> proceed = new MutableLiveData<>();
         boolean canProceed = true;
-        if (buildingNO.getValue() == null) {
+        if (name.getValue() == null) {
             canProceed = false;
-        } else if (city.getValue() == null) {
-            canProceed = false;
-        } else if (province.getValue() == null) {
-            canProceed = false;
-        } else if (postalCode.getValue() == null) {
-            canProceed = false;
-        } else if (street.getValue() == null) {
+        } else if (fullAddress.getValue() == null) {
             canProceed = false;
         }
         proceed.setValue(canProceed);
@@ -91,17 +100,32 @@ public class ShippingDetailViewModel extends BaseViewModel {
 
     public BillingAddress getBillingObject() {
         BillingAddress billing = new BillingAddress();
-        billing.setFirst_name(name.getValue());
-        billing.setLast_name(name.getValue());
+        billing.setFull_name(name.getValue());
         billing.setEmail(email.getValue());
-        billing.setPhone(phoneNo.getValue().replace("966",""));
-        billing.setAddress_1(buildingNO.getValue());
-        billing.setAddress_2(street.getValue());
-        billing.setCity(city.getValue());
-        billing.setState(province.getValue());
-        billing.setPostcode(postalCode.getValue());
-        billing.setCountry(province.getValue());
+
+        billing.setPhone(Objects.requireNonNull(phoneNo.getValue())
+                .replace("966", ""));
+
+        billing.setAddress((user != null && !TextUtils.isEmpty(user.getAddress())) ?
+                user.getAddress() : fullAddress.getValue());
+
+        billing.setMap_address(fullAddress.getValue());
+
+        billing.setCity((user != null && !TextUtils.isEmpty(user.getCity())) ?
+                user.getCity() : googleAddress.getLocality());
+
+        billing.setLat(String.valueOf(googleAddress.getLatitude()));
+        billing.setLng(String.valueOf(googleAddress.getLongitude()));
+
+        // billing.setState(province.getValue() == null ? googleAddress.getAdminArea() : province.getValue());
+        //billing.setPostcode(postalCode.getValue() == null ? googleAddress.getPostalCode() : postalCode.getValue());
+        // billing.setCountry(province.getValue() == null ? googleAddress.getCountryName() : province.getValue());
+
         return billing;
+    }
+
+    public LiveData<BaseResponse> getUserDetail(String userId) {
+        return repository.getUserDetail(userId);
     }
 }
 

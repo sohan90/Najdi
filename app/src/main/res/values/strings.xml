@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name"> نجدي
        للذبائح</string>
     <string name="welcome_msg">WELCOME TO \n NAJDI</string>
@@ -44,6 +44,7 @@
     <string name="our_bank_accounts_drawer">Our Bank Accounts</string>
     <string name="invalid_phone_no">phone no is invalid!</string>
     <string name="invalid_pass">invalid password</string>
+    <string name="password_error">Password must be at least 6 characters long</string>
     <string name="login_as_a_guest">Login as a Guest</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -52,7 +53,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_home_screen">HomeScreenActivity</string>
-    <string name="category">category</string>
+    <string name="category">Category</string>
     <string name="product_details">Product Details</string>
     <string name="currency">SAR</string>
     <string name="cart">Cart</string>
@@ -94,7 +95,7 @@
     <string name="one_time_psd">One Time Password sent to this mobile number</string>
     <string name="please_enter_it_below">Please Enter it Below</string>
     <string name="didn_t_get_the_sms">Didn\'t get the SMS?</string>
-    <string name="resend_code_in_30s">Resend Code in %s</string>
+    <string name="resend_code_in">Resend Code in %s</string>
     <string name="resend_code">Resend Code</string>
     <string name="verify">Verify</string>
     <string name="update_cart_label">Update Cart</string>
@@ -132,7 +133,7 @@
     <string name="change_no_msg">To change your mobile number, Please enter the  new one below.</string>
     <string name="mobile_number">Mobile Number</string>
     <string name="update">Update</string>
-    <string name="old_password">Old Password</string>
+    <string name="old_password">Current password</string>
     <string name="new_password">New Password</string>
     <string name="confirm_new_password">Confirm New Password</string>
     <string name="new_mobile_number">New Mobile Number</string>
@@ -140,11 +141,11 @@
     <string name="forgot_your_password">Forgot Your Password</string>
     <string name="please_otp_msg">Please enter your mobile number, You will receive  a One-Time-Password via SMS</string>
     <string name="submit">Submit</string>
-    <string name="password_mismatched">Password mismatched!</string>
+    <string name="password_mismatched">Password mismatch!</string>
     <string name="building_number">Building number</string>
     <string name="direct_transfer_title">Direct Bank Transfer</string>
     <string name="not_available">Not Available</string>
-    <string name="sale">Sale</string>
+    <string name="sale">special offer</string>
     <string name="profile_succes_msg">profile has been updated successfully</string>
     <string name="verification_matched">The code is correct</string>
     <string name="message_success">Your message has been sent. We will contact you soon</string>
@@ -160,5 +161,27 @@
     <string name="verification_password_sent_to">Verification password sent to %s</string>
     <string name="password_upd_msg">Password updated successfully</string>
     <string name="iban">IBAN</string>
-    <string name="password_does_not_matched">Password does not matched</string>
+    <string name="password_does_not_matched">Password does not match</string>
+    <string name="enter_your_location" tools:ignore="MissingTranslation">Enter your location</string>
+    <string name="coupon">Coupon</string>
+    <string name="space" translatable="false">\u0020</string>
+    <string name="select_shipping_address_from_map" >Select shipping address from Map</string>
+    <string name="guest_user_title">Guest User</string>
+    <string name="login_to_continue" >Please login to continue</string>
+    <string name="shortcut_label" >Orders</string>
+    <string name="shortcut_bank" >Bank Accounts</string>
+    <string name="notes">Notes</string>
+    <string name="add_your_notes">Add your notes</string>
+    <string name="select_city" >Select City</string>
+    <string name="enter_valid_phone_no" >Enter the valid mobile no</string>
+    <string name="save_to_fav" >Save as Favourite Location</string>
+    <string name="location_saved_msg" >Your Location saved successfully</string>
+    <string name="plz_valid_fields" >Please enter the valid fields</string>
+    <string name="upgrade_title" >Upgrade your App</string>
+    <string name="upgrade_msg" >\" recommends that you upgrade to the latest version\"</string>
+    <string name="tax" >Tax</string>
+    <string name="select_appr_option" >Select option</string>
+    <string name="mobile_no_error">Mobile no must contains 9 digits (5xxxxxxxx)</string>
+    <string name="invalid_email">invalid email address</string>
+    <string name="no_network_msg">No internet connection!</string>
 </resources>

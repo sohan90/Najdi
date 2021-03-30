@@ -3,21 +3,21 @@ package com.najdi.android.najdiapp.checkout.view;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.najdi.android.najdiapp.R;
 import com.najdi.android.najdiapp.common.BaseResponse;
 import com.najdi.android.najdiapp.databinding.ItemBankAccountsBinding;
 
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.RecyclerView;
-
 public class BankDetailAdapter extends RecyclerView.Adapter<BankDetailAdapter.ViewHolder> {
 
     private List<BaseResponse.BankResponse> list;
 
-    public BankDetailAdapter(List<BaseResponse.BankResponse> list) {
+    BankDetailAdapter(List<BaseResponse.BankResponse> list) {
         this.list = list;
     }
 
@@ -47,11 +47,11 @@ public class BankDetailAdapter extends RecyclerView.Adapter<BankDetailAdapter.Vi
         return list == null ? 0 : list.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         ItemBankAccountsBinding binding;
 
-        public ViewHolder(@NonNull ItemBankAccountsBinding itemView) {
+        ViewHolder(@NonNull ItemBankAccountsBinding itemView) {
             super(itemView.getRoot());
             binding = itemView;
         }
